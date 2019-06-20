@@ -4,6 +4,6 @@
 
 项目正式开坑！<br>
 花了一个下午研究如何用GCC编译带有资源文件的exe。没想到原来没有想象中这么难。大致的步骤如下：<br>
-1. 编写好资源文件脚本文件（Resource Srcipt, *.rc）<br>
+1. 编写好资源文件脚本文件（Resource Script, *.rc）<br>
 2. 使用windres对rc进行编译。windres会对rc文件里面涉及到的资源进行收集，所以尽量把里面涉及到的资源与rc文件放在同一目录下。编译命令：`windres --include-dir="【Include路径】" 【输入rc文件】 -O coff -o 【输出res文件】`<br>
 3. 使用g++对源码和res文件进行编译。编译命令：`g++ 【源码路径】 【res路径】 -o 【输出exe路径】` 注意：【源码路径】不需要包括.h文件<br>
