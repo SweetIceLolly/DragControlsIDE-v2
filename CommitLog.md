@@ -7,3 +7,6 @@
 1. 编写好资源文件脚本文件（Resource Script, *.rc）<br>
 2. 使用windres对rc进行编译。windres会对rc文件里面涉及到的资源进行收集，所以尽量把里面涉及到的资源与rc文件放在同一目录下。编译命令：`windres --include-dir="【Include路径】" 【输入rc文件】 -O coff -o 【输出res文件】`<br>
 3. 使用g++对源码和res文件进行编译。编译命令：`g++ 【源码路径】 【res路径】 -o 【输出exe路径】` 注意：【源码路径】不需要包括.h文件<br>
+
+晚上研究了一下gdb的使用。如果我想要调试某个exe，那么使用g++编译它的时候要加上`-g`参数，使编译的exe能被gdb调试。<br>
+接着试了一下gdb的命令行参数，大概是这样使用的（如有错请纠正，毕竟我是今天才开始学习使用的）：`gdb -exec="【需调试程序的路径】" -q -nw` 其中`-q`让gdb不要输出版本信息，`-nw`让gdb使用命令行界面。至于调试命令尚未研究，不过找到个文档，晚点看看：http://condor.depaul.edu/glancast/373class/docs/gdb.html
