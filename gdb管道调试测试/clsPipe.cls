@@ -113,6 +113,18 @@ Dim bStopOutput         As Boolean                                              
 Public Event Output(strOutput As String)                                        '目标程序仍在输出
 Public Event OutputFinished()                                                   '目标程序输出完成
 
+'描述:      获取当前管道的目标进程的进程句柄
+'返回值:    目标进程的进程句柄
+Public Property Get hProcess() As Long
+    hProcess = pi.hProcess
+End Property
+
+'描述:      获取当前管道的目标进程的进程ID
+'返回值:    目标进程的进程ID
+Public Property Get dwProcessId() As Long
+    dwProcessId = pi.dwProcessId
+End Property
+
 '描述:      创建Dos输入、输出管道
 '参数:      CommandLine: 需要执行的程序
 '返回值:    1代表创建成功，0代表创建失败
