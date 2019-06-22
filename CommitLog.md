@@ -1,4 +1,4 @@
-【更改日志】
+【日志】
 
 # 2019.6.22
 
@@ -10,7 +10,7 @@
 4. 尚未试过gdb附加调试进程，之后会试试
 
 潜在问题：
-4. 进入gdb之后需要使用`set pagination off`来关闭gdb的"Type <return> to continue, or q <return> to quit"消息
+进入gdb之后需要使用`set pagination off`来关闭gdb的"Type <return> to continue, or q <return> to quit"消息
 
 # 2019.6.21
 
