@@ -7,6 +7,8 @@
 1. 看上去管道获取gdb输出是个不错的方式，之后拖控件大法的调试功能就打算这样弄了，通过分析gdb的输出来获取需要的信息
 2. “中断程序”功能尚未完善，打算改良运行的方式：先用`CreateProcess`运行并挂起(`CREATE_SUSPENDED`)待调试的程序，然后让gdb附加到这个进程上。这样就可以得到待调试进程的PID和进程句柄，从而使用`DebugBreakProcess`使其中断
 3. `NtSuspendProcess`虽然能让待调试进程挂起，但是gdb却仍然认为他在运行，故不采用此方式
+4. 尚未试过gdb附加调试进程，之后会试试
+
 潜在问题：
 4. 进入gdb之后需要使用`set pagination off`来关闭gdb的"Type <return> to continue, or q <return> to quit"消息
 
