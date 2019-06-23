@@ -2,12 +2,12 @@ VERSION 5.00
 Begin VB.UserControl DarkTitleBar 
    Alignable       =   -1  'True
    BackColor       =   &H00302D2D&
-   ClientHeight    =   525
+   ClientHeight    =   528
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   5370
-   ScaleHeight     =   525
-   ScaleWidth      =   5370
+   ClientWidth     =   5376
+   ScaleHeight     =   528
+   ScaleWidth      =   5376
    ToolboxBitmap   =   "DarkTitleBar.ctx":0000
    Begin ÍÏ¿Ø¼þ´ó·¨UI.DarkMenu mnuPopup 
       Height          =   315
@@ -16,11 +16,11 @@ Begin VB.UserControl DarkTitleBar
       Top             =   600
       Visible         =   0   'False
       Width           =   2775
-      _ExtentX        =   4895
-      _ExtentY        =   556
+      _ExtentX        =   4890
+      _ExtentY        =   550
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
-         Size            =   9.75
+         Size            =   9.6
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -123,20 +123,20 @@ Begin VB.UserControl DarkTitleBar
       HasBorder       =   0   'False
    End
    Begin VB.Image imgMax 
-      Height          =   480
+      Height          =   384
       Left            =   4320
       Picture         =   "DarkTitleBar.ctx":30B8
       Top             =   480
       Visible         =   0   'False
-      Width           =   480
+      Width           =   384
    End
    Begin VB.Image imgRestore 
-      Height          =   480
+      Height          =   384
       Left            =   4800
       Picture         =   "DarkTitleBar.ctx":3D82
       Top             =   480
       Visible         =   0   'False
-      Width           =   480
+      Width           =   384
    End
    Begin VB.Label labTip 
       AutoSize        =   -1  'True
@@ -151,7 +151,7 @@ Begin VB.UserControl DarkTitleBar
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      ForeColor       =   &H00D5F1F1&
+      ForeColor       =   &H00DADADA&
       Height          =   225
       Left            =   480
       TabIndex        =   0
@@ -159,11 +159,11 @@ Begin VB.UserControl DarkTitleBar
       Width           =   1215
    End
    Begin VB.Image imgIcon 
-      Height          =   480
+      Height          =   384
       Left            =   0
       Picture         =   "DarkTitleBar.ctx":4A4C
       Top             =   0
-      Width           =   480
+      Width           =   384
    End
 End
 Attribute VB_Name = "DarkTitleBar"
@@ -276,9 +276,9 @@ Private Sub tmrCheckFocus_Timer()
     End If
     UserControl.Width = UserControl.Parent.ScaleWidth
     If GetForegroundWindow() = UserControl.Parent.hWnd Then
-        UserControl.labTip.ForeColor = RGB(241, 241, 213)
+        UserControl.labTip.ForeColor = RGB(218, 218, 232)
     Else
-        UserControl.labTip.ForeColor = RGB(117, 153, 136)
+        UserControl.labTip.ForeColor = RGB(188, 188, 188)
     End If
     If Me.BindCaption Then
         UserControl.labTip.Caption = UserControl.Parent.Caption
@@ -318,6 +318,9 @@ Private Sub UserControl_Resize()
     UserControl.cmdClose.Height = UserControl.Height
     UserControl.cmdMax.Height = UserControl.Height
     UserControl.cmdMin.Height = UserControl.Height
+    UserControl.imgIcon.Top = UserControl.Height / 2 - imgIcon.Height / 2
+    UserControl.imgIcon.Left = UserControl.imgIcon.Top
+    UserControl.labTip.Left = UserControl.imgIcon.Left * 2 + UserControl.imgIcon.Width
     
     '-------------------------------------------------
     Dim wp  As WINDOWPLACEMENT

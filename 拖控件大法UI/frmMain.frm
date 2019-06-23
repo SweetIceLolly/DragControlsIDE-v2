@@ -3,26 +3,27 @@ Begin VB.Form frmMain
    BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "Form1"
-   ClientHeight    =   7095
+   ClientHeight    =   7092
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   12870
+   ClientWidth     =   12876
+   Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   7095
-   ScaleWidth      =   12870
-   StartUpPosition =   2  'CenterScreen
+   ScaleHeight     =   7092
+   ScaleWidth      =   12876
+   StartUpPosition =   2  '屏幕中心
    Begin 拖控件大法UI.DarkMenu DarkMenu 
       Align           =   1  'Align Top
-      Height          =   315
+      Height          =   312
       Left            =   0
       TabIndex        =   1
-      Top             =   495
-      Width           =   12870
-      _ExtentX        =   22701
-      _ExtentY        =   556
+      Top             =   492
+      Width           =   12876
+      _ExtentX        =   22712
+      _ExtentY        =   550
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
-         Size            =   9.75
+         Size            =   9.6
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -399,8 +400,8 @@ Begin VB.Form frmMain
    Begin 拖控件大法UI.DarkWindowBorder DarkWindowBorderSizer 
       Left            =   12240
       Top             =   6480
-      _ExtentX        =   847
-      _ExtentY        =   847
+      _ExtentX        =   677
+      _ExtentY        =   677
       Thickness       =   5
       MinWidth        =   330
       MinHeight       =   75
@@ -410,8 +411,8 @@ Begin VB.Form frmMain
    Begin 拖控件大法UI.DarkWindowBorder DarkWindowBorder 
       Left            =   11640
       Top             =   6480
-      _ExtentX        =   847
-      _ExtentY        =   847
+      _ExtentX        =   677
+      _ExtentY        =   677
       MinWidth        =   330
       MinHeight       =   75
    End
@@ -422,8 +423,8 @@ Begin VB.Form frmMain
       TabIndex        =   0
       Top             =   0
       Width           =   12870
-      _ExtentX        =   22701
-      _ExtentY        =   873
+      _ExtentX        =   22712
+      _ExtentY        =   868
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -434,7 +435,7 @@ Begin VB.Form frmMain
          Strikethrough   =   0   'False
       EndProperty
       Caption         =   "新工程 - 拖控件大法"
-      Picture         =   "frmMain.frx":0000
+      Picture         =   "frmMain.frx":1BCC2
    End
 End
 Attribute VB_Name = "frmMain"
@@ -444,3 +445,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Private Sub Form_Load()
+    DarkWindowBorder.FocusedColor = RGB(10, 176, 255)
+    DarkWindowBorder.NotFocusedColor = RGB(128, 128, 128)
+End Sub
