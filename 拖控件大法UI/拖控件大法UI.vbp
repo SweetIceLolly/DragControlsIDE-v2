@@ -1,6 +1,6 @@
 Type=Exe
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\Windows\SysWOW64\stdole2.tlb#OLE Automation
-Reference=*\G{13FC9823-115E-4CB2-9A02-881895942E28}#1.646#0#..\..\..\..\Windows\SysWow64\Win32Api.tlb#Win32API之vb6头文件 2016-7-17函数常量完整重大更新 made by 棉花糖 
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\Windows\SysWOW64\stdole2.tlb#OLE Automation
+Reference=*\G{13FC9823-115E-4CB2-9A02-881895942E28}#1.646#0#..\..\Muing2\Win32Api.tlb#Win32API之vb6头文件 2016-7-17函数常量完整重大更新 made by 棉花糖 
 UserControl=DarkButton.ctl
 UserControl=DarkCheckBox.ctl
 UserControl=DarkTitleBar.ctl
@@ -25,6 +25,7 @@ Form=frmMain.frm
 Startup="frmMain"
 HelpFile=""
 Title="拖控件大法UI"
+ExeName32="拖控件大法UI.exe"
 Command32=""
 Name="拖控件大法UI"
 HelpContextID="0"
