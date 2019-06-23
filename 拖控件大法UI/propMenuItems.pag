@@ -1,0 +1,694 @@
+VERSION 5.00
+Begin VB.PropertyPage propMenuItems 
+   BackColor       =   &H00302D2D&
+   Caption         =   "菜单编辑器"
+   ClientHeight    =   4995
+   ClientLeft      =   0
+   ClientTop       =   0
+   ClientWidth     =   6120
+   PaletteMode     =   0  'Halftone
+   ScaleHeight     =   4995
+   ScaleWidth      =   6120
+   Begin 拖控件大法UI.DarkListBox lstMenus 
+      Height          =   2190
+      Left            =   120
+      TabIndex        =   18
+      Top             =   2400
+      Width           =   5775
+      _ExtentX        =   10186
+      _ExtentY        =   3863
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ListIndex       =   -1
+   End
+   Begin VB.PictureBox picMenuIcon 
+      Appearance      =   0  'Flat
+      AutoRedraw      =   -1  'True
+      BackColor       =   &H001C1B1B&
+      ForeColor       =   &H80000008&
+      Height          =   615
+      Left            =   5280
+      OLEDropMode     =   1  'Manual
+      ScaleHeight     =   585
+      ScaleWidth      =   555
+      TabIndex        =   16
+      TabStop         =   0   'False
+      ToolTipText     =   "把图片拖进来以设置菜单图标 右键点击移除图标"
+      Top             =   360
+      Width           =   585
+   End
+   Begin 拖控件大法UI.DarkButton cmdDelete 
+      Height          =   375
+      Left            =   4800
+      TabIndex        =   11
+      Top             =   1920
+      Width           =   1095
+      _ExtentX        =   1931
+      _ExtentY        =   661
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "删除"
+   End
+   Begin 拖控件大法UI.DarkButton cmdInsert 
+      Height          =   375
+      Left            =   3480
+      TabIndex        =   10
+      Top             =   1920
+      Width           =   1095
+      _ExtentX        =   1931
+      _ExtentY        =   661
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "插入"
+   End
+   Begin 拖控件大法UI.DarkButton cmdUp 
+      Height          =   375
+      Left            =   1080
+      TabIndex        =   7
+      Top             =   1920
+      Width           =   375
+      _ExtentX        =   661
+      _ExtentY        =   661
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "↑"
+   End
+   Begin 拖控件大法UI.DarkButton cmdLeft 
+      Height          =   375
+      Left            =   120
+      TabIndex        =   5
+      Top             =   1920
+      Width           =   375
+      _ExtentX        =   661
+      _ExtentY        =   661
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "←"
+   End
+   Begin 拖控件大法UI.DarkButton cmdRight 
+      Height          =   375
+      Left            =   600
+      TabIndex        =   6
+      Top             =   1920
+      Width           =   375
+      _ExtentX        =   661
+      _ExtentY        =   661
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "→"
+   End
+   Begin 拖控件大法UI.DarkButton cmdDown 
+      Height          =   375
+      Left            =   1560
+      TabIndex        =   8
+      Top             =   1920
+      Width           =   375
+      _ExtentX        =   661
+      _ExtentY        =   661
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "↓"
+   End
+   Begin 拖控件大法UI.DarkButton cmdNext 
+      Height          =   375
+      Left            =   2160
+      TabIndex        =   9
+      Top             =   1920
+      Width           =   1095
+      _ExtentX        =   1931
+      _ExtentY        =   661
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "下一个"
+   End
+   Begin 拖控件大法UI.DarkCheckBox chkHasCheckBox 
+      Height          =   375
+      Left            =   120
+      TabIndex        =   2
+      Top             =   1320
+      Width           =   1935
+      _ExtentX        =   3413
+      _ExtentY        =   661
+      Enabled         =   -1  'True
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "该菜单支持复选"
+   End
+   Begin 拖控件大法UI.DarkEdit edMenuText 
+      Height          =   375
+      Left            =   1800
+      TabIndex        =   0
+      Top             =   240
+      Width           =   1215
+      _ExtentX        =   2143
+      _ExtentY        =   661
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Text            =   ""
+   End
+   Begin 拖控件大法UI.DarkEdit edMenuID 
+      Height          =   375
+      Left            =   1800
+      TabIndex        =   1
+      Top             =   720
+      Width           =   1215
+      _ExtentX        =   2143
+      _ExtentY        =   661
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Locked          =   -1  'True
+      Text            =   ""
+      MousePointer    =   1
+   End
+   Begin 拖控件大法UI.DarkCheckBox chkEnabled 
+      Height          =   375
+      Left            =   2160
+      TabIndex        =   3
+      Top             =   1320
+      Width           =   1815
+      _ExtentX        =   3201
+      _ExtentY        =   661
+      Enabled         =   -1  'True
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "该菜单已启用"
+      Value           =   -1  'True
+   End
+   Begin 拖控件大法UI.DarkCheckBox chkVisible 
+      Height          =   375
+      Left            =   4080
+      TabIndex        =   4
+      Top             =   1320
+      Width           =   1815
+      _ExtentX        =   3201
+      _ExtentY        =   661
+      Enabled         =   -1  'True
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "该菜单可视"
+      Value           =   -1  'True
+   End
+   Begin VB.Label labTip 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "把图片拖进框内"
+      BeginProperty Font 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   225
+      Index           =   3
+      Left            =   3240
+      TabIndex        =   17
+      Top             =   720
+      Width           =   1260
+   End
+   Begin VB.Label labTip 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "菜单图标(15x15为佳)："
+      BeginProperty Font 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   225
+      Index           =   2
+      Left            =   3240
+      TabIndex        =   15
+      Top             =   360
+      Width           =   1890
+   End
+   Begin VB.Label labError 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      BeginProperty Font 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H0000FFFF&
+      Height          =   225
+      Left            =   120
+      TabIndex        =   14
+      Top             =   4680
+      Width           =   60
+   End
+   Begin VB.Label labTip 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "菜单ID（只读）："
+      BeginProperty Font 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   225
+      Index           =   1
+      Left            =   120
+      TabIndex        =   13
+      Top             =   720
+      Width           =   1455
+   End
+   Begin VB.Label labTip 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "菜单文本："
+      BeginProperty Font 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   225
+      Index           =   0
+      Left            =   120
+      TabIndex        =   12
+      Top             =   240
+      Width           =   900
+   End
+End
+Attribute VB_Name = "propMenuItems"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
+Private Type MenuItem
+    MenuID          As Integer
+    MenuText        As String
+    SubMenus()      As String           'Base = 1
+    SubMenuID()     As Integer          'Base = 1
+    Enabled         As Boolean
+    CheckBox        As Boolean
+    Visible         As Boolean
+    MenuIcon        As IPictureDisp
+End Type
+
+Dim Menus()         As MenuItem         'Base = 1
+Dim Levels()        As Integer          'Base = 1, 0 means root
+
+Private Sub AddSubMenusToMenuItem(ParentMenuIndex As Integer, ParentLevel As Integer)
+    Dim i           As Integer
+    
+    With Menus(ParentMenuIndex)
+        For i = ParentMenuIndex + 1 To UBound(Menus)
+            If Levels(i) - 1 = Levels(ParentMenuIndex) Then
+                ReDim Preserve .SubMenus(UBound(.SubMenus) + 1)
+                ReDim Preserve .SubMenuID(UBound(.SubMenuID) + 1)
+                .SubMenus(UBound(.SubMenus)) = Menus(i).MenuText
+                .SubMenuID(UBound(.SubMenuID)) = i
+                With Menus(ParentMenuIndex)
+                    SelectedControls(0).SetMenuItemInfo ParentMenuIndex, .MenuID, .MenuText, .Enabled, .CheckBox, _
+                        .Visible, .SubMenus, .SubMenuID, .MenuIcon
+                End With
+            ElseIf Levels(i) - 1 > Levels(ParentMenuIndex) Then
+                ReDim Menus(i - 1).SubMenuID(0)
+                ReDim Menus(i - 1).SubMenus(0)
+                AddSubMenusToMenuItem i - 1, ParentLevel + 1
+            ElseIf Levels(i) = Levels(ParentMenuIndex) Then
+                Exit Sub
+            End If
+        Next i
+    End With
+End Sub
+
+Private Sub chkEnabled_Click()
+    If lstMenus.ListIndex <> -1 Then
+        Menus(lstMenus.ListIndex + 1).Enabled = chkEnabled.Value
+        Changed = True
+    End If
+End Sub
+
+Private Sub chkHasCheckBox_Click()
+    If lstMenus.ListIndex <> -1 Then
+        Menus(lstMenus.ListIndex + 1).CheckBox = chkHasCheckBox.Value
+    End If
+End Sub
+
+Private Sub chkVisible_Click()
+    If lstMenus.ListIndex <> -1 Then
+        Menus(lstMenus.ListIndex + 1).Visible = chkVisible.Value
+        Changed = True
+    End If
+End Sub
+
+Private Sub cmdDelete_Click()
+    Dim i           As Integer
+    Dim CurrIndex   As Integer
+    
+    CurrIndex = lstMenus.ListIndex
+    If CurrIndex <> -1 Then
+        For i = CurrIndex + 1 To UBound(Menus) - 1
+            With Menus(i)
+                .CheckBox = Menus(i + 1).CheckBox
+                .Enabled = Menus(i + 1).Enabled
+                .MenuID = Menus(i + 1).MenuID - 1
+                .MenuText = Menus(i + 1).MenuText
+                .SubMenuID = Menus(i + 1).SubMenuID
+                .SubMenus = Menus(i + 1).SubMenus
+                .Visible = Menus(i + 1).Visible
+            End With
+            Levels(i) = Levels(i + 1)
+        Next i
+        ReDim Preserve Menus(UBound(Menus) - 1)
+        ReDim Preserve Levels(UBound(Levels) - 1)
+        lstMenus.RemoveItem CurrIndex
+        If CurrIndex <= lstMenus.ListCount - 1 Then
+            lstMenus.ListIndex = CurrIndex
+        End If
+    End If
+End Sub
+
+Private Sub cmdDown_Click()
+    If lstMenus.ListIndex < lstMenus.ListCount - 1 Then
+        lstMenus.ListIndex = lstMenus.ListIndex + 1
+        edMenuText.SelStart = 0
+        edMenuText.SelLength = Len(edMenuText.Text)
+        edMenuText.SetFocus
+    End If
+End Sub
+
+Private Sub cmdInsert_Click()
+    Dim i           As Integer
+    Dim CurrIndex   As Integer
+    
+    CurrIndex = lstMenus.ListIndex
+    If CurrIndex <> -1 Then
+        ReDim Preserve Menus(UBound(Menus) + 1)
+        ReDim Preserve Levels(UBound(Levels) + 1)
+        For i = UBound(Menus) To CurrIndex + 1 Step -1
+            With Menus(i)
+                .CheckBox = Menus(i - 1).CheckBox
+                .Enabled = Menus(i - 1).Enabled
+                .MenuID = Menus(i - 1).MenuID + 1
+                .MenuText = Menus(i - 1).MenuText
+                .SubMenuID = Menus(i - 1).SubMenuID
+                .SubMenus = Menus(i - 1).SubMenus
+                .Visible = Menus(i - 1).Visible
+            End With
+            Levels(i) = Levels(i - 1)
+        Next i
+        Levels(CurrIndex + 1) = Levels(CurrIndex)
+        Menus(CurrIndex + 1).Enabled = True
+        Menus(CurrIndex + 1).Visible = True
+        Menus(CurrIndex + 1).MenuText = ""
+        Menus(CurrIndex + 1).MenuID = CurrIndex
+        ReDim Menus(CurrIndex + 1).SubMenuID(0)
+        ReDim Menus(CurrIndex + 1).SubMenus(0)
+        lstMenus.AddItem String(Levels(CurrIndex + 1) * 4, "."), CurrIndex
+        lstMenus.ListIndex = CurrIndex
+    End If
+End Sub
+
+Private Sub cmdLeft_Click()
+    If lstMenus.ListIndex <> -1 Then
+        If Levels(lstMenus.ListIndex + 1) > 0 Then
+            Levels(lstMenus.ListIndex + 1) = Levels(lstMenus.ListIndex + 1) - 1
+            lstMenus.List(lstMenus.ListIndex) = String(Levels(lstMenus.ListIndex + 1) * 4, ".") & Menus(lstMenus.ListIndex + 1).MenuText
+            Changed = True
+            edMenuText.SelStart = 0
+            edMenuText.SelLength = Len(edMenuText.Text)
+            edMenuText.SetFocus
+        End If
+    End If
+End Sub
+
+Private Sub cmdRight_Click()
+    If lstMenus.ListIndex <> -1 Then
+        Levels(lstMenus.ListIndex + 1) = Levels(lstMenus.ListIndex + 1) + 1
+        lstMenus.List(lstMenus.ListIndex) = String(Levels(lstMenus.ListIndex + 1) * 4, ".") & Menus(lstMenus.ListIndex + 1).MenuText
+        Changed = True
+        edMenuText.SelStart = 0
+        edMenuText.SelLength = Len(edMenuText.Text)
+        edMenuText.SetFocus
+    End If
+End Sub
+
+Private Sub cmdNext_Click()
+    If lstMenus.ListIndex < lstMenus.ListCount - 1 Then
+        lstMenus.ListIndex = lstMenus.ListIndex + 1
+    Else
+        edMenuText.SelStart = 0
+        edMenuText.SelLength = Len(edMenuText.Text)
+        edMenuText.SetFocus
+        ReDim Preserve Menus(UBound(Menus) + 1)
+        ReDim Preserve Menus(UBound(Menus)).SubMenuID(0)
+        ReDim Preserve Menus(UBound(Menus)).SubMenus(0)
+        ReDim Preserve Levels(UBound(Levels) + 1)
+        Levels(UBound(Levels)) = Levels(UBound(Levels) - 1)
+        lstMenus.AddItem String(4 * Levels(UBound(Levels)), ".")
+        Menus(UBound(Menus)).Enabled = True
+        Menus(UBound(Menus)).Visible = True
+        Menus(UBound(Menus)).MenuID = UBound(Menus) - 1
+        lstMenus.ListIndex = lstMenus.ListCount - 1
+    End If
+End Sub
+
+Private Sub cmdUp_Click()
+    If lstMenus.ListIndex <> -1 Then
+        lstMenus.ListIndex = lstMenus.ListIndex - 1
+        edMenuText.SelStart = 0
+        edMenuText.SelLength = Len(edMenuText.Text)
+        edMenuText.SetFocus
+    End If
+End Sub
+
+Private Sub edMenuText_Change()
+    If lstMenus.ListIndex <> -1 Then
+        lstMenus.List(lstMenus.ListIndex) = String(Levels(lstMenus.ListIndex + 1) * 4, ".") & edMenuText.Text
+        Menus(lstMenus.ListIndex + 1).MenuText = edMenuText.Text
+        Changed = True
+    End If
+End Sub
+
+Private Sub edMenuText_GotFocus()
+    lstMenus.Visible = False
+    lstMenus.Visible = True
+End Sub
+
+Private Sub lstMenus_Click()
+    With Menus(lstMenus.ListIndex + 1)
+        edMenuText.Text = .MenuText
+        edMenuID.Text = .MenuID
+        chkEnabled.Value = .Enabled
+        chkHasCheckBox.Value = .CheckBox
+        chkVisible.Value = .Visible
+        Set picMenuIcon.Picture = .MenuIcon
+    End With
+    labError.Caption = ""
+End Sub
+
+Private Sub picMenuIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    If Button = vbRightButton Then
+        Set picMenuIcon.Picture = Nothing
+        Set Menus(lstMenus.ListIndex + 1).MenuIcon = Nothing
+    End If
+End Sub
+
+Private Sub picMenuIcon_OLEDragDrop(Data As DataObject, Effect As Long, Button As Integer, Shift As Integer, X As Single, Y As Single)
+    On Error Resume Next
+    Dim picIcon     As IPictureDisp
+    
+    Set picIcon = LoadPicture(Data.Files(1))
+    If Err.Number <> 0 Then
+        labError.Caption = "无效的图片！"
+        Exit Sub
+    Else
+        labError.Caption = ""
+    End If
+    Set Menus(lstMenus.ListIndex + 1).MenuIcon = picIcon
+    Set picMenuIcon.Picture = picIcon
+End Sub
+
+Private Sub PropertyPage_ApplyChanges()
+    On Error Resume Next
+    Dim i           As Integer
+    Dim PrevRoot    As Integer
+    
+    If Levels(1) > 0 Then
+        lstMenus.ListIndex = 0
+        lstMenus.SetFocus
+        Changed = True
+        labError.Caption = "第一个菜单必须为最底层！"
+        Exit Sub
+    End If
+    
+    For i = 2 To UBound(Levels)
+        If Levels(i) - Levels(i - 1) > 1 Then
+            lstMenus.ListIndex = i - 1
+            lstMenus.SetFocus
+            Changed = True
+            labError.Caption = "你的菜单跳级了！"
+            Exit Sub
+        End If
+    Next i
+    
+    labError.Caption = "正在存储菜单项，请稍候..."
+    SelectedControls(0).SetMenuCount UBound(Menus)
+    SelectedControls(0).SetLevels Levels
+    For i = 1 To UBound(Menus)
+        With Menus(i)
+            If Levels(i) = 0 Then
+                PrevRoot = i
+            ElseIf Levels(i) = 1 Then
+                ReDim Menus(PrevRoot).SubMenuID(0)
+                ReDim Menus(PrevRoot).SubMenus(0)
+                AddSubMenusToMenuItem PrevRoot, 0
+            End If
+            
+            SelectedControls(0).SetMenuItemInfo i, .MenuID, .MenuText, .Enabled, .CheckBox, _
+                .Visible, .SubMenus, .SubMenuID, .MenuIcon
+        End With
+    Next i
+End Sub
+
+Private Sub PropertyPage_Initialize()
+    ReDim Menus(1)
+    ReDim Menus(1).SubMenuID(0)
+    ReDim Menus(1).SubMenus(0)
+    ReDim Levels(1)
+End Sub
+
+Private Sub PropertyPage_SelectionChanged()
+    Dim i           As Integer
+    
+    lstMenus.Clear
+    Levels = SelectedControls(0).GetLevels
+    ReDim Menus(SelectedControls(0).GetMenuCount)
+    For i = 1 To UBound(Menus)
+        With Menus(i)
+            SelectedControls(0).GetMenuItemInfo i, .MenuID, .MenuText, .Enabled, .CheckBox, _
+                .Visible, .SubMenus, .SubMenuID, .MenuIcon
+            lstMenus.AddItem String(Levels(i) * 4, ".") & .MenuText
+        End With
+    Next i
+    
+    If lstMenus.ListCount = 0 Then
+        ReDim Menus(1)
+        ReDim Menus(1).SubMenuID(0)
+        ReDim Menus(1).SubMenus(0)
+        ReDim Levels(1)
+        Menus(1).Enabled = True
+        Menus(1).Visible = True
+        lstMenus.AddItem ""
+    End If
+    lstMenus.ListIndex = 0
+    Changed = False
+End Sub

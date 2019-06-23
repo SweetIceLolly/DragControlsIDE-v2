@@ -1,0 +1,156 @@
+VERSION 5.00
+Begin VB.PropertyPage propComboBox 
+   BackColor       =   &H00302D2D&
+   Caption         =   "列表项"
+   ClientHeight    =   2745
+   ClientLeft      =   0
+   ClientTop       =   0
+   ClientWidth     =   4755
+   PaletteMode     =   0  'Halftone
+   ScaleHeight     =   2745
+   ScaleWidth      =   4755
+   Begin 拖控件大法UI.DarkListBox lstItems 
+      Height          =   2190
+      Left            =   120
+      TabIndex        =   4
+      Top             =   120
+      Width           =   2055
+      _ExtentX        =   3625
+      _ExtentY        =   3863
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ListIndex       =   -1
+   End
+   Begin 拖控件大法UI.DarkButton cmdAdd 
+      Height          =   495
+      Left            =   2400
+      TabIndex        =   1
+      Top             =   720
+      Width           =   2055
+      _ExtentX        =   3625
+      _ExtentY        =   873
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "添加"
+   End
+   Begin 拖控件大法UI.DarkEdit edNewItem 
+      Height          =   375
+      Left            =   2400
+      TabIndex        =   0
+      Top             =   120
+      Width           =   2055
+      _ExtentX        =   3625
+      _ExtentY        =   661
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Text            =   ""
+   End
+   Begin 拖控件大法UI.DarkButton cmdDelete 
+      Height          =   495
+      Left            =   2400
+      TabIndex        =   2
+      Top             =   1320
+      Width           =   2055
+      _ExtentX        =   3625
+      _ExtentY        =   873
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "删除选择"
+   End
+   Begin 拖控件大法UI.DarkButton cmdClear 
+      Height          =   495
+      Left            =   2400
+      TabIndex        =   3
+      Top             =   1920
+      Width           =   2055
+      _ExtentX        =   3625
+      _ExtentY        =   873
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "清空"
+   End
+End
+Attribute VB_Name = "propComboBox"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
+Private Sub cmdAdd_Click()
+    lstItems.AddItem edNewItem.Text
+    edNewItem.SelStart = 0
+    edNewItem.SelLength = Len(edNewItem.Text)
+    edNewItem.SetFocus
+    Changed = True
+End Sub
+
+Private Sub cmdClear_Click()
+    lstItems.Clear
+    Changed = True
+End Sub
+
+Private Sub cmdDelete_Click()
+    If lstItems.ListIndex <> -1 Then
+        lstItems.RemoveItem lstItems.ListIndex
+    End If
+    Changed = True
+End Sub
+
+Private Sub edNewItem_GotFocus()
+    lstItems.Visible = False
+    lstItems.Visible = True
+End Sub
+
+Private Sub PropertyPage_ApplyChanges()
+    Dim i       As Integer
+    
+    SelectedControls(0).Clear
+    For i = 0 To lstItems.ListCount - 1
+        SelectedControls(0).AddItem lstItems.List(i)
+    Next i
+End Sub
+
+Private Sub PropertyPage_SelectionChanged()
+    Dim i       As Integer
+    
+    lstItems.Clear
+    For i = 1 To SelectedControls(0).ListCount
+        lstItems.AddItem SelectedControls(0).Items(i)
+    Next i
+End Sub
