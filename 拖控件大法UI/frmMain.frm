@@ -1,29 +1,62 @@
 VERSION 5.00
+Object = "{945E8FCC-830E-45CC-AF00-A012D5AE7451}#15.3#0"; "CO7FCA~1.OCX"
 Begin VB.Form frmMain 
    BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "Form1"
-   ClientHeight    =   7092
+   ClientHeight    =   6090
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   12876
+   ClientWidth     =   13140
+   BeginProperty Font 
+      Name            =   "Microsoft YaHei UI"
+      Size            =   8.25
+      Charset         =   0
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   7092
-   ScaleWidth      =   12876
-   StartUpPosition =   2  '屏幕中心
+   ScaleHeight     =   6090
+   ScaleWidth      =   13140
+   StartUpPosition =   3  'Windows Default
+   Begin VB.PictureBox Picture1 
+      Align           =   1  'Align Top
+      Appearance      =   0  'Flat
+      BackColor       =   &H00302D2D&
+      BorderStyle     =   0  'None
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H80000008&
+      Height          =   1815
+      Left            =   0
+      ScaleHeight     =   1815
+      ScaleWidth      =   13140
+      TabIndex        =   2
+      Top             =   810
+      Width           =   13140
+   End
    Begin 拖控件大法UI.DarkMenu DarkMenu 
       Align           =   1  'Align Top
-      Height          =   312
+      Height          =   315
       Left            =   0
-      TabIndex        =   1
-      Top             =   492
-      Width           =   12876
-      _ExtentX        =   22712
-      _ExtentY        =   550
+      TabIndex        =   0
+      Top             =   495
+      Width           =   13140
+      _ExtentX        =   23178
+      _ExtentY        =   556
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
-         Size            =   9.6
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -398,33 +431,33 @@ Begin VB.Form frmMain
       SubMenuID_54_0  =   0
    End
    Begin 拖控件大法UI.DarkWindowBorder DarkWindowBorderSizer 
-      Left            =   12240
-      Top             =   6480
-      _ExtentX        =   677
-      _ExtentY        =   677
+      Left            =   12120
+      Top             =   5400
+      _ExtentX        =   847
+      _ExtentY        =   847
       Thickness       =   5
-      MinWidth        =   330
+      MinWidth        =   400
       MinHeight       =   75
       Transparency    =   1
       UseSetParent    =   0   'False
    End
    Begin 拖控件大法UI.DarkWindowBorder DarkWindowBorder 
-      Left            =   11640
-      Top             =   6480
-      _ExtentX        =   677
-      _ExtentY        =   677
-      MinWidth        =   330
+      Left            =   11520
+      Top             =   5400
+      _ExtentX        =   847
+      _ExtentY        =   847
+      MinWidth        =   400
       MinHeight       =   75
    End
    Begin 拖控件大法UI.DarkTitleBar DarkTitleBar 
       Align           =   1  'Align Top
       Height          =   495
       Left            =   0
-      TabIndex        =   0
+      TabIndex        =   1
       Top             =   0
-      Width           =   12870
-      _ExtentX        =   22712
-      _ExtentY        =   868
+      Width           =   13140
+      _ExtentX        =   23178
+      _ExtentY        =   873
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -437,6 +470,15 @@ Begin VB.Form frmMain
       Caption         =   "新工程 - 拖控件大法"
       Picture         =   "frmMain.frx":1BCC2
    End
+   Begin XtremeDockingPane.DockingPane DockingPane 
+      Left            =   10560
+      Top             =   5520
+      _Version        =   983043
+      _ExtentX        =   635
+      _ExtentY        =   635
+      _StockProps     =   0
+      VisualTheme     =   10
+   End
 End
 Attribute VB_Name = "frmMain"
 Attribute VB_GlobalNameSpace = False
@@ -445,7 +487,40 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Private Sub DockingPane_AttachPane(ByVal Item As XtremeDockingPane.IPane)
+    Select Case Item.Id
+        Case 1
+            Item.Handle = frmPane.hWnd
+            Item.Title = "测试"
+        
+    End Select
+End Sub
+
 Private Sub Form_Load()
-    DarkWindowBorder.FocusedColor = RGB(10, 176, 255)
-    DarkWindowBorder.NotFocusedColor = RGB(128, 128, 128)
+    Me.DockingPane.AttachToWindow Me.Picture1.hWnd
+    Me.DockingPane.CreatePane 1, 100, (Me.ScaleHeight - Me.Picture1.Top) / 15, DockLeftOf
+    Me.DockingPane.Options.ShowDockingContextStickers = True
+    Me.DockingPane.Options.AlphaDockingContext = True
+    Me.DockingPane.Options.LunaColors = False
+    Me.DockingPane.Options.ThemedFloatingFrames = True
+    'Me.DockingPane.Options.SideDocking = False
+    'Me.DockingPane.PaintManager.SplitterColor = RGB(63, 63, 70)
+    
+    Me.DarkTitleBar.Caption = DockingPaneGlobalSettings.ResourceImages.LoadFromFile(App.Path & "\Office2010.dll", "Office2010Black.ini")
+    Me.DockingPane.VisualTheme = ThemeResource
+    Me.DockingPane.PaintManager.SplitterSize = 2
+    Me.DockingPane.RedrawPanes
+End Sub
+
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    Unload frmPane
+End Sub
+
+Private Sub Form_Resize()
+    Me.Picture1.Height = Me.ScaleHeight - Me.Picture1.Top
+End Sub
+
+Private Sub Picture1_Click()
+    'Me.DockingPane.PanelPaintManager.ColorSet.ControlFace = RGB(255 * Rnd, 255 * Rnd, 255 * Rnd)
+    DockingPaneGlobalSettings.ResourceImages.LoadFromFile App.Path & "\Office2010.dll", "Office2010Black.ini"
 End Sub
