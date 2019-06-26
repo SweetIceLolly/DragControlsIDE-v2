@@ -19,6 +19,8 @@ Begin VB.Form frmMain
    EndProperty
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
    ScaleHeight     =   6090
    ScaleWidth      =   13140
    StartUpPosition =   3  'Windows Default
@@ -503,24 +505,20 @@ Private Sub Form_Load()
     Me.DockingPane.Options.AlphaDockingContext = True
     Me.DockingPane.Options.LunaColors = False
     Me.DockingPane.Options.ThemedFloatingFrames = True
-    'Me.DockingPane.Options.SideDocking = False
-    'Me.DockingPane.PaintManager.SplitterColor = RGB(63, 63, 70)
     
     Me.DarkTitleBar.Caption = DockingPaneGlobalSettings.ResourceImages.LoadFromFile(App.Path & "\Office2010.dll", "Office2010Black.ini")
     Me.DockingPane.VisualTheme = ThemeResource
     Me.DockingPane.PaintManager.SplitterSize = 2
     Me.DockingPane.RedrawPanes
+    
+    SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf WndProc)
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(hWnd, "PrevWndProc")
     Unload frmPane
 End Sub
 
 Private Sub Form_Resize()
     Me.Picture1.Height = Me.ScaleHeight - Me.Picture1.Top
-End Sub
-
-Private Sub Picture1_Click()
-    'Me.DockingPane.PanelPaintManager.ColorSet.ControlFace = RGB(255 * Rnd, 255 * Rnd, 255 * Rnd)
-    DockingPaneGlobalSettings.ResourceImages.LoadFromFile App.Path & "\Office2010.dll", "Office2010Black.ini"
 End Sub

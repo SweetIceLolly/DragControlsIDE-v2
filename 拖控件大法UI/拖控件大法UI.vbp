@@ -24,6 +24,7 @@ UserControl=DarkHScrollBar.ctl
 Form=frmPane.frm
 Form=frmMain.frm
 Object={945E8FCC-830E-45CC-AF00-A012D5AE7451}#15.3#0; CO7FCA~1.OCX
+Module=modMain; modMain.bas
 IconForm="frmMain"
 Startup="frmMain"
 HelpFile=""
