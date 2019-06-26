@@ -446,3 +446,10 @@ Public Property Let BarWidth(ByVal New_BarWidth As Long)
     UserControl.shpBar.Width = New_BarWidth
 End Property
 
+'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
+'MappingInfo=UserControl,UserControl,-1,hWnd
+Public Property Get hWnd() As Long
+Attribute hWnd.VB_Description = "Returns a handle (from Microsoft Windows) to an object's window."
+    hWnd = UserControl.hWnd
+End Property
+
