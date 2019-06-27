@@ -1,29 +1,111 @@
 VERSION 5.00
+Object = "{945E8FCC-830E-45CC-AF00-A012D5AE7451}#15.3#0"; "CO7FCA~1.OCX"
+Object = "{CA73588D-282F-4592-9369-A61CC244FADA}#15.3#0"; "COCEAE~1.OCX"
+Object = "{BD0C1912-66C3-49CC-8B12-7B347BF6C846}#15.3#0"; "COE2B7~1.OCX"
 Begin VB.Form frmMain 
    BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "Form1"
-   ClientHeight    =   7092
+   ClientHeight    =   6090
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   12876
+   ClientWidth     =   13140
+   BeginProperty Font 
+      Name            =   "Microsoft YaHei UI"
+      Size            =   8.25
+      Charset         =   0
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   7092
-   ScaleWidth      =   12876
-   StartUpPosition =   2  '屏幕中心
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   6090
+   ScaleWidth      =   13140
+   StartUpPosition =   3  'Windows Default
+   Begin VB.PictureBox Picture1 
+      Align           =   1  'Align Top
+      Appearance      =   0  'Flat
+      BackColor       =   &H00302D2D&
+      BorderStyle     =   0  'None
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H80000008&
+      Height          =   3615
+      Left            =   0
+      ScaleHeight     =   3615
+      ScaleWidth      =   13140
+      TabIndex        =   2
+      Top             =   810
+      Width           =   13140
+      Begin XtremeSyntaxEdit.SyntaxEdit SyntaxEdit 
+         Height          =   855
+         Left            =   2400
+         TabIndex        =   3
+         Top             =   240
+         Width           =   1455
+         _Version        =   983043
+         _ExtentX        =   2566
+         _ExtentY        =   1508
+         _StockProps     =   84
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         EnableSyntaxColorization=   -1  'True
+         ShowLineNumbers =   -1  'True
+         ShowSelectionMargin=   -1  'True
+         ShowScrollBarVert=   -1  'True
+         ShowScrollBarHorz=   -1  'True
+         EnableVirtualSpace=   0   'False
+         EnableAutoIndent=   -1  'True
+         ShowWhiteSpace  =   0   'False
+         ShowCollapsibleNodes=   -1  'True
+         AutoCompleteWndWidth=   160
+         EnableEditAccelerators=   -1  'True
+      End
+      Begin VB.PictureBox picScrollBarCover 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00302D2D&
+         BorderStyle     =   0  'None
+         ForeColor       =   &H80000008&
+         Height          =   255
+         Left            =   9720
+         ScaleHeight     =   255
+         ScaleMode       =   0  'User
+         ScaleWidth      =   255
+         TabIndex        =   4
+         Top             =   1800
+         Width           =   255
+      End
+   End
    Begin 拖控件大法UI.DarkMenu DarkMenu 
       Align           =   1  'Align Top
-      Height          =   312
+      Height          =   315
       Left            =   0
-      TabIndex        =   1
-      Top             =   492
-      Width           =   12876
-      _ExtentX        =   22712
-      _ExtentY        =   550
+      TabIndex        =   0
+      Top             =   495
+      Width           =   13140
+      _ExtentX        =   23178
+      _ExtentY        =   556
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
-         Size            =   9.6
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -398,33 +480,33 @@ Begin VB.Form frmMain
       SubMenuID_54_0  =   0
    End
    Begin 拖控件大法UI.DarkWindowBorder DarkWindowBorderSizer 
-      Left            =   12240
-      Top             =   6480
-      _ExtentX        =   677
-      _ExtentY        =   677
+      Left            =   12120
+      Top             =   5400
+      _ExtentX        =   847
+      _ExtentY        =   847
       Thickness       =   5
-      MinWidth        =   330
+      MinWidth        =   400
       MinHeight       =   75
       Transparency    =   1
       UseSetParent    =   0   'False
    End
    Begin 拖控件大法UI.DarkWindowBorder DarkWindowBorder 
-      Left            =   11640
-      Top             =   6480
-      _ExtentX        =   677
-      _ExtentY        =   677
-      MinWidth        =   330
+      Left            =   11520
+      Top             =   5400
+      _ExtentX        =   847
+      _ExtentY        =   847
+      MinWidth        =   400
       MinHeight       =   75
    End
    Begin 拖控件大法UI.DarkTitleBar DarkTitleBar 
       Align           =   1  'Align Top
       Height          =   495
       Left            =   0
-      TabIndex        =   0
+      TabIndex        =   1
       Top             =   0
-      Width           =   12870
-      _ExtentX        =   22712
-      _ExtentY        =   868
+      Width           =   13140
+      _ExtentX        =   23178
+      _ExtentY        =   873
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -437,6 +519,23 @@ Begin VB.Form frmMain
       Caption         =   "新工程 - 拖控件大法"
       Picture         =   "frmMain.frx":1BCC2
    End
+   Begin XtremeSkinFramework.SkinFramework SkinFramework 
+      Left            =   9720
+      Top             =   5520
+      _Version        =   983043
+      _ExtentX        =   635
+      _ExtentY        =   635
+      _StockProps     =   0
+   End
+   Begin XtremeDockingPane.DockingPane DockingPane 
+      Left            =   10560
+      Top             =   5520
+      _Version        =   983043
+      _ExtentX        =   635
+      _ExtentY        =   635
+      _StockProps     =   0
+      VisualTheme     =   10
+   End
 End
 Attribute VB_Name = "frmMain"
 Attribute VB_GlobalNameSpace = False
@@ -445,7 +544,67 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Function LoadSampleFile(FileName As String) As String
+    Dim fileHandle As Integer
+    Dim FileText As String
+    
+    If Len(Dir$(FileName$)) = 0 Then
+        Err.Raise 53
+    End If
+    
+    fileHandle = FreeFile
+    Open FileName$ For Input As #fileHandle
+        FileText = Input$(LOF(fileHandle), fileHandle)
+    Close #fileHandle
+    
+    LoadSampleFile = FileText
+End Function
+
+Private Sub DockingPane_AttachPane(ByVal Item As XtremeDockingPane.IPane)
+    Select Case Item.Id
+        Case 1
+            Item.Handle = frmPane.hWnd
+            Item.Title = "测试"
+        
+    End Select
+End Sub
+
 Private Sub Form_Load()
-    DarkWindowBorder.FocusedColor = RGB(10, 176, 255)
-    DarkWindowBorder.NotFocusedColor = RGB(128, 128, 128)
+    Me.DockingPane.AttachToWindow Me.Picture1.hWnd
+    Me.DockingPane.CreatePane 1, 100, (Me.ScaleHeight - Me.Picture1.Top) / 15, DockLeftOf
+    Me.DockingPane.Options.ShowDockingContextStickers = True
+    Me.DockingPane.Options.AlphaDockingContext = True
+    Me.DockingPane.Options.LunaColors = False
+    Me.DockingPane.Options.ThemedFloatingFrames = True
+    
+    Me.DarkTitleBar.Caption = DockingPaneGlobalSettings.ResourceImages.LoadFromFile(App.Path & "\Office2010.dll", "Office2010Black.ini")
+    Me.DockingPane.VisualTheme = ThemeResource
+    Me.DockingPane.PaintManager.SplitterSize = 2
+    Me.DockingPane.RedrawPanes
+    
+    'Me.SyntaxEdit.SetScrollBars Me.HScroll.hWnd, Me.VScroll.hWnd
+    Me.SyntaxEdit.PaintManager.BackColor = RGB(28, 28, 28)
+    Me.SyntaxEdit.PaintManager.LineNumberBackColor = RGB(28, 28, 28)
+    Me.SyntaxEdit.PaintManager.LineNumberTextColor = RGB(86, 156, 214)
+    Me.SyntaxEdit.ShowSelectionMargin = False
+    Me.SyntaxEdit.DataManager.FileExt = ".cpp"
+    Me.SyntaxEdit.SetSyntaxAndColorScheme LoadSampleFile("cpp.schclass"), LoadSampleFile("SyntaxEditDark.ini"), False, False
+    
+    Me.SkinFramework.LoadSkin "Office2007.cjstyles", "NormalBlue.ini"
+    Me.SkinFramework.ApplyWindow Me.hWnd
+    
+    SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf WndProc)
+End Sub
+
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(hWnd, "PrevWndProc")
+    Unload frmPane
+End Sub
+
+Private Sub Form_Resize()
+    Me.Picture1.Height = Me.ScaleHeight - Me.Picture1.Top
+    Me.SyntaxEdit.Move 1500, 0, Me.Picture1.ScaleWidth - 3000, Me.Picture1.ScaleHeight - 1500
+    Me.picScrollBarCover.ZOrder 0
+    Me.picScrollBarCover.Left = Me.SyntaxEdit.Left + Me.SyntaxEdit.Width - Me.picScrollBarCover.Width
+    Me.picScrollBarCover.Top = Me.SyntaxEdit.Top + Me.SyntaxEdit.Height - Me.picScrollBarCover.Height
 End Sub

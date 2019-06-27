@@ -2,12 +2,12 @@ VERSION 5.00
 Begin VB.UserControl DarkTitleBar 
    Alignable       =   -1  'True
    BackColor       =   &H00302D2D&
-   ClientHeight    =   528
+   ClientHeight    =   525
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   5376
-   ScaleHeight     =   528
-   ScaleWidth      =   5376
+   ClientWidth     =   5370
+   ScaleHeight     =   525
+   ScaleWidth      =   5370
    ToolboxBitmap   =   "DarkTitleBar.ctx":0000
    Begin 拖控件大法UI.DarkMenu mnuPopup 
       Height          =   315
@@ -16,11 +16,11 @@ Begin VB.UserControl DarkTitleBar
       Top             =   600
       Visible         =   0   'False
       Width           =   2775
-      _ExtentX        =   4890
-      _ExtentY        =   550
+      _ExtentX        =   4895
+      _ExtentY        =   556
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
-         Size            =   9.6
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -123,20 +123,20 @@ Begin VB.UserControl DarkTitleBar
       HasBorder       =   0   'False
    End
    Begin VB.Image imgMax 
-      Height          =   384
+      Height          =   480
       Left            =   4320
       Picture         =   "DarkTitleBar.ctx":30B8
       Top             =   480
       Visible         =   0   'False
-      Width           =   384
+      Width           =   480
    End
    Begin VB.Image imgRestore 
-      Height          =   384
+      Height          =   480
       Left            =   4800
       Picture         =   "DarkTitleBar.ctx":3D82
       Top             =   480
       Visible         =   0   'False
-      Width           =   384
+      Width           =   480
    End
    Begin VB.Label labTip 
       AutoSize        =   -1  'True
@@ -159,11 +159,11 @@ Begin VB.UserControl DarkTitleBar
       Width           =   1215
    End
    Begin VB.Image imgIcon 
-      Height          =   384
+      Height          =   480
       Left            =   0
       Picture         =   "DarkTitleBar.ctx":4A4C
       Top             =   0
-      Width           =   384
+      Width           =   480
    End
 End
 Attribute VB_Name = "DarkTitleBar"
@@ -180,7 +180,7 @@ Option Explicit
 'Focused:       241, 241, 213
 'No focus:      117, 153, 136
 
-Private Declare Function GetWindowPlacement Lib "user32" (ByVal hWnd As Long, lpwndpl As WINDOWPLACEMENT) As Long
+Private Declare Function GetWindowPlacement Lib "user32" (ByVal hwnd As Long, lpwndpl As WINDOWPLACEMENT) As Long
 
 Private Const SZ_MARGIN = 30
 
@@ -196,15 +196,14 @@ End Sub
 Private Sub cmdMax_Click()
     On Error Resume Next
     Dim wp          As WINDOWPLACEMENT
-    Dim PrevStyle   As Long
     
-    GetWindowPlacement UserControl.Parent.hWnd, wp
+    GetWindowPlacement UserControl.Parent.hwnd, wp
     If wp.ShowCmd = SW_MAXIMIZE Then
-        ShowWindow UserControl.Parent.hWnd, SW_RESTORE
+        ShowWindow UserControl.Parent.hwnd, SW_RESTORE
         UserControl.cmdMax.ToolTipText = "最大化"
         Set UserControl.cmdMax.Picture = UserControl.imgMax.Picture
     Else
-        ShowWindow UserControl.Parent.hWnd, SW_MAXIMIZE
+        ShowWindow UserControl.Parent.hwnd, SW_MAXIMIZE
         UserControl.cmdMax.ToolTipText = "还原"
         Set UserControl.cmdMax.Picture = UserControl.imgRestore.Picture
     End If
@@ -212,7 +211,7 @@ End Sub
 
 Private Sub cmdMin_Click()
     On Error Resume Next
-    ShowWindow UserControl.Parent.hWnd, SW_MINIMIZE
+    ShowWindow UserControl.Parent.hwnd, SW_MINIMIZE
 End Sub
 
 Private Sub imgIcon_DblClick()
@@ -225,7 +224,7 @@ Private Sub imgIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, 
         Dim wRect   As RECT
         Dim wp  As WINDOWPLACEMENT
     
-        GetWindowPlacement UserControl.Parent.hWnd, wp
+        GetWindowPlacement UserControl.Parent.hwnd, wp
         If wp.ShowCmd = SW_MAXIMIZE Then
             UserControl.mnuPopup.MenuEnabled(1) = True
             UserControl.mnuPopup.MenuEnabled(2) = False
@@ -234,7 +233,7 @@ Private Sub imgIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, 
             UserControl.mnuPopup.MenuEnabled(2) = True
         End If
         
-        GetWindowRect UserControl.hWnd, wRect
+        GetWindowRect UserControl.hwnd, wRect
         UserControl.mnuPopup.PopupMenu 0, wRect.Left * Screen.TwipsPerPixelX + X + 120, _
             wRect.Top * Screen.TwipsPerPixelY + Y + 120
     End If
@@ -275,7 +274,7 @@ Private Sub tmrCheckFocus_Timer()
         UserControl.tmrCheckFocus.Enabled = False
     End If
     UserControl.Width = UserControl.Parent.ScaleWidth
-    If GetForegroundWindow() = UserControl.Parent.hWnd Then
+    If GetForegroundWindow() = UserControl.Parent.hwnd Then
         UserControl.labTip.ForeColor = RGB(218, 218, 232)
     Else
         UserControl.labTip.ForeColor = RGB(188, 188, 188)
@@ -296,7 +295,7 @@ Private Sub UserControl_MouseDown(Button As Integer, Shift As Integer, X As Sing
     
     If Button = vbLeftButton Then
         ReleaseCapture
-        SendMessageA UserControl.Parent.hWnd, WM_NCLBUTTONDOWN, HTCAPTION, 0
+        SendMessageA UserControl.Parent.hwnd, WM_NCLBUTTONDOWN, HTCAPTION, 0
     ElseIf Button = vbRightButton Then
         Call imgIcon_MouseDown(1, 0, X, Y)
     End If
@@ -325,7 +324,7 @@ Private Sub UserControl_Resize()
     '-------------------------------------------------
     Dim wp  As WINDOWPLACEMENT
     
-    GetWindowPlacement UserControl.Parent.hWnd, wp
+    GetWindowPlacement UserControl.Parent.hwnd, wp
     If wp.ShowCmd = SW_MAXIMIZE Then
         UserControl.cmdMax.ToolTipText = "还原"
         Set UserControl.cmdMax.Picture = UserControl.imgRestore.Picture
