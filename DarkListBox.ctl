@@ -80,7 +80,7 @@ Event Scroll() 'MappingInfo=lstMain,lstMain,-1,Scroll
 Attribute Scroll.VB_Description = "Occurs when you reposition the scroll box on a control."
 
 Private Sub lstMain_Scroll()
-    UserControl.VScrollBar.Value = UserControl.lstMain.TopIndex
+    UserControl.VscrollBar.Value = UserControl.lstMain.TopIndex
     RaiseEvent Scroll
 End Sub
 
@@ -97,22 +97,22 @@ Private Sub tmrUpdateVScrollBar_Timer()
         (SendMessageA(UserControl.lstMain.hWnd, LB_GETITEMHEIGHT, 0, 0) * Screen.TwipsPerPixelY)
     ItemCount = UserControl.lstMain.ListCount
     If ItemCount > ItemsPerPage Then
-        If UserControl.VScrollBar.Max <> ItemCount - ItemsPerPage Then
-            UserControl.VScrollBar.Max = ItemCount - ItemsPerPage
+        If UserControl.VscrollBar.Max <> ItemCount - ItemsPerPage Then
+            UserControl.VscrollBar.Max = ItemCount - ItemsPerPage
         End If
-        If UserControl.VScrollBar.BarHeight > 0 And UserControl.VScrollBar.BarHeight < 120 Then
-            UserControl.VScrollBar.BarHeight = 120
-        ElseIf UserControl.VScrollBar.BarHeight = 120 Then
+        If UserControl.VscrollBar.BarHeight > 0 And UserControl.VscrollBar.BarHeight < 120 Then
+            UserControl.VscrollBar.BarHeight = 120
+        ElseIf UserControl.VscrollBar.BarHeight = 120 Then
             Exit Sub
-        ElseIf UserControl.VScrollBar.BarHeight <> CLng((UserControl.VScrollBar.Height - 480 * 2) / ItemCount * ItemsPerPage) Then
-            UserControl.VScrollBar.BarHeight = (UserControl.VScrollBar.Height - 480 * 2) / ItemCount * ItemsPerPage
+        ElseIf UserControl.VscrollBar.BarHeight <> CLng((UserControl.VscrollBar.Height - 480 * 2) / ItemCount * ItemsPerPage) Then
+            UserControl.VscrollBar.BarHeight = (UserControl.VscrollBar.Height - 480 * 2) / ItemCount * ItemsPerPage
         End If
-        UserControl.VScrollBar.Enabled = True
+        UserControl.VscrollBar.Enabled = True
     Else
-        If UserControl.VScrollBar.BarHeight <> 0 Then
-            UserControl.VScrollBar.BarHeight = 0
+        If UserControl.VscrollBar.BarHeight <> 0 Then
+            UserControl.VscrollBar.BarHeight = 0
         End If
-        UserControl.VScrollBar.Enabled = False
+        UserControl.VscrollBar.Enabled = False
     End If
 End Sub
 
@@ -135,12 +135,13 @@ End Sub
 
 Private Sub UserControl_Resize()
     On Error Resume Next
+    
     UserControl.lstMain.Height = UserControl.Height
-    UserControl.lstMain.Width = UserControl.Width - UserControl.VScrollBar.Width
-    UserControl.VScrollBar.Left = UserControl.lstMain.Width
+    UserControl.lstMain.Width = UserControl.Width - UserControl.VscrollBar.Width
+    UserControl.VscrollBar.Left = UserControl.lstMain.Width
     UserControl.Height = UserControl.lstMain.Height
-    UserControl.VScrollBar.Height = UserControl.Height
-    UserControl.Width = UserControl.VScrollBar.Left + UserControl.VScrollBar.Width
+    UserControl.VscrollBar.Height = UserControl.Height
+    UserControl.Width = UserControl.VscrollBar.Left + UserControl.VscrollBar.Width
 End Sub
 
 Private Sub VScrollBar_ValueChanged(NewValue As Long)

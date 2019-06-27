@@ -401,11 +401,11 @@ Public Function SetSelectedItem(Index As Long) As Long
 End Function
 
 Public Sub ScrollDown()
-    UserControl.VScrollBar.Value = UserControl.VScrollBar.Value + UserControl.VScrollBar.SmallChange
+    UserControl.VscrollBar.Value = UserControl.VscrollBar.Value + UserControl.VscrollBar.SmallChange
 End Sub
 
 Public Sub ScrollUp()
-    UserControl.VScrollBar.Value = UserControl.VScrollBar.Value - UserControl.VScrollBar.SmallChange
+    UserControl.VscrollBar.Value = UserControl.VscrollBar.Value - UserControl.VscrollBar.SmallChange
 End Sub
 
 Private Sub labColumnHeader_Click(Index As Integer)
@@ -521,25 +521,25 @@ Private Sub tmrUpdateScrollBars_Timer()
         TopIndex = SendMessageA(hWnd, LVM_GETTOPINDEX, 0, 0)
         SendMessageA hWnd, LVM_GETITEMRECT, TopIndex, ByVal VarPtr(ItemRect)
         
-        If UserControl.VScrollBar.Visible = False Then
-            UserControl.VScrollBar.Visible = True
+        If UserControl.VscrollBar.Visible = False Then
+            UserControl.VscrollBar.Visible = True
             Call UserControl_Resize
         End If
-        If UserControl.VScrollBar.Max <> ReqH - lstRect.bottom + lstRect.Top Then
-            UserControl.VScrollBar.Max = ReqH - lstRect.bottom + lstRect.Top
-            UserControl.VScrollBar.SmallChange = (ItemRect.bottom - ItemRect.Top)
-            UserControl.VScrollBar.LargeChange = UserControl.VScrollBar.SmallChange * 3
+        If UserControl.VscrollBar.Max <> ReqH - lstRect.bottom + lstRect.Top Then
+            UserControl.VscrollBar.Max = ReqH - lstRect.bottom + lstRect.Top
+            UserControl.VscrollBar.SmallChange = (ItemRect.bottom - ItemRect.Top)
+            UserControl.VscrollBar.LargeChange = UserControl.VscrollBar.SmallChange * 3
         End If
-        If UserControl.VScrollBar.BarHeight <> CLng((UserControl.VScrollBar.Height - 480 * 2) / ReqH * (lstRect.bottom - lstRect.Top)) Then
-            UserControl.VScrollBar.BarHeight = CLng((UserControl.VScrollBar.Height - 480 * 2) / ReqH * (lstRect.bottom - lstRect.Top))
+        If UserControl.VscrollBar.BarHeight <> CLng((UserControl.VscrollBar.Height - 480 * 2) / ReqH * (lstRect.bottom - lstRect.Top)) Then
+            UserControl.VscrollBar.BarHeight = CLng((UserControl.VscrollBar.Height - 480 * 2) / ReqH * (lstRect.bottom - lstRect.Top))
         End If
-        If Abs(UserControl.VScrollBar.Value - (ItemRect.bottom - ItemRect.Top) * TopIndex) > (ItemRect.bottom - ItemRect.Top) Then
-            UserControl.VScrollBar.Value = (ItemRect.bottom - ItemRect.Top) * TopIndex
+        If Abs(UserControl.VscrollBar.Value - (ItemRect.bottom - ItemRect.Top) * TopIndex) > (ItemRect.bottom - ItemRect.Top) Then
+            UserControl.VscrollBar.Value = (ItemRect.bottom - ItemRect.Top) * TopIndex
         End If
     Else
-        If UserControl.VScrollBar.Visible = True Then
-            UserControl.VScrollBar.Visible = False
-            UserControl.VScrollBar.Value = 0
+        If UserControl.VscrollBar.Visible = True Then
+            UserControl.VscrollBar.Visible = False
+            UserControl.VscrollBar.Value = 0
             Call UserControl_Resize
         End If
     End If
@@ -632,22 +632,24 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
 End Sub
 
 Private Sub UserControl_Resize()
+    On Error Resume Next
+    
     SetWindowPos hWnd, 0, -1, (labColumnHeader(0).Height - 15) / Screen.TwipsPerPixelY - 1, _
-        IIf(UserControl.VScrollBar.Visible, (UserControl.Width - UserControl.VScrollBar.Width) / Screen.TwipsPerPixelX, UserControl.Width / Screen.TwipsPerPixelX), _
+        IIf(UserControl.VscrollBar.Visible, (UserControl.Width - UserControl.VscrollBar.Width) / Screen.TwipsPerPixelX, UserControl.Width / Screen.TwipsPerPixelX), _
         IIf(UserControl.HScrollBar.Visible, (UserControl.Height - UserControl.labColumnHeader(0).Height - UserControl.HScrollBar.Height) / Screen.TwipsPerPixelY + 1, _
             (UserControl.Height - UserControl.labColumnHeader(0).Height) / Screen.TwipsPerPixelY + 1), SWP_NOZORDER
     
-    If UserControl.VScrollBar.Visible Then
-        UserControl.VScrollBar.Top = UserControl.labColumnHeader(0).Height
-        UserControl.VScrollBar.Left = UserControl.Width - UserControl.VScrollBar.Width
-        UserControl.VScrollBar.Height = IIf(UserControl.HScrollBar.Visible, _
+    If UserControl.VscrollBar.Visible Then
+        UserControl.VscrollBar.Top = UserControl.labColumnHeader(0).Height
+        UserControl.VscrollBar.Left = UserControl.Width - UserControl.VscrollBar.Width
+        UserControl.VscrollBar.Height = IIf(UserControl.HScrollBar.Visible, _
             UserControl.Height - UserControl.HScrollBar.Height - UserControl.labColumnHeader(0).Height, _
             UserControl.Height - UserControl.labColumnHeader(0).Height)
     End If
     If UserControl.HScrollBar.Visible Then
         UserControl.HScrollBar.Left = 0
         UserControl.HScrollBar.Top = UserControl.Height - UserControl.HScrollBar.Height
-        UserControl.HScrollBar.Width = IIf(UserControl.VScrollBar.Visible, UserControl.Width - UserControl.VScrollBar.Width, UserControl.Width)
+        UserControl.HScrollBar.Width = IIf(UserControl.VscrollBar.Visible, UserControl.Width - UserControl.VscrollBar.Width, UserControl.Width)
     End If
     
     Dim i   As Integer

@@ -24,12 +24,12 @@ Public Function GetAppPath() As String
     End If
 End Function
 
-'描述:      修复主窗口最大化全屏的问题
+'描述:      修复主窗口最大化全屏和在任务栏的右键菜单无法关闭的问题
 '参数:      hWnd: 窗口句柄
 '.          uMsg: 消息值
 '.          wParam, lParam: 消息的参数
 '返回值:    消息处理返回值
-Public Function MainWindowMaximizeFixProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function MainWindowMaximizeCloseFixProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     If uMsg = WM_GETMINMAXINFO Then                                                         '窗口尝试获取最大、最小化信息
         Dim mmi             As MINMAXINFO                                                       '最大、最小化信息
         Dim rectWorkArea    As RECT                                                             '屏幕工作区大小
@@ -40,8 +40,12 @@ Public Function MainWindowMaximizeFixProc(ByVal hWnd As Long, ByVal uMsg As Long
         mmi.ptMaxSize.Y = rectWorkArea.bottom - rectWorkArea.Top
         CopyMemory ByVal lParam, mmi, ByVal Len(mmi)                                            '更改最大化信息中的大小信息，修复窗口最大化的时候会全屏的问题
         
-        MainWindowMaximizeFixProc = 0                                                           '处理这个消息之后需要返回0
+        MainWindowMaximizeCloseFixProc = 0                                                      '处理这个消息之后需要返回0
         Exit Function
+    ElseIf uMsg = WM_SYSCOMMAND Then                                                        '在任务栏使用右键菜单关闭
+        If wParam = SC_CLOSE Then
+            Unload frmMain
+        End If
     End If
-    MainWindowMaximizeFixProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
+    MainWindowMaximizeCloseFixProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
 End Function

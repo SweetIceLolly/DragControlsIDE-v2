@@ -169,6 +169,8 @@ Private Sub UserControl_MouseMove(Button As Integer, Shift As Integer, X As Sing
 End Sub
 
 Private Sub UserControl_Resize()
+    On Error Resume Next
+    
     UserControl.edMain.Left = SZ_BORDER
     UserControl.edMain.Top = SZ_BORDER
     UserControl.edMain.Width = UserControl.Width - SZ_BORDER * 3

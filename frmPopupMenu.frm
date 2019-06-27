@@ -107,7 +107,7 @@ Begin VB.Form frmPopupMenu
       BackColor       =   &H001C1B1B&
       Caption         =   " Item"
       BeginProperty Font 
-         Name            =   "Microsoft YaHei UI"
+         Name            =   "Consolas"
          Size            =   9.75
          Charset         =   0
          Weight          =   400
@@ -116,12 +116,12 @@ Begin VB.Form frmPopupMenu
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00F0F0F0&
-      Height          =   255
+      Height          =   225
       Index           =   0
       Left            =   0
       TabIndex        =   0
       Top             =   0
-      Width           =   480
+      Width           =   525
    End
 End
 Attribute VB_Name = "frmPopupMenu"
@@ -472,6 +472,8 @@ Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y A
 End Sub
 
 Private Sub Form_Resize()
+    On Error Resume Next
+    
     With Me.lnBorderBottom
         .X1 = 0
         .Y1 = Me.ScaleHeight - 15
@@ -560,7 +562,7 @@ Private Sub labItem_MouseUp(Index As Integer, Button As Integer, Shift As Intege
 End Sub
 
 Private Sub tmrCheckFocus_Timer()
-    Dim pt          As Point
+    Dim pt          As POINT
     Dim i           As Integer
     
     GetCursorPos pt

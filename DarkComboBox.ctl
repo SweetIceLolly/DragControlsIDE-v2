@@ -183,6 +183,8 @@ Private Sub UserControl_InitProperties()
 End Sub
 
 Private Sub UserControl_Resize()
+    On Error Resume Next
+    
     UserControl.imgDropDown.Left = UserControl.Width - UserControl.imgDropDown.Width
     UserControl.edMain.Width = UserControl.Width - UserControl.imgDropDown.Width
     UserControl.edMain.Height = UserControl.Height
@@ -218,18 +220,18 @@ Private Sub UserControl_MouseDown(Button As Integer, Shift As Integer, X As Sing
                 .picContainer.Height = Me.ListHeight
                 If .labItem(.labItem.UBound).Top + .labItem(.labItem.UBound).Height > .picContainer.Height Then
                     .picContainer.Height = .labItem(.labItem.UBound).Top + .labItem(.labItem.UBound).Height
-                    .VScrollBar.Visible = True
-                    .MaxWidth = .MaxWidth + .VScrollBar.Width
-                    .VScrollBar.Left = .MaxWidth - .VScrollBar.Width
-                    .VScrollBar.Max = .picContainer.Height - Me.ListHeight
-                    .VScrollBar.Height = Me.ListHeight
-                    .VScrollBar.BarHeight = (.VScrollBar.Height - 480 * 2) * Me.ListHeight / .picContainer.Height
-                    If .VScrollBar.BarHeight < 120 Then
-                        .VScrollBar.BarHeight = 120
+                    .VscrollBar.Visible = True
+                    .MaxWidth = .MaxWidth + .VscrollBar.Width
+                    .VscrollBar.Left = .MaxWidth - .VscrollBar.Width
+                    .VscrollBar.Max = .picContainer.Height - Me.ListHeight
+                    .VscrollBar.Height = Me.ListHeight
+                    .VscrollBar.BarHeight = (.VscrollBar.Height - 480 * 2) * Me.ListHeight / .picContainer.Height
+                    If .VscrollBar.BarHeight < 120 Then
+                        .VscrollBar.BarHeight = 120
                     End If
-                    .VScrollBar.SmallChange = .labItem(0).Height
-                    .VScrollBar.LargeChange = .labItem(0).Height * (Me.ListHeight \ .labItem(0).Height)
-                    .picContainer.Width = .VScrollBar.Left
+                    .VscrollBar.SmallChange = .labItem(0).Height
+                    .VscrollBar.LargeChange = .labItem(0).Height * (Me.ListHeight \ .labItem(0).Height)
+                    .picContainer.Width = .VscrollBar.Left
                     .Height = Me.ListHeight
                 Else
                     .Height = .labItem(.labItem.UBound).Top + .labItem(.labItem.UBound).Height

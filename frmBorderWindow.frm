@@ -245,7 +245,7 @@ Private Sub tmrCheckFocus_Timer()
         End Select
         
         If GetAsyncKeyState(VK_LBUTTON) = 0 Then
-            ClipCursor 0
+            ClipCursor ByVal 0
             bMoving = False
         End If
         If bMoving Then

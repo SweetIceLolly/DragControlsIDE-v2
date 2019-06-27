@@ -453,6 +453,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
 End Sub
 
 Private Sub UserControl_Resize()
+    On Error Resume Next
     Dim i           As Label
     
     UserControl.labRootItem(0).AutoSize = True
