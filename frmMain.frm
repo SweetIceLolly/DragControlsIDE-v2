@@ -45,8 +45,8 @@ Begin VB.Form frmMain
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      MENU_ITEM_COUNT =   66
-      LEVELS_COUNT    =   66
+      MENU_ITEM_COUNT =   70
+      LEVELS_COUNT    =   70
       LEVELS_2        =   1
       LEVELS_3        =   1
       LEVELS_4        =   1
@@ -90,22 +90,26 @@ Begin VB.Form frmMain
       LEVELS_46       =   2
       LEVELS_47       =   2
       LEVELS_48       =   2
-      LEVELS_49       =   1
-      LEVELS_50       =   1
-      LEVELS_51       =   1
-      LEVELS_52       =   1
+      LEVELS_49       =   2
+      LEVELS_50       =   2
+      LEVELS_51       =   2
+      LEVELS_52       =   2
       LEVELS_53       =   1
       LEVELS_54       =   1
       LEVELS_55       =   1
       LEVELS_56       =   1
+      LEVELS_57       =   1
       LEVELS_58       =   1
       LEVELS_59       =   1
       LEVELS_60       =   1
-      LEVELS_61       =   1
       LEVELS_62       =   1
+      LEVELS_63       =   1
       LEVELS_64       =   1
       LEVELS_65       =   1
       LEVELS_66       =   1
+      LEVELS_68       =   1
+      LEVELS_69       =   1
+      LEVELS_70       =   1
       MenuID_1        =   0
       MenuText_1      =   "文件"
       MenuVisible_1   =   -1  'True
@@ -154,7 +158,7 @@ Begin VB.Form frmMain
       SubMenuID_8_0   =   0
       SubMenuText_8_1 =   "撤销 (&U)           Ctrl+Z"
       SubMenuID_8_1   =   9
-      SubMenuText_8_2 =   "重复 (&Y)           Ctrl+Y"
+      SubMenuText_8_2 =   "重复 (&R)           Ctrl+Y"
       SubMenuID_8_2   =   10
       SubMenuText_8_3 =   "-"
       SubMenuID_8_3   =   11
@@ -172,7 +176,7 @@ Begin VB.Form frmMain
       SubMenuID_8_9   =   17
       SubMenuText_8_10=   "查找 (&F)           Ctrl+F"
       SubMenuID_8_10  =   18
-      SubMenuText_8_11=   "替换 (&R)           Ctrl+H"
+      SubMenuText_8_11=   "替换 (&E)           Ctrl+H"
       SubMenuID_8_11  =   19
       SubMenuText_8_12=   "-"
       SubMenuID_8_12  =   20
@@ -195,7 +199,7 @@ Begin VB.Form frmMain
       MenuVisible_9   =   -1  'True
       SubMenuID_9_0   =   0
       MenuID_10       =   9
-      MenuText_10     =   "重复 (&Y)           Ctrl+Y"
+      MenuText_10     =   "重复 (&R)           Ctrl+Y"
       MenuVisible_10  =   -1  'True
       SubMenuID_10_0  =   0
       MenuID_11       =   10
@@ -231,7 +235,7 @@ Begin VB.Form frmMain
       MenuVisible_18  =   -1  'True
       SubMenuID_18_0  =   0
       MenuID_19       =   18
-      MenuText_19     =   "替换 (&R)           Ctrl+H"
+      MenuText_19     =   "替换 (&E)           Ctrl+H"
       MenuVisible_19  =   -1  'True
       SubMenuID_19_0  =   0
       MenuID_20       =   19
@@ -332,170 +336,194 @@ Begin VB.Form frmMain
       SubMenuText_38_1=   "窗口"
       SubMenuID_38_1  =   39
       SubMenuText_38_2=   "运行 (&R)           F5"
-      SubMenuID_38_2  =   49
+      SubMenuID_38_2  =   53
       SubMenuText_38_3=   "中断 (&B)           Ctrl+Alt+Break"
-      SubMenuID_38_3  =   50
+      SubMenuID_38_3  =   54
       SubMenuText_38_4=   "停止 (&E)           Shift+F5"
-      SubMenuID_38_4  =   51
+      SubMenuID_38_4  =   55
       SubMenuText_38_5=   "重新运行 (&S)       Ctrl+Shift+F5"
-      SubMenuID_38_5  =   52
+      SubMenuID_38_5  =   56
       SubMenuText_38_6=   "-"
-      SubMenuID_38_6  =   53
+      SubMenuID_38_6  =   57
       SubMenuText_38_7=   "逐语句执行         F11"
-      SubMenuID_38_7  =   54
+      SubMenuID_38_7  =   58
       SubMenuText_38_8=   "逐过程执行         F10"
-      SubMenuID_38_8  =   55
+      SubMenuID_38_8  =   59
       SubMenuText_38_9=   "执行到返回         Shift+F11"
-      SubMenuID_38_9  =   56
+      SubMenuID_38_9  =   60
       MenuID_39       =   38
       MenuText_39     =   "窗口"
       MenuVisible_39  =   -1  'True
-      SUBMENU_ITEM_COUNT_39=   9
+      SUBMENU_ITEM_COUNT_39=   13
       SubMenuID_39_0  =   0
       SubMenuText_39_1=   "断点列表 (&B)       Ctrl+Alt+B"
       SubMenuID_39_1  =   40
-      SubMenuText_39_2=   "监视窗口 (&W)       Ctrl+Alt+W"
+      SubMenuText_39_2=   "-"
       SubMenuID_39_2  =   41
-      SubMenuText_39_3=   "本地 (&L)           Ctrl+Alt+L"
+      SubMenuText_39_3=   "监视窗口 (&W)       Ctrl+Alt+W"
       SubMenuID_39_3  =   42
-      SubMenuText_39_4=   "调用堆栈 (&C)       Ctrl+Alt+C"
+      SubMenuText_39_4=   "本地 (&L)           Ctrl+Alt+L"
       SubMenuID_39_4  =   43
-      SubMenuText_39_5=   "线程 (&T)           Ctrl+Alt+T"
+      SubMenuText_39_5=   "立即窗口 (&I)       Ctrl+Alt+I"
       SubMenuID_39_5  =   44
-      SubMenuText_39_6=   "模块 (&M)           Ctrl+Alt+M"
+      SubMenuText_39_6=   "-"
       SubMenuID_39_6  =   45
-      SubMenuText_39_7=   "内存 (&E)           Ctrl+Alt+E"
+      SubMenuText_39_7=   "调用堆栈 (&C)       Ctrl+Alt+C"
       SubMenuID_39_7  =   46
-      SubMenuText_39_8=   "寄存器 (&R)         Ctrl+Alt+R"
+      SubMenuText_39_8=   "线程 (&T)           Ctrl+Alt+T"
       SubMenuID_39_8  =   47
-      SubMenuText_39_9=   "反汇编 (&D)         Ctrl+Alt+D"
+      SubMenuText_39_9=   "模块 (&M)           Ctrl+Alt+M"
       SubMenuID_39_9  =   48
+      SubMenuText_39_10=   "-"
+      SubMenuID_39_10 =   49
+      SubMenuText_39_11=   "内存 (&E)           Ctrl+Alt+E"
+      SubMenuID_39_11 =   50
+      SubMenuText_39_12=   "寄存器 (&R)         Ctrl+Alt+R"
+      SubMenuID_39_12 =   51
+      SubMenuText_39_13=   "反汇编 (&D)         Ctrl+Alt+D"
+      SubMenuID_39_13 =   52
       MenuID_40       =   39
       MenuText_40     =   "断点列表 (&B)       Ctrl+Alt+B"
       MenuVisible_40  =   -1  'True
       SubMenuID_40_0  =   0
       MenuID_41       =   40
-      MenuText_41     =   "监视窗口 (&W)       Ctrl+Alt+W"
+      MenuText_41     =   "-"
       MenuVisible_41  =   -1  'True
       SubMenuID_41_0  =   0
       MenuID_42       =   41
-      MenuText_42     =   "本地 (&L)           Ctrl+Alt+L"
+      MenuText_42     =   "监视窗口 (&W)       Ctrl+Alt+W"
       MenuVisible_42  =   -1  'True
       SubMenuID_42_0  =   0
       MenuID_43       =   42
-      MenuText_43     =   "调用堆栈 (&C)       Ctrl+Alt+C"
+      MenuText_43     =   "本地 (&L)           Ctrl+Alt+L"
       MenuVisible_43  =   -1  'True
       SubMenuID_43_0  =   0
       MenuID_44       =   43
-      MenuText_44     =   "线程 (&T)           Ctrl+Alt+T"
+      MenuText_44     =   "立即窗口 (&I)       Ctrl+Alt+I"
       MenuVisible_44  =   -1  'True
       SubMenuID_44_0  =   0
       MenuID_45       =   44
-      MenuText_45     =   "模块 (&M)           Ctrl+Alt+M"
+      MenuText_45     =   "-"
       MenuVisible_45  =   -1  'True
       SubMenuID_45_0  =   0
       MenuID_46       =   45
-      MenuText_46     =   "内存 (&E)           Ctrl+Alt+E"
+      MenuText_46     =   "调用堆栈 (&C)       Ctrl+Alt+C"
       MenuVisible_46  =   -1  'True
       SubMenuID_46_0  =   0
       MenuID_47       =   46
-      MenuText_47     =   "寄存器 (&R)         Ctrl+Alt+R"
+      MenuText_47     =   "线程 (&T)           Ctrl+Alt+T"
       MenuVisible_47  =   -1  'True
       SubMenuID_47_0  =   0
       MenuID_48       =   47
-      MenuText_48     =   "反汇编 (&D)         Ctrl+Alt+D"
+      MenuText_48     =   "模块 (&M)           Ctrl+Alt+M"
       MenuVisible_48  =   -1  'True
       SubMenuID_48_0  =   0
       MenuID_49       =   48
-      MenuText_49     =   "运行 (&R)           F5"
+      MenuText_49     =   "-"
       MenuVisible_49  =   -1  'True
       SubMenuID_49_0  =   0
       MenuID_50       =   49
-      MenuText_50     =   "中断 (&B)           Ctrl+Alt+Break"
+      MenuText_50     =   "内存 (&E)           Ctrl+Alt+E"
       MenuVisible_50  =   -1  'True
       SubMenuID_50_0  =   0
       MenuID_51       =   50
-      MenuText_51     =   "停止 (&E)           Shift+F5"
+      MenuText_51     =   "寄存器 (&R)         Ctrl+Alt+R"
       MenuVisible_51  =   -1  'True
       SubMenuID_51_0  =   0
       MenuID_52       =   51
-      MenuText_52     =   "重新运行 (&S)       Ctrl+Shift+F5"
+      MenuText_52     =   "反汇编 (&D)         Ctrl+Alt+D"
       MenuVisible_52  =   -1  'True
       SubMenuID_52_0  =   0
       MenuID_53       =   52
-      MenuText_53     =   "-"
+      MenuText_53     =   "运行 (&R)           F5"
       MenuVisible_53  =   -1  'True
       SubMenuID_53_0  =   0
       MenuID_54       =   53
-      MenuText_54     =   "逐语句执行         F11"
+      MenuText_54     =   "中断 (&B)           Ctrl+Alt+Break"
       MenuVisible_54  =   -1  'True
       SubMenuID_54_0  =   0
       MenuID_55       =   54
-      MenuText_55     =   "逐过程执行         F10"
+      MenuText_55     =   "停止 (&E)           Shift+F5"
       MenuVisible_55  =   -1  'True
       SubMenuID_55_0  =   0
       MenuID_56       =   55
-      MenuText_56     =   "执行到返回         Shift+F11"
+      MenuText_56     =   "重新运行 (&S)       Ctrl+Shift+F5"
       MenuVisible_56  =   -1  'True
       SubMenuID_56_0  =   0
       MenuID_57       =   56
-      MenuText_57     =   "工具"
+      MenuText_57     =   "-"
       MenuVisible_57  =   -1  'True
-      SUBMENU_ITEM_COUNT_57=   5
       SubMenuID_57_0  =   0
-      SubMenuText_57_1=   "窗口工具 (&W)"
-      SubMenuID_57_1  =   58
-      SubMenuText_57_2=   "消息拦截 (&M)"
-      SubMenuID_57_2  =   59
-      SubMenuText_57_3=   "进程 (&P)"
-      SubMenuID_57_3  =   60
-      SubMenuText_57_4=   "-"
-      SubMenuID_57_4  =   61
-      SubMenuText_57_5=   "设置 (&O)"
-      SubMenuID_57_5  =   62
       MenuID_58       =   57
-      MenuText_58     =   "窗口工具 (&W)"
+      MenuText_58     =   "逐语句执行         F11"
       MenuVisible_58  =   -1  'True
       SubMenuID_58_0  =   0
       MenuID_59       =   58
-      MenuText_59     =   "消息拦截 (&M)"
+      MenuText_59     =   "逐过程执行         F10"
       MenuVisible_59  =   -1  'True
       SubMenuID_59_0  =   0
       MenuID_60       =   59
-      MenuText_60     =   "进程 (&P)"
+      MenuText_60     =   "执行到返回         Shift+F11"
       MenuVisible_60  =   -1  'True
       SubMenuID_60_0  =   0
       MenuID_61       =   60
-      MenuText_61     =   "-"
+      MenuText_61     =   "工具"
       MenuVisible_61  =   -1  'True
+      SUBMENU_ITEM_COUNT_61=   5
       SubMenuID_61_0  =   0
+      SubMenuText_61_1=   "窗口工具 (&W)"
+      SubMenuID_61_1  =   62
+      SubMenuText_61_2=   "消息拦截 (&M)"
+      SubMenuID_61_2  =   63
+      SubMenuText_61_3=   "进程 (&P)"
+      SubMenuID_61_3  =   64
+      SubMenuText_61_4=   "-"
+      SubMenuID_61_4  =   65
+      SubMenuText_61_5=   "设置 (&O)"
+      SubMenuID_61_5  =   66
       MenuID_62       =   61
-      MenuText_62     =   "设置 (&O)"
+      MenuText_62     =   "窗口工具 (&W)"
       MenuVisible_62  =   -1  'True
       SubMenuID_62_0  =   0
       MenuID_63       =   62
-      MenuText_63     =   "帮助"
+      MenuText_63     =   "消息拦截 (&M)"
       MenuVisible_63  =   -1  'True
-      SUBMENU_ITEM_COUNT_63=   3
       SubMenuID_63_0  =   0
-      SubMenuText_63_1=   "帮助文档 (&D)       F1"
-      SubMenuID_63_1  =   64
-      SubMenuText_63_2=   "示例程序 (&E)"
-      SubMenuID_63_2  =   65
-      SubMenuText_63_3=   "关于拖控件大法 (&A) Ctrl+F1"
-      SubMenuID_63_3  =   66
       MenuID_64       =   63
-      MenuText_64     =   "帮助文档 (&D)       F1"
+      MenuText_64     =   "进程 (&P)"
       MenuVisible_64  =   -1  'True
       SubMenuID_64_0  =   0
       MenuID_65       =   64
-      MenuText_65     =   "示例程序 (&E)"
+      MenuText_65     =   "-"
       MenuVisible_65  =   -1  'True
       SubMenuID_65_0  =   0
       MenuID_66       =   65
-      MenuText_66     =   "关于拖控件大法 (&A) Ctrl+F1"
+      MenuText_66     =   "设置 (&O)"
       MenuVisible_66  =   -1  'True
       SubMenuID_66_0  =   0
+      MenuID_67       =   66
+      MenuText_67     =   "帮助"
+      MenuVisible_67  =   -1  'True
+      SUBMENU_ITEM_COUNT_67=   3
+      SubMenuID_67_0  =   0
+      SubMenuText_67_1=   "帮助文档 (&D)       F1"
+      SubMenuID_67_1  =   68
+      SubMenuText_67_2=   "示例程序 (&E)"
+      SubMenuID_67_2  =   69
+      SubMenuText_67_3=   "关于拖控件大法 (&A) Ctrl+F1"
+      SubMenuID_67_3  =   70
+      MenuID_68       =   67
+      MenuText_68     =   "帮助文档 (&D)       F1"
+      MenuVisible_68  =   -1  'True
+      SubMenuID_68_0  =   0
+      MenuID_69       =   68
+      MenuText_69     =   "示例程序 (&E)"
+      MenuVisible_69  =   -1  'True
+      SubMenuID_69_0  =   0
+      MenuID_70       =   69
+      MenuText_70     =   "关于拖控件大法 (&A) Ctrl+F1"
+      MenuVisible_70  =   -1  'True
+      SubMenuID_70_0  =   0
    End
    Begin VB.PictureBox picToolBar 
       Align           =   1  'Align Top
@@ -610,7 +638,7 @@ Option Explicit
 Private Declare Function GetWindowPlacement Lib "user32" (ByVal hWnd As Long, lpwndpl As WINDOWPLACEMENT) As Long
 
 Private Sub DockingPane_AttachPane(ByVal Item As XtremeDockingPane.IPane)
-    Select Case Item.Id
+    Select Case Item.id
         Case 1
             
         
@@ -621,7 +649,9 @@ Private Sub Form_Load()
     On Error Resume Next
     
     '加载字符串资源
-    
+    If Not LoadLanguage(1001) Then
+        MsgBox "加载字符串资源失败！" & Err.Number & ": " & Err.Description, vbCritical, "错误"
+    End If
     
     '创建工作区
     Me.DockingPane.AttachToWindow Me.picClientArea.hWnd                                                                 '绑定工作区
@@ -645,9 +675,9 @@ Private Sub Form_Load()
     '设置窗口子类化，处理最大化问题
     SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)
     
-    frmCodeWindow.Show
-    SetPropA frmCodeWindow.hWnd, "Parent", Me.picClientArea.hWnd
-    SetParent frmCodeWindow.hWnd, Me.picClientArea.hWnd
+    'frmCodeWindow.Show
+    'SetPropA frmCodeWindow.hWnd, "Parent", Me.picClientArea.hWnd
+    'SetParent frmCodeWindow.hWnd, Me.picClientArea.hWnd
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)

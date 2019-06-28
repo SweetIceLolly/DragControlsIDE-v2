@@ -18,6 +18,7 @@ Begin VB.UserControl DarkMenu
    End
    Begin VB.Line lnBorderTop 
       BorderColor     =   &H00373333&
+      Visible         =   0   'False
       X1              =   1920
       X2              =   1440
       Y1              =   120
@@ -25,6 +26,7 @@ Begin VB.UserControl DarkMenu
    End
    Begin VB.Line lnBorderLeft 
       BorderColor     =   &H00373333&
+      Visible         =   0   'False
       X1              =   1440
       X2              =   1440
       Y1              =   120
@@ -32,6 +34,7 @@ Begin VB.UserControl DarkMenu
    End
    Begin VB.Line lnBorderRight 
       BorderColor     =   &H00373333&
+      Visible         =   0   'False
       X1              =   1920
       X2              =   1920
       Y1              =   120

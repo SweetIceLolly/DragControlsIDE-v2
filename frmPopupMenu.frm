@@ -135,7 +135,7 @@ Private Const ITEM_DISTANCE = 90
 Private Const ITEM_HORZ_MARGIN = 60
 Private Const SPLITTER_VERT_MARGIN = 90
 Private Const MIN_WIDTH = 1425
-Private Const TRANSPARENT_VALUE = 235
+Private Const TRANSPARENT_VALUE = 210
 
 Private Type MenuItem
     MenuID          As Integer
