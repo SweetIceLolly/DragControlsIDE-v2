@@ -5,16 +5,16 @@ Begin VB.Form frmCodeWindow
    BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "代码窗口"
-   ClientHeight    =   5175
+   ClientHeight    =   5172
    ClientLeft      =   3540
    ClientTop       =   3060
-   ClientWidth     =   8865
+   ClientWidth     =   8868
    FillColor       =   &H00FFFFFF&
    ForeColor       =   &H00FFFFFF&
    Icon            =   "frmCodeWindow.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   5175
-   ScaleWidth      =   8865
+   ScaleHeight     =   5172
+   ScaleWidth      =   8868
    ShowInTaskbar   =   0   'False
    Begin XtremeSyntaxEdit.SyntaxEdit SyntaxEdit 
       Height          =   1815
@@ -52,8 +52,8 @@ Begin VB.Form frmCodeWindow
       TabIndex        =   2
       Top             =   660
       Width           =   4095
-      _ExtentX        =   7223
-      _ExtentY        =   556
+      _ExtentX        =   7218
+      _ExtentY        =   550
       Items0          =   ""
       ITEM_COUNT      =   0
       Text            =   ""
@@ -70,8 +70,8 @@ Begin VB.Form frmCodeWindow
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorder 
       Left            =   7560
       Top             =   4560
-      _ExtentX        =   847
-      _ExtentY        =   847
+      _ExtentX        =   677
+      _ExtentY        =   677
       Thickness       =   4
       MinWidth        =   150
       MinHeight       =   100
@@ -82,8 +82,8 @@ Begin VB.Form frmCodeWindow
       TabIndex        =   1
       Top             =   0
       Width           =   8865
-      _ExtentX        =   15637
-      _ExtentY        =   873
+      _ExtentX        =   15642
+      _ExtentY        =   868
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -100,8 +100,8 @@ Begin VB.Form frmCodeWindow
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorderSizer 
       Left            =   8280
       Top             =   4560
-      _ExtentX        =   847
-      _ExtentY        =   847
+      _ExtentX        =   677
+      _ExtentY        =   677
       Thickness       =   3
       FocusedColor    =   3157293
       NotFocusedColor =   3157293
@@ -114,8 +114,8 @@ Begin VB.Form frmCodeWindow
       TabIndex        =   3
       Top             =   660
       Width           =   4095
-      _ExtentX        =   7223
-      _ExtentY        =   556
+      _ExtentX        =   7218
+      _ExtentY        =   550
       Items0          =   ""
       ITEM_COUNT      =   0
       Text            =   ""
@@ -139,14 +139,14 @@ Option Explicit
 
 Private Sub Form_Load()
     '设置代码框属性
-    Me.DarkTitleBar.Top = Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelY
+    Me.DarkTitleBar.top = Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelY
     Me.SyntaxEdit.Move Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelX, _
         Me.DarkTitleBar.Height + Me.comObject.Height + 240 + Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelY
-    Me.SyntaxEdit.PaintManager.BackColor = RGB(28, 28, 28)
+    Me.SyntaxEdit.PaintManager.Backcolor = RGB(28, 28, 28)
     Me.SyntaxEdit.PaintManager.LineNumberBackColor = RGB(28, 28, 28)
     Me.SyntaxEdit.PaintManager.LineNumberTextColor = RGB(86, 156, 214)
     Me.SyntaxEdit.DataManager.FileExt = ".cpp"
-    Me.SyntaxEdit.ConfigFile = App.Path & "\SyntaxEdit.ini"
+    Me.SyntaxEdit.ConfigFile = App.path & "\SyntaxEdit.ini"
 End Sub
 
 Private Sub Form_Resize()
@@ -154,7 +154,7 @@ Private Sub Form_Resize()
     
     '设置代码框大小
     Me.SyntaxEdit.Width = Me.ScaleWidth - Me.SyntaxEdit.Left - Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelX
-    Me.SyntaxEdit.Height = Me.ScaleHeight - Me.SyntaxEdit.Top - Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelY
+    Me.SyntaxEdit.Height = Me.ScaleHeight - Me.SyntaxEdit.top - Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelY
     
     '设置组合框大小和位置
     Me.comObject.Width = (Me.ScaleWidth - 480) / 2

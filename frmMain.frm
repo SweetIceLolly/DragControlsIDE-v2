@@ -1,18 +1,19 @@
 VERSION 5.00
 Object = "{945E8FCC-830E-45CC-AF00-A012D5AE7451}#15.3#0"; "CO7FCA~1.OCX"
 Object = "{BD0C1912-66C3-49CC-8B12-7B347BF6C846}#15.3#0"; "COE2B7~1.OCX"
+Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "Image.ocx"
 Begin VB.Form frmMain 
    BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "新工程 - 拖控件大法"
-   ClientHeight    =   7905
+   ClientHeight    =   7908
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   16845
+   ClientWidth     =   16848
    FillColor       =   &H00FFFFFF&
    BeginProperty Font 
       Name            =   "Microsoft YaHei UI"
-      Size            =   8.25
+      Size            =   8.4
       Charset         =   0
       Weight          =   400
       Underline       =   0   'False
@@ -24,9 +25,9 @@ Begin VB.Form frmMain
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   7905
-   ScaleWidth      =   16845
-   StartUpPosition =   2  'CenterScreen
+   ScaleHeight     =   7908
+   ScaleWidth      =   16848
+   StartUpPosition =   2  '屏幕中心
    Begin DragControlsIDE.DarkMenu DarkMenu 
       Align           =   1  'Align Top
       Height          =   315
@@ -34,11 +35,11 @@ Begin VB.Form frmMain
       TabIndex        =   3
       Top             =   495
       Width           =   16845
-      _ExtentX        =   29713
-      _ExtentY        =   556
+      _ExtentX        =   29718
+      _ExtentY        =   550
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
-         Size            =   9.75
+         Size            =   9.6
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -533,10 +534,10 @@ Begin VB.Form frmMain
       ForeColor       =   &H80000008&
       Height          =   375
       Left            =   0
-      ScaleHeight     =   375
-      ScaleWidth      =   16845
+      ScaleHeight     =   372
+      ScaleWidth      =   16848
       TabIndex        =   2
-      Top             =   810
+      Top             =   804
       Width           =   16845
    End
    Begin VB.PictureBox picClientArea 
@@ -546,7 +547,7 @@ Begin VB.Form frmMain
       BorderStyle     =   0  'None
       BeginProperty Font 
          Name            =   "MS Sans Serif"
-         Size            =   8.25
+         Size            =   7.8
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -554,19 +555,233 @@ Begin VB.Form frmMain
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H80000008&
-      Height          =   3615
+      Height          =   6588
       Left            =   0
-      ScaleHeight     =   3615
-      ScaleWidth      =   16845
+      ScaleHeight     =   6588
+      ScaleWidth      =   16848
       TabIndex        =   1
-      Top             =   1185
+      Top             =   1176
       Width           =   16845
+      Begin DragControlsIDE.DarkEButton btnNewWin32 
+         Height          =   492
+         Left            =   1344
+         TabIndex        =   6
+         Top             =   900
+         Width           =   3756
+         _ExtentX        =   6625
+         _ExtentY        =   868
+         DefaultColor    =   3157293
+         HoverColor      =   6576473
+         ForeColor       =   12632256
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "微软雅黑"
+            Size            =   10.2
+            Charset         =   134
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Content         =   "新建窗口程序"
+         Align           =   1
+      End
+      Begin DragControlsIDE.DarkEButton btnNewConsole 
+         Height          =   492
+         Left            =   1344
+         TabIndex        =   7
+         Top             =   1440
+         Width           =   3756
+         _ExtentX        =   6625
+         _ExtentY        =   868
+         DefaultColor    =   3157293
+         HoverColor      =   6576473
+         ForeColor       =   12632256
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "微软雅黑"
+            Size            =   10.2
+            Charset         =   134
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Content         =   "新建控制台程序"
+         Align           =   1
+      End
+      Begin DragControlsIDE.DarkEButton btnNewCPP 
+         Height          =   492
+         Left            =   1344
+         TabIndex        =   8
+         Top             =   2016
+         Width           =   3756
+         _ExtentX        =   6625
+         _ExtentY        =   868
+         DefaultColor    =   3157293
+         HoverColor      =   6576473
+         ForeColor       =   12632256
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "微软雅黑"
+            Size            =   10.2
+            Charset         =   134
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Content         =   "新建空白C++代码文件"
+         Align           =   1
+      End
+      Begin DragControlsIDE.DarkEButton btnOpenProject 
+         Height          =   492
+         Left            =   1344
+         TabIndex        =   9
+         Top             =   2580
+         Width           =   3756
+         _ExtentX        =   6625
+         _ExtentY        =   868
+         DefaultColor    =   3157293
+         HoverColor      =   6576473
+         ForeColor       =   12632256
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "微软雅黑"
+            Size            =   10.2
+            Charset         =   134
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Content         =   "打开工程..."
+         Align           =   1
+      End
+      Begin VB.Label tabRecentCaption 
+         Appearance      =   0  'Flat
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "最近"
+         BeginProperty Font 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00CEDB1A&
+         Height          =   324
+         Left            =   528
+         TabIndex        =   11
+         Top             =   3336
+         Width           =   480
+      End
+      Begin VB.Label tabRecentPad 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00CEDB1A&
+         BeginProperty Font 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFB00A&
+         Height          =   372
+         Left            =   0
+         TabIndex        =   10
+         Top             =   3312
+         Width           =   96
+      End
+      Begin ImageX.aicAlphaImage imgOpenProject 
+         Height          =   516
+         Left            =   516
+         Top             =   2568
+         Width           =   516
+         _ExtentX        =   910
+         _ExtentY        =   910
+         Image           =   "frmMain.frx":1BCC2
+         Props           =   5
+      End
+      Begin ImageX.aicAlphaImage imgCPP 
+         Height          =   516
+         Left            =   516
+         Top             =   2004
+         Width           =   516
+         _ExtentX        =   910
+         _ExtentY        =   910
+         Image           =   "frmMain.frx":1BF09
+         Props           =   5
+      End
+      Begin ImageX.aicAlphaImage imgConsole 
+         Height          =   516
+         Left            =   516
+         Top             =   1428
+         Width           =   516
+         _ExtentX        =   910
+         _ExtentY        =   910
+         Image           =   "frmMain.frx":1C24D
+         Props           =   5
+      End
+      Begin ImageX.aicAlphaImage imgWin32 
+         Height          =   516
+         Left            =   504
+         Top             =   888
+         Width           =   528
+         _ExtentX        =   931
+         _ExtentY        =   910
+         Image           =   "frmMain.frx":1C3CD
+         Props           =   5
+      End
+      Begin VB.Label tabCreatePad 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00FFB00A&
+         BeginProperty Font 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFB00A&
+         Height          =   372
+         Left            =   0
+         TabIndex        =   5
+         Top             =   288
+         Width           =   96
+      End
+      Begin VB.Label tabCreateCaption 
+         Appearance      =   0  'Flat
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "创建"
+         BeginProperty Font 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFB00A&
+         Height          =   324
+         Left            =   528
+         TabIndex        =   4
+         Top             =   312
+         Width           =   480
+      End
    End
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorderSizer 
       Left            =   12120
       Top             =   5400
-      _ExtentX        =   847
-      _ExtentY        =   847
+      _ExtentX        =   677
+      _ExtentY        =   677
       Thickness       =   3
       MinWidth        =   400
       MinHeight       =   100
@@ -576,8 +791,8 @@ Begin VB.Form frmMain
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorder 
       Left            =   11520
       Top             =   5400
-      _ExtentX        =   847
-      _ExtentY        =   847
+      _ExtentX        =   677
+      _ExtentY        =   677
       MinWidth        =   400
       MinHeight       =   100
    End
@@ -588,8 +803,8 @@ Begin VB.Form frmMain
       TabIndex        =   0
       Top             =   0
       Width           =   16845
-      _ExtentX        =   29713
-      _ExtentY        =   873
+      _ExtentX        =   29718
+      _ExtentY        =   868
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -601,22 +816,22 @@ Begin VB.Form frmMain
       EndProperty
       Caption         =   "新工程 - 拖控件大法"
       BindCaption     =   -1  'True
-      Picture         =   "frmMain.frx":1BCC2
+      Picture         =   "frmMain.frx":1C4FF
    End
    Begin XtremeSkinFramework.SkinFramework SkinFramework 
       Left            =   10080
       Top             =   5520
       _Version        =   983043
-      _ExtentX        =   635
-      _ExtentY        =   635
+      _ExtentX        =   508
+      _ExtentY        =   508
       _StockProps     =   0
    End
    Begin XtremeDockingPane.DockingPane DockingPane 
       Left            =   10800
       Top             =   5520
       _Version        =   983043
-      _ExtentX        =   635
-      _ExtentY        =   635
+      _ExtentX        =   508
+      _ExtentY        =   508
       _StockProps     =   0
       VisualTheme     =   10
    End
@@ -635,7 +850,9 @@ Attribute VB_Exposed = False
 Option Explicit
 
 '获取窗口最大、最小化状态
-Private Declare Function GetWindowPlacement Lib "user32" (ByVal hWnd As Long, lpwndpl As WINDOWPLACEMENT) As Long
+Private Declare Function GetWindowPlacement Lib "user32" (ByVal Hwnd As Long, lpwndpl As WINDOWPLACEMENT) As Long
+'窗口阴影
+Private Shadow As New aShadow
 
 Private Sub DockingPane_AttachPane(ByVal Item As XtremeDockingPane.IPane)
     Select Case Item.id
@@ -648,13 +865,16 @@ End Sub
 Private Sub Form_Load()
     On Error Resume Next
     
+    '启动LOGO
+    frmStartupLOGO.Show
+    
     '加载字符串资源
     If Not LoadLanguage(1001) Then
         MsgBox "加载字符串资源失败！" & Err.Number & ": " & Err.Description, vbCritical, "错误"
     End If
     
     '创建工作区
-    Me.DockingPane.AttachToWindow Me.picClientArea.hWnd                                                                 '绑定工作区
+    Me.DockingPane.AttachToWindow Me.picClientArea.Hwnd                                                                 '绑定工作区
     
     '设置Docking Pane的样式
     Me.DockingPane.Options.ShowDockingContextStickers = True                                                            '显示Docking stickers
@@ -670,10 +890,22 @@ Private Sub Form_Load()
     '加载皮肤
     Me.SkinFramework.RemoveAllWindows
     Me.SkinFramework.LoadSkin "Skin.cjstyles", "NormalBlue.ini"
-    Me.SkinFramework.ApplyWindow Me.hWnd
+    Me.SkinFramework.ApplyWindow Me.Hwnd
 
+    '加载阴影
+    With Shadow
+        If .Shadow(Me) Then
+            .Color = RGB(0, 0, 0)
+            .Depth = 16
+            .Transparency = 50
+        End If
+    End With
+    
     '设置窗口子类化，处理最大化问题
-    SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)
+    SetPropA Me.Hwnd, "PrevWndProc", SetWindowLongA(Me.Hwnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)
+    
+    '卸载LOGO
+    Unload frmStartupLOGO
     
     'frmCodeWindow.Show
     'SetPropA frmCodeWindow.hWnd, "Parent", Me.picClientArea.hWnd
@@ -682,7 +914,7 @@ End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     '恢复窗口子类化
-    SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(hWnd, "PrevWndProc")
+    SetWindowLongA Me.Hwnd, GWL_WNDPROC, GetPropA(Hwnd, "PrevWndProc")
     Unload frmCodeWindow
 End Sub
 
@@ -690,19 +922,20 @@ Private Sub Form_Resize()
     On Error Resume Next
     
     '调整“客户区”的大小
-    Me.picClientArea.Height = Me.ScaleHeight - Me.picClientArea.Top
+    Me.picClientArea.Height = Me.ScaleHeight - Me.picClientArea.top
     
     '调整最大化的子窗体的大小
     Dim Target  As Form
     Dim wp      As WINDOWPLACEMENT
     
     For Each Target In Forms
-        If GetPropA(Target.hWnd, "Parent") = Me.picClientArea.hWnd Then
-            GetWindowPlacement Target.hWnd, wp
+        If GetPropA(Target.Hwnd, "Parent") = Me.picClientArea.Hwnd Then
+            GetWindowPlacement Target.Hwnd, wp
             If wp.ShowCmd = SW_MAXIMIZE Then
-                ShowWindow Target.hWnd, SW_HIDE
-                ShowWindow Target.hWnd, SW_MAXIMIZE
+                ShowWindow Target.Hwnd, SW_HIDE
+                ShowWindow Target.Hwnd, SW_MAXIMIZE
             End If
         End If
     Next Target
 End Sub
+
