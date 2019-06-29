@@ -5,15 +5,15 @@ Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "Image.ocx"
 Begin VB.Form frmMain 
    BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
-   Caption         =   "新工程 - 拖控件大法"
-   ClientHeight    =   7908
+   Caption         =   "拖控件大法"
+   ClientHeight    =   7905
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   16848
+   ClientWidth     =   16845
    FillColor       =   &H00FFFFFF&
    BeginProperty Font 
       Name            =   "Microsoft YaHei UI"
-      Size            =   8.4
+      Size            =   8.25
       Charset         =   0
       Weight          =   400
       Underline       =   0   'False
@@ -25,21 +25,21 @@ Begin VB.Form frmMain
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   7908
-   ScaleWidth      =   16848
-   StartUpPosition =   2  '屏幕中心
+   ScaleHeight     =   7905
+   ScaleWidth      =   16845
+   StartUpPosition =   2  'CenterScreen
    Begin DragControlsIDE.DarkMenu DarkMenu 
       Align           =   1  'Align Top
       Height          =   315
       Left            =   0
-      TabIndex        =   3
+      TabIndex        =   7
       Top             =   495
       Width           =   16845
-      _ExtentX        =   29718
-      _ExtentY        =   550
+      _ExtentX        =   29713
+      _ExtentY        =   556
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
-         Size            =   9.6
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -290,26 +290,32 @@ Begin VB.Form frmMain
       SubMenuID_28_6  =   34
       MenuID_29       =   28
       MenuText_29     =   "工具栏 (&T)"
+      MenuCheckBox_29 =   -1  'True
       MenuVisible_29  =   -1  'True
       SubMenuID_29_0  =   0
       MenuID_30       =   29
       MenuText_30     =   "控件箱 (&C)"
+      MenuCheckBox_30 =   -1  'True
       MenuVisible_30  =   -1  'True
       SubMenuID_30_0  =   0
       MenuID_31       =   30
       MenuText_31     =   "属性 (&P)           F4"
+      MenuCheckBox_31 =   -1  'True
       MenuVisible_31  =   -1  'True
       SubMenuID_31_0  =   0
       MenuID_32       =   31
       MenuText_32     =   "工程资源管理器 (&M)"
+      MenuCheckBox_32 =   -1  'True
       MenuVisible_32  =   -1  'True
       SubMenuID_32_0  =   0
       MenuID_33       =   32
       MenuText_33     =   "错误列表 (&E)       Ctrl+E"
+      MenuCheckBox_33 =   -1  'True
       MenuVisible_33  =   -1  'True
       SubMenuID_33_0  =   0
       MenuID_34       =   33
       MenuText_34     =   "输出 (&O)           Ctrl+Alt+O"
+      MenuCheckBox_34 =   -1  'True
       MenuVisible_34  =   -1  'True
       SubMenuID_34_0  =   0
       MenuID_35       =   34
@@ -385,6 +391,7 @@ Begin VB.Form frmMain
       SubMenuID_39_13 =   52
       MenuID_40       =   39
       MenuText_40     =   "断点列表 (&B)       Ctrl+Alt+B"
+      MenuCheckBox_40 =   -1  'True
       MenuVisible_40  =   -1  'True
       SubMenuID_40_0  =   0
       MenuID_41       =   40
@@ -393,14 +400,17 @@ Begin VB.Form frmMain
       SubMenuID_41_0  =   0
       MenuID_42       =   41
       MenuText_42     =   "监视窗口 (&W)       Ctrl+Alt+W"
+      MenuCheckBox_42 =   -1  'True
       MenuVisible_42  =   -1  'True
       SubMenuID_42_0  =   0
       MenuID_43       =   42
       MenuText_43     =   "本地 (&L)           Ctrl+Alt+L"
+      MenuCheckBox_43 =   -1  'True
       MenuVisible_43  =   -1  'True
       SubMenuID_43_0  =   0
       MenuID_44       =   43
       MenuText_44     =   "立即窗口 (&I)       Ctrl+Alt+I"
+      MenuCheckBox_44 =   -1  'True
       MenuVisible_44  =   -1  'True
       SubMenuID_44_0  =   0
       MenuID_45       =   44
@@ -409,14 +419,17 @@ Begin VB.Form frmMain
       SubMenuID_45_0  =   0
       MenuID_46       =   45
       MenuText_46     =   "调用堆栈 (&C)       Ctrl+Alt+C"
+      MenuCheckBox_46 =   -1  'True
       MenuVisible_46  =   -1  'True
       SubMenuID_46_0  =   0
       MenuID_47       =   46
       MenuText_47     =   "线程 (&T)           Ctrl+Alt+T"
+      MenuCheckBox_47 =   -1  'True
       MenuVisible_47  =   -1  'True
       SubMenuID_47_0  =   0
       MenuID_48       =   47
       MenuText_48     =   "模块 (&M)           Ctrl+Alt+M"
+      MenuCheckBox_48 =   -1  'True
       MenuVisible_48  =   -1  'True
       SubMenuID_48_0  =   0
       MenuID_49       =   48
@@ -425,14 +438,17 @@ Begin VB.Form frmMain
       SubMenuID_49_0  =   0
       MenuID_50       =   49
       MenuText_50     =   "内存 (&E)           Ctrl+Alt+E"
+      MenuCheckBox_50 =   -1  'True
       MenuVisible_50  =   -1  'True
       SubMenuID_50_0  =   0
       MenuID_51       =   50
       MenuText_51     =   "寄存器 (&R)         Ctrl+Alt+R"
+      MenuCheckBox_51 =   -1  'True
       MenuVisible_51  =   -1  'True
       SubMenuID_51_0  =   0
       MenuID_52       =   51
       MenuText_52     =   "反汇编 (&D)         Ctrl+Alt+D"
+      MenuCheckBox_52 =   -1  'True
       MenuVisible_52  =   -1  'True
       SubMenuID_52_0  =   0
       MenuID_53       =   52
@@ -534,9 +550,9 @@ Begin VB.Form frmMain
       ForeColor       =   &H80000008&
       Height          =   375
       Left            =   0
-      ScaleHeight     =   372
-      ScaleWidth      =   16848
-      TabIndex        =   2
+      ScaleHeight     =   375
+      ScaleWidth      =   16845
+      TabIndex        =   6
       Top             =   804
       Width           =   16845
    End
@@ -547,7 +563,7 @@ Begin VB.Form frmMain
       BorderStyle     =   0  'None
       BeginProperty Font 
          Name            =   "MS Sans Serif"
-         Size            =   7.8
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -555,106 +571,122 @@ Begin VB.Form frmMain
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H80000008&
-      Height          =   6588
+      Height          =   5625
       Left            =   0
-      ScaleHeight     =   6588
-      ScaleWidth      =   16848
-      TabIndex        =   1
-      Top             =   1176
+      ScaleHeight     =   5625
+      ScaleWidth      =   16845
+      TabIndex        =   0
+      Top             =   1185
       Width           =   16845
-      Begin DragControlsIDE.DarkEButton btnNewWin32 
-         Height          =   492
-         Left            =   1344
-         TabIndex        =   6
-         Top             =   900
-         Width           =   3756
-         _ExtentX        =   6625
-         _ExtentY        =   868
-         DefaultColor    =   3157293
-         HoverColor      =   6576473
-         ForeColor       =   12632256
+      Begin VB.PictureBox picWindowClientArea 
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         BorderStyle     =   0  'None
+         ForeColor       =   &H80000008&
+         Height          =   2055
+         Left            =   8880
+         ScaleHeight     =   2055
+         ScaleWidth      =   5655
+         TabIndex        =   12
+         Top             =   720
+         Visible         =   0   'False
+         Width           =   5655
+      End
+      Begin DragControlsIDE.DarkButton cmdOpenProject 
+         Height          =   615
+         Left            =   1680
+         TabIndex        =   4
+         Top             =   3000
+         Width           =   3855
+         _ExtentX        =   6800
+         _ExtentY        =   1085
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "微软雅黑"
-            Size            =   10.2
-            Charset         =   134
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
             Weight          =   400
             Underline       =   0   'False
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Content         =   "新建窗口程序"
-         Align           =   1
+         Caption         =   "打开工程..."
+         HasBorder       =   0   'False
+         Alignment       =   0
       End
-      Begin DragControlsIDE.DarkEButton btnNewConsole 
-         Height          =   492
-         Left            =   1344
-         TabIndex        =   7
-         Top             =   1440
-         Width           =   3756
-         _ExtentX        =   6625
-         _ExtentY        =   868
-         DefaultColor    =   3157293
-         HoverColor      =   6576473
-         ForeColor       =   12632256
+      Begin DragControlsIDE.DarkButton cmdNewConsoleProgram 
+         Height          =   615
+         Left            =   1680
+         TabIndex        =   2
+         Top             =   1560
+         Width           =   3855
+         _ExtentX        =   6800
+         _ExtentY        =   1085
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "微软雅黑"
-            Size            =   10.2
-            Charset         =   134
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
             Weight          =   400
             Underline       =   0   'False
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Content         =   "新建控制台程序"
-         Align           =   1
+         Caption         =   "新建控制台程序"
+         HasBorder       =   0   'False
+         Alignment       =   0
       End
-      Begin DragControlsIDE.DarkEButton btnNewCPP 
-         Height          =   492
-         Left            =   1344
-         TabIndex        =   8
-         Top             =   2016
-         Width           =   3756
-         _ExtentX        =   6625
-         _ExtentY        =   868
-         DefaultColor    =   3157293
-         HoverColor      =   6576473
-         ForeColor       =   12632256
+      Begin DragControlsIDE.DarkButton cmdNewPlainCpp 
+         Height          =   615
+         Left            =   1680
+         TabIndex        =   3
+         Top             =   2280
+         Width           =   3855
+         _ExtentX        =   6800
+         _ExtentY        =   1085
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "微软雅黑"
-            Size            =   10.2
-            Charset         =   134
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
             Weight          =   400
             Underline       =   0   'False
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Content         =   "新建空白C++代码文件"
-         Align           =   1
+         Caption         =   "新建空白C++程序"
+         HasBorder       =   0   'False
+         Alignment       =   0
       End
-      Begin DragControlsIDE.DarkEButton btnOpenProject 
-         Height          =   492
-         Left            =   1344
-         TabIndex        =   9
-         Top             =   2580
-         Width           =   3756
-         _ExtentX        =   6625
-         _ExtentY        =   868
-         DefaultColor    =   3157293
-         HoverColor      =   6576473
-         ForeColor       =   12632256
+      Begin DragControlsIDE.DarkButton cmdNewWindowProgram 
+         Height          =   615
+         Left            =   1680
+         TabIndex        =   1
+         Top             =   840
+         Width           =   3855
+         _ExtentX        =   6800
+         _ExtentY        =   1085
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "微软雅黑"
-            Size            =   10.2
-            Charset         =   134
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
             Weight          =   400
             Underline       =   0   'False
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Content         =   "打开工程..."
-         Align           =   1
+         Caption         =   "新建窗口程序"
+         HasBorder       =   0   'False
+         Alignment       =   0
       End
-      Begin VB.Label tabRecentCaption 
+      Begin ImageX.aicAlphaImage imgNewWindowProgram 
+         Height          =   645
+         Left            =   600
+         Top             =   840
+         Width           =   660
+         _ExtentX        =   1164
+         _ExtentY        =   1138
+         Image           =   "frmMain.frx":1BCC2
+         Props           =   5
+      End
+      Begin VB.Label labTip 
          Appearance      =   0  'Flat
          AutoSize        =   -1  'True
          BackColor       =   &H80000005&
@@ -670,13 +702,14 @@ Begin VB.Form frmMain
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00CEDB1A&
-         Height          =   324
-         Left            =   528
+         Height          =   330
+         Index           =   3
+         Left            =   600
          TabIndex        =   11
-         Top             =   3336
+         Top             =   4200
          Width           =   480
       End
-      Begin VB.Label tabRecentPad 
+      Begin VB.Label labTip 
          Appearance      =   0  'Flat
          BackColor       =   &H00CEDB1A&
          BeginProperty Font 
@@ -689,53 +722,44 @@ Begin VB.Form frmMain
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00FFB00A&
-         Height          =   372
+         Height          =   375
+         Index           =   2
          Left            =   0
          TabIndex        =   10
-         Top             =   3312
-         Width           =   96
+         Top             =   4200
+         Width           =   90
       End
       Begin ImageX.aicAlphaImage imgOpenProject 
-         Height          =   516
-         Left            =   516
-         Top             =   2568
-         Width           =   516
-         _ExtentX        =   910
-         _ExtentY        =   910
-         Image           =   "frmMain.frx":1BCC2
+         Height          =   645
+         Left            =   600
+         Top             =   3000
+         Width           =   645
+         _ExtentX        =   1138
+         _ExtentY        =   1138
+         Image           =   "frmMain.frx":1BDF4
          Props           =   5
       End
-      Begin ImageX.aicAlphaImage imgCPP 
-         Height          =   516
-         Left            =   516
-         Top             =   2004
-         Width           =   516
-         _ExtentX        =   910
-         _ExtentY        =   910
-         Image           =   "frmMain.frx":1BF09
+      Begin ImageX.aicAlphaImage imgNewPlainCpp 
+         Height          =   615
+         Left            =   600
+         Top             =   2280
+         Width           =   615
+         _ExtentX        =   1085
+         _ExtentY        =   1085
+         Image           =   "frmMain.frx":1C03B
          Props           =   5
       End
-      Begin ImageX.aicAlphaImage imgConsole 
-         Height          =   516
-         Left            =   516
-         Top             =   1428
-         Width           =   516
-         _ExtentX        =   910
-         _ExtentY        =   910
-         Image           =   "frmMain.frx":1C24D
+      Begin ImageX.aicAlphaImage imgNewConsoleProgram 
+         Height          =   645
+         Left            =   600
+         Top             =   1560
+         Width           =   645
+         _ExtentX        =   1138
+         _ExtentY        =   1138
+         Image           =   "frmMain.frx":1C37F
          Props           =   5
       End
-      Begin ImageX.aicAlphaImage imgWin32 
-         Height          =   516
-         Left            =   504
-         Top             =   888
-         Width           =   528
-         _ExtentX        =   931
-         _ExtentY        =   910
-         Image           =   "frmMain.frx":1C3CD
-         Props           =   5
-      End
-      Begin VB.Label tabCreatePad 
+      Begin VB.Label labTip 
          Appearance      =   0  'Flat
          BackColor       =   &H00FFB00A&
          BeginProperty Font 
@@ -748,13 +772,14 @@ Begin VB.Form frmMain
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00FFB00A&
-         Height          =   372
+         Height          =   375
+         Index           =   0
          Left            =   0
-         TabIndex        =   5
-         Top             =   288
-         Width           =   96
+         TabIndex        =   9
+         Top             =   240
+         Width           =   90
       End
-      Begin VB.Label tabCreateCaption 
+      Begin VB.Label labTip 
          Appearance      =   0  'Flat
          AutoSize        =   -1  'True
          BackColor       =   &H80000005&
@@ -770,18 +795,19 @@ Begin VB.Form frmMain
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00FFB00A&
-         Height          =   324
-         Left            =   528
-         TabIndex        =   4
-         Top             =   312
+         Height          =   330
+         Index           =   1
+         Left            =   600
+         TabIndex        =   8
+         Top             =   240
          Width           =   480
       End
    End
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorderSizer 
-      Left            =   12120
-      Top             =   5400
-      _ExtentX        =   677
-      _ExtentY        =   677
+      Left            =   16200
+      Top             =   7200
+      _ExtentX        =   847
+      _ExtentY        =   847
       Thickness       =   3
       MinWidth        =   400
       MinHeight       =   100
@@ -789,10 +815,10 @@ Begin VB.Form frmMain
       UseSetParent    =   0   'False
    End
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorder 
-      Left            =   11520
-      Top             =   5400
-      _ExtentX        =   677
-      _ExtentY        =   677
+      Left            =   15600
+      Top             =   7200
+      _ExtentX        =   847
+      _ExtentY        =   847
       MinWidth        =   400
       MinHeight       =   100
    End
@@ -800,11 +826,11 @@ Begin VB.Form frmMain
       Align           =   1  'Align Top
       Height          =   495
       Left            =   0
-      TabIndex        =   0
+      TabIndex        =   5
       Top             =   0
       Width           =   16845
-      _ExtentX        =   29718
-      _ExtentY        =   868
+      _ExtentX        =   29713
+      _ExtentY        =   873
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -814,24 +840,24 @@ Begin VB.Form frmMain
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Caption         =   "新工程 - 拖控件大法"
+      Caption         =   "拖控件大法"
       BindCaption     =   -1  'True
       Picture         =   "frmMain.frx":1C4FF
    End
    Begin XtremeSkinFramework.SkinFramework SkinFramework 
-      Left            =   10080
-      Top             =   5520
+      Left            =   14160
+      Top             =   7320
       _Version        =   983043
-      _ExtentX        =   508
-      _ExtentY        =   508
+      _ExtentX        =   635
+      _ExtentY        =   635
       _StockProps     =   0
    End
    Begin XtremeDockingPane.DockingPane DockingPane 
-      Left            =   10800
-      Top             =   5520
+      Left            =   14880
+      Top             =   7320
       _Version        =   983043
-      _ExtentX        =   508
-      _ExtentY        =   508
+      _ExtentX        =   635
+      _ExtentY        =   635
       _StockProps     =   0
       VisualTheme     =   10
    End
@@ -843,38 +869,172 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 '====================================================
 '描述:      主窗口
-'作者:      冰棍
+'作者:      冰棍, Error 404
 '文件:      frmMain.frm
 '====================================================
 
 Option Explicit
 
 '获取窗口最大、最小化状态
-Private Declare Function GetWindowPlacement Lib "user32" (ByVal Hwnd As Long, lpwndpl As WINDOWPLACEMENT) As Long
-'窗口阴影
-Private Shadow As New aShadow
+Private Declare Function GetWindowPlacement Lib "user32" (ByVal hWnd As Long, lpwndpl As WINDOWPLACEMENT) As Long
 
-Private Sub DockingPane_AttachPane(ByVal Item As XtremeDockingPane.IPane)
-    Select Case Item.id
-        Case 1
-            
+Public ProjectType  As Integer                                                                                          '工程类型
+'值     描述
+'0      未创建工程，处于启动界面
+'1      窗口程序
+'2      控制台程序
+'3      空白C++程序
+
+'描述: 隐藏启动界面
+Private Sub HideStartupPage()
+    Dim i           As Integer
+    
+    For i = 0 To 3
+        Me.labTip(i).Visible = False
+    Next i
+    Me.imgNewConsoleProgram.Visible = False
+    Me.imgNewPlainCpp.Visible = False
+    Me.imgNewWindowProgram.Visible = False
+    Me.imgOpenProject.Visible = False
+    Me.cmdNewConsoleProgram.Visible = False
+    Me.cmdNewPlainCpp.Visible = False
+    Me.cmdNewWindowProgram.Visible = False
+    Me.cmdOpenProject.Visible = False
+    
+    Me.DarkMenu.MenuEnabled(3) = True                                                                                   '保存
+    Me.DarkMenu.MenuEnabled(4) = True                                                                                   '另存为
+    Me.DarkMenu.MenuEnabled(7) = True                                                                                   '编辑
+    Me.DarkMenu.MenuEnabled(27) = True                                                                                  '视图
+    Me.DarkMenu.MenuEnabled(34) = True                                                                                  '生成
+    Me.DarkMenu.MenuEnabled(37) = True                                                                                  '调试
+End Sub
+
+Private Sub cmdNewConsoleProgram_Click()
+    Call HideStartupPage
+End Sub
+
+Private Sub cmdNewPlainCpp_Click()
+    On Error Resume Next
+    
+    ProjectType = 3                                                                                                     '设置工程类型
+    Call HideStartupPage                                                                                                '隐藏启动界面
+    
+    SetPropA frmCodeWindow.hWnd, "Parent", Me.picWindowClientArea.hWnd                                                  '记录代码窗口的母窗体, 供其调整大小之用
+    SetParent frmCodeWindow.hWnd, Me.picWindowClientArea.hWnd                                                           '设置代码窗口的母窗体
+    frmCodeWindow.Move 0, 0, (Me.picClientArea.ScaleWidth - 250) / 3 * 2, (Me.picClientArea.ScaleHeight - 120) / 3 * 2  '调整代码框大小
+    
+    '禁用不适用的菜单项
+    Me.DarkMenu.MenuEnabled(29) = False                                                                                 '控件箱
+    Me.DarkMenu.MenuEnabled(30) = False                                                                                 '属性
+    
+    '显示需要的Pane
+    Me.DockingPane.ShowPane 3                                                                                           '工程资源管理器
+    Me.DockingPane.ShowPane 5                                                                                           '输出
+    
+    '更新标题
+    Me.Caption = "新工程 - 拖控件大法"
+    
+    '让代码框获得焦点
+    Me.picWindowClientArea.Visible = True
+    frmCodeWindow.Show
+    frmCodeWindow.SyntaxEdit.SetFocus
+End Sub
+
+Private Sub cmdNewWindowProgram_Click()
+    Call HideStartupPage
+End Sub
+
+Private Sub cmdOpenProject_Click()
+    Call HideStartupPage
+End Sub
+
+Private Sub DarkMenu_MenuItemClicked(MenuID As Integer)
+    Select Case MenuID
         
     End Select
+End Sub
+
+Private Sub DockingPane_Resize()
+    If ProjectType <> 0 Then                                                            '如果不是在启动界面的话就调整窗口活动客户区大小
+        Dim cLeft   As Long, cRight   As Long, cTop   As Long, cBottom   As Long
+        
+        Me.DockingPane.GetClientRect cLeft, cTop, cRight, cBottom
+        Me.picWindowClientArea.Move cLeft, cTop, cRight - cLeft, cBottom - cTop
+        
+        Call Form_Resize                                                                    '如果窗口客户区里面有最大化的窗口，对其大小进行调整
+    End If
 End Sub
 
 Private Sub Form_Load()
     On Error Resume Next
     
     '启动LOGO
-    frmStartupLOGO.Show
+    frmStartupLogo.Show
     
     '加载字符串资源
     If Not LoadLanguage(1001) Then
         MsgBox "加载字符串资源失败！" & Err.Number & ": " & Err.Description, vbCritical, "错误"
     End If
     
+    '调整“客户区”
+    Me.picClientArea.Height = Me.ScaleHeight - Me.picClientArea.Top                                                     '主“客户区”的大小
+    Me.picWindowClientArea.BackColor = Me.BackColor                                                                     '窗口客户区的颜色
+    
     '创建工作区
-    Me.DockingPane.AttachToWindow Me.picClientArea.Hwnd                                                                 '绑定工作区
+    Dim ClientHeight        As Integer, ClientWidth             As Integer
+    Dim i                   As Integer
+    
+    Me.DockingPane.AttachToWindow Me.picClientArea.hWnd                                                                 '绑定工作区
+    ClientHeight = Me.picClientArea.ScaleHeight / Screen.TwipsPerPixelY
+    ClientWidth = Me.picClientArea.ScaleWidth / Screen.TwipsPerPixelX
+    Me.DockingPane.CreatePane 1, 100, ClientHeight, DockLeftOf                                                          '控件箱
+    Me.DockingPane(1).Handle = frmControlBox.hWnd
+    Me.DockingPane(1).Title = "控件箱"
+    Me.DockingPane.CreatePane 2, 250, ClientHeight / 2, DockRightOf                                                     '属性
+    Me.DockingPane(2).Handle = frmProperties.hWnd
+    Me.DockingPane(2).Title = "属性"
+    Me.DockingPane.CreatePane 3, 250, ClientHeight / 2, DockRightOf                                                     '工程资源管理器
+    Me.DockingPane(3).Handle = frmSolutionExplorer.hWnd
+    Me.DockingPane(3).Title = "工程资源管理器"
+    Me.DockingPane.CreatePane 4, ClientWidth / 2, 120, DockBottomOf Or DockLeftOf                                       '错误列表
+    Me.DockingPane(4).Handle = frmErrorList.hWnd
+    Me.DockingPane(4).Title = "错误列表"
+    Me.DockingPane.CreatePane 5, ClientWidth / 2, 120, DockBottomOf Or DockRightOf                                      '输出
+    Me.DockingPane(5).Handle = frmOutput.hWnd
+    Me.DockingPane(5).Title = "输出"
+    Me.DockingPane.CreatePane 6, ClientWidth / 2, 120, DockBottomOf Or DockRightOf                                      '断点列表
+    Me.DockingPane(6).Handle = frmBreakpoints.hWnd
+    Me.DockingPane(6).Title = "断点列表"
+    Me.DockingPane.CreatePane 7, ClientWidth / 2, 120, DockBottomOf                                                     '监视窗口
+    Me.DockingPane(7).Handle = frmWatch.hWnd
+    Me.DockingPane(7).Title = "监视窗口"
+    Me.DockingPane.CreatePane 8, ClientWidth / 2, 120, DockBottomOf                                                     '本地
+    Me.DockingPane(8).Handle = frmLocals.hWnd
+    Me.DockingPane(8).Title = "本地"
+    Me.DockingPane.CreatePane 9, ClientWidth / 2, 120, DockBottomOf                                                     '立即窗口
+    Me.DockingPane(9).Handle = frmImmediate.hWnd
+    Me.DockingPane(9).Title = "立即窗口"
+    Me.DockingPane.CreatePane 10, ClientWidth / 2, 120, DockBottomOf                                                    '调用堆栈
+    Me.DockingPane(10).Handle = frmCallStack.hWnd
+    Me.DockingPane(10).Title = "调用堆栈"
+    Me.DockingPane.CreatePane 11, ClientWidth / 2, 120, DockBottomOf                                                    '线程
+    Me.DockingPane(11).Handle = frmThreads.hWnd
+    Me.DockingPane(11).Title = "线程"
+    Me.DockingPane.CreatePane 12, ClientWidth / 2, 120, DockBottomOf                                                    '模块
+    Me.DockingPane(12).Handle = frmModules.hWnd
+    Me.DockingPane(12).Title = "模块"
+    Me.DockingPane.CreatePane 13, ClientWidth / 2, 250, DockBottomOf                                                    '内存
+    Me.DockingPane(13).Handle = frmMemory.hWnd
+    Me.DockingPane(13).Title = "内存"
+    Me.DockingPane.CreatePane 14, ClientWidth / 2, 250, DockBottomOf                                                    '寄存器
+    Me.DockingPane(14).Handle = frmRegisters.hWnd
+    Me.DockingPane(14).Title = "寄存器"
+    Me.DockingPane.CreatePane 15, ClientWidth / 2, 250, DockBottomOf                                                    '反汇编
+    Me.DockingPane(15).Handle = frmDisassembly.hWnd
+    Me.DockingPane(15).Title = "反汇编"
+    For i = 1 To 15                                                                                                     '隐藏所有的Pane
+        Me.DockingPane(i).Close
+    Next i
     
     '设置Docking Pane的样式
     Me.DockingPane.Options.ShowDockingContextStickers = True                                                            '显示Docking stickers
@@ -888,54 +1048,80 @@ Private Sub Form_Load()
     Me.DockingPane.PaintManager.SplitterSize = 2                                                                        '设置分割区域的大小
     
     '加载皮肤
-    Me.SkinFramework.RemoveAllWindows
     Me.SkinFramework.LoadSkin "Skin.cjstyles", "NormalBlue.ini"
-    Me.SkinFramework.ApplyWindow Me.Hwnd
-
-    '加载阴影
-    With Shadow
-        If .Shadow(Me) Then
-            .Color = RGB(0, 0, 0)
-            .Depth = 16
-            .Transparency = 50
-        End If
-    End With
+    Me.SkinFramework.ApplyWindow Me.hWnd
     
-    '设置窗口子类化，处理最大化问题
-    SetPropA Me.Hwnd, "PrevWndProc", SetWindowLongA(Me.Hwnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)
+    '禁用不需要的菜单
+    Me.DarkMenu.MenuEnabled(3) = False                                                                                  '保存
+    Me.DarkMenu.MenuEnabled(4) = False                                                                                  '另存为
+    Me.DarkMenu.MenuEnabled(7) = False                                                                                  '编辑
+    Me.DarkMenu.MenuEnabled(27) = False                                                                                 '视图
+    Me.DarkMenu.MenuEnabled(34) = False                                                                                 '生成
+    Me.DarkMenu.MenuEnabled(37) = False                                                                                 '调试
+    
+    '设置窗口子类化，处理最大化问题及处理任务栏右键关闭
+    SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)
     
     '卸载LOGO
-    Unload frmStartupLOGO
-    
-    'frmCodeWindow.Show
-    'SetPropA frmCodeWindow.hWnd, "Parent", Me.picClientArea.hWnd
-    'SetParent frmCodeWindow.hWnd, Me.picClientArea.hWnd
+    Unload frmStartupLogo
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     '恢复窗口子类化
-    SetWindowLongA Me.Hwnd, GWL_WNDPROC, GetPropA(Hwnd, "PrevWndProc")
+    SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(hWnd, "PrevWndProc")
+    
+    '关闭所有窗口
     Unload frmCodeWindow
+    Unload frmControlBox
+    Unload frmProperties
+    Unload frmSolutionExplorer
+    Unload frmErrorList
+    Unload frmOutput
+    Unload frmBreakpoints
+    Unload frmWatch
+    Unload frmLocals
+    Unload frmImmediate
+    Unload frmCallStack
+    Unload frmThreads
+    Unload frmModules
+    Unload frmMemory
+    Unload frmRegisters
+    Unload frmDisassembly
 End Sub
 
 Private Sub Form_Resize()
     On Error Resume Next
     
     '调整“客户区”的大小
-    Me.picClientArea.Height = Me.ScaleHeight - Me.picClientArea.top
+    Me.picClientArea.Height = Me.ScaleHeight - Me.picClientArea.Top
     
     '调整最大化的子窗体的大小
     Dim Target  As Form
     Dim wp      As WINDOWPLACEMENT
     
     For Each Target In Forms
-        If GetPropA(Target.Hwnd, "Parent") = Me.picClientArea.Hwnd Then
-            GetWindowPlacement Target.Hwnd, wp
+        If GetPropA(Target.hWnd, "Parent") = Me.picWindowClientArea.hWnd Then
+            GetWindowPlacement Target.hWnd, wp
             If wp.ShowCmd = SW_MAXIMIZE Then
-                ShowWindow Target.Hwnd, SW_HIDE
-                ShowWindow Target.Hwnd, SW_MAXIMIZE
+                ShowWindow Target.hWnd, SW_HIDE
+                ShowWindow Target.hWnd, SW_MAXIMIZE
             End If
         End If
     Next Target
 End Sub
 
+Private Sub imgNewConsoleProgram_Click(ByVal Button As Integer)
+    Call cmdNewConsoleProgram_Click
+End Sub
+
+Private Sub imgNewPlainCpp_Click(ByVal Button As Integer)
+    Call cmdNewPlainCpp_Click
+End Sub
+
+Private Sub imgNewWindowProgram_Click(ByVal Button As Integer)
+    Call cmdNewWindowProgram_Click
+End Sub
+
+Private Sub imgOpenProject_Click(ByVal Button As Integer)
+    Call cmdOpenProject_Click
+End Sub

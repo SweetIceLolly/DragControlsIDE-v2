@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "Image.ocx"
 Begin VB.UserControl DarkImageButton 
    Appearance      =   0  'Flat
    BackColor       =   &H00302D2D&
@@ -15,6 +16,16 @@ Begin VB.UserControl DarkImageButton
       Left            =   960
       Top             =   360
    End
+   Begin ImageX.aicAlphaImage imgPicture 
+      Height          =   480
+      Left            =   120
+      Top             =   0
+      Width           =   480
+      _ExtentX        =   847
+      _ExtentY        =   847
+      Image           =   "DarkImageButton.ctx":0312
+      Props           =   5
+   End
    Begin VB.Shape shpFocus 
       BorderColor     =   &H00D5F1F1&
       BorderStyle     =   3  'Dot
@@ -23,14 +34,6 @@ Begin VB.UserControl DarkImageButton
       Top             =   0
       Visible         =   0   'False
       Width           =   975
-   End
-   Begin VB.Image imgPicture 
-      Enabled         =   0   'False
-      Height          =   480
-      Left            =   120
-      Picture         =   "DarkImageButton.ctx":0312
-      Top             =   0
-      Width           =   480
    End
 End
 Attribute VB_Name = "DarkImageButton"
@@ -60,6 +63,9 @@ Private BackG   As Integer
 Private BackB   As Integer
 
 Dim bDown       As Boolean
+
+Dim imgData()   As Byte
+Dim imgFileName As String
 
 'Default Property Values:
 Const m_def_Focusable = True
@@ -217,32 +223,29 @@ End Sub
 
 'Load property values from storage
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
-    m_Enabled = PropBag.ReadProperty("Enabled", m_def_Enabled)
+    On Error Resume Next
     
+    m_Enabled = PropBag.ReadProperty("Enabled", m_def_Enabled)
+    imgData = PropBag.ReadProperty("Image", StrConv("", vbFromUnicode))
+    
+    UserControl.imgPicture.LoadImage_FromArray imgData
     UserControl.Enabled = Me.Enabled
     UserControl.BorderStyle = IIf(PropBag.ReadProperty("HasBorder", True), 1, 0)
     Call UserControl_Resize
-    Set Picture = PropBag.ReadProperty("Picture", Nothing)
     m_Focusable = PropBag.ReadProperty("Focusable", m_def_Focusable)
 End Sub
 
 'Write property values to storage
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
     Call PropBag.WriteProperty("Enabled", m_Enabled, m_def_Enabled)
-    Call PropBag.WriteProperty("Picture", Picture, Nothing)
+    Call PropBag.WriteProperty("Image", imgData, StrConv("", vbFromUnicode))
     Call PropBag.WriteProperty("Focusable", m_Focusable, m_def_Focusable)
     Call PropBag.WriteProperty("HasBorder", IIf(UserControl.BorderStyle = 1, True, False), True)
 End Sub
 
-'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
-'MappingInfo=imgPicture,imgPicture,-1,Picture
-Public Property Get Picture() As Picture
-Attribute Picture.VB_Description = "Returns/sets a graphic to be displayed in a control."
-    Set Picture = imgPicture.Picture
-End Property
-
 Public Property Set Picture(ByVal New_Picture As Picture)
-    Set imgPicture.Picture = New_Picture
+Attribute Picture.VB_Description = "Returns/sets a graphic to be displayed in a control."
+    UserControl.imgPicture.LoadImage_FromStdPicture New_Picture
     PropertyChanged "Picture"
     
     Call UserControl_Resize
@@ -268,4 +271,19 @@ End Property
 Public Property Let HasBorder(ByVal New_HasBorder As Boolean)
     UserControl.BorderStyle() = IIf(New_HasBorder, 1, 0)
     PropertyChanged "HasBorder"
+End Property
+
+Public Property Get FileName() As String
+    FileName = imgFileName
+End Property
+
+Public Property Let FileName(NewFileName As String)
+    On Error Resume Next
+    
+    imgFileName = NewFileName
+    UserControl.imgPicture.LoadImage_FromFile NewFileName
+    Open NewFileName For Binary As #1
+        ReDim imgData(LOF(1))
+        Get #1, , imgData
+    Close #1
 End Property

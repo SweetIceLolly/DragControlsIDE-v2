@@ -83,16 +83,18 @@ Dim BackB       As Integer
 Dim bDown       As Boolean
 
 'Default Property Values:
+Const m_def_Alignment = 1
 Const m_def_HasBorder = True
 Const m_def_Enabled = True
 'Property Variables:
+Dim m_Alignment As Integer
 Dim m_Enabled As Boolean
 'Event Declarations:
 Event Click()
 Attribute Click.VB_Description = "Occurs when the user presses and then releases a mouse button over an object."
 
 Private Sub tmrSetColor_Timer()
-    Dim pt      As Point
+    Dim pt      As POINT
     Dim Target  As Long
     
     If Not Enabled Then
@@ -191,7 +193,7 @@ End Sub
 
 Private Sub UserControl_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = vbLeftButton Then
-        Dim pt      As Point
+        Dim pt      As POINT
         Dim Target  As Long
         
         GetCursorPos pt
@@ -213,7 +215,17 @@ Private Sub UserControl_Resize()
     UserControl.shpFocus.Height = UserControl.Height - UserControl.shpFocus.Top - SZ_BORDER
     
     UserControl.labTip.Top = UserControl.Height / 2 - UserControl.labTip.Height / 2
-    UserControl.labTip.Left = UserControl.Width / 2 - UserControl.labTip.Width / 2
+    Select Case m_Alignment
+        Case 0                                                              'Left
+            UserControl.labTip.Left = SZ_BORDER + 60
+        
+        Case 1                                                              'Center
+            UserControl.labTip.Left = UserControl.Width / 2 - UserControl.labTip.Width / 2
+        
+        Case 2                                                              'Right
+            UserControl.labTip.Left = UserControl.Width - SZ_BORDER - 60 - UserControl.labTip.Width
+        
+    End Select
 End Sub
 
 'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
@@ -260,11 +272,13 @@ End Property
 'Initialize Properties for User Control
 Private Sub UserControl_InitProperties()
     m_Enabled = m_def_Enabled
+    m_Alignment = m_def_Alignment
 End Sub
 
 'Load property values from storage
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     m_Enabled = PropBag.ReadProperty("Enabled", m_def_Enabled)
+    m_Alignment = PropBag.ReadProperty("Alignment", m_def_Alignment)
     Set labTip.Font = PropBag.ReadProperty("Font", Ambient.Font)
     labTip.Caption = PropBag.ReadProperty("Caption", "Caption")
     UserControl.BorderStyle = IIf(PropBag.ReadProperty("HasBorder", True), 1, 0)
@@ -280,6 +294,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
     Call PropBag.WriteProperty("Caption", labTip.Caption, "Caption")
     Call PropBag.WriteProperty("Enabled", m_Enabled, m_def_Enabled)
     Call PropBag.WriteProperty("HasBorder", IIf(UserControl.BorderStyle = 1, True, False), True)
+    Call PropBag.WriteProperty("Alignment", m_Alignment, m_def_Alignment)
 End Sub
 
 'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
@@ -291,5 +306,19 @@ End Property
 Public Property Let HasBorder(ByVal New_HasBorder As Boolean)
     UserControl.BorderStyle() = IIf(New_HasBorder, 1, 0)
     PropertyChanged "HasBorder"
+End Property
+
+'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
+'MemberInfo=7,0,0,1
+Public Property Get Alignment() As Integer
+Attribute Alignment.VB_Description = "Returns/sets the alignment of a CheckBox or OptionButton, or a control's text."
+    Alignment = m_Alignment
+End Property
+
+Public Property Let Alignment(ByVal New_Alignment As Integer)
+    m_Alignment = New_Alignment
+    PropertyChanged "Alignment"
+    
+    UserControl_Resize
 End Property
 

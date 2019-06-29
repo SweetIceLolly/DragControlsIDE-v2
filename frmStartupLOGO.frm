@@ -1,21 +1,36 @@
 VERSION 5.00
-Begin VB.Form frmStartupLOGO 
+Begin VB.Form frmStartupLogo 
    Appearance      =   0  'Flat
-   BackColor       =   &H80000005&
+   BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "拖控件大法"
-   ClientHeight    =   1908
+   ClientHeight    =   1590
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   6372
+   ClientWidth     =   5445
    LinkTopic       =   "Form1"
-   Picture         =   "frmStartupLOGO.frx":0000
-   ScaleHeight     =   1908
-   ScaleWidth      =   6372
-   StartUpPosition =   2  '屏幕中心
+   Picture         =   "frmStartupLogo.frx":0000
+   ScaleHeight     =   1590
+   ScaleWidth      =   5445
+   StartUpPosition =   2  'CenterScreen
 End
-Attribute VB_Name = "frmStartupLOGO"
+Attribute VB_Name = "frmStartupLogo"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+'====================================================
+'描述:      启动窗口
+'作者:      Error 404
+'文件:      frmStartupLogo.frm
+'====================================================
+
+Private Sub Form_Click()
+    Unload Me
+End Sub
+
+Private Sub Form_Load()
+    '窗口大小适应不同DPI
+    Me.Width = 533 * Screen.TwipsPerPixelX
+    Me.Height = 160 * Screen.TwipsPerPixelY
+End Sub

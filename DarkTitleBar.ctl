@@ -90,7 +90,7 @@ Begin VB.UserControl DarkTitleBar
       Width           =   480
       _ExtentX        =   847
       _ExtentY        =   847
-      Picture         =   "DarkTitleBar.ctx":0A2A
+      Image           =   "DarkTitleBar.ctx":0A2A
       Focusable       =   0   'False
       HasBorder       =   0   'False
    End
@@ -104,7 +104,7 @@ Begin VB.UserControl DarkTitleBar
       Width           =   480
       _ExtentX        =   847
       _ExtentY        =   847
-      Picture         =   "DarkTitleBar.ctx":1704
+      Image           =   "DarkTitleBar.ctx":1709
       Focusable       =   0   'False
       HasBorder       =   0   'False
    End
@@ -118,14 +118,14 @@ Begin VB.UserControl DarkTitleBar
       Width           =   480
       _ExtentX        =   847
       _ExtentY        =   847
-      Picture         =   "DarkTitleBar.ctx":23DE
+      Image           =   "DarkTitleBar.ctx":23E8
       Focusable       =   0   'False
       HasBorder       =   0   'False
    End
    Begin VB.Image imgMax 
       Height          =   480
       Left            =   4320
-      Picture         =   "DarkTitleBar.ctx":30B8
+      Picture         =   "DarkTitleBar.ctx":30C7
       Top             =   480
       Visible         =   0   'False
       Width           =   480
@@ -133,7 +133,7 @@ Begin VB.UserControl DarkTitleBar
    Begin VB.Image imgRestore 
       Height          =   480
       Left            =   4800
-      Picture         =   "DarkTitleBar.ctx":3D82
+      Picture         =   "DarkTitleBar.ctx":3D91
       Top             =   480
       Visible         =   0   'False
       Width           =   480
@@ -161,7 +161,7 @@ Begin VB.UserControl DarkTitleBar
    Begin VB.Image imgIcon 
       Height          =   480
       Left            =   0
-      Picture         =   "DarkTitleBar.ctx":4A4C
+      Picture         =   "DarkTitleBar.ctx":4A5B
       Top             =   0
       Width           =   480
    End
