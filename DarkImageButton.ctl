@@ -24,6 +24,7 @@ Begin VB.UserControl DarkImageButton
       _ExtentX        =   847
       _ExtentY        =   847
       Image           =   "DarkImageButton.ctx":0312
+      Enabled         =   0   'False
       Props           =   5
    End
    Begin VB.Shape shpFocus 
@@ -77,7 +78,7 @@ Dim m_Enabled As Boolean
 Event Click()
 
 Private Sub tmrSetColor_Timer()
-    Dim pt      As POINT
+    Dim pt      As Point
     Dim Target  As Long
     
     If Not Enabled Then
@@ -177,7 +178,7 @@ End Sub
 
 Private Sub UserControl_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = vbLeftButton Then
-        Dim pt      As POINT
+        Dim pt      As Point
         Dim Target  As Long
         
         GetCursorPos pt

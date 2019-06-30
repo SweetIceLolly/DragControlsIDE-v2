@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "Image.ocx"
 Begin VB.PropertyPage propMenuItems 
    BackColor       =   &H00302D2D&
    Caption         =   "菜单编辑器"
@@ -12,7 +13,7 @@ Begin VB.PropertyPage propMenuItems
    Begin DragControlsIDE.DarkListBox lstMenus 
       Height          =   2190
       Left            =   120
-      TabIndex        =   18
+      TabIndex        =   17
       Top             =   2400
       Width           =   5775
       _ExtentX        =   10186
@@ -27,22 +28,6 @@ Begin VB.PropertyPage propMenuItems
          Strikethrough   =   0   'False
       EndProperty
       ListIndex       =   -1
-   End
-   Begin VB.PictureBox picMenuIcon 
-      Appearance      =   0  'Flat
-      AutoRedraw      =   -1  'True
-      BackColor       =   &H001C1B1B&
-      ForeColor       =   &H80000008&
-      Height          =   615
-      Left            =   5280
-      OLEDropMode     =   1  'Manual
-      ScaleHeight     =   585
-      ScaleWidth      =   555
-      TabIndex        =   16
-      TabStop         =   0   'False
-      ToolTipText     =   "把图片拖进来以设置菜单图标 右键点击移除图标"
-      Top             =   360
-      Width           =   585
    End
    Begin DragControlsIDE.DarkButton cmdDelete 
       Height          =   375
@@ -279,6 +264,16 @@ Begin VB.PropertyPage propMenuItems
       Caption         =   "该菜单可视"
       Value           =   -1  'True
    End
+   Begin ImageX.aicAlphaImage picMenuIcon 
+      Height          =   615
+      Left            =   5280
+      Top             =   360
+      Width           =   615
+      _ExtentX        =   1085
+      _ExtentY        =   1085
+      Image           =   "propMenuItems.pgx":0000
+      OLEdrop         =   1
+   End
    Begin VB.Label labTip 
       AutoSize        =   -1  'True
       BackStyle       =   0  'Transparent
@@ -296,7 +291,7 @@ Begin VB.PropertyPage propMenuItems
       Height          =   225
       Index           =   3
       Left            =   3240
-      TabIndex        =   17
+      TabIndex        =   16
       Top             =   720
       Width           =   1260
    End
@@ -398,7 +393,7 @@ Private Type MenuItem
     Enabled         As Boolean
     CheckBox        As Boolean
     Visible         As Boolean
-    MenuIcon        As IPictureDisp
+    MenuIcon()      As Byte
 End Type
 
 Dim Menus()         As MenuItem         'Base = 1
@@ -590,31 +585,39 @@ Private Sub lstMenus_Click()
         chkEnabled.Value = .Enabled
         chkHasCheckBox.Value = .CheckBox
         chkVisible.Value = .Visible
-        Set picMenuIcon.Picture = .MenuIcon
+        If UBound(.MenuIcon) <> -1 Then
+            picMenuIcon.LoadImage_FromArray .MenuIcon
+            picMenuIcon.Refresh
+        Else
+            picMenuIcon.LoadImage_FromStdPicture Nothing
+            picMenuIcon.Refresh
+        End If
     End With
     labError.Caption = ""
 End Sub
 
 Private Sub picMenuIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = vbRightButton Then
-        Set picMenuIcon.Picture = Nothing
-        Set Menus(lstMenus.ListIndex + 1).MenuIcon = Nothing
+        picMenuIcon.LoadImage_FromStdPicture Nothing
+        Menus(lstMenus.ListIndex + 1).MenuIcon = StrConv("", vbFromUnicode)
+        picMenuIcon.Refresh
     End If
 End Sub
 
 Private Sub picMenuIcon_OLEDragDrop(Data As DataObject, Effect As Long, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
-    Dim picIcon     As IPictureDisp
+    Dim imgData()   As Byte
     
-    Set picIcon = LoadPicture(Data.Files(1))
-    If Err.Number <> 0 Then
-        labError.Caption = "无效的图片！"
-        Exit Sub
+    If picMenuIcon.LoadImage_FromFile(Data.Files(1)) Then
+        Open Data.Files(1) For Binary As #1
+            ReDim imgData(LOF(1))
+            Get #1, , imgData
+        Close #1
+        Menus(lstMenus.ListIndex + 1).MenuIcon = imgData
     Else
-        labError.Caption = ""
+        Menus(lstMenus.ListIndex + 1).MenuIcon = StrConv("", vbFromUnicode)
+        labError.Caption = "无效的图片！"
     End If
-    Set Menus(lstMenus.ListIndex + 1).MenuIcon = picIcon
-    Set picMenuIcon.Picture = picIcon
 End Sub
 
 Private Sub PropertyPage_ApplyChanges()

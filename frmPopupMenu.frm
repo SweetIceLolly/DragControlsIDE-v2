@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "Image.ocx"
 Begin VB.Form frmPopupMenu 
    BackColor       =   &H001C1B1B&
    BorderStyle     =   0  'None
@@ -23,6 +24,17 @@ Begin VB.Form frmPopupMenu
       Left            =   480
       Top             =   2040
    End
+   Begin ImageX.aicAlphaImage imgMenuCheckBox 
+      Height          =   345
+      Index           =   0
+      Left            =   1320
+      Top             =   1080
+      Width           =   345
+      _ExtentX        =   609
+      _ExtentY        =   609
+      Image           =   "frmPopupMenu.frx":0000
+      Enabled         =   0   'False
+   End
    Begin VB.Line lnSplitter 
       BorderColor     =   &H00373333&
       Index           =   0
@@ -36,7 +48,7 @@ Begin VB.Form frmPopupMenu
       Enabled         =   0   'False
       Height          =   225
       Left            =   1320
-      Picture         =   "frmPopupMenu.frx":0000
+      Picture         =   "frmPopupMenu.frx":0018
       Top             =   1560
       Visible         =   0   'False
       Width           =   225
@@ -45,18 +57,8 @@ Begin VB.Form frmPopupMenu
       Enabled         =   0   'False
       Height          =   225
       Left            =   1680
-      Picture         =   "frmPopupMenu.frx":0356
+      Picture         =   "frmPopupMenu.frx":036E
       Top             =   1560
-      Visible         =   0   'False
-      Width           =   225
-   End
-   Begin VB.Image imgMenuCheckBox 
-      Enabled         =   0   'False
-      Height          =   225
-      Index           =   0
-      Left            =   1320
-      Picture         =   "frmPopupMenu.frx":06AC
-      Top             =   1080
       Visible         =   0   'False
       Width           =   225
    End
@@ -65,7 +67,7 @@ Begin VB.Form frmPopupMenu
       Height          =   225
       Index           =   0
       Left            =   1320
-      Picture         =   "frmPopupMenu.frx":0A02
+      Picture         =   "frmPopupMenu.frx":06C4
       Top             =   720
       Visible         =   0   'False
       Width           =   225
@@ -146,7 +148,7 @@ Private Type MenuItem
     CheckBox        As Boolean
     Visible         As Boolean
     Checked         As Boolean
-    MenuIcon        As IPictureDisp
+    MenuIcon()      As Byte
 End Type
 
 Dim Menus()         As MenuItem         'Base = 1
@@ -248,25 +250,25 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
                 If nCheckBoxes > 0 Then
                     Load Me.imgMenuCheckBox(nCheckBoxes)
                 End If
-                Me.imgMenuCheckBox(nCheckBoxes).Left = ITEM_HORZ_MARGIN
+                Me.imgMenuCheckBox(nCheckBoxes).Left = 60 'ITEM_HORZ_MARGIN
                 Me.imgMenuCheckBox(nCheckBoxes).Top = Me.labItem(i - 1).Top + Me.labItem(i - 1).Height / 2 - Me.imgMenuCheckBox(nCheckBoxes).Height / 2
                 If Menus(CurrSubMenuID(i)).Checked Then
-                    Me.imgMenuCheckBox(nCheckBoxes).Picture = Me.imgChecked.Picture
+                    Me.imgMenuCheckBox(nCheckBoxes).LoadImage_FromStdPicture Me.imgChecked.Picture
                 Else
-                    Me.imgMenuCheckBox(nCheckBoxes).Picture = Me.imgUnchecked.Picture
+                    Me.imgMenuCheckBox(nCheckBoxes).LoadImage_FromStdPicture Me.imgUnchecked.Picture
                 End If
                 Me.imgMenuCheckBox(nCheckBoxes).Visible = True
                 Me.imgMenuCheckBox(nCheckBoxes).ZOrder 0
                 nCheckBoxes = nCheckBoxes + 1
-            ElseIf Not Menus(CurrSubMenuID(i)).MenuIcon Is Nothing And Menus(CurrSubMenuID(i)).MenuText <> "-" Then
+            ElseIf (Not Menus(CurrSubMenuID(i)).MenuIcon) <> -1 And Menus(CurrSubMenuID(i)).MenuText <> "-" Then
                 HasCheckBox = True
                 If nCheckBoxes > 0 Then
                     Load Me.imgMenuCheckBox(nCheckBoxes)
                 End If
-                Me.imgMenuCheckBox(nCheckBoxes).Left = ITEM_HORZ_MARGIN
+                Me.imgMenuCheckBox(nCheckBoxes).Left = ITEM_HORZ_MARGIN + 90
                 Me.imgMenuCheckBox(nCheckBoxes).Top = Me.labItem(i - 1).Top + Me.labItem(i - 1).Height / 2 - Me.imgMenuCheckBox(nCheckBoxes).Height / 2
-                Me.imgMenuCheckBox(nCheckBoxes).Stretch = True
-                Set Me.imgMenuCheckBox(nCheckBoxes).Picture = Menus(CurrSubMenuID(i)).MenuIcon
+                'Me.imgMenuCheckBox(nCheckBoxes).Stretch = True
+                Me.imgMenuCheckBox(nCheckBoxes).LoadImage_FromArray Menus(CurrSubMenuID(i)).MenuIcon
                 Me.imgMenuCheckBox(nCheckBoxes).Visible = True
                 Me.imgMenuCheckBox(nCheckBoxes).ZOrder 0
                 nCheckBoxes = nCheckBoxes + 1

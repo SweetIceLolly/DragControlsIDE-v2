@@ -87,7 +87,7 @@ Private Type MenuItem
     CheckBox        As Boolean
     Visible         As Boolean
     Checked         As Boolean          'Won't save in the property bag
-    MenuIcon        As IPictureDisp
+    MenuIcon()      As Byte
 End Type
 
 Dim Menus()         As MenuItem         'Base = 1
@@ -168,7 +168,7 @@ End Sub
 'Please note that this function is for internal usage only and is NOT suggested to call directly
 'Please use menu properties instead
 Public Sub SetMenuItemInfo(Index As Integer, MenuID As Integer, MenuText As String, Enabled As Boolean, CheckBox As Boolean, _
-    Visible As Boolean, SubMenus() As String, SubMenuID() As Integer, MenuIcon As IPictureDisp)
+    Visible As Boolean, SubMenus() As String, SubMenuID() As Integer, MenuIcon() As Byte)
     
     With Menus(Index)
          .MenuID = MenuID
@@ -178,7 +178,7 @@ Public Sub SetMenuItemInfo(Index As Integer, MenuID As Integer, MenuText As Stri
          .Visible = Visible
          .SubMenus = SubMenus
          .SubMenuID = SubMenuID
-         Set .MenuIcon = MenuIcon
+         .MenuIcon = MenuIcon
     End With
     PropertyChanged
     
@@ -188,7 +188,7 @@ End Sub
 'Please note that this function is for internal usage only and is NOT suggested to call directly
 'Please use menu properties instead
 Public Sub GetMenuItemInfo(ByVal Index As Integer, MenuID As Integer, MenuText As String, Enabled As Boolean, CheckBox As Boolean, _
-    Visible As Boolean, SubMenus() As String, SubMenuID() As Integer, MenuIcon As IPictureDisp, Optional Checked As Boolean)
+    Visible As Boolean, SubMenus() As String, SubMenuID() As Integer, MenuIcon() As Byte, Optional Checked As Boolean)
     
     With Menus(Index)
         MenuID = .MenuID
@@ -198,7 +198,7 @@ Public Sub GetMenuItemInfo(ByVal Index As Integer, MenuID As Integer, MenuText A
         Visible = .Visible
         SubMenus = .SubMenus
         SubMenuID = .SubMenuID
-        Set MenuIcon = .MenuIcon
+        MenuIcon = .MenuIcon
         If Not IsMissing(Checked) Then
             Checked = .Checked
         End If
@@ -438,7 +438,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
             .Enabled = PropBag.ReadProperty("MenuEnabled_" & i, True)
             .CheckBox = PropBag.ReadProperty("MenuCheckBox_" & i, False)
             .Visible = PropBag.ReadProperty("MenuVisible_" & i, False)
-            Set .MenuIcon = PropBag.ReadProperty("MenuIcon_" & i, Nothing)
+            .MenuIcon = PropBag.ReadProperty("MenuIcon_" & i, StrConv("", vbFromUnicode))
             ReDim .SubMenuID(PropBag.ReadProperty("SUBMENU_ITEM_COUNT_" & i, 0))
             ReDim .SubMenus(PropBag.ReadProperty("SUBMENU_ITEM_COUNT_" & i, 0))
             For j = 0 To UBound(Menus(i).SubMenus)
@@ -543,12 +543,12 @@ Public Property Get MenuVisible(ByVal MenuID As Integer) As Boolean
     MenuVisible = Menus(MenuID + 1).Visible
 End Property
 
-Public Property Set MenuIcon(ByVal MenuID As Integer, NewIcon As IPictureDisp)
-    Set Menus(MenuID + 1).MenuIcon = NewIcon
+Public Property Let MenuIcon(ByVal MenuID As Integer, NewIcon() As Byte)
+    Menus(MenuID + 1).MenuIcon = NewIcon
 End Property
 
-Public Property Get MenuIcon(ByVal MenuID As Integer) As IPictureDisp
-    Set MenuIcon = Menus(MenuID).MenuIcon
+Public Property Get MenuIcon(ByVal MenuID As Integer) As Byte()
+    MenuIcon = Menus(MenuID).MenuIcon
 End Property
 
 'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
