@@ -661,6 +661,16 @@ Begin VB.Form frmMain
          Top             =   720
          Visible         =   0   'False
          Width           =   5655
+         Begin DragControlsIDE.TabBar TabBar 
+            Height          =   3615
+            Left            =   600
+            TabIndex        =   13
+            Top             =   480
+            Visible         =   0   'False
+            Width           =   8175
+            _ExtentX        =   14420
+            _ExtentY        =   6376
+         End
       End
       Begin DragControlsIDE.DarkButton cmdOpenProject 
          Height          =   615
@@ -970,6 +980,7 @@ Private Sub HideStartupPage()
     Me.cmdNewPlainCpp.Visible = False
     Me.cmdNewWindowProgram.Visible = False
     Me.cmdOpenProject.Visible = False
+    Me.TabBar.Visible = True
     
     Me.DarkMenu.MenuEnabled(3) = True                                                                                   '保存
     Me.DarkMenu.MenuEnabled(4) = True                                                                                   '另存为
@@ -1006,8 +1017,8 @@ Private Sub cmdNewPlainCpp_Click()
     
     '让代码框获得焦点
     Me.picWindowClientArea.Visible = True
-    frmCodeWindow.Show
-    frmCodeWindow.SyntaxEdit.SetFocus
+    'frmCodeWindow.Show
+    'frmCodeWindow.SyntaxEdit.SetFocus
 End Sub
 
 Private Sub cmdNewWindowProgram_Click()
@@ -1020,6 +1031,10 @@ End Sub
 
 Private Sub DarkMenu_MenuItemClicked(MenuID As Integer)
     Select Case MenuID
+        Case 1
+            Dim NewCodeWindow   As New frmCodeWindow
+            
+            Me.TabBar.AddForm NewCodeWindow
         
     End Select
 End Sub
@@ -1030,6 +1045,7 @@ Private Sub DockingPane_Resize()
         
         Me.DockingPane.GetClientRect cLeft, cTop, cRight, cBottom
         Me.picWindowClientArea.Move cLeft, cTop, cRight - cLeft, cBottom - cTop
+        Me.TabBar.Move 0, 0, Me.picWindowClientArea.ScaleWidth, Me.picWindowClientArea.ScaleHeight
         
         Call Form_Resize                                                                    '如果窗口客户区里面有最大化的窗口，对其大小进行调整
     End If

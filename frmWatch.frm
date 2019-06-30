@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmWatch 
+   BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "¼àÊÓ´°¿Ú"
    ClientHeight    =   3030

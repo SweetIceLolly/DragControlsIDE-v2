@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmBreakpoints 
+   BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "∂œµ„¡–±Ì"
    ClientHeight    =   3030

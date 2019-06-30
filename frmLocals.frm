@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmLocals 
+   BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "±¾µØ"
    ClientHeight    =   3030

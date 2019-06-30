@@ -46,6 +46,7 @@ Form=frmProperties.frm
 Form=frmSolutionExplorer.frm
 Form=frmErrorList.frm
 Form=frmOutput.frm
+UserControl=TabBar.ctl
 ResFile32="DragControlsIDE.res"
 IconForm="frmMain"
 Startup="frmMain"

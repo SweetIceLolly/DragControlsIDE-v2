@@ -156,8 +156,19 @@ Private Sub Form_Load()
     Me.SyntaxEdit.ConfigFile = App.Path & "\SyntaxEdit.ini"
 End Sub
 
-Private Sub Form_Resize()
+Public Sub Form_Resize()
     On Error Resume Next
+    
+    '根据标题栏是否显示来调整控件位置
+    If Me.DarkTitleBar.Visible = True Then
+        Me.comObject.Top = Me.DarkTitleBar.Height + 165
+        Me.comEvent.Top = Me.comObject.Top
+        Me.SyntaxEdit.Top = Me.comEvent.Top + Me.comEvent.Height + 240
+    Else
+        Me.comObject.Top = 120
+        Me.comEvent.Top = 120
+        Me.SyntaxEdit.Top = 120 + Me.comObject.Height + 120
+    End If
     
     '设置代码框大小
     Me.SyntaxEdit.Width = Me.ScaleWidth - Me.SyntaxEdit.Left - Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelX
