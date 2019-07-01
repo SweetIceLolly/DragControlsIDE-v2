@@ -2,12 +2,12 @@ VERSION 5.00
 Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "Image.ocx"
 Begin VB.UserControl TabBar 
    BackColor       =   &H00302D2D&
-   ClientHeight    =   4485
+   ClientHeight    =   4488
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   7425
-   ScaleHeight     =   4485
-   ScaleWidth      =   7425
+   ClientWidth     =   7428
+   ScaleHeight     =   4488
+   ScaleWidth      =   7428
    Begin VB.Timer DropInCheck 
       Interval        =   100
       Left            =   6912
@@ -55,16 +55,16 @@ Begin VB.UserControl TabBar
          Height          =   420
          Left            =   7032
          ScaleHeight     =   420
-         ScaleWidth      =   390
+         ScaleWidth      =   396
          TabIndex        =   9
          Top             =   0
          Width           =   396
          Begin VB.Image MoreBtnIcon 
-            Height          =   165
-            Left            =   150
+            Height          =   132
+            Left            =   156
             Picture         =   "TabBar.ctx":0000
-            Top             =   150
-            Width           =   240
+            Top             =   156
+            Width           =   192
          End
       End
       Begin VB.Label DropInMark 
@@ -120,8 +120,8 @@ Begin VB.UserControl TabBar
          Top             =   96
          Visible         =   0   'False
          Width           =   252
-         _ExtentX        =   450
-         _ExtentY        =   370
+         _ExtentX        =   445
+         _ExtentY        =   360
          Image           =   "TabBar.ctx":0252
       End
       Begin VB.Label TabBg 
@@ -513,6 +513,21 @@ Private Sub DropInCheck_Timer()
     
     If Not (p.Y >= r.Top And p.Y <= r.Top + TopBar.Height / Screen.TwipsPerPixelY) Then Exit Sub
     
+    Dim frm As Form, DropForm As Form
+    
+    For Each frm In VB.Forms
+        If frm.hWnd = hWnd Then Set DropForm = frm: Exit For
+    Next
+    
+    If DropForm Is Nothing Then Exit Sub
+    On Error GoTo FailRead
+    If DropForm.DarkTitleBar Is Nothing Then Exit Sub
+    GoTo SuccessRead
+    
+FailRead:
+    Exit Sub
+SuccessRead:
+    
     Dim X As Single
     
     BottomBar.BackColor = RGB(254, 84, 57)
@@ -548,17 +563,10 @@ Private Sub DropInCheck_Timer()
     
     If X < 0 Or X > UserControl.Width Then Exit Sub
     
-    Dim frm As Form
-    
-    For Each frm In VB.Forms
-        If frm.hWnd = hWnd Then
-            AddForm frm
-            'Cheat
-            DropMode = 1: DropIndex = UBound(Windows)
-            Call ClickCover_MouseUp(1, 0, X, 0)
-            Exit For
-        End If
-    Next
+    AddForm DropForm
+    'Cheat
+    DropMode = 1: DropIndex = UBound(Windows)
+    Call ClickCover_MouseUp(1, 0, X, 0)
     
     UserControl.SetFocus
     FixPosTimer.Enabled = True
@@ -574,10 +582,8 @@ Private Sub FixPosTimer_Timer()
 End Sub
 
 Private Sub KeyCheckTimer_Timer()
-    If Not Ambient.UserMode Then
-        UserControl.KeyCheckTimer.Enabled = False
-    End If
-    
+    If GetActiveWindow = 0 Then Exit Sub
+
     If (GetAsyncKeyState(VK_CONTROL) <> 0) And (GetAsyncKeyState(VK_W) <> 0) Then
         If Not KeyClose Then
             KeyClose = True
