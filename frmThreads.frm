@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmThreads 
+   BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "Ïß³Ì"
    ClientHeight    =   3030

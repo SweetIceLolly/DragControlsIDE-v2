@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmRegisters 
+   BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "¼Ä´æÆ÷"
    ClientHeight    =   3030

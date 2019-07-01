@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmModules 
+   BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "Ä£¿é"
    ClientHeight    =   3030

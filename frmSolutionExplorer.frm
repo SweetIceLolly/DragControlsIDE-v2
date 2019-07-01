@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmSolutionExplorer 
+   BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "工程资源管理器"
    ClientHeight    =   3030

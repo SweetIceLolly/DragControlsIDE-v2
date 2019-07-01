@@ -267,7 +267,6 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
                 End If
                 Me.imgMenuCheckBox(nCheckBoxes).Left = ITEM_HORZ_MARGIN + 90
                 Me.imgMenuCheckBox(nCheckBoxes).Top = Me.labItem(i - 1).Top + Me.labItem(i - 1).Height / 2 - Me.imgMenuCheckBox(nCheckBoxes).Height / 2
-                'Me.imgMenuCheckBox(nCheckBoxes).Stretch = True
                 Me.imgMenuCheckBox(nCheckBoxes).LoadImage_FromArray Menus(CurrSubMenuID(i)).MenuIcon
                 Me.imgMenuCheckBox(nCheckBoxes).Visible = True
                 Me.imgMenuCheckBox(nCheckBoxes).ZOrder 0

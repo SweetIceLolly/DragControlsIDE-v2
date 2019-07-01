@@ -1,21 +1,20 @@
 VERSION 5.00
-Object = "{CA73588D-282F-4592-9369-A61CC244FADA}#15.3#0"; "COCEAE~1.OCX"
+Object = "{CA73588D-282F-4592-9369-A61CC244FADA}#15.3#0"; "SYNTAX~1.OCX"
 Begin VB.Form frmCodeWindow 
    Appearance      =   0  'Flat
    BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "代码窗口"
-   ClientHeight    =   5175
+   ClientHeight    =   5172
    ClientLeft      =   3540
    ClientTop       =   3060
-   ClientWidth     =   8865
+   ClientWidth     =   8868
    FillColor       =   &H00FFFFFF&
    ForeColor       =   &H00FFFFFF&
    Icon            =   "frmCodeWindow.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   5175
-   ScaleWidth      =   8865
-   ShowInTaskbar   =   0   'False
+   ScaleHeight     =   5172
+   ScaleWidth      =   8868
    Begin XtremeSyntaxEdit.SyntaxEdit SyntaxEdit 
       Height          =   1935
       Left            =   240
@@ -53,8 +52,8 @@ Begin VB.Form frmCodeWindow
       TabIndex        =   0
       Top             =   660
       Width           =   4095
-      _ExtentX        =   7223
-      _ExtentY        =   556
+      _ExtentX        =   7218
+      _ExtentY        =   550
       Items0          =   ""
       ITEM_COUNT      =   0
       Text            =   ""
@@ -71,8 +70,8 @@ Begin VB.Form frmCodeWindow
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorder 
       Left            =   7560
       Top             =   4560
-      _ExtentX        =   847
-      _ExtentY        =   847
+      _ExtentX        =   677
+      _ExtentY        =   677
       Thickness       =   4
       MinWidth        =   150
       MinHeight       =   100
@@ -83,8 +82,8 @@ Begin VB.Form frmCodeWindow
       TabIndex        =   2
       Top             =   0
       Width           =   8865
-      _ExtentX        =   15637
-      _ExtentY        =   873
+      _ExtentX        =   15642
+      _ExtentY        =   868
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -101,8 +100,8 @@ Begin VB.Form frmCodeWindow
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorderSizer 
       Left            =   8280
       Top             =   4560
-      _ExtentX        =   847
-      _ExtentY        =   847
+      _ExtentX        =   677
+      _ExtentY        =   677
       Thickness       =   3
       FocusedColor    =   3157293
       NotFocusedColor =   3157293
@@ -115,8 +114,8 @@ Begin VB.Form frmCodeWindow
       TabIndex        =   1
       Top             =   660
       Width           =   4095
-      _ExtentX        =   7223
-      _ExtentY        =   556
+      _ExtentX        =   7218
+      _ExtentY        =   550
       Items0          =   ""
       ITEM_COUNT      =   0
       Text            =   ""
@@ -138,6 +137,8 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Public WindowObj    As Object                                                                                           '窗口自身
+
 Private Sub DarkTitleBar_GotFocus()
     On Error Resume Next
     
@@ -154,10 +155,34 @@ Private Sub Form_Load()
     Me.SyntaxEdit.PaintManager.LineNumberTextColor = RGB(86, 156, 214)
     Me.SyntaxEdit.DataManager.FileExt = ".cpp"
     Me.SyntaxEdit.ConfigFile = App.Path & "\SyntaxEdit.ini"
+    
+    '设置窗口子类化，处理最大化问题及处理任务栏右键关闭
+    '设置窗口子类化，处理最大化问题及处理任务栏右键关闭
+    Dim lpObj               As Long                                                                                     '指向窗口自身的物件指针
+    Set WindowObj = Me
+    lpObj = ObjPtr(Me)                                                                                                  '获取指向窗口自身的物件指针
+    SetPropA Me.hWnd, "WindowObj", lpObj                                                                                '记录窗口的物件地址，供子类化卸载窗体用
+    SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)
 End Sub
 
-Private Sub Form_Resize()
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    '恢复窗口子类化
+    SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(Me.hWnd, "PrevWndProc")
+End Sub
+
+Public Sub Form_Resize()
     On Error Resume Next
+    
+    '根据标题栏是否显示来调整控件位置
+    If Me.DarkTitleBar.Visible = True Then
+        Me.comObject.Top = Me.DarkTitleBar.Height + 165
+        Me.comEvent.Top = Me.comObject.Top
+        Me.SyntaxEdit.Top = Me.comEvent.Top + Me.comEvent.Height + 240
+    Else
+        Me.comObject.Top = 120
+        Me.comEvent.Top = 120
+        Me.SyntaxEdit.Top = 120 + Me.comObject.Height + 120
+    End If
     
     '设置代码框大小
     Me.SyntaxEdit.Width = Me.ScaleWidth - Me.SyntaxEdit.Left - Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelX

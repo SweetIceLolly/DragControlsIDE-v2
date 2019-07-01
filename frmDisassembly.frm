@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmDisassembly 
+   BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "·´»ã±à"
    ClientHeight    =   3030

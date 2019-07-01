@@ -3,18 +3,38 @@ Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "Image.ocx"
 Begin VB.UserControl DarkImageButton 
    Appearance      =   0  'Flat
    BackColor       =   &H00302D2D&
-   ClientHeight    =   465
+   ClientHeight    =   570
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   450
-   ScaleHeight     =   465
-   ScaleWidth      =   450
+   ClientWidth     =   2130
+   ScaleHeight     =   570
+   ScaleWidth      =   2130
    ToolboxBitmap   =   "DarkImageButton.ctx":0000
    Begin VB.Timer tmrSetColor 
       Enabled         =   0   'False
       Interval        =   10
-      Left            =   960
-      Top             =   360
+      Left            =   1440
+      Top             =   0
+   End
+   Begin VB.Label labTip 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "Dark°·Button"
+      BeginProperty Font 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   225
+      Left            =   720
+      TabIndex        =   0
+      Top             =   120
+      Width           =   1125
    End
    Begin ImageX.aicAlphaImage imgPicture 
       Height          =   480
@@ -25,7 +45,6 @@ Begin VB.UserControl DarkImageButton
       _ExtentY        =   847
       Image           =   "DarkImageButton.ctx":0312
       Enabled         =   0   'False
-      Props           =   5
    End
    Begin VB.Shape shpFocus 
       BorderColor     =   &H00D5F1F1&
@@ -34,7 +53,7 @@ Begin VB.UserControl DarkImageButton
       Left            =   120
       Top             =   0
       Visible         =   0   'False
-      Width           =   975
+      Width           =   1935
    End
 End
 Attribute VB_Name = "DarkImageButton"
@@ -74,11 +93,24 @@ Const m_def_Enabled = True
 'Property Variables:
 Dim m_Focusable As Boolean
 Dim m_Enabled As Boolean
+Dim m_Alignment As Integer
 'Event Declarations:
 Event Click()
 
+Private Sub labTip_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    Call UserControl_MouseDown(Button, 0, 0, 0)
+End Sub
+
+Private Sub labTip_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    Call UserControl_MouseMove(Button, 0, 0, 0)
+End Sub
+
+Private Sub labTip_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    Call UserControl_MouseUp(Button, 0, 0, 0)
+End Sub
+
 Private Sub tmrSetColor_Timer()
-    Dim pt      As Point
+    Dim pt      As POINT
     Dim Target  As Long
     
     If Not Enabled Then
@@ -178,7 +210,7 @@ End Sub
 
 Private Sub UserControl_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = vbLeftButton Then
-        Dim pt      As Point
+        Dim pt      As POINT
         Dim Target  As Long
         
         GetCursorPos pt
@@ -199,8 +231,29 @@ Private Sub UserControl_Resize()
     UserControl.shpFocus.Width = UserControl.Width - UserControl.shpFocus.Left - SZ_BORDER
     UserControl.shpFocus.Height = UserControl.Height - UserControl.shpFocus.Top - SZ_BORDER
     
+    UserControl.labTip.Top = UserControl.Height / 2 - UserControl.labTip.Height / 2
+    UserControl.imgPicture.Height = UserControl.Height - SZ_BORDER * 2
     UserControl.imgPicture.Top = UserControl.Height / 2 - UserControl.imgPicture.Height / 2
-    UserControl.imgPicture.Left = UserControl.Width / 2 - UserControl.imgPicture.Width / 2
+    UserControl.imgPicture.Width = UserControl.imgPicture.Height
+    
+    Select Case Alignment
+        Case 0
+            UserControl.imgPicture.Left = SZ_BORDER * 2
+            UserControl.labTip.Left = UserControl.imgPicture.Left + UserControl.imgPicture.Width + 120
+        
+        Case 1
+            If UserControl.labTip.Caption <> "" Then
+                UserControl.imgPicture.Left = UserControl.Width / 2 - (UserControl.imgPicture.Width + UserControl.labTip.Width + 120) / 2
+            Else
+                UserControl.imgPicture.Left = UserControl.Width / 2 - UserControl.imgPicture.Width / 2
+            End If
+            UserControl.labTip.Left = UserControl.imgPicture.Left + UserControl.imgPicture.Width + 120
+        
+        Case 2
+            UserControl.labTip.Left = UserControl.Width - UserControl.labTip.Width - SZ_BORDER * 2
+            UserControl.imgPicture.Left = labTip.Left - 120 - UserControl.imgPicture.Width
+        
+    End Select
 End Sub
 
 'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
@@ -220,6 +273,7 @@ End Property
 Private Sub UserControl_InitProperties()
     m_Enabled = m_def_Enabled
     m_Focusable = m_def_Focusable
+    m_Alignment = 1
 End Sub
 
 'Load property values from storage
@@ -228,12 +282,16 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     
     m_Enabled = PropBag.ReadProperty("Enabled", m_def_Enabled)
     imgData = PropBag.ReadProperty("Image", StrConv("", vbFromUnicode))
+    m_Alignment = PropBag.ReadProperty("Alignment", 1)
     
     UserControl.imgPicture.LoadImage_FromArray imgData
     UserControl.Enabled = Me.Enabled
     UserControl.BorderStyle = IIf(PropBag.ReadProperty("HasBorder", True), 1, 0)
-    Call UserControl_Resize
     m_Focusable = PropBag.ReadProperty("Focusable", m_def_Focusable)
+    labTip.Caption = PropBag.ReadProperty("Caption", "Dark°·Button")
+    imgPicture.AutoSize = PropBag.ReadProperty("AutoSize", False)
+    
+    Call UserControl_Resize
 End Sub
 
 'Write property values to storage
@@ -242,6 +300,9 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
     Call PropBag.WriteProperty("Image", imgData, StrConv("", vbFromUnicode))
     Call PropBag.WriteProperty("Focusable", m_Focusable, m_def_Focusable)
     Call PropBag.WriteProperty("HasBorder", IIf(UserControl.BorderStyle = 1, True, False), True)
+    Call PropBag.WriteProperty("Caption", labTip.Caption, "Dark°·Button")
+    Call PropBag.WriteProperty("Alignment", m_Alignment, 1)
+    Call PropBag.WriteProperty("AutoSize", imgPicture.AutoSize, False)
 End Sub
 
 Public Property Set Picture(ByVal New_Picture As Picture)
@@ -288,3 +349,39 @@ Public Property Let FileName(NewFileName As String)
         Get #1, , imgData
     Close #1
 End Property
+
+'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
+'MappingInfo=labTip,labTip,-1,Caption
+Public Property Get Caption() As String
+Attribute Caption.VB_Description = "Returns/sets the text displayed in an object's title bar or below an object's icon."
+    Caption = labTip.Caption
+End Property
+
+Public Property Let Caption(ByVal New_Caption As String)
+    labTip.Caption() = New_Caption
+    PropertyChanged "Caption"
+    Call UserControl_Resize
+End Property
+
+Public Property Get Alignment() As Integer
+    Alignment = m_Alignment
+End Property
+
+Public Property Let Alignment(New_Alignment As Integer)
+    m_Alignment = New_Alignment
+    Call UserControl_Resize
+End Property
+
+'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
+'MappingInfo=imgPicture,imgPicture,-1,AutoSize
+Public Property Get AutoSize() As Boolean
+Attribute AutoSize.VB_Description = "Determines whether a control is automatically resized to display its entire contents"
+    AutoSize = imgPicture.AutoSize
+End Property
+
+Public Property Let AutoSize(ByVal New_AutoSize As Boolean)
+    imgPicture.AutoSize() = New_AutoSize
+    PropertyChanged "AutoSize"
+    Call UserControl_Resize
+End Property
+

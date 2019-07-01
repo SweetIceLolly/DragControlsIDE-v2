@@ -5,6 +5,23 @@
 */
 
 #include "IceControls.h"
+#include "resource.h"
+
+HINSTANCE ProgramInstance;						//程序的实例句柄
+
+IceWindow MainWindow(IDD_MAINWINDOW);
+
+/*
+描述:	获取程序实例句柄的接口，供IceControls.h使用
+返回值:	程序实例句柄
+*/
+HINSTANCE GetProgramInstance() {
+	return ProgramInstance;
+}
+
+void Form_Load() {
+	MessageBox(MainWindow.GetHwnd(), "Hello", "Ha", 0);
+}
 
 /*
 描述:	程序入口点
@@ -15,5 +32,10 @@
 返回值:	程序运行返回值
 */
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+	//重要！不要删除！-------------------------
+	ProgramInstance = hInstance;								//记录程序的实例句柄
+	//----------------------------------------
+	MainWindow.Form_Load = (void*)Form_Load;
+	MainWindow.Create();
 	return 0;
 }

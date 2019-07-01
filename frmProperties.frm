@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmProperties 
+   BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   " Ù–‘"
    ClientHeight    =   3030
