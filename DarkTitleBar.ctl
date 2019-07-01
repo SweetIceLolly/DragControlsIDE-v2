@@ -37,6 +37,7 @@ Begin VB.UserControl DarkTitleBar
       MenuID_1        =   0
       MenuText_1      =   "Popup"
       MenuVisible_1   =   -1  'True
+      MenuIcon_1      =   "DarkTitleBar.ctx":0312
       SUBMENU_ITEM_COUNT_1=   5
       SubMenuID_1_0   =   0
       SubMenuText_1_1 =   "还原"
@@ -53,26 +54,27 @@ Begin VB.UserControl DarkTitleBar
       MenuText_2      =   "还原"
       MenuEnabled_2   =   0   'False
       MenuVisible_2   =   -1  'True
-      MenuIcon_2      =   "DarkTitleBar.ctx":0312
+      MenuIcon_2      =   "DarkTitleBar.ctx":0332
       SubMenuID_2_0   =   0
       MenuID_3        =   2
       MenuText_3      =   "最大化"
       MenuVisible_3   =   -1  'True
-      MenuIcon_3      =   "DarkTitleBar.ctx":04D8
+      MenuIcon_3      =   "DarkTitleBar.ctx":034A
       SubMenuID_3_0   =   0
       MenuID_4        =   3
       MenuText_4      =   "最小化"
       MenuVisible_4   =   -1  'True
-      MenuIcon_4      =   "DarkTitleBar.ctx":069E
+      MenuIcon_4      =   "DarkTitleBar.ctx":0362
       SubMenuID_4_0   =   0
       MenuID_5        =   4
       MenuText_5      =   "-"
       MenuVisible_5   =   -1  'True
+      MenuIcon_5      =   "DarkTitleBar.ctx":037A
       SubMenuID_5_0   =   0
       MenuID_6        =   5
       MenuText_6      =   "关闭"
       MenuVisible_6   =   -1  'True
-      MenuIcon_6      =   "DarkTitleBar.ctx":0864
+      MenuIcon_6      =   "DarkTitleBar.ctx":039A
       SubMenuID_6_0   =   0
    End
    Begin VB.Timer tmrCheckFocus 
@@ -90,9 +92,10 @@ Begin VB.UserControl DarkTitleBar
       Width           =   480
       _ExtentX        =   847
       _ExtentY        =   847
-      Image           =   "DarkTitleBar.ctx":0A2A
+      Image           =   "DarkTitleBar.ctx":03B2
       Focusable       =   0   'False
       HasBorder       =   0   'False
+      Caption         =   ""
    End
    Begin DragControlsIDE.DarkImageButton cmdMax 
       Height          =   480
@@ -104,9 +107,10 @@ Begin VB.UserControl DarkTitleBar
       Width           =   480
       _ExtentX        =   847
       _ExtentY        =   847
-      Image           =   "DarkTitleBar.ctx":1709
+      Image           =   "DarkTitleBar.ctx":1091
       Focusable       =   0   'False
       HasBorder       =   0   'False
+      Caption         =   ""
    End
    Begin DragControlsIDE.DarkImageButton cmdClose 
       Height          =   480
@@ -118,14 +122,15 @@ Begin VB.UserControl DarkTitleBar
       Width           =   480
       _ExtentX        =   847
       _ExtentY        =   847
-      Image           =   "DarkTitleBar.ctx":23E8
+      Image           =   "DarkTitleBar.ctx":1D70
       Focusable       =   0   'False
       HasBorder       =   0   'False
+      Caption         =   ""
    End
    Begin VB.Image imgMax 
       Height          =   480
       Left            =   4320
-      Picture         =   "DarkTitleBar.ctx":30C7
+      Picture         =   "DarkTitleBar.ctx":2A4F
       Top             =   480
       Visible         =   0   'False
       Width           =   480
@@ -133,7 +138,7 @@ Begin VB.UserControl DarkTitleBar
    Begin VB.Image imgRestore 
       Height          =   480
       Left            =   4800
-      Picture         =   "DarkTitleBar.ctx":3D91
+      Picture         =   "DarkTitleBar.ctx":3719
       Top             =   480
       Visible         =   0   'False
       Width           =   480
@@ -161,7 +166,7 @@ Begin VB.UserControl DarkTitleBar
    Begin VB.Image imgIcon 
       Height          =   480
       Left            =   0
-      Picture         =   "DarkTitleBar.ctx":4A5B
+      Picture         =   "DarkTitleBar.ctx":43E3
       Top             =   0
       Width           =   480
    End

@@ -188,6 +188,10 @@ Dim KeyClose As Boolean
 Dim MenuTab As Integer
 
 Public Sub RemoveForm(Index As Integer, Optional DeleteSource As Boolean = True)
+    If Windows(Index) Is Nothing Then
+        Exit Sub
+    End If
+    
     If DeleteSource Then Unload Windows(Index)
     FixPosition Index, UBound(Windows) - 1, 1
     ReDim Preserve Windows(UBound(Windows) - 1)

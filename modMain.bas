@@ -44,7 +44,10 @@ Public Function MainWindowMaximizeCloseFixProc(ByVal hWnd As Long, ByVal uMsg As
         Exit Function
     ElseIf uMsg = WM_SYSCOMMAND Then                                                        '在任务栏使用右键菜单关闭
         If wParam = SC_CLOSE Then
-            Unload frmMain
+            Dim WindowObj   As Object                                                           '对应的窗体物件
+            
+            CopyMemory ByVal VarPtr(WindowObj), GetPropA(hWnd, "WindowObj"), ByVal 4            '获取该窗口对应的Form
+            Unload WindowObj                                                                    '卸载Form
         End If
     End If
     MainWindowMaximizeCloseFixProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)

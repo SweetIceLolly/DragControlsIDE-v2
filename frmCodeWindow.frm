@@ -15,7 +15,6 @@ Begin VB.Form frmCodeWindow
    LinkTopic       =   "Form1"
    ScaleHeight     =   5175
    ScaleWidth      =   8865
-   ShowInTaskbar   =   0   'False
    Begin XtremeSyntaxEdit.SyntaxEdit SyntaxEdit 
       Height          =   1935
       Left            =   240
@@ -138,6 +137,8 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Public WindowObj    As Object                                                                                           '窗口自身
+
 Private Sub DarkTitleBar_GotFocus()
     On Error Resume Next
     
@@ -154,6 +155,19 @@ Private Sub Form_Load()
     Me.SyntaxEdit.PaintManager.LineNumberTextColor = RGB(86, 156, 214)
     Me.SyntaxEdit.DataManager.FileExt = ".cpp"
     Me.SyntaxEdit.ConfigFile = App.Path & "\SyntaxEdit.ini"
+    
+    '设置窗口子类化，处理最大化问题及处理任务栏右键关闭
+    '设置窗口子类化，处理最大化问题及处理任务栏右键关闭
+    Dim lpObj               As Long                                                                                     '指向窗口自身的物件指针
+    Set WindowObj = Me
+    lpObj = ObjPtr(Me)                                                                                                  '获取指向窗口自身的物件指针
+    SetPropA Me.hWnd, "WindowObj", lpObj                                                                                '记录窗口的物件地址，供子类化卸载窗体用
+    SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)
+End Sub
+
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    '恢复窗口子类化
+    SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(Me.hWnd, "PrevWndProc")
 End Sub
 
 Public Sub Form_Resize()
