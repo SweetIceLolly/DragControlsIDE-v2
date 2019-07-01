@@ -573,6 +573,7 @@ Private Sub FixPosTimer_Timer()
 End Sub
 
 Private Sub KeyCheckTimer_Timer()
+    If GetActiveWindow = 0 Then Exit Sub
     If (GetAsyncKeyState(VK_CONTROL) <> 0) And (GetAsyncKeyState(VK_W) <> 0) Then
         If Not KeyClose Then
             KeyClose = True
