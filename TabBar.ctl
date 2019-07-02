@@ -526,7 +526,7 @@ Private Sub DropInCheck_Timer()
     
     GetWindowRect UserControl.hWnd, r
     
-    If Not (p.Y >= r.Top And p.Y <= r.Top + TopBar.Height / Screen.TwipsPerPixelY) Then Exit Sub
+    If Not (p.Y >= r.Top And p.Y <= r.Top + TopBar.Height / Screen.TwipsPerPixelY And p.X >= r.Left And p.X <= r.Right) Then Exit Sub
     
     Dim frm As Form, DropForm As Form
     
