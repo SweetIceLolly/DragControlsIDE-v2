@@ -7,6 +7,7 @@ Begin VB.Form frmBreakpoints
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4560
+   Icon            =   "frmBreakpoints.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   3030
    ScaleWidth      =   4560

@@ -7,6 +7,7 @@ Begin VB.Form frmComboBoxListWindow
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   1500
+   Icon            =   "frmComboBoxListWindow.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   2070
    ScaleWidth      =   1500

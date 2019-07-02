@@ -14,6 +14,8 @@ Private Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (By
 '获取系统参数信息
 Private Declare Function SystemParametersInfo Lib "user32" Alias "SystemParametersInfoA" (ByVal uAction As Long, _
     ByVal uParam As Long, ByRef lpvParam As Any, ByVal fuWinIni As Long) As Long
+
+Public DebugProgramInfo     As PROCESS_INFORMATION                                      '正在调试中的进程信息
     
 '描述:      获取本程序的路径。如果路径后面缺少"\"，则自动加上
 '返回值:    以"\"结尾的路径
@@ -22,6 +24,16 @@ Public Function GetAppPath() As String
     If Right(GetAppPath, 1) <> "\" Then
         GetAppPath = GetAppPath & "\"
     End If
+End Function
+
+'描述:      判断进程中是否存在有指定PID的进程
+'参数:      hProcess: 进程句柄
+'返回值:    指定的进程是否存在
+Public Function ProcessExists(ByVal hProcess As Long) As Boolean
+    Dim ret         As Long
+    
+    ret = WaitForSingleObject(hProcess, 0)                                                  '判断进程是否退出
+    ProcessExists = (ret = WAIT_TIMEOUT)                                                    '当返回值为超时说明进程仍在运行
 End Function
 
 '描述:      修复主窗口最大化全屏和在任务栏的右键菜单无法关闭的问题

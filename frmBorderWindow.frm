@@ -6,6 +6,7 @@ Begin VB.Form frmBorderWindow
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   1305
+   Icon            =   "frmBorderWindow.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False

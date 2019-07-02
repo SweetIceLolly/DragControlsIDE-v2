@@ -2,12 +2,12 @@ VERSION 5.00
 Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "Image.ocx"
 Begin VB.UserControl TabBar 
    BackColor       =   &H00302D2D&
-   ClientHeight    =   4488
+   ClientHeight    =   4485
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   7428
-   ScaleHeight     =   4488
-   ScaleWidth      =   7428
+   ClientWidth     =   7425
+   ScaleHeight     =   4485
+   ScaleWidth      =   7425
    Begin VB.Timer DropInCheck 
       Interval        =   100
       Left            =   6912
@@ -55,16 +55,16 @@ Begin VB.UserControl TabBar
          Height          =   420
          Left            =   7032
          ScaleHeight     =   420
-         ScaleWidth      =   396
+         ScaleWidth      =   390
          TabIndex        =   9
          Top             =   0
          Width           =   396
          Begin VB.Image MoreBtnIcon 
-            Height          =   132
-            Left            =   156
+            Height          =   165
+            Left            =   150
             Picture         =   "TabBar.ctx":0000
-            Top             =   156
-            Width           =   192
+            Top             =   150
+            Width           =   240
          End
       End
       Begin VB.Label DropInMark 
@@ -120,8 +120,8 @@ Begin VB.UserControl TabBar
          Top             =   96
          Visible         =   0   'False
          Width           =   252
-         _ExtentX        =   445
-         _ExtentY        =   360
+         _ExtentX        =   450
+         _ExtentY        =   370
          Image           =   "TabBar.ctx":0252
       End
       Begin VB.Label TabBg 
@@ -279,6 +279,8 @@ Public Sub AddForm(frm As Form)
     If frm.Visible = False Then frm.Show
     
     frm.DarkTitleBar.Visible = False
+    frm.DarkWindowBorder.Bind = False
+    frm.DarkWindowBorderSizer.Bind = False
     Call frm.Form_Resize
     
     Load WindowFrame(Index)
@@ -346,6 +348,8 @@ Private Sub ClickCover_MouseMove(Button As Integer, Shift As Integer, X As Singl
             GetCursorPos p
             SetWindowPos Windows(DropIndex).hWnd, 0, p.X - SrcX / Screen.TwipsPerPixelX, p.Y - SrcY / Screen.TwipsPerPixelY, 0, 0, SWP_NOZORDER Or SWP_NOSIZE
             Windows(DropIndex).DarkTitleBar.Visible = True
+            Windows(DropIndex).DarkWindowBorder.Bind = True
+            Windows(DropIndex).DarkWindowBorderSizer.Bind = True
             Call Windows(DropIndex).Form_Resize
             SetParent Windows(DropIndex).hWnd, 0
             Dim rtn As Long
@@ -582,6 +586,10 @@ Private Sub FixPosTimer_Timer()
 End Sub
 
 Private Sub KeyCheckTimer_Timer()
+    If Not Ambient.UserMode Then
+        UserControl.KeyCheckTimer.Enabled = False
+    End If
+    
     If GetActiveWindow = 0 Then Exit Sub
 
     If (GetAsyncKeyState(VK_CONTROL) <> 0) And (GetAsyncKeyState(VK_W) <> 0) Then
@@ -635,6 +643,8 @@ Private Sub UserControl_Initialize()
 End Sub
 
 Private Sub UserControl_Resize()
+    On Error Resume Next
+    
     BottomBar.Height = 3 * Screen.TwipsPerPixelY
     BottomBar.Width = UserControl.Width
     TopBar.Width = UserControl.Width
@@ -655,4 +665,3 @@ Private Sub UserControl_Resize()
     WindowFrame(FocusIndex).Height = UserControl.Height - TopBar.Height
     Windows(FocusIndex).Move 0, 0, UserControl.Width, UserControl.Height - TopBar.Height
 End Sub
-

@@ -612,7 +612,6 @@ Begin VB.Form frmMain
       SubMenuID_70_0  =   0
    End
    Begin VB.PictureBox picToolBar 
-      Align           =   1  'Align Top
       Appearance      =   0  'Flat
       BackColor       =   &H00302D2D&
       BorderStyle     =   0  'None
@@ -626,7 +625,6 @@ Begin VB.Form frmMain
       Width           =   16845
    End
    Begin VB.PictureBox picClientArea 
-      Align           =   1  'Align Top
       Appearance      =   0  'Flat
       BackColor       =   &H00302D2D&
       BorderStyle     =   0  'None
@@ -640,26 +638,13 @@ Begin VB.Form frmMain
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H80000008&
-      Height          =   5625
+      Height          =   5040
       Left            =   0
-      ScaleHeight     =   5625
+      ScaleHeight     =   5040
       ScaleWidth      =   16845
       TabIndex        =   0
-      Top             =   1185
+      Top             =   1200
       Width           =   16845
-      Begin DragControlsIDE.DarkImageButton cmdNewWindowProgram 
-         Height          =   765
-         Left            =   480
-         TabIndex        =   10
-         Top             =   720
-         Width           =   3735
-         _ExtentX        =   6588
-         _ExtentY        =   1349
-         Image           =   "frmMain.frx":1C582
-         HasBorder       =   0   'False
-         Caption         =   "       新建窗口程序"
-         Alignment       =   0
-      End
       Begin VB.PictureBox picWindowClientArea 
          Appearance      =   0  'Flat
          BackColor       =   &H80000005&
@@ -669,145 +654,20 @@ Begin VB.Form frmMain
          Left            =   8880
          ScaleHeight     =   2055
          ScaleWidth      =   5655
-         TabIndex        =   8
+         TabIndex        =   4
          Top             =   720
          Visible         =   0   'False
          Width           =   5655
          Begin DragControlsIDE.TabBar TabBar 
             Height          =   3615
             Left            =   600
-            TabIndex        =   9
+            TabIndex        =   5
             Top             =   480
             Visible         =   0   'False
             Width           =   8175
             _ExtentX        =   14420
             _ExtentY        =   6376
          End
-      End
-      Begin DragControlsIDE.DarkImageButton cmdNewConsoleProgram 
-         Height          =   765
-         Left            =   480
-         TabIndex        =   11
-         Top             =   1560
-         Width           =   3735
-         _ExtentX        =   6588
-         _ExtentY        =   1349
-         Image           =   "frmMain.frx":1C6B5
-         HasBorder       =   0   'False
-         Caption         =   "       新建控制台程序"
-         Alignment       =   0
-      End
-      Begin DragControlsIDE.DarkImageButton cmdNewPlainCpp 
-         Height          =   765
-         Left            =   480
-         TabIndex        =   12
-         Top             =   2400
-         Width           =   3735
-         _ExtentX        =   6588
-         _ExtentY        =   1349
-         Image           =   "frmMain.frx":1C836
-         HasBorder       =   0   'False
-         Caption         =   "       新建空白C++程序"
-         Alignment       =   0
-      End
-      Begin DragControlsIDE.DarkImageButton cmdOpenProject 
-         Height          =   765
-         Left            =   480
-         TabIndex        =   13
-         Top             =   3240
-         Width           =   3735
-         _ExtentX        =   6588
-         _ExtentY        =   1349
-         Image           =   "frmMain.frx":1CB7B
-         HasBorder       =   0   'False
-         Caption         =   "       打开工程..."
-         Alignment       =   0
-      End
-      Begin VB.Label labTip 
-         Appearance      =   0  'Flat
-         AutoSize        =   -1  'True
-         BackColor       =   &H80000005&
-         BackStyle       =   0  'Transparent
-         Caption         =   "最近"
-         BeginProperty Font 
-            Name            =   "Microsoft YaHei UI"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00CEDB1A&
-         Height          =   330
-         Index           =   3
-         Left            =   600
-         TabIndex        =   7
-         Top             =   4320
-         Width           =   480
-      End
-      Begin VB.Label labTip 
-         Appearance      =   0  'Flat
-         BackColor       =   &H00CEDB1A&
-         BeginProperty Font 
-            Name            =   "Microsoft YaHei UI"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFB00A&
-         Height          =   375
-         Index           =   2
-         Left            =   0
-         TabIndex        =   6
-         Top             =   4320
-         Width           =   90
-      End
-      Begin VB.Label labTip 
-         Appearance      =   0  'Flat
-         BackColor       =   &H00FFB00A&
-         BeginProperty Font 
-            Name            =   "Microsoft YaHei UI"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFB00A&
-         Height          =   375
-         Index           =   0
-         Left            =   0
-         TabIndex        =   5
-         Top             =   240
-         Width           =   90
-      End
-      Begin VB.Label labTip 
-         Appearance      =   0  'Flat
-         AutoSize        =   -1  'True
-         BackColor       =   &H80000005&
-         BackStyle       =   0  'Transparent
-         Caption         =   "创建"
-         BeginProperty Font 
-            Name            =   "Microsoft YaHei UI"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFB00A&
-         Height          =   330
-         Index           =   1
-         Left            =   600
-         TabIndex        =   4
-         Top             =   240
-         Width           =   480
       End
    End
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorderSizer 
@@ -849,7 +709,7 @@ Begin VB.Form frmMain
       EndProperty
       Caption         =   "拖控件大法"
       BindCaption     =   -1  'True
-      Picture         =   "frmMain.frx":1CDC3
+      Picture         =   "frmMain.frx":1C582
    End
    Begin XtremeSkinFramework.SkinFramework SkinFramework 
       Left            =   14160
@@ -885,81 +745,138 @@ Option Explicit
 '获取窗口最大、最小化状态
 Private Declare Function GetWindowPlacement Lib "user32" (ByVal hWnd As Long, lpwndpl As WINDOWPLACEMENT) As Long
 
-Public ProjectType  As Integer                                                                                          '工程类型
+'创建进程
+Private Declare Function CreateProcess Lib "kernel32" Alias "CreateProcessA" (ByVal lpApplicationName As Long, ByVal lpCommandLine As String, _
+    lpProcessAttributes As SECURITY_ATTRIBUTES, lpThreadAttributes As SECURITY_ATTRIBUTES, ByVal bInheritHandles As Long, ByVal dwCreationFlags As Long, _
+    ByVal lpEnvironment As Long, ByVal lpCurrentDirectory As Long, lpStartupInfo As STARTUPINFO, lpProcessInformation As PROCESS_INFORMATION) As Long
+
+
+'工程类型
 '值     描述
 '0      未创建工程，处于启动界面
 '1      窗口程序
 '2      控制台程序
 '3      空白C++程序
+Public ProjectType          As Integer
 
-Public WindowObj    As Object                                                                                           '窗口自身
+Public WindowObj            As Object                                                   '窗口自身
 
-'描述: 隐藏启动界面
-Private Sub HideStartupPage()
-    Dim i           As Integer
-    
-    For i = 0 To 3
-        Me.labTip(i).Visible = False
-    Next i
-    Me.cmdNewConsoleProgram.Visible = False
-    Me.cmdNewPlainCpp.Visible = False
-    Me.cmdNewWindowProgram.Visible = False
-    Me.cmdOpenProject.Visible = False
-    Me.TabBar.Visible = True
-    
-    Me.DarkMenu.MenuEnabled(3) = True                                                                                   '保存
-    Me.DarkMenu.MenuEnabled(4) = True                                                                                   '另存为
-    Me.DarkMenu.MenuEnabled(7) = True                                                                                   '编辑
-    Me.DarkMenu.MenuEnabled(27) = True                                                                                  '视图
-    Me.DarkMenu.MenuEnabled(34) = True                                                                                  '生成
-    Me.DarkMenu.MenuEnabled(37) = True                                                                                  '调试
+Private WithEvents GdbPipe  As clsPipe                                                  'gdb调试管道
+Attribute GdbPipe.VB_VarHelpID = -1
+
+'描述:      “新建项目”菜单
+Private Sub mnuNewProject_Click()
+    Dim NewCreateWindow As New frmCreate
+            
+    Me.Enabled = False
+    SetParent NewCreateWindow.hWnd, 0
+    NewCreateWindow.Move Screen.Width / 2 - frmCreate.Width / 2, Screen.Height / 2 - frmCreate.Height / 2
+    NewCreateWindow.DarkTitleBar.Visible = True
+    NewCreateWindow.DarkWindowBorder.Bind = True
+    NewCreateWindow.Show
 End Sub
 
-Private Sub cmdNewConsoleProgram_Click()
-    Call HideStartupPage
-End Sub
-
-Private Sub cmdNewPlainCpp_Click()
+'描述:      “运行”菜单
+Private Sub mnuRun_Click()
     On Error Resume Next
     
-    ProjectType = 3                                                                                                     '设置工程类型
-    Call HideStartupPage                                                                                                '隐藏启动界面
+    Dim GccPipe             As New clsPipe                                              'g++管道
+    Dim GccOutput           As String                                                   'g++输出的内容
+    Dim GccOutputContent()  As String                                                   '逐行分开的g++输出内容
+    Dim i                   As Long
     
-    SetPropA frmCodeWindow.hWnd, "Parent", Me.picWindowClientArea.hWnd                                                  '记录代码窗口的母窗体, 供其调整大小之用
-    SetParent frmCodeWindow.hWnd, Me.picWindowClientArea.hWnd                                                           '设置代码窗口的母窗体
-    frmCodeWindow.Move 0, 0, (Me.picClientArea.ScaleWidth - 250) / 3 * 2, (Me.picClientArea.ScaleHeight - 120) / 3 * 2  '调整代码框大小
+    '保存文件
+    frmOutput.edOutput.Text = ""
+    Open "temp.cpp" For Output As #1
+        Print #1, frmCodeWindow.SyntaxEdit.Text
+    Close #1
+    If Err.Number <> 0 Then
+        frmOutput.OutputLog "保存文件失败！"
+        Exit Sub
+    End If
+
+    '使用g++进行编译
+    '                   ↓转到当前程序所在的盘符                    ↓调用g++.exe进行编译    ↓编译为调试程序           ↓所有的cpp代码文件
+    '命令格式: cmd /c 【盘符】: && cd "【g++.exe所在目录】" && "【g++.exe路径】" [-mwindows] -g -o "【输出路径】" "【cpp文件1】" "【cpp文件2】"
+    '                                       ↑转到g++.exe所在的目录                 ↑是否为命令行程序   ↑编译的EXE输出路径
+    frmOutput.OutputLog "正在启动g++进行编译..."
+    If GccPipe.InitDosIO("cmd /c " & Left(GetAppPath(), 1) & ": && " & _
+       "cd """ & GetAppPath() & "GCC\bin"" && " & _
+       """" & GetAppPath() & "GCC\bin\g++.exe"" -g -o """ & GetAppPath() & "temp.exe"" """ & GetAppPath() & "temp.cpp""") = 0 Then
+       
+        frmOutput.OutputLog "无法启动g++！"
+    End If
+    frmMain.DarkMenu.HideMenu                                                           '先隐藏菜单
+    Do While ProcessExists(GccPipe.hProcess)                                            '等待g++执行完成
+        Sleep 50
+        DoEvents
+    Loop
+    GccPipe.DosOutput GccOutput, vbNullChar & vbNullChar                                '获取g++输出
+    GccOutputContent = Split(GccOutput, vbCrLf)
+    If UBound(GccOutputContent) >= 0 Then
+        For i = 0 To UBound(GccOutputContent)                                               '逐行输出
+            If GccOutputContent(i) <> "" Then                                                   '如果不是空行
+                frmOutput.OutputLog GccOutputContent(i)
+            End If
+        Next i
+    End If
+    If Dir(GetAppPath() & "temp.exe") = "" Then
+        frmOutput.OutputLog "编译失败！"
+        Exit Sub
+    Else
+        frmOutput.OutputLog "编译完成。"
+    End If
     
-    '禁用不适用的菜单项
-    Me.DarkMenu.MenuEnabled(29) = False                                                                                 '控件箱
-    Me.DarkMenu.MenuEnabled(30) = False                                                                                 '属性
+    '创建待调试进程。该进程启动之后会挂起，等待gdb附加
+    Dim si                  As STARTUPINFO                                              '进程启动信息
+    Dim sa                  As SECURITY_ATTRIBUTES                                      '安全属性
     
-    '显示需要的Pane
-    Me.DockingPane.ShowPane 3                                                                                           '工程资源管理器
-    Me.DockingPane.ShowPane 5                                                                                           '输出
+    With sa                                                                             '设置安全属性
+        .bInheritHandle = 1
+        .lpSecurityDescriptor = 0
+        .nLength = Len(sa)
+    End With
+    If CreateProcess(0, GetAppPath() & "temp.exe", sa, sa, ByVal 1, _
+       NORMAL_PRIORITY_CLASS Or CREATE_SUSPENDED, ByVal 0, ByVal 0, si, DebugProgramInfo) <> 1 Then
+        
+        frmOutput.OutputLog "无法运行 " & GetAppPath() & "temp.exe"
+        Exit Sub
+    End If
     
-    '更新标题
-    Me.Caption = "新工程 - 拖控件大法"
-    
-    '让代码框获得焦点
-    Me.picWindowClientArea.Visible = True
+    '创建gdb管道
+    Set GdbPipe = New clsPipe
+    If GdbPipe.InitDosIO(GetAppPath() & "GCC\gdb\gdb.exe -q -nw") = 0 Then              '创建gdb调试管道失败
+        TerminateProcess DebugProgramInfo.hProcess, 0                                       '杀掉待调试进程，放弃调试
+        Set GdbPipe = Nothing                                                               '关闭gdb管道
+        frmOutput.OutputLog "创建gdb调试管道失败！无法进行调试。"
+        Exit Sub
+    End If
+    GdbPipe.DosInput "attach " & DebugProgramInfo.dwProcessId & vbCrLf                  '附加到待调试进程
+    GdbPipe.DosInput "continue" & vbCrLf                                                '使目标进程继续运行
+    frmOutput.OutputLog "调试正在进行: gdb.exe 进程ID: " & GdbPipe.dwProcessId & "; temp.exe 进程ID: " & DebugProgramInfo.dwProcessId
 End Sub
 
-Private Sub cmdNewWindowProgram_Click()
-    Call HideStartupPage
-End Sub
-
-Private Sub cmdOpenProject_Click()
-    Call HideStartupPage
+'描述:      隐藏启动界面
+Public Sub HideStartupPage()
+    frmCreate.Hide
+    Me.TabBar.Visible = True
+    
+    Me.DarkMenu.MenuEnabled(3) = True                                                   '保存
+    Me.DarkMenu.MenuEnabled(4) = True                                                   '另存为
+    Me.DarkMenu.MenuEnabled(7) = True                                                   '编辑
+    Me.DarkMenu.MenuEnabled(27) = True                                                  '视图
+    Me.DarkMenu.MenuEnabled(34) = True                                                  '生成
+    Me.DarkMenu.MenuEnabled(37) = True                                                  '调试
 End Sub
 
 Private Sub DarkMenu_MenuItemClicked(MenuID As Integer)
     Select Case MenuID
         Case 1                                                                          '新建
-            Dim NewCodeWindow   As New frmCodeWindow
-            
-            Me.TabBar.AddForm NewCodeWindow
-            NewCodeWindow.Show
-            NewCodeWindow.SyntaxEdit.SetFocus
+            Call mnuNewProject_Click
+        
+        Case 52                                                                         '运行
+            Call mnuRun_Click
+        
     End Select
 End Sub
 
@@ -1076,6 +993,15 @@ Private Sub Form_Load()
     SetPropA Me.hWnd, "WindowObj", lpObj                                                                                '记录窗口的物件地址，供子类化卸载窗体用
     SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)
     
+    '显示启动页面
+    frmCreate.DarkTitleBar.Visible = False
+    frmCreate.DarkWindowBorder.Bind = False
+    SetParent frmCreate.hWnd, Me.picClientArea.hWnd
+    frmCreate.Move 0, 0
+    frmCreate.Show
+    picToolBar.Move 0, Me.DarkMenu.Top + Me.DarkMenu.Height
+    Me.picClientArea.Move 0, Me.picToolBar.Top + Me.picToolBar.Height
+    
     '卸载LOGO
     Unload frmStartupLogo
 End Sub
@@ -1087,6 +1013,7 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     '关闭所有窗口
     Unload frmCodeWindow
     Unload frmControlBox
+    Unload frmCreate
     Unload frmProperties
     Unload frmSolutionExplorer
     Unload frmErrorList
@@ -1107,7 +1034,8 @@ Private Sub Form_Resize()
     On Error Resume Next
     
     '调整“客户区”的大小
-    Me.picClientArea.Height = Me.ScaleHeight - Me.picClientArea.Top
+    Me.picToolBar.Width = Me.ScaleWidth
+    Me.picClientArea.Move 0, Me.picToolBar.Top + Me.picToolBar.Height, Me.ScaleWidth, Me.ScaleHeight - Me.picClientArea.Top
     
     '调整最大化的子窗体的大小
     Dim Target  As Form
@@ -1124,3 +1052,6 @@ Private Sub Form_Resize()
     Next Target
 End Sub
 
+Private Sub picToolBar_Click()
+    Me.picToolBar.ZOrder
+End Sub

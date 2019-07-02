@@ -202,6 +202,8 @@ Private Sub PopupNewMenu(LabelIndex As Integer)
 End Sub
 
 Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional ControlWidth As Integer)
+    On Error Resume Next
+    
     Dim i           As Integer
     Dim NewWidth    As Integer
     Dim HasCheckBox As Boolean
@@ -227,7 +229,7 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
         End With
     Next i
     
-    For i = 1 To Me.labItem.UBound
+    For i = 1 To Me.labItem.ubound
         Unload Me.labItem(i)
     Next i
     
@@ -300,7 +302,7 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
     Next i
     
     If HasCheckBox Then
-        For i = 0 To Me.labItem.UBound
+        For i = 0 To Me.labItem.ubound
             Me.labItem(i).Caption = "   " & Me.labItem(i).Caption
             If i > 0 Then
                 Dim NextVisibleItem As Integer
@@ -320,8 +322,8 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
         NewWidth = NewWidth + Me.imgMenuCheckBox(0).Width + ITEM_HORZ_MARGIN
     End If
     LabelWidth = ControlWidth
-    Me.Height = Me.labItem(Me.labItem.UBound).Top + Me.labItem(Me.labItem.UBound).Height + ITEM_DISTANCE * 2
-    For i = Me.labItem.UBound To 0 Step -1
+    Me.Height = Me.labItem(Me.labItem.ubound).Top + Me.labItem(Me.labItem.ubound).Height + ITEM_DISTANCE * 2
+    For i = Me.labItem.ubound To 0 Step -1
         If Me.labItem(i).Visible = True Then
             Exit For
         End If
@@ -332,17 +334,17 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
         If Me.Width < MIN_WIDTH Then
             Me.Width = MIN_WIDTH
         End If
-        For i = 0 To Me.labItem.UBound
+        For i = 0 To Me.labItem.ubound
             Me.labItem(i).Width = Me.Width
         Next i
         If HasSubMenu Then
             NewWidth = NewWidth + Me.imgShowSubMenu(0).Width + ITEM_HORZ_MARGIN
-            For i = 0 To Me.imgShowSubMenu.UBound
+            For i = 0 To Me.imgShowSubMenu.ubound
                 Me.imgShowSubMenu(i).Left = Me.Width - Me.imgShowSubMenu(0).Width - ITEM_HORZ_MARGIN * 2
                 Me.imgShowSubMenu(i).ZOrder 0
             Next i
         End If
-        For i = 0 To Me.labItem.UBound
+        For i = 0 To Me.labItem.ubound
             If Trim(Me.labItem(i).Caption) = "-" Then
                 Me.labItem(i).Visible = False
                 If nSplitters > 0 Then
@@ -360,15 +362,15 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
                 '------------------------------------------------
                 Dim j As Integer
                 
-                For j = i + 1 To Me.labItem.UBound
+                For j = i + 1 To Me.labItem.ubound
                     Me.labItem(j).Top = Me.labItem(j).Top - Me.labItem(i).Height + SPLITTER_VERT_MARGIN * 2
                 Next j
-                For j = 0 To Me.imgMenuCheckBox.UBound
+                For j = 0 To Me.imgMenuCheckBox.ubound
                     If Me.imgMenuCheckBox(j).Top > Me.labItem(i).Top Then
                         Me.imgMenuCheckBox(j).Top = Me.imgMenuCheckBox(j).Top - Me.labItem(i).Height + SPLITTER_VERT_MARGIN * 2
                     End If
                 Next j
-                For j = 0 To Me.imgShowSubMenu.UBound
+                For j = 0 To Me.imgShowSubMenu.ubound
                     If Me.imgShowSubMenu(j).Top > Me.labItem(i).Top Then
                         Me.imgShowSubMenu(j).Top = Me.imgShowSubMenu(j).Top - Me.labItem(i).Height + SPLITTER_VERT_MARGIN * 2
                     End If
@@ -386,13 +388,13 @@ Public Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
         Case vbKeyDown
             IsUsingKeyboard = True
             KeybdIndex = KeybdIndex + 1
-            If KeybdIndex > Me.labItem.UBound Then
+            If KeybdIndex > Me.labItem.ubound Then
                 KeybdIndex = 0
             End If
             PrevKeybdIndex = KeybdIndex
             Do While Menus(CurrSubMenuID(KeybdIndex + 1)).MenuText = "-" Or Menus(CurrSubMenuID(KeybdIndex + 1)).Enabled = False
                 KeybdIndex = KeybdIndex + 1
-                If KeybdIndex > Me.labItem.UBound Then
+                If KeybdIndex > Me.labItem.ubound Then
                     KeybdIndex = 0
                 End If
                 If KeybdIndex = PrevKeybdIndex Then
@@ -409,13 +411,13 @@ Public Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
             IsUsingKeyboard = True
             KeybdIndex = KeybdIndex - 1
             If KeybdIndex < 0 Then
-                KeybdIndex = Me.labItem.UBound
+                KeybdIndex = Me.labItem.ubound
             End If
             PrevKeybdIndex = KeybdIndex
             Do While Menus(CurrSubMenuID(KeybdIndex + 1)).MenuText = "-" Or Menus(CurrSubMenuID(KeybdIndex + 1)).Enabled = False
                 KeybdIndex = KeybdIndex - 1
                 If KeybdIndex < 0 Then
-                    KeybdIndex = Me.labItem.UBound
+                    KeybdIndex = Me.labItem.ubound
                 End If
                 If KeybdIndex = PrevKeybdIndex Then
                     Exit Sub
@@ -530,7 +532,7 @@ Private Sub labItem_MouseMove(Index As Integer, Button As Integer, Shift As Inte
         PrevX = X
         PrevY = Y
         If Index <> PrevItem Then
-            For i = 0 To Me.labItem.UBound
+            For i = 0 To Me.labItem.ubound
                 Me.labItem(i).BackColor = RGB(27, 27, 28)
             Next i
             Me.labItem(Index).BackColor = RGB(51, 51, 52)
@@ -570,7 +572,7 @@ Private Sub tmrCheckFocus_Timer()
     If WindowFromPoint(pt.X, pt.Y) <> Me.hWnd And Not IsUsingKeyboard Then
         PrevItem = -1
         Me.tmrPopupTimeout.Enabled = False
-        For i = 0 To Me.labItem.UBound
+        For i = 0 To Me.labItem.ubound
             If Not SubMenuWindow Is Nothing Then
                 If i <> SubMenuWindow.MatchItem Then
                     Me.labItem(i).BackColor = RGB(27, 27, 28)
