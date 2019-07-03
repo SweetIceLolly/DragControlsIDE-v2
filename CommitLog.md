@@ -1,5 +1,21 @@
 【日志】
 
+# 2019.7.3
+
+移除了不同模块重复声明的一些API和函数，并把重复的操作改成子过程，让代码没这么臃肿。
+
+添加了DarkTreeView控件，TreeView纯API创建的，一是不想又加多个ocx，二是VB6的TreeView控件会被皮肤控件画坏掉，用不成。由于TreeView是自制的，一定有许多功能，以及稳定性上不及VB6的TreeView控件。如果有发现我的TreeView有Bug，或者有什么需要改进的地方请告诉我。
+
+我自制的TreeView控件的事件触发跟别的用户控件不一样，他的事件是直接通过子类化触发的，也就是说控件里面声明的Event实际上只是空壳。因为我技术实在欠佳，没有好的方式从子类化触发事件。我看到很多高手都是用Thunk的方式来写用户控件子类化的，不过我的水平远不及他们，实在是写不出o(╥﹏╥)o
+
+在frmSolutionExplorer中添加了TreeView的所有事件。
+
+优化了cmdNewPlainCpp_Click中代码的执行顺序，并在添加了操作TreeView的代码。
+
+在OutputLog过程中添加了把光标移到结尾。
+
+把ObjPtr(Me)改成了ObjPtr(WindowObj)，虽然效果一样，不过我认为这样更利于理解代码。
+
 # 2019.7.2
 
 为TabBar控件的Resize事件加了On Error Resume Next，因为有时候调整大小的时候会出错。
