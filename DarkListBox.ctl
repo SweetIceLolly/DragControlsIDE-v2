@@ -56,9 +56,6 @@ Option Explicit
 'Dark°·ListBox by IceLolly
 'Date: 2018.8.26
 
-Private Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, _
-    ByVal hWnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-
 'Event Declarations:
 Event Click() 'MappingInfo=lstMain,lstMain,-1,Click
 Attribute Click.VB_Description = "Occurs when the user presses and then releases a mouse button over an object."

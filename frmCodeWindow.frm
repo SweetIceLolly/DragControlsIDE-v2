@@ -160,7 +160,7 @@ Private Sub Form_Load()
     '设置窗口子类化，处理最大化问题及处理任务栏右键关闭
     Dim lpObj               As Long                                                                                     '指向窗口自身的物件指针
     Set WindowObj = Me
-    lpObj = ObjPtr(Me)                                                                                                  '获取指向窗口自身的物件指针
+    lpObj = ObjPtr(WindowObj)                                                                                           '获取指向窗口自身的物件指针
     SetPropA Me.hWnd, "WindowObj", lpObj                                                                                '记录窗口的物件地址，供子类化卸载窗体用
     SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)
 End Sub

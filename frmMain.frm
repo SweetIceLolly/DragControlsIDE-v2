@@ -974,9 +974,7 @@ Private Sub Form_Load()
     Me.DockingPane.VisualTheme = ThemeResource                                                                          '设置为从资源文件读取样式
     Me.DockingPane.PaintManager.SplitterSize = 2                                                                        '设置分割区域的大小
     
-    '加载皮肤
-    Me.SkinFramework.LoadSkin "Skin.cjstyles", "NormalBlue.ini"
-    Me.SkinFramework.ApplyWindow Me.hWnd
+    Me.SkinFramework.LoadSkin "Skin.cjstyles", "NormalBlue.ini"                                                         '加载皮肤
     
     '禁用不需要的菜单
     Me.DarkMenu.MenuEnabled(3) = False                                                                                  '保存
@@ -989,7 +987,7 @@ Private Sub Form_Load()
     '设置窗口子类化，处理最大化问题及处理任务栏右键关闭
     Dim lpObj               As Long                                                                                     '指向窗口自身的物件指针
     Set WindowObj = Me
-    lpObj = ObjPtr(Me)                                                                                                  '获取指向窗口自身的物件指针
+    lpObj = ObjPtr(WindowObj)                                                                                           '获取指向窗口自身的物件指针
     SetPropA Me.hWnd, "WindowObj", lpObj                                                                                '记录窗口的物件地址，供子类化卸载窗体用
     SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)
     

@@ -4,9 +4,6 @@ Attribute VB_Name = "modListBoxRedrawProc"
 'WndProc to support redrawing list items for Dark°·ListBox
 'Date: 2018.8.26
 
-Private Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, _
-    ByVal hWnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-
 Public PrevUserCtlProc      As Long
 Public PrevListBoxProc      As Long
 

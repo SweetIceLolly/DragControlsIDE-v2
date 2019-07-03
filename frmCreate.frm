@@ -48,8 +48,8 @@ Begin VB.Form frmCreate
       Left            =   480
       TabIndex        =   0
       Top             =   1080
-      Width           =   3735
-      _ExtentX        =   6588
+      Width           =   6855
+      _ExtentX        =   12091
       _ExtentY        =   1349
       Image           =   "frmCreate.frx":0C52
       HasBorder       =   0   'False
@@ -61,8 +61,8 @@ Begin VB.Form frmCreate
       Left            =   480
       TabIndex        =   1
       Top             =   1920
-      Width           =   3735
-      _ExtentX        =   6588
+      Width           =   6855
+      _ExtentX        =   12091
       _ExtentY        =   1349
       Image           =   "frmCreate.frx":0D85
       HasBorder       =   0   'False
@@ -74,8 +74,8 @@ Begin VB.Form frmCreate
       Left            =   480
       TabIndex        =   2
       Top             =   2760
-      Width           =   3735
-      _ExtentX        =   6588
+      Width           =   6855
+      _ExtentX        =   12091
       _ExtentY        =   1349
       Image           =   "frmCreate.frx":0F06
       HasBorder       =   0   'False
@@ -87,8 +87,8 @@ Begin VB.Form frmCreate
       Left            =   480
       TabIndex        =   3
       Top             =   3600
-      Width           =   3735
-      _ExtentX        =   6588
+      Width           =   6855
+      _ExtentX        =   12091
       _ExtentY        =   1349
       Image           =   "frmCreate.frx":124B
       HasBorder       =   0   'False
@@ -200,23 +200,24 @@ Private Sub cmdNewPlainCpp_Click()
     
     frmMain.ProjectType = 3                                                                                             '设置工程类型
     Call frmMain.HideStartupPage                                                                                        '隐藏启动界面
+    frmMain.DarkMenu.MenuEnabled(29) = False                                                                            '禁用控件箱菜单
+    frmMain.DarkMenu.MenuEnabled(30) = False                                                                            '禁用属性菜单
+    frmMain.DockingPane.ShowPane 3                                                                                      '显示工程资源管理器
+    frmMain.DockingPane.ShowPane 5                                                                                      '显示输出
+    frmMain.Caption = "新空白C++程序 - 拖控件大法"                                                                      '更新标题
     
+    '构建工程结构
+    Dim ParentItem  As Long                                                                                             '树视图的父节点
+    frmSolutionExplorer.SolutionTreeView.RemoveItem 0                                                                   '清空树视图
+    ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem("工程")
+    ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem("源文件", ParentItem)
+    ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem("新建空白代码.cpp", ParentItem)
+    frmSolutionExplorer.SolutionTreeView.SelectItem ParentItem
+    
+    frmCodeWindow.Caption = "新建空白代码.cpp"
     frmMain.TabBar.AddForm frmCodeWindow                                                                                '新建一个代码框
-    
-    '禁用不适用的菜单项
-    frmMain.DarkMenu.MenuEnabled(29) = False                                                                            '控件箱
-    frmMain.DarkMenu.MenuEnabled(30) = False                                                                            '属性
-    
-    '显示需要的Pane
-    frmMain.DockingPane.ShowPane 3                                                                                      '工程资源管理器
-    frmMain.DockingPane.ShowPane 5                                                                                      '输出
-    
-    '更新标题
-    frmMain.Caption = "新工程 - 拖控件大法"
-    
-    '让代码框获得焦点
-    frmMain.picWindowClientArea.Visible = True
-    frmCodeWindow.SyntaxEdit.SetFocus
+    frmMain.picWindowClientArea.Visible = True                                                                          '显示窗口客户区
+    frmCodeWindow.SyntaxEdit.SetFocus                                                                                   '让代码框获得焦点
     
     Unload Me
 End Sub

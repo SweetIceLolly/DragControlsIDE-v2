@@ -44,6 +44,7 @@ Option Explicit
 '参数:      strOutput: 需要输出的消息
 Public Sub OutputLog(strOutput As String)
     Me.edOutput.Text = Me.edOutput.Text & Date & " " & Time & " " & strOutput & vbCrLf
+    Me.edOutput.SelStart = Len(Me.edOutput.Text)                                            '滚动到文本末尾
 End Sub
 
 Private Sub Form_Resize()

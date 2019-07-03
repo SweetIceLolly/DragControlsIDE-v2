@@ -8,8 +8,8 @@ Attribute VB_Name = "modMain"
 Option Explicit
 
 '调用系统的消息处理过程
-Private Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal hWnd As Long, _
-    ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal hWnd As Long, _
+    ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 
 '获取系统参数信息
 Private Declare Function SystemParametersInfo Lib "user32" Alias "SystemParametersInfoA" (ByVal uAction As Long, _
@@ -34,6 +34,42 @@ Public Function ProcessExists(ByVal hProcess As Long) As Boolean
     
     ret = WaitForSingleObject(hProcess, 0)                                                  '判断进程是否退出
     ProcessExists = (ret = WAIT_TIMEOUT)                                                    '当返回值为超时说明进程仍在运行
+End Function
+
+'描述:      把两个16位的数联合成一个32位的Long型数
+'参数:      wLow, wHigh: 分别是低16位和高16位
+'返回值:    合成的数
+Public Function MakeLong(wLow As Long, wHigh As Long) As Long
+    MakeLong = LoWord(wLow) Or (&H10000 * LoWord(wHigh))
+End Function
+
+'描述:      获取一个32位数的高16位
+'参数:      lValue: 数值
+'返回值:    高16位的数值
+Public Function HiWord(lValue As Long) As Integer
+    If lValue And &H80000000 Then
+        HiWord = (lValue \ 65535) - 1
+    Else
+        HiWord = lValue \ 65535
+    End If
+End Function
+
+'描述:      获取一个32位数的低16位
+'参数:      lValue: 数值
+'返回值:    低16位的数值
+Public Function LoWord(lValue As Long) As Integer
+    If lValue And &H8000& Then
+        LoWord = &H8000 Or (lValue And &H7FFF&)
+    Else
+        LoWord = lValue And &HFFFF&
+    End If
+End Function
+
+'描述:      通过wParam计算出Shift值
+'参数:      wParam: wParam值
+'返回值:    Shift值
+Public Function GetShiftValue(wParam As Long) As Long
+    GetShiftValue = (wParam And MK_CONTROL) Or (wParam And MK_SHIFT)
 End Function
 
 '描述:      修复主窗口最大化全屏和在任务栏的右键菜单无法关闭的问题

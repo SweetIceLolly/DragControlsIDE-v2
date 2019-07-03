@@ -4,33 +4,10 @@ Option Explicit
 'WndProc to handle messages for Dark°·ListView
 'Date: 2018.8.30
 
-Private Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, _
-    ByVal hWnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-
 Public PrevListViewProc     As Long
 Public PrevLVUserCtlProc    As Long
 
 Dim CtlList()               As DarkListView
-
-Public Function MakeLong(wLow As Long, wHigh As Long) As Long
-    MakeLong = LoWord(wLow) Or (&H10000 * LoWord(wHigh))
-End Function
-
-Public Function HiWord(lValue As Long) As Integer
-    If lValue And &H80000000 Then
-        HiWord = (lValue \ 65535) - 1
-    Else
-        HiWord = lValue \ 65535
-    End If
-End Function
- 
-Public Function LoWord(lValue As Long) As Integer
-    If lValue And &H8000& Then
-        LoWord = &H8000 Or (lValue And &H7FFF&)
-    Else
-        LoWord = lValue And &HFFFF&
-    End If
-End Function
 
 Public Function CtlListPushBack(Ctl As DarkListView) As Integer
     On Error Resume Next
@@ -56,31 +33,31 @@ Public Function ListViewProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wPara
                 (wParam And MK_CONTROL) Or (wParam And MK_SHIFT), LoWord(lParam), HiWord(lParam)
         
         Case WM_LBUTTONDOWN
-            CtlList(GetPropA(hWnd, "ID")).RaiseMouseDown 1, (wParam And MK_CONTROL) Or (wParam And MK_SHIFT), LoWord(lParam), HiWord(lParam)
+            CtlList(GetPropA(hWnd, "ID")).RaiseMouseDown 1, GetShiftValue(wParam), LoWord(lParam), HiWord(lParam)
             
         Case WM_LBUTTONUP
-            CtlList(GetPropA(hWnd, "ID")).RaiseMouseUp 1, (wParam And MK_CONTROL) Or (wParam And MK_SHIFT), LoWord(lParam), HiWord(lParam)
+            CtlList(GetPropA(hWnd, "ID")).RaiseMouseUp 1, GetShiftValue(wParam), LoWord(lParam), HiWord(lParam)
         
         Case WM_RBUTTONDOWN
-            CtlList(GetPropA(hWnd, "ID")).RaiseMouseDown 2, (wParam And MK_CONTROL) Or (wParam And MK_SHIFT), LoWord(lParam), HiWord(lParam)
+            CtlList(GetPropA(hWnd, "ID")).RaiseMouseDown 2, GetShiftValue(wParam), LoWord(lParam), HiWord(lParam)
         
         Case WM_RBUTTONUP
-            CtlList(GetPropA(hWnd, "ID")).RaiseMouseUp 2, (wParam And MK_CONTROL) Or (wParam And MK_SHIFT), LoWord(lParam), HiWord(lParam)
+            CtlList(GetPropA(hWnd, "ID")).RaiseMouseUp 2, GetShiftValue(wParam), LoWord(lParam), HiWord(lParam)
         
         Case WM_MBUTTONDOWN
-            CtlList(GetPropA(hWnd, "ID")).RaiseMouseDown 4, (wParam And MK_CONTROL) Or (wParam And MK_SHIFT), LoWord(lParam), HiWord(lParam)
+            CtlList(GetPropA(hWnd, "ID")).RaiseMouseDown 4, GetShiftValue(wParam), LoWord(lParam), HiWord(lParam)
         
         Case WM_MBUTTONUP
-            CtlList(GetPropA(hWnd, "ID")).RaiseMouseUp 4, (wParam And MK_CONTROL) Or (wParam And MK_SHIFT), LoWord(lParam), HiWord(lParam)
+            CtlList(GetPropA(hWnd, "ID")).RaiseMouseUp 4, GetShiftValue(wParam), LoWord(lParam), HiWord(lParam)
         
         Case WM_LBUTTONDBLCLK
-            CtlList(GetPropA(hWnd, "ID")).RaiseDoubleClick 1, (wParam And MK_CONTROL) Or (wParam And MK_SHIFT), LoWord(lParam), HiWord(lParam)
+            CtlList(GetPropA(hWnd, "ID")).RaiseDoubleClick 1, GetShiftValue(wParam), LoWord(lParam), HiWord(lParam)
         
         Case WM_RBUTTONDBLCLK
-            CtlList(GetPropA(hWnd, "ID")).RaiseDoubleClick 2, (wParam And MK_CONTROL) Or (wParam And MK_SHIFT), LoWord(lParam), HiWord(lParam)
+            CtlList(GetPropA(hWnd, "ID")).RaiseDoubleClick 2, GetShiftValue(wParam), LoWord(lParam), HiWord(lParam)
         
         Case WM_MBUTTONDBLCLK
-            CtlList(GetPropA(hWnd, "ID")).RaiseDoubleClick 4, (wParam And MK_CONTROL) Or (wParam And MK_SHIFT), LoWord(lParam), HiWord(lParam)
+            CtlList(GetPropA(hWnd, "ID")).RaiseDoubleClick 4, GetShiftValue(wParam), LoWord(lParam), HiWord(lParam)
         
         Case WM_SETFOCUS
             SetFocus GetPropA(hWnd, "PARENT_CTL")
