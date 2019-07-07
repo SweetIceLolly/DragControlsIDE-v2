@@ -35,6 +35,11 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+Private Sub Form_Resize()
+    On Error Resume Next
+    Me.SolutionTreeView.Move 0, 0, Me.ScaleWidth, Me.ScaleHeight
+End Sub
+
 Public Sub SolutionTreeView_BeginLabelEdit(ByVal hTreeItem As Long, bCancel As Boolean)
     
 End Sub
@@ -44,7 +49,29 @@ Public Sub SolutionTreeView_Click(bCancel As Boolean)
 End Sub
 
 Public Sub SolutionTreeView_DoubleClick(ByVal Button As Long, ByVal Shift As Long, ByVal X As Long, ByVal Y As Long)
+    On Error Resume Next
+    Dim CurrSelItem     As Long
+    Dim i               As Long
     
+    CurrSelItem = Me.SolutionTreeView.GetSelectedItem()                                         '获取选择的树视图列表项
+    For i = 0 To UBound(TvItemBinding)                                                          '查找列表项对应的文件序号
+        If CurrSelItem = TvItemBinding(i).TVITEM Then
+            If CurrentProject.Files(TvItemBinding(i).FileIndex).TargetWindow Is Nothing Then
+                Dim NewCodeWindow   As frmCodeWindow                                                        '新建的代码框窗体
+                Dim FileTitle       As String                                                               '文件名
+                
+                Set NewCodeWindow = CreateNewCodeWindow(TvItemBinding(i).FileIndex)                         '创建新的代码窗体并设置绑定的文件序号
+                FileTitle = CurrentProject.Files(TvItemBinding(i).FileIndex).FilePath
+                FileTitle = Right(FileTitle, Len(FileTitle) - InStrRev(FileTitle, "\"))                     '截取出文件名
+                NewCodeWindow.Caption = FileTitle
+                frmMain.TabBar.AddForm NewCodeWindow
+            Else
+                CurrentProject.Files(TvItemBinding(i).FileIndex).TargetWindow.Show                          '显示对应的窗口
+                CurrentProject.Files(TvItemBinding(i).FileIndex).TargetWindow.SyntaxEdit.SetFocus
+            End If
+            Exit For
+        End If
+    Next i
 End Sub
 
 Public Sub SolutionTreeView_EndLabelEdit(ByVal hTreeItem As Long, NewText As String, bCancel As Boolean)

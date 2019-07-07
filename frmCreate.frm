@@ -7,10 +7,11 @@ Begin VB.Form frmCreate
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   7545
+   Icon            =   "frmCreate.frx":0000
+   KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
    ScaleHeight     =   5865
    ScaleWidth      =   7545
-   ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorder 
       Left            =   6840
@@ -40,8 +41,10 @@ Begin VB.Form frmCreate
       Caption         =   "新建项目"
       MaxButtonEnabled=   0   'False
       MinButtonEnabled=   0   'False
+      MaxButtonVisible=   0   'False
+      MinButtonVisible=   0   'False
       BindCaption     =   -1  'True
-      Picture         =   "frmCreate.frx":0000
+      Picture         =   "frmCreate.frx":1BCC2
    End
    Begin DragControlsIDE.DarkImageButton cmdNewWindowProgram 
       Height          =   765
@@ -51,7 +54,7 @@ Begin VB.Form frmCreate
       Width           =   6855
       _ExtentX        =   12091
       _ExtentY        =   1349
-      Image           =   "frmCreate.frx":0C52
+      Image           =   "frmCreate.frx":1C914
       HasBorder       =   0   'False
       Caption         =   "       新建窗口程序"
       Alignment       =   0
@@ -64,7 +67,7 @@ Begin VB.Form frmCreate
       Width           =   6855
       _ExtentX        =   12091
       _ExtentY        =   1349
-      Image           =   "frmCreate.frx":0D85
+      Image           =   "frmCreate.frx":1CA47
       HasBorder       =   0   'False
       Caption         =   "       新建控制台程序"
       Alignment       =   0
@@ -77,7 +80,7 @@ Begin VB.Form frmCreate
       Width           =   6855
       _ExtentX        =   12091
       _ExtentY        =   1349
-      Image           =   "frmCreate.frx":0F06
+      Image           =   "frmCreate.frx":1CBC8
       HasBorder       =   0   'False
       Caption         =   "       新建空白C++程序"
       Alignment       =   0
@@ -90,7 +93,7 @@ Begin VB.Form frmCreate
       Width           =   6855
       _ExtentX        =   12091
       _ExtentY        =   1349
-      Image           =   "frmCreate.frx":124B
+      Image           =   "frmCreate.frx":1CF0D
       HasBorder       =   0   'False
       Caption         =   "       打开工程..."
       Alignment       =   0
@@ -189,51 +192,43 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Private Sub cmdNewWindowProgram_Click()
+    frmCreateOptions.NewProjectType = 1                 '设置工程类型
+    frmCreateOptions.Show                               '显示新建选项
+    Unload Me
+End Sub
+
 Private Sub cmdNewConsoleProgram_Click()
-    Call frmMain.HideStartupPage
-    
+    frmCreateOptions.NewProjectType = 2                 '设置工程类型
+    frmCreateOptions.Show                               '显示新建选项
     Unload Me
 End Sub
 
 Private Sub cmdNewPlainCpp_Click()
-    On Error Resume Next
-    
-    frmMain.ProjectType = 3                                                                                             '设置工程类型
-    Call frmMain.HideStartupPage                                                                                        '隐藏启动界面
-    frmMain.DarkMenu.MenuEnabled(29) = False                                                                            '禁用控件箱菜单
-    frmMain.DarkMenu.MenuEnabled(30) = False                                                                            '禁用属性菜单
-    frmMain.DockingPane.ShowPane 3                                                                                      '显示工程资源管理器
-    frmMain.DockingPane.ShowPane 5                                                                                      '显示输出
-    frmMain.Caption = "新空白C++程序 - 拖控件大法"                                                                      '更新标题
-    
-    '构建工程结构
-    Dim ParentItem  As Long                                                                                             '树视图的父节点
-    frmSolutionExplorer.SolutionTreeView.RemoveItem 0                                                                   '清空树视图
-    ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem("工程")
-    ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem("源文件", ParentItem)
-    ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem("新建空白代码.cpp", ParentItem)
-    frmSolutionExplorer.SolutionTreeView.SelectItem ParentItem
-    
-    frmCodeWindow.Caption = "新建空白代码.cpp"
-    frmMain.TabBar.AddForm frmCodeWindow                                                                                '新建一个代码框
-    frmMain.picWindowClientArea.Visible = True                                                                          '显示窗口客户区
-    frmCodeWindow.SyntaxEdit.SetFocus                                                                                   '让代码框获得焦点
-    
-    Unload Me
-End Sub
-
-Private Sub cmdNewWindowProgram_Click()
-    Call frmMain.HideStartupPage
-    
+    frmCreateOptions.NewProjectType = 3                 '设置工程类型
+    frmCreateOptions.Show                               '显示新建选项
     Unload Me
 End Sub
 
 Private Sub cmdOpenProject_Click()
     Call frmMain.HideStartupPage
     
+    frmMain.Enabled = True
+    frmMain.DarkWindowBorderSizer.Bind = True
     Unload Me
 End Sub
 
-Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
-    frmMain.Enabled = True
+Private Sub Form_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyEscape Then                      '按下Esc键关闭窗体
+        KeyAscii = 0
+        Unload Me
+    End If
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    If frmCreateOptions.Visible = False Then            '如果取消新建，则重新激活主窗体
+        Unload frmCreateOptions
+        frmMain.Enabled = True
+        frmMain.DarkWindowBorderSizer.Bind = True
+    End If
 End Sub

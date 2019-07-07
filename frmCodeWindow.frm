@@ -94,6 +94,8 @@ Begin VB.Form frmCodeWindow
          Strikethrough   =   0   'False
       EndProperty
       Caption         =   "代码窗口"
+      MaxButtonVisible=   0   'False
+      MinButtonVisible=   0   'False
       BindCaption     =   -1  'True
       Picture         =   "frmCodeWindow.frx":1BCC2
    End
@@ -138,6 +140,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Public WindowObj    As Object                                                                                           '窗口自身
+Public FileIndex    As Long                                                                                             '在CurrentProject.Files对应的文件序号
 
 Private Sub DarkTitleBar_GotFocus()
     On Error Resume Next
@@ -146,6 +149,9 @@ Private Sub DarkTitleBar_GotFocus()
 End Sub
 
 Private Sub Form_Load()
+    Me.DarkTitleBar.MaxButtonVisible = True
+    Me.DarkTitleBar.MinButtonVisible = True
+    
     '设置代码框属性
     Me.DarkTitleBar.Top = Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelY
     Me.SyntaxEdit.Move Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelX, _
@@ -157,7 +163,6 @@ Private Sub Form_Load()
     Me.SyntaxEdit.ConfigFile = App.Path & "\SyntaxEdit.ini"
     
     '设置窗口子类化，处理最大化问题及处理任务栏右键关闭
-    '设置窗口子类化，处理最大化问题及处理任务栏右键关闭
     Dim lpObj               As Long                                                                                     '指向窗口自身的物件指针
     Set WindowObj = Me
     lpObj = ObjPtr(WindowObj)                                                                                           '获取指向窗口自身的物件指针
@@ -166,8 +171,13 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
-    '恢复窗口子类化
-    SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(Me.hWnd, "PrevWndProc")
+    If IsExiting Then
+        '恢复窗口子类化
+        SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(Me.hWnd, "PrevWndProc")
+    Else
+        Cancel = 1
+        Unload Me
+    End If
 End Sub
 
 Public Sub Form_Resize()
@@ -193,3 +203,8 @@ Public Sub Form_Resize()
     Me.comEvent.Width = Me.comObject.Width
     Me.comEvent.Left = Me.comObject.Width + 360
 End Sub
+
+Private Sub SyntaxEdit_TextChanged(ByVal nRowFrom As Long, ByVal nRowTo As Long, ByVal nActions As Long)
+    CurrentProject.Files(FileIndex).Changed = True                                                      '代码框的内容一旦更改，就把文件视为更改了
+End Sub
+

@@ -42,13 +42,13 @@ Dim wndTreeView     As Long                                                     
 Private Sub UserControl_Initialize()
     '创建树视图控件
     wndTreeView = CreateWindowExA(0, "SysTreeView32", "", _
-        WS_VISIBLE Or WS_CHILD Or TVS_HASBUTTONS Or TVS_SHOWSELALWAYS Or TVS_LINESATROOT Or TVS_HASLINES Or TVS_LINESATROOT Or TVS_EDITLABELS, _
-        0, 0, 100, 300, UserControl.hWnd, 0, App.hInstance, 0)
-    
+        WS_VISIBLE Or WS_CHILD Or TVS_HASBUTTONS Or TVS_SHOWSELALWAYS Or TVS_EDITLABELS Or TVS_FULLROWSELECT Or TVS_LINESATROOT Or TVS_LINESATROOT, _
+        0, 0, 100, 300, UserControl.hWnd, 0, App.hInstance, 0)  'Or TVS_HASLINES
+
     '设置控件颜色
-    SendMessageA wndTreeView, TVM_SETBKCOLOR, 0, &H302D2D
-    SendMessageA wndTreeView, TVM_SETTEXTCOLOR, 0, &HF0F0F0
-    SendMessageA wndTreeView, TVM_SETLINECOLOR, 0, &H808080
+    SendMessageA wndTreeView, TVM_SETBKCOLOR, 0, ByVal &H302D2D
+    SendMessageA wndTreeView, TVM_SETTEXTCOLOR, 0, ByVal &HF0F0F0
+    SendMessageA wndTreeView, TVM_SETLINECOLOR, 0, ByVal &H808080
 End Sub
 
 Private Sub UserControl_Resize()
@@ -72,19 +72,24 @@ Public Function AddItem(ItemText As String, Optional ParentItem As Long = 0) As 
         .itemex.cchTextMax = UBound(TextBuf)
     End With
     AddItem = SendMessageA(wndTreeView, TVM_INSERTITEM, 0, ByVal VarPtr(ti))
+    
+    '设置控件颜色
+    SendMessageA wndTreeView, TVM_SETBKCOLOR, 0, ByVal &H302D2D
+    SendMessageA wndTreeView, TVM_SETTEXTCOLOR, 0, ByVal &HF0F0F0
+    SendMessageA wndTreeView, TVM_SETLINECOLOR, 0, ByVal &H808080
 End Function
 
 '描述:      删除指定的项目
 '参数:      Item: 需要删除的项目的句柄。设置为0则删除所有的项目
 '返回值:    若删除成功则返回非0的整数，否则返回0
 Public Function RemoveItem(ByVal Item As Long) As Boolean
-    RemoveItem = (SendMessageA(wndTreeView, TVM_DELETEITEM, 0, Item) <> 0)
+    RemoveItem = (SendMessageA(wndTreeView, TVM_DELETEITEM, 0, ByVal Item) <> 0)
 End Function
 
 '描述:      确保指定的项目可视
 '参数:      Item: 指定项目句柄
 Public Sub EnsureVisible(ByVal Item As Long)
-    SendMessageA wndTreeView, TVM_ENSUREVISIBLE, 0, Item
+    SendMessageA wndTreeView, TVM_ENSUREVISIBLE, 0, ByVal Item
 End Sub
 
 '描述:      展开或者收缩树状图
@@ -92,13 +97,13 @@ End Sub
 '.          Mode: 展开或者收缩。1: 收缩; 2: 展开; 3: 切换展开或者收缩
 '返回值:    如果成功，返回True
 Public Function ExpandItems(ByVal Item As Long, Mode As Integer) As Boolean
-    ExpandItems = (SendMessageA(wndTreeView, TVM_EXPAND, Mode, Item) <> 0)
+    ExpandItems = (SendMessageA(wndTreeView, TVM_EXPAND, ByVal Mode, ByVal Item) <> 0)
 End Function
 
 '描述:      开始编辑文本
 '参数:      Item: 需要编辑文本的列表项
 Public Function EditLabel(ByVal Item As Long) As Boolean
-    EditLabel = (SendMessageA(wndTreeView, TVM_EDITLABEL, 0, Item) <> 0)
+    EditLabel = (SendMessageA(wndTreeView, TVM_EDITLABEL, 0, ByVal Item) <> 0)
 End Function
 
 '描述:      取消编辑文本
@@ -153,14 +158,14 @@ End Function
 '参数:      Item: 列表项的句柄
 '返回值:    指定列表项的根节点句柄。若没有选择项目或者选择的项目无效，则返回0
 Public Function GetParentItem(ByVal Item As Long) As Long
-    GetParentItem = SendMessageA(wndTreeView, TVM_GETNEXTITEM, TVGN_PARENT, Item)
+    GetParentItem = SendMessageA(wndTreeView, TVM_GETNEXTITEM, TVGN_PARENT, ByVal Item)
 End Function
 
 '描述:      选择指定的列表项目
 '参数:      Item: 列表项的句柄
 '返回值:    如果执行成功则返回True
 Public Function SelectItem(ByVal Item As Long) As Boolean
-    SelectItem = (SendMessageA(wndTreeView, TVM_SELECTITEM, TVGN_CARET, Item) <> 0)
+    SelectItem = (SendMessageA(wndTreeView, TVM_SELECTITEM, TVGN_CARET, ByVal Item) <> 0)
 End Function
 
 'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!

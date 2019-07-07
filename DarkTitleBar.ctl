@@ -191,7 +191,9 @@ Private Const SZ_MARGIN = 30
 'Default Property Values:
 Const m_def_BindCaption = 0
 'Property Variables:
-Dim m_BindCaption As Boolean
+Dim m_BindCaption   As Boolean
+Dim MinVisible      As Boolean
+Dim MaxVisible      As Boolean
 
 Private Sub cmdClose_Click()
     Unload UserControl.Parent
@@ -341,7 +343,6 @@ End Sub
 'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
 'MappingInfo=UserControl,UserControl,-1,Enabled
 Public Property Get Enabled() As Boolean
-Attribute Enabled.VB_Description = "Returns/sets a value that determines whether an object can respond to user-generated events."
     Enabled = UserControl.Enabled
 End Property
 
@@ -353,8 +354,6 @@ End Property
 'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
 'MappingInfo=labTip,labTip,-1,Font
 Public Property Get Font() As Font
-Attribute Font.VB_Description = "Returns a Font object."
-Attribute Font.VB_UserMemId = -512
     Set Font = labTip.Font
 End Property
 
@@ -366,7 +365,6 @@ End Property
 'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
 'MappingInfo=labTip,labTip,-1,Caption
 Public Property Get Caption() As String
-Attribute Caption.VB_Description = "Returns/sets the text displayed in an object's title bar or below an object's icon."
     Caption = labTip.Caption
 End Property
 
@@ -387,6 +385,18 @@ Public Property Let MaxButtonEnabled(ByVal New_MaxButtonEnabled As Boolean)
 End Property
 
 'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
+'MappingInfo=cmdMax,cmdMax,-1,Visible
+Public Property Get MaxButtonVisible() As Boolean
+    MaxButtonVisible = UserControl.cmdMax.Visible
+End Property
+
+Public Property Let MaxButtonVisible(ByVal New_MaxButtonVisible As Boolean)
+    UserControl.cmdMax.Visible = New_MaxButtonVisible
+    MaxVisible = New_MaxButtonVisible
+    PropertyChanged "MaxButtonVisible"
+End Property
+
+'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
 'MappingInfo=cmdMin,cmdMin,-1,Enabled
 Public Property Get MinButtonEnabled() As Boolean
     MinButtonEnabled = cmdMin.Enabled
@@ -395,6 +405,18 @@ End Property
 Public Property Let MinButtonEnabled(ByVal New_MinButtonEnabled As Boolean)
     cmdMin.Enabled() = New_MinButtonEnabled
     PropertyChanged "MinButtonEnabled"
+End Property
+
+'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
+'MappingInfo=cmdMin,cmdMin,-1,Visible
+Public Property Get MinButtonVisible() As Boolean
+    MinButtonVisible = UserControl.cmdMin.Visible
+End Property
+
+Public Property Let MinButtonVisible(ByVal New_MinButtonVisible As Boolean)
+    UserControl.cmdMin.Visible = New_MinButtonVisible
+    MinVisible = New_MinButtonVisible
+    PropertyChanged "MinButtonVisible"
 End Property
 
 'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
@@ -415,6 +437,10 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     labTip.Caption = PropBag.ReadProperty("Caption", "Dark°·TitleBar")
     cmdMax.Enabled = PropBag.ReadProperty("MaxButtonEnabled", True)
     cmdMin.Enabled = PropBag.ReadProperty("MinButtonEnabled", True)
+    cmdMax.Visible = PropBag.ReadProperty("MaxButtonVisible", True)
+    MaxVisible = cmdMax.Visible
+    cmdMin.Visible = PropBag.ReadProperty("MinButtonVisible", True)
+    MinVisible = cmdMin.Visible
     cmdClose.Enabled = PropBag.ReadProperty("CloseButtonEnabled", True)
     m_BindCaption = PropBag.ReadProperty("BindCaption", m_def_BindCaption)
     Set Picture = PropBag.ReadProperty("Picture", Nothing)
@@ -429,6 +455,8 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
     Call PropBag.WriteProperty("Caption", labTip.Caption, "Dark°·TitleBar")
     Call PropBag.WriteProperty("MaxButtonEnabled", cmdMax.Enabled, True)
     Call PropBag.WriteProperty("MinButtonEnabled", cmdMin.Enabled, True)
+    Call PropBag.WriteProperty("MaxButtonVisible", MaxVisible, True)
+    Call PropBag.WriteProperty("MinButtonVisible", MinVisible, True)
     Call PropBag.WriteProperty("CloseButtonEnabled", cmdClose.Enabled, True)
     Call PropBag.WriteProperty("BindCaption", m_BindCaption, m_def_BindCaption)
     Call PropBag.WriteProperty("Picture", Picture, Nothing)
@@ -437,7 +465,6 @@ End Sub
 'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
 'MemberInfo=0,0,0,0
 Public Property Get BindCaption() As Boolean
-Attribute BindCaption.VB_Description = "Return/Sets if the title changes with the parent window automatically"
     BindCaption = m_BindCaption
 End Property
 
@@ -454,7 +481,6 @@ End Sub
 'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
 'MappingInfo=imgIcon,imgIcon,-1,Picture
 Public Property Get Picture() As Picture
-Attribute Picture.VB_Description = "Returns/sets a graphic to be displayed in a control."
     Set Picture = imgIcon.Picture
 End Property
 
@@ -462,4 +488,6 @@ Public Property Set Picture(ByVal New_Picture As Picture)
     Set imgIcon.Picture = New_Picture
     PropertyChanged "Picture"
 End Property
+
+
 

@@ -708,6 +708,8 @@ Begin VB.Form frmMain
          Strikethrough   =   0   'False
       EndProperty
       Caption         =   "拖控件大法"
+      MaxButtonVisible=   0   'False
+      MinButtonVisible=   0   'False
       BindCaption     =   -1  'True
       Picture         =   "frmMain.frx":1C582
    End
@@ -750,7 +752,6 @@ Private Declare Function CreateProcess Lib "kernel32" Alias "CreateProcessA" (By
     lpProcessAttributes As SECURITY_ATTRIBUTES, lpThreadAttributes As SECURITY_ATTRIBUTES, ByVal bInheritHandles As Long, ByVal dwCreationFlags As Long, _
     ByVal lpEnvironment As Long, ByVal lpCurrentDirectory As Long, lpStartupInfo As STARTUPINFO, lpProcessInformation As PROCESS_INFORMATION) As Long
 
-
 '工程类型
 '值     描述
 '0      未创建工程，处于启动界面
@@ -760,15 +761,54 @@ Private Declare Function CreateProcess Lib "kernel32" Alias "CreateProcessA" (By
 Public ProjectType          As Integer
 
 Public WindowObj            As Object                                                   '窗口自身
+Dim NewCreateWindow         As frmCreate                                                '“新建项目”窗体
 
 Private WithEvents GdbPipe  As clsPipe                                                  'gdb调试管道
 Attribute GdbPipe.VB_VarHelpID = -1
 
+'描述:      “加载项目”菜单
+Private Sub mnuOpen_Click()
+    NoSkinMsgBox ShowOpen(Me.hWnd, "Dilidi - Open", "洗屁屁文件(*.cpp)" & vbNullChar & "*.cpp")
+End Sub
+
+'描述:      “保存”菜单
+Private Sub mnuSave_Click()
+    On Error Resume Next
+    Dim i                   As Long
+    
+    For i = 0 To UBound(CurrentProject.Files)                                           '检查还没有保存的文件
+        If CurrentProject.Files(i).Changed = True Then                                      '逐个保存未保存的文件
+            Open CurrentProject.Files(i).FilePath For Output As #1
+                If Err.Number <> 0 Then                                                             '保存文件失败
+                    Close #1
+                    If NoSkinMsgBox("无法保存文件：" & CurrentProject.Files(i).FilePath & " :" & _
+                       Err.Number & " - " & Err.Description & " ，是否继续保存其他文件？", vbExclamation, "错误") = vbNo Then
+                        Exit Sub
+                    End If
+                End If
+                Print #1, CurrentProject.Files(i).TargetWindow.SyntaxEdit.Text
+            Close #1
+            CurrentProject.Files(i).Changed = False
+        End If
+    Next i
+    
+    'ToDo: Save project file
+End Sub
+
+'描述:      “另存为”菜单
+Private Sub mnuSaveAs_Click()
+    NoSkinMsgBox ShowSave(Me.hWnd, "Shar.cpp", "Save", "fsaf(*.cpp)" & vbNullChar & "*.cpp")
+End Sub
+
 '描述:      “新建项目”菜单
 Private Sub mnuNewProject_Click()
-    Dim NewCreateWindow As New frmCreate
-            
+    If Not NewCreateWindow Is Nothing Then                                              '卸载掉上一个“新建项目”窗体
+        Unload NewCreateWindow
+        Set NewCreateWindow = Nothing
+    End If
+    Set NewCreateWindow = New frmCreate
     Me.Enabled = False
+    Me.DarkWindowBorderSizer.Bind = False
     SetParent NewCreateWindow.hWnd, 0
     NewCreateWindow.Move Screen.Width / 2 - frmCreate.Width / 2, Screen.Height / 2 - frmCreate.Height / 2
     NewCreateWindow.DarkTitleBar.Visible = True
@@ -781,29 +821,35 @@ Private Sub mnuRun_Click()
     On Error Resume Next
     
     Dim GccPipe             As New clsPipe                                              'g++管道
+    Dim GccCmdLine          As String                                                   'g++命令行
+    Dim ExePath             As String                                                   'exe文件编译路径
     Dim GccOutput           As String                                                   'g++输出的内容
     Dim GccOutputContent()  As String                                                   '逐行分开的g++输出内容
     Dim i                   As Long
     
-    '保存文件
-    frmOutput.edOutput.Text = ""
-    Open "temp.cpp" For Output As #1
-        Print #1, frmCodeWindow.SyntaxEdit.Text
-    Close #1
-    If Err.Number <> 0 Then
-        frmOutput.OutputLog "保存文件失败！"
-        Exit Sub
-    End If
+    '提示保存文件
+    For i = 0 To UBound(CurrentProject.Files)
+        If CurrentProject.Files(i).Changed Then
+            If NoSkinMsgBox("是否先保存所有文件再进行编译？", vbQuestion Or vbYesNo, "确认") = vbYes Then
+                Call mnuSave_Click
+            End If
+            Exit For
+        End If
+    Next i
 
     '使用g++进行编译
     '                   ↓转到当前程序所在的盘符                    ↓调用g++.exe进行编译    ↓编译为调试程序           ↓所有的cpp代码文件
     '命令格式: cmd /c 【盘符】: && cd "【g++.exe所在目录】" && "【g++.exe路径】" [-mwindows] -g -o "【输出路径】" "【cpp文件1】" "【cpp文件2】"
     '                                       ↑转到g++.exe所在的目录                 ↑是否为命令行程序   ↑编译的EXE输出路径
     frmOutput.OutputLog "正在启动g++进行编译..."
-    If GccPipe.InitDosIO("cmd /c " & Left(GetAppPath(), 1) & ": && " & _
+    ExePath = ProjectFolderPath & CurrentProject.ProjectName & ".exe"
+    GccCmdLine = "cmd /c " & Left(GetAppPath(), 1) & ": && " & _
        "cd """ & GetAppPath() & "GCC\bin"" && " & _
-       """" & GetAppPath() & "GCC\bin\g++.exe"" -g -o """ & GetAppPath() & "temp.exe"" """ & GetAppPath() & "temp.cpp""") = 0 Then
-       
+       """" & GetAppPath() & "GCC\bin\g++.exe"" -g -o """ & ExePath & """"
+    For i = 0 To UBound(CurrentProject.Files)
+        GccCmdLine = GccCmdLine & " """ & CurrentProject.Files(i).FilePath & """"
+    Next i
+    If GccPipe.InitDosIO(GccCmdLine) = 0 Then
         frmOutput.OutputLog "无法启动g++！"
     End If
     frmMain.DarkMenu.HideMenu                                                           '先隐藏菜单
@@ -820,7 +866,7 @@ Private Sub mnuRun_Click()
             End If
         Next i
     End If
-    If Dir(GetAppPath() & "temp.exe") = "" Then
+    If Dir(ExePath, vbNormal Or vbReadOnly Or vbHidden Or vbSystem) = "" Then           '如果exe路径不存在，则说明编译不成功
         frmOutput.OutputLog "编译失败！"
         Exit Sub
     Else
@@ -836,10 +882,10 @@ Private Sub mnuRun_Click()
         .lpSecurityDescriptor = 0
         .nLength = Len(sa)
     End With
-    If CreateProcess(0, GetAppPath() & "temp.exe", sa, sa, ByVal 1, _
+    If CreateProcess(0, ExePath, sa, sa, ByVal 1, _
        NORMAL_PRIORITY_CLASS Or CREATE_SUSPENDED, ByVal 0, ByVal 0, si, DebugProgramInfo) <> 1 Then
         
-        frmOutput.OutputLog "无法运行 " & GetAppPath() & "temp.exe"
+        frmOutput.OutputLog "无法运行 " & ExePath & " (" & Err.LastDllError & ")"
         Exit Sub
     End If
     
@@ -853,12 +899,14 @@ Private Sub mnuRun_Click()
     End If
     GdbPipe.DosInput "attach " & DebugProgramInfo.dwProcessId & vbCrLf                  '附加到待调试进程
     GdbPipe.DosInput "continue" & vbCrLf                                                '使目标进程继续运行
-    frmOutput.OutputLog "调试正在进行: gdb.exe 进程ID: " & GdbPipe.dwProcessId & "; temp.exe 进程ID: " & DebugProgramInfo.dwProcessId
+    frmOutput.OutputLog "调试正在进行: gdb.exe 进程ID: " & GdbPipe.dwProcessId & "(" & Hex(GdbPipe.dwProcessId) & "); " & _
+        Right(ExePath, Len(ExePath) - InStrRev(ExePath, "\")) & " 进程ID: " & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ")"
 End Sub
 
 '描述:      隐藏启动界面
 Public Sub HideStartupPage()
-    frmCreate.Hide
+    On Error Resume Next
+    Unload NewCreateWindow
     Me.TabBar.Visible = True
     
     Me.DarkMenu.MenuEnabled(3) = True                                                   '保存
@@ -869,10 +917,28 @@ Public Sub HideStartupPage()
     Me.DarkMenu.MenuEnabled(37) = True                                                  '调试
 End Sub
 
+'描述:      显示启动界面
+Public Sub ShowStartupPage()
+    frmCreate.DarkTitleBar.Visible = False                                              '不显示标题栏和边框
+    frmCreate.DarkWindowBorder.Bind = False
+    SetParent frmCreate.hWnd, Me.picClientArea.hWnd                                     '让“新建项目”作为本窗体的子窗体
+    frmCreate.Move 0, 0                                                                 '设置其位置
+    frmCreate.Show
+End Sub
+
 Private Sub DarkMenu_MenuItemClicked(MenuID As Integer)
     Select Case MenuID
         Case 1                                                                          '新建
             Call mnuNewProject_Click
+        
+        Case 2                                                                          '加载
+            Call mnuOpen_Click
+        
+        Case 3                                                                          '保存
+            Call mnuSave_Click
+        
+        Case 4                                                                          '另存为
+            Call mnuSaveAs_Click
         
         Case 52                                                                         '运行
             Call mnuRun_Click
@@ -896,11 +962,15 @@ Private Sub Form_Load()
     On Error Resume Next
     
     '启动LOGO
+    Me.Hide
     frmStartupLogo.Show
+    frmStartupLogo.SetFocus
+    Me.DarkTitleBar.MinButtonVisible = True
+    Me.DarkTitleBar.MaxButtonVisible = True
     
     '加载字符串资源
     If Not LoadLanguage(1001) Then
-        MsgBox "加载字符串资源失败！" & Err.Number & ": " & Err.Description, vbCritical, "错误"
+        NoSkinMsgBox "加载字符串资源失败！" & Err.Number & ": " & Err.Description, vbCritical, "错误"
     End If
     
     '调整“客户区”
@@ -969,12 +1039,12 @@ Private Sub Form_Load()
     Me.DockingPane.Options.ThemedFloatingFrames = True                                                                  '作为弹窗时边框保持样式
     Me.DockingPane.Options.ShowContentsWhileDragging = True
     If DockingPaneGlobalSettings.ResourceImages.LoadFromFile(GetAppPath & "Skin.dll", "Office2010Black.ini") = False Then
-        MsgBox "加载样式失败！", vbCritical, "错误"
+        NoSkinMsgBox "加载样式失败！", vbCritical, "错误"
     End If
     Me.DockingPane.VisualTheme = ThemeResource                                                                          '设置为从资源文件读取样式
     Me.DockingPane.PaintManager.SplitterSize = 2                                                                        '设置分割区域的大小
     
-    Me.SkinFramework.LoadSkin "Skin.cjstyles", "NormalBlue.ini"                                                         '加载皮肤
+    'Me.SkinFramework.LoadSkin "Skin.cjstyles", "NormalBlue.ini"                                                         '加载皮肤 [ToDo]
     
     '禁用不需要的菜单
     Me.DarkMenu.MenuEnabled(3) = False                                                                                  '保存
@@ -989,28 +1059,49 @@ Private Sub Form_Load()
     Set WindowObj = Me
     lpObj = ObjPtr(WindowObj)                                                                                           '获取指向窗口自身的物件指针
     SetPropA Me.hWnd, "WindowObj", lpObj                                                                                '记录窗口的物件地址，供子类化卸载窗体用
-    SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)
+    'SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)    '[ToDo]
     
     '显示启动页面
-    frmCreate.DarkTitleBar.Visible = False
-    frmCreate.DarkWindowBorder.Bind = False
-    SetParent frmCreate.hWnd, Me.picClientArea.hWnd
-    frmCreate.Move 0, 0
-    frmCreate.Show
+    Call ShowStartupPage
     picToolBar.Move 0, Me.DarkMenu.Top + Me.DarkMenu.Height
     Me.picClientArea.Move 0, Me.picToolBar.Top + Me.picToolBar.Height
     
     '卸载LOGO
     Unload frmStartupLogo
+    Me.Show
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    On Error Resume Next
+    
     '恢复窗口子类化
     SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(Me.hWnd, "PrevWndProc")
     
+    '检查“新建项目”窗口是否关闭
+    If frmCreateOptions.Visible = True Then
+        frmCreateOptions.Show
+        frmCreateOptions.SetFocus
+        Cancel = 1
+        Exit Sub
+    End If
+    If Not NewCreateWindow Is Nothing Then
+        If NewCreateWindow.Visible = True Then
+            NewCreateWindow.Show
+            NewCreateWindow.SetFocus
+            Cancel = 1
+            Exit Sub
+        End If
+    End If
+    
     '关闭所有窗口
-    Unload frmCodeWindow
+    Dim CodeWindow  As Form
+    IsExiting = True                                        '进入退出状态
+    For Each CodeWindow In CodeWindows                      '卸载所有代码窗体
+        Unload CodeWindow
+    Next CodeWindow
+    Unload NewCreateWindow
     Unload frmControlBox
+    Unload frmCreateOptions
     Unload frmCreate
     Unload frmProperties
     Unload frmSolutionExplorer
@@ -1052,4 +1143,22 @@ End Sub
 
 Private Sub picToolBar_Click()
     Me.picToolBar.ZOrder
+End Sub
+
+Private Sub TabBar_TabClick(frm As Form, Index As Integer)
+    On Error Resume Next
+    frm.SetFocus                                                                    '点了TabBar之后让对应的窗口获得焦点
+    frm.SyntaxEdit.SetFocus
+End Sub
+
+Private Sub TabBar_WindowDropIn(frm As Form, Index As Integer)
+    On Error Resume Next
+    frm.SetFocus                                                                    '窗口拖进来后让对应的窗口获得焦点
+    frm.SyntaxEdit.SetFocus
+End Sub
+
+Private Sub TabBar_WindowDropOut(frm As Form, Index As Integer)
+    On Error Resume Next
+    frm.SetFocus                                                                    '窗口拖出去后让对应的窗口获得焦点
+    frm.SyntaxEdit.SetFocus
 End Sub
