@@ -1,5 +1,39 @@
 【日志】
 
+# 2019.7.7
+
+为DarkTitleBar添加了MinVisible和MaxVisible属性，可以选择隐藏最大、最小化按钮。如果有点Bug，有时候运行之后最大、最小化按钮就会自己隐藏，不知道为啥，也修不好，所以干脆运行时用代码设置算了。
+
+完善DarkTreeView，有时使用SendMessageA没有以ByVal传参数，导致执行失败。现在已改成以ByVal方式传参数。
+
+为DarkTreeView的UserControl_Resize添加修改树视图颜色的代码，使树视图不会被该死的皮肤控件改成难看的颜色。
+
+修复TabBar的WindowDropOut事件不被触发的问题。
+
+添加了全局变量IsExiting，该变量在退出时被设为True，一些窗体（如代码框）在关闭时检测到该变量为True时才会关闭，否则只是隐藏。
+
+把frmCreate的大部分代码放到frmCreateOptions，因为frmCreateOptions会提供选项给用户设置，包括工程名称、路径等选项。
+
+改进一些用户体验，如把MsgBox函数改成无皮肤的NoSkinMsgBox函数、frmCreate frmCreateOptions响应Esc键等、代码窗口拖出拖入的时候会获取焦点。
+
+修复frmMain的Enabled设置成False时能调整大小的问题。（因为忘记设置frmMain.DarkWindowBorderSizer.Bind属性）
+
+编写了frmCreateOptions窗体的代码。
+
+添加frmMain的mnuSave_Click过程，该过程遍历CurrentProject.Files数组并保存所有标记为未保存的代码文件。
+
+把编译相关的代码中有关部分当前工程的路径和名称。
+
+把显示启动界面的过程单独写成一个过程ShowStartupPage。
+
+为frmSolutionExplorer里的树视图添加双击代码，这部分代码会通过搜索TvItemBinding数组中匹配的树视图列表项句柄，从而确定列表项对应的文件序号，使列表项双击的时候会显示对应的代码（可能存在Bug）。
+
+现在不直接操作frmCodeWindow，而是通过CreateNewCodeWindow函数来创建一个新的frmCodeWindow，再对创建的对象进行操作。因为CreateNewCodeWindow函数会往CodeWindows集合中添加新加的frmCodeWindow对象，使SourceFile结构中的TargetWindow能与其绑定。
+
+编写ShowSave和ShowOpen函数，分别用来显示保存和加载通用对话框。通用对话框疑似会遭到皮肤重绘毒手，但是编译之后似乎又不会。所以暂时先不管吧。
+
+初步定义工程各文件的信息结构雏形，包括工程主文件、工程代码文件等。
+
 # 2019.7.3
 
 移除了不同模块重复声明的一些API和函数，并把重复的操作改成子过程，让代码没这么臃肿。
