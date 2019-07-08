@@ -2,13 +2,14 @@ VERSION 5.00
 Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "Image.ocx"
 Begin VB.UserControl DarkImageButton 
    Appearance      =   0  'Flat
+   AutoRedraw      =   -1  'True
    BackColor       =   &H00302D2D&
-   ClientHeight    =   570
+   ClientHeight    =   576
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   2130
-   ScaleHeight     =   570
-   ScaleWidth      =   2130
+   ClientWidth     =   2136
+   ScaleHeight     =   576
+   ScaleWidth      =   2136
    ToolboxBitmap   =   "DarkImageButton.ctx":0000
    Begin VB.Timer tmrSetColor 
       Enabled         =   0   'False
