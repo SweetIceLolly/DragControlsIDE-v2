@@ -1,18 +1,18 @@
 VERSION 5.00
-Object = "{945E8FCC-830E-45CC-AF00-A012D5AE7451}#15.3#0"; "CO7FCA~1.OCX"
-Object = "{BD0C1912-66C3-49CC-8B12-7B347BF6C846}#15.3#0"; "COE2B7~1.OCX"
+Object = "{945E8FCC-830E-45CC-AF00-A012D5AE7451}#15.3#0"; "DOCKIN~1.OCX"
+Object = "{BD0C1912-66C3-49CC-8B12-7B347BF6C846}#15.3#0"; "SKINFR~1.OCX"
 Begin VB.Form frmMain 
    BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "拖控件大法"
-   ClientHeight    =   7905
+   ClientHeight    =   7908
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   16845
+   ClientWidth     =   16848
    FillColor       =   &H00FFFFFF&
    BeginProperty Font 
       Name            =   "Microsoft YaHei UI"
-      Size            =   8.25
+      Size            =   8.4
       Charset         =   0
       Weight          =   400
       Underline       =   0   'False
@@ -24,9 +24,9 @@ Begin VB.Form frmMain
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   7905
-   ScaleWidth      =   16845
-   StartUpPosition =   2  'CenterScreen
+   ScaleHeight     =   7908
+   ScaleWidth      =   16848
+   StartUpPosition =   2  '屏幕中心
    Begin DragControlsIDE.DarkMenu DarkMenu 
       Align           =   1  'Align Top
       Height          =   315
@@ -34,11 +34,11 @@ Begin VB.Form frmMain
       TabIndex        =   3
       Top             =   495
       Width           =   16845
-      _ExtentX        =   29713
-      _ExtentY        =   556
+      _ExtentX        =   29718
+      _ExtentY        =   550
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
-         Size            =   9.75
+         Size            =   9.6
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -618,8 +618,8 @@ Begin VB.Form frmMain
       ForeColor       =   &H80000008&
       Height          =   375
       Left            =   0
-      ScaleHeight     =   375
-      ScaleWidth      =   16845
+      ScaleHeight     =   372
+      ScaleWidth      =   16848
       TabIndex        =   2
       Top             =   804
       Width           =   16845
@@ -630,7 +630,7 @@ Begin VB.Form frmMain
       BorderStyle     =   0  'None
       BeginProperty Font 
          Name            =   "MS Sans Serif"
-         Size            =   8.25
+         Size            =   7.8
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -641,7 +641,7 @@ Begin VB.Form frmMain
       Height          =   5040
       Left            =   0
       ScaleHeight     =   5040
-      ScaleWidth      =   16845
+      ScaleWidth      =   16848
       TabIndex        =   0
       Top             =   1200
       Width           =   16845
@@ -652,8 +652,8 @@ Begin VB.Form frmMain
          ForeColor       =   &H80000008&
          Height          =   2055
          Left            =   8880
-         ScaleHeight     =   2055
-         ScaleWidth      =   5655
+         ScaleHeight     =   2052
+         ScaleWidth      =   5652
          TabIndex        =   4
          Top             =   720
          Visible         =   0   'False
@@ -665,16 +665,16 @@ Begin VB.Form frmMain
             Top             =   480
             Visible         =   0   'False
             Width           =   8175
-            _ExtentX        =   14420
-            _ExtentY        =   6376
+            _ExtentX        =   14415
+            _ExtentY        =   6371
          End
       End
    End
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorderSizer 
       Left            =   16200
       Top             =   7200
-      _ExtentX        =   847
-      _ExtentY        =   847
+      _ExtentX        =   677
+      _ExtentY        =   677
       Thickness       =   3
       MinWidth        =   400
       MinHeight       =   100
@@ -684,8 +684,8 @@ Begin VB.Form frmMain
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorder 
       Left            =   15600
       Top             =   7200
-      _ExtentX        =   847
-      _ExtentY        =   847
+      _ExtentX        =   677
+      _ExtentY        =   677
       MinWidth        =   400
       MinHeight       =   100
    End
@@ -696,8 +696,8 @@ Begin VB.Form frmMain
       TabIndex        =   1
       Top             =   0
       Width           =   16845
-      _ExtentX        =   29713
-      _ExtentY        =   873
+      _ExtentX        =   29718
+      _ExtentY        =   868
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -717,16 +717,16 @@ Begin VB.Form frmMain
       Left            =   14160
       Top             =   7320
       _Version        =   983043
-      _ExtentX        =   635
-      _ExtentY        =   635
+      _ExtentX        =   508
+      _ExtentY        =   508
       _StockProps     =   0
    End
    Begin XtremeDockingPane.DockingPane DockingPane 
       Left            =   14880
       Top             =   7320
       _Version        =   983043
-      _ExtentX        =   635
-      _ExtentY        =   635
+      _ExtentX        =   508
+      _ExtentY        =   508
       _StockProps     =   0
       VisualTheme     =   10
    End
@@ -811,7 +811,7 @@ Private Sub mnuNewProject_Click()
     Me.DarkWindowBorderSizer.Bind = False
     SetParent NewCreateWindow.hWnd, 0
     NewCreateWindow.Move Screen.Width / 2 - frmCreate.Width / 2, Screen.Height / 2 - frmCreate.Height / 2
-    NewCreateWindow.DarkTitleBar.Visible = True
+    NewCreateWindow.DarkTitleBar_NoDrop.Visible = True
     NewCreateWindow.DarkWindowBorder.Bind = True
     NewCreateWindow.Show
 End Sub
@@ -919,7 +919,7 @@ End Sub
 
 '描述:      显示启动界面
 Public Sub ShowStartupPage()
-    frmCreate.DarkTitleBar.Visible = False                                              '不显示标题栏和边框
+    frmCreate.DarkTitleBar_NoDrop.Visible = False                                              '不显示标题栏和边框
     frmCreate.DarkWindowBorder.Bind = False
     SetParent frmCreate.hWnd, Me.picClientArea.hWnd                                     '让“新建项目”作为本窗体的子窗体
     frmCreate.Move 0, 0                                                                 '设置其位置
@@ -1044,7 +1044,7 @@ Private Sub Form_Load()
     Me.DockingPane.VisualTheme = ThemeResource                                                                          '设置为从资源文件读取样式
     Me.DockingPane.PaintManager.SplitterSize = 2                                                                        '设置分割区域的大小
     
-    'Me.SkinFramework.LoadSkin "Skin.cjstyles", "NormalBlue.ini"                                                         '加载皮肤 [ToDo]
+    Me.SkinFramework.LoadSkin "Skin.cjstyles", "NormalBlue.ini"                                                         '加载皮肤 [ToDo]
     
     '禁用不需要的菜单
     Me.DarkMenu.MenuEnabled(3) = False                                                                                  '保存
@@ -1141,24 +1141,28 @@ Private Sub Form_Resize()
     Next Target
 End Sub
 
+Private Sub picClientArea_Click()
+
+End Sub
+
 Private Sub picToolBar_Click()
     Me.picToolBar.ZOrder
 End Sub
 
-Private Sub TabBar_TabClick(frm As Form, Index As Integer)
+Private Sub TabBar_TabClick(Frm As Form, Index As Integer)
     On Error Resume Next
-    frm.SetFocus                                                                    '点了TabBar之后让对应的窗口获得焦点
-    frm.SyntaxEdit.SetFocus
+    Frm.SetFocus                                                                    '点了TabBar之后让对应的窗口获得焦点
+    Frm.SyntaxEdit.SetFocus
 End Sub
 
-Private Sub TabBar_WindowDropIn(frm As Form, Index As Integer)
+Private Sub TabBar_WindowDropIn(Frm As Form, Index As Integer)
     On Error Resume Next
-    frm.SetFocus                                                                    '窗口拖进来后让对应的窗口获得焦点
-    frm.SyntaxEdit.SetFocus
+    Frm.SetFocus                                                                    '窗口拖进来后让对应的窗口获得焦点
+    Frm.SyntaxEdit.SetFocus
 End Sub
 
-Private Sub TabBar_WindowDropOut(frm As Form, Index As Integer)
+Private Sub TabBar_WindowDropOut(Frm As Form, Index As Integer)
     On Error Resume Next
-    frm.SetFocus                                                                    '窗口拖出去后让对应的窗口获得焦点
-    frm.SyntaxEdit.SetFocus
+    Frm.SetFocus                                                                    '窗口拖出去后让对应的窗口获得焦点
+    Frm.SyntaxEdit.SetFocus
 End Sub

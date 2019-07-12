@@ -6,18 +6,18 @@ Begin VB.Form frmCreateOptions
    ClientHeight    =   4500
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   7575
+   ClientWidth     =   7572
    Icon            =   "frmCreateOptions.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
    ScaleHeight     =   4500
-   ScaleWidth      =   7575
-   StartUpPosition =   2  'CenterScreen
+   ScaleWidth      =   7572
+   StartUpPosition =   2  '屏幕中心
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorder 
       Left            =   6840
       Top             =   3240
-      _ExtentX        =   847
-      _ExtentY        =   847
+      _ExtentX        =   677
+      _ExtentY        =   677
       Sizable         =   0   'False
    End
    Begin DragControlsIDE.DarkButton cmdCancel 
@@ -26,8 +26,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   8
       Top             =   3840
       Width           =   1335
-      _ExtentX        =   2355
-      _ExtentY        =   873
+      _ExtentX        =   2350
+      _ExtentY        =   868
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -46,8 +46,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   7
       Top             =   3840
       Width           =   1335
-      _ExtentX        =   2355
-      _ExtentY        =   873
+      _ExtentX        =   2350
+      _ExtentY        =   868
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -66,8 +66,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   3
       Top             =   1920
       Width           =   6975
-      _ExtentX        =   12303
-      _ExtentY        =   661
+      _ExtentX        =   12298
+      _ExtentY        =   656
       Enabled         =   -1  'True
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
@@ -86,8 +86,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   2
       Top             =   1320
       Width           =   1095
-      _ExtentX        =   1931
-      _ExtentY        =   661
+      _ExtentX        =   1926
+      _ExtentY        =   656
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -106,8 +106,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   0
       Top             =   720
       Width           =   4335
-      _ExtentX        =   7646
-      _ExtentY        =   661
+      _ExtentX        =   7641
+      _ExtentY        =   656
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -126,8 +126,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   9
       Top             =   0
       Width           =   7575
-      _ExtentX        =   13361
-      _ExtentY        =   873
+      _ExtentX        =   13356
+      _ExtentY        =   868
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -151,8 +151,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   1
       Top             =   1320
       Width           =   4335
-      _ExtentX        =   7646
-      _ExtentY        =   661
+      _ExtentX        =   7641
+      _ExtentY        =   656
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -170,8 +170,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   5
       Top             =   2880
       Width           =   6975
-      _ExtentX        =   12303
-      _ExtentY        =   661
+      _ExtentX        =   12298
+      _ExtentY        =   656
       Enabled         =   -1  'True
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
@@ -190,8 +190,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   6
       Top             =   3360
       Width           =   6975
-      _ExtentX        =   12303
-      _ExtentY        =   661
+      _ExtentX        =   12298
+      _ExtentY        =   656
       Enabled         =   -1  'True
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
@@ -210,8 +210,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   4
       Top             =   2400
       Width           =   6975
-      _ExtentX        =   12303
-      _ExtentY        =   661
+      _ExtentX        =   12298
+      _ExtentY        =   656
       Enabled         =   -1  'True
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
@@ -430,6 +430,10 @@ Private Sub cmdOK_Click()
     NewCodeWindow.SyntaxEdit.CurrPos.SetPos CodeStartLn, NewCodeWindow.SyntaxEdit.TabSize + 1           '把输入光标移动到适合的位置
     NewCodeWindow.SyntaxEdit.SetFocus                                                                   '让代码框获得焦点
     Unload Me
+End Sub
+
+Private Sub DarkTitleBar_GotFocus()
+
 End Sub
 
 Private Sub edPath_Change()
