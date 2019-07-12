@@ -1,5 +1,13 @@
 【日志】
 
+# 2019.7.12
+
+拖延了好几天（啊啊啊最近好忙），终于merge了404的pr...感谢404~
+
+把按钮控件的AutoRedraw设置成True，避免按钮闪烁。
+
+TabBar控件添加RemoveFormByForm方法。
+
 # 2019.7.7
 
 为DarkTitleBar添加了MinVisible和MaxVisible属性，可以选择隐藏最大、最小化按钮。如果有点Bug，有时候运行之后最大、最小化按钮就会自己隐藏，不知道为啥，也修不好，所以干脆运行时用代码设置算了。
