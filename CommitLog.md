@@ -1,5 +1,41 @@
 【日志】
 
+# 2019.7.20
+
+把DarkComboBox的Image控件换成PNG控件，因为Image控件的颜色会被皮肤控件影响。
+
+为TreeView添加了TVS_HASLINES样式。
+
+把TabBar控件的SetFocus方法重命名为SwitchTo。
+
+为TabBar控件添加SwitchToByForm方法，使TabBar能够切换到指定的窗口。
+
+为TabBar控件添加UpdateCaptions方法，使TabBar能够更新所有窗口的标题。
+
+添加了Win32Api.tlb文件到目录里。
+
+clsPipe.cls里DosOutput的EndingStr参数说明之前忘记写了，现在补上。
+
+把所有字符串常量都换成了变量，为之后切换语言的功能做准备。
+
+把加载语言、显示Logo的代码放到了frmMain的Initialize事件中，因为语言必须比用户控件更早加载。
+
+在创建工程后把工程文件标记为已更改。
+
+把工程资源管理器里的“工程”替换成了当前工程的名称，并支持重命名。重命名文件的时候会自动选择“.”前面的字符串。
+
+frmCreateOptions里的edProjectName文本框响应回车键。
+
+frmCreateOptions在Load的时候不关闭皮肤，改成显示选择目录对话框的时候才关闭皮肤，选择完目录之后就立即恢复皮肤。
+
+_保存工程的代码尚未编写！_
+
+处理了gdb附加进程失败的情况。
+
+处理了加载皮肤失败的清空。
+
+为LoadLanguage函数添加了一个可选参数LoadMenuTextOnly，因为加载语言需要分成两步进行，首先在frmMain的Initialize事件中加载各种字符串，然后再在frmMain的Load事件中加载所有菜单语言。
+
 # 2019.7.12
 
 拖延了好几天（啊啊啊最近好忙），终于merge了404的pr...感谢404~
