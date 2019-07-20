@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{CA73588D-282F-4592-9369-A61CC244FADA}#15.3#0"; "COCEAE~1.OCX"
+Object = "{CA73588D-282F-4592-9369-A61CC244FADA}#15.3#0"; "Codejock.SyntaxEdit.v15.3.1.ocx"
 Begin VB.Form frmCodeWindow 
    Appearance      =   0  'Flat
    BackColor       =   &H00302D2D&
@@ -149,6 +149,7 @@ Private Sub DarkTitleBar_GotFocus()
 End Sub
 
 Private Sub Form_Load()
+    Me.Caption = Lang_CodeWindow_Caption
     Me.DarkTitleBar.MaxButtonVisible = True
     Me.DarkTitleBar.MinButtonVisible = True
     
@@ -167,7 +168,7 @@ Private Sub Form_Load()
     Set WindowObj = Me
     lpObj = ObjPtr(WindowObj)                                                                                           '获取指向窗口自身的物件指针
     SetPropA Me.hWnd, "WindowObj", lpObj                                                                                '记录窗口的物件地址，供子类化卸载窗体用
-    SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)
+    'SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)    '[ToDo]
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
@@ -176,7 +177,7 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
         SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(Me.hWnd, "PrevWndProc")
     Else
         Cancel = 1
-        Unload Me
+        Me.Hide
     End If
 End Sub
 

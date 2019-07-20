@@ -1,13 +1,14 @@
 VERSION 5.00
+Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "Image.ocx"
 Begin VB.UserControl DarkComboBox 
    BackColor       =   &H00463F3F&
    ClientHeight    =   930
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   2370
+   ClientWidth     =   3015
    PropertyPages   =   "DarkComboBox.ctx":0000
    ScaleHeight     =   930
-   ScaleWidth      =   2370
+   ScaleWidth      =   3015
    ToolboxBitmap   =   "DarkComboBox.ctx":0013
    Begin VB.Timer tmrCheckFocus 
       Enabled         =   0   'False
@@ -34,6 +35,16 @@ Begin VB.UserControl DarkComboBox
       EndProperty
       Text            =   "Dark°·ComboBox"
    End
+   Begin ImageX.aicAlphaImage imgDropDown 
+      Height          =   360
+      Left            =   1680
+      Top             =   0
+      Width           =   360
+      _ExtentX        =   635
+      _ExtentY        =   635
+      Image           =   "DarkComboBox.ctx":0325
+      Enabled         =   0   'False
+   End
    Begin VB.Shape shpBorder 
       BorderColor     =   &H00CC7A00&
       Height          =   375
@@ -42,18 +53,10 @@ Begin VB.UserControl DarkComboBox
       Visible         =   0   'False
       Width           =   375
    End
-   Begin VB.Image imgDropDown 
-      Enabled         =   0   'False
-      Height          =   360
-      Left            =   1680
-      Picture         =   "DarkComboBox.ctx":0325
-      Top             =   0
-      Width           =   360
-   End
    Begin VB.Image imgMouseDown 
       Height          =   360
       Left            =   1560
-      Picture         =   "DarkComboBox.ctx":0A8F
+      Picture         =   "DarkComboBox.ctx":03D3
       Top             =   480
       Visible         =   0   'False
       Width           =   360
@@ -61,7 +64,7 @@ Begin VB.UserControl DarkComboBox
    Begin VB.Image imgMouseIn 
       Height          =   360
       Left            =   1080
-      Picture         =   "DarkComboBox.ctx":11F9
+      Picture         =   "DarkComboBox.ctx":0B3D
       Top             =   480
       Visible         =   0   'False
       Width           =   360
@@ -69,7 +72,7 @@ Begin VB.UserControl DarkComboBox
    Begin VB.Image imgNormal 
       Height          =   360
       Left            =   600
-      Picture         =   "DarkComboBox.ctx":1963
+      Picture         =   "DarkComboBox.ctx":12A7
       Top             =   480
       Visible         =   0   'False
       Width           =   360
@@ -113,7 +116,7 @@ End Sub
 Public Sub HideList()
     bDropDown = False
     Unload frmComboBoxListWindow
-    UserControl.imgDropDown.Picture = UserControl.imgNormal.Picture
+    UserControl.imgDropDown.LoadImage_FromStdPicture UserControl.imgNormal.Picture
     UserControl.BackColor = RGB(63, 63, 70)
     UserControl.shpBorder.Visible = False
 End Sub
@@ -170,7 +173,7 @@ Private Sub tmrCheckFocus_Timer()
     GetCursorPos pt
     Target = WindowFromPoint(pt.X, pt.Y)
     If Target <> UserControl.hWnd Then
-        UserControl.imgDropDown.Picture = UserControl.imgNormal.Picture
+        UserControl.imgDropDown.LoadImage_FromStdPicture UserControl.imgNormal.Picture
         UserControl.BackColor = RGB(63, 63, 70)
         UserControl.shpBorder.Visible = False
     End If
@@ -198,7 +201,7 @@ Private Sub UserControl_MouseDown(Button As Integer, Shift As Integer, X As Sing
     If Button = vbLeftButton Then
         bDown = True
         bDropDown = Not bDropDown
-        UserControl.imgDropDown.Picture = UserControl.imgMouseDown.Picture
+        UserControl.imgDropDown.LoadImage_FromStdPicture UserControl.imgMouseDown.Picture
         UserControl.BackColor = RGB(0, 122, 204)
         UserControl.shpBorder.Visible = False
         
@@ -246,7 +249,7 @@ End Sub
 
 Private Sub UserControl_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Not bDown And Not bDropDown Then
-        UserControl.imgDropDown.Picture = UserControl.imgMouseIn.Picture
+        UserControl.imgDropDown.LoadImage_FromStdPicture UserControl.imgMouseIn.Picture
         UserControl.BackColor = RGB(45, 45, 48)
         UserControl.shpBorder.Visible = True
         UserControl.tmrCheckFocus.Enabled = True

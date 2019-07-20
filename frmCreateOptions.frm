@@ -6,18 +6,18 @@ Begin VB.Form frmCreateOptions
    ClientHeight    =   4500
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   7572
+   ClientWidth     =   7575
    Icon            =   "frmCreateOptions.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
    ScaleHeight     =   4500
-   ScaleWidth      =   7572
-   StartUpPosition =   2  '屏幕中心
+   ScaleWidth      =   7575
+   StartUpPosition =   2  'CenterScreen
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorder 
       Left            =   6840
       Top             =   3240
-      _ExtentX        =   677
-      _ExtentY        =   677
+      _ExtentX        =   847
+      _ExtentY        =   847
       Sizable         =   0   'False
    End
    Begin DragControlsIDE.DarkButton cmdCancel 
@@ -26,8 +26,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   8
       Top             =   3840
       Width           =   1335
-      _ExtentX        =   2350
-      _ExtentY        =   868
+      _ExtentX        =   2355
+      _ExtentY        =   873
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -46,8 +46,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   7
       Top             =   3840
       Width           =   1335
-      _ExtentX        =   2350
-      _ExtentY        =   868
+      _ExtentX        =   2355
+      _ExtentY        =   873
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -66,8 +66,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   3
       Top             =   1920
       Width           =   6975
-      _ExtentX        =   12298
-      _ExtentY        =   656
+      _ExtentX        =   12303
+      _ExtentY        =   661
       Enabled         =   -1  'True
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
@@ -86,8 +86,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   2
       Top             =   1320
       Width           =   1095
-      _ExtentX        =   1926
-      _ExtentY        =   656
+      _ExtentX        =   1931
+      _ExtentY        =   661
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -106,8 +106,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   0
       Top             =   720
       Width           =   4335
-      _ExtentX        =   7641
-      _ExtentY        =   656
+      _ExtentX        =   7646
+      _ExtentY        =   661
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -126,8 +126,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   9
       Top             =   0
       Width           =   7575
-      _ExtentX        =   13356
-      _ExtentY        =   868
+      _ExtentX        =   13361
+      _ExtentY        =   873
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -151,8 +151,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   1
       Top             =   1320
       Width           =   4335
-      _ExtentX        =   7641
-      _ExtentY        =   656
+      _ExtentX        =   7646
+      _ExtentY        =   661
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -170,8 +170,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   5
       Top             =   2880
       Width           =   6975
-      _ExtentX        =   12298
-      _ExtentY        =   656
+      _ExtentX        =   12303
+      _ExtentY        =   661
       Enabled         =   -1  'True
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
@@ -190,8 +190,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   6
       Top             =   3360
       Width           =   6975
-      _ExtentX        =   12298
-      _ExtentY        =   656
+      _ExtentX        =   12303
+      _ExtentY        =   661
       Enabled         =   -1  'True
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
@@ -210,8 +210,8 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   4
       Top             =   2400
       Width           =   6975
-      _ExtentX        =   12298
-      _ExtentY        =   656
+      _ExtentX        =   12303
+      _ExtentY        =   661
       Enabled         =   -1  'True
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
@@ -297,11 +297,15 @@ Private Sub cmdBrowse_Click()
     With bi
         .hWndOwner = Me.hWnd
         .pidlRoot = 0
-        .lpszTitle = "选择项目文件夹"
+        .lpszTitle = Lang_CreateOptions_BrowseCaption
         .ulFlags = BIF_RETURNONLYFSDIRS Or BIF_USENEWUI
     End With
+    frmMain.SkinFramework.AutoApplyNewThreads = False                           '禁用皮肤
+    frmMain.SkinFramework.AutoApplyNewWindows = False
     pidl = SHBrowseForFolder(bi)
-    If pidl <> 0 Then                                                       '如果用户没有取消操作
+    frmMain.SkinFramework.AutoApplyNewThreads = True                            '启用皮肤
+    frmMain.SkinFramework.AutoApplyNewWindows = True
+    If pidl <> 0 Then                                                           '如果用户没有取消操作
         If SHGetPathFromIDList(pidl, NewPath) Then
             Me.edPath.Text = Split(NewPath, vbNullChar)(0)
         End If
@@ -322,13 +326,13 @@ Private Sub cmdOK_Click()
     If Dir(Me.edPath.Text, vbDirectory Or vbNormal Or vbReadOnly Or vbHidden Or vbSystem) = "" Then     '检测到路径不存在
         MkDir Me.edPath.Text                                                                                '尝试创建文件夹
         If Err.Number <> 0 Then                                                                             '创建文件夹失败
-            NoSkinMsgBox "指定的项目文件夹路径无效！", vbExclamation, "错误"
+            NoSkinMsgBox Lang_CreateOptions_InvalidProjectPath, vbExclamation, Lang_Msgbox_Error
             Me.cmdBrowse.SetFocus
             Exit Sub
         End If
     Else                                                                                                '检测到路径存在
         If (GetAttr(Me.edPath.Text) And vbDirectory) = 0 Then                                               '目标路径不是文件夹
-            NoSkinMsgBox "指定的项目文件夹路径无效！", vbExclamation, "错误"
+            NoSkinMsgBox Lang_CreateOptions_InvalidProjectPath, vbExclamation, Lang_Msgbox_Error
             Me.cmdBrowse.SetFocus
             Exit Sub
         End If
@@ -339,14 +343,14 @@ Private Sub cmdOK_Click()
     
     ProjCppPath = ProjPath & Me.edProjectName.Text & ".cpp"
     If Dir(ProjCppPath, vbDirectory Or vbNormal Or vbReadOnly Or vbHidden Or vbSystem) <> "" Then
-        If NoSkinMsgBox("检测到同名文件: " & ProjCppPath & " ，是否继续创建项目？目标文件将会被覆盖！", vbQuestion Or vbYesNo, "确认") <> vbYes Then
+        If NoSkinMsgBox(Lang_CreateOptions_NameConflict_1 & ProjCppPath & Lang_CreateOptions_NameConflict_2, vbQuestion Or vbYesNo, Lang_Msgbox_Confirm) <> vbYes Then
             Exit Sub
         End If
     End If
     Open ProjCppPath For Binary As #1
         If Err.Number <> 0 Then                                                                             '创建文件失败
             Close #1
-            NoSkinMsgBox "无法创建" & ProjCppPath & " :" & Err.Number & " - " & Err.Description & " ，请确保项目名称是有效的。", vbExclamation, "错误"
+            NoSkinMsgBox Lang_CreateOptions_CreationFailure_1 & ProjCppPath & " :" & Err.Number & " - " & Err.Description & Lang_CreateOptions_CreationFailure_2, vbExclamation, Lang_Msgbox_Error
             Me.edProjectName.SetFocus
             Exit Sub
         End If
@@ -361,7 +365,7 @@ Private Sub cmdOK_Click()
     End If
     frmMain.DockingPane.ShowPane 3                                                                      '显示工程资源管理器
     frmMain.DockingPane.ShowPane 5                                                                      '显示输出
-    frmMain.Caption = Me.edProjectName.Text & " - 拖控件大法"                                           '更改标题
+    frmMain.Caption = Me.edProjectName.Text & " - " & Lang_Application_Title                            '更改标题
     frmMain.SkinFramework.AutoApplyNewThreads = True                                                    '重新激活皮肤，否则代码框的滚动条就不能画到了
     frmMain.SkinFramework.AutoApplyNewWindows = True
     
@@ -371,9 +375,11 @@ Private Sub cmdOK_Click()
     Dim CodeStartLn     As Long                                                                         '生成代码后光标所在的行
     Dim NewCodeWindow   As frmCodeWindow                                                                '新创建的代码窗口
     
+    CurrentProject.ProjectName = Me.edProjectName.Text
     frmSolutionExplorer.SolutionTreeView.RemoveItem 0                                                   '清空树视图
-    ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem("工程")                                   '添加项目
-    ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem("源文件", ParentItem)
+    ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem(CurrentProject.ProjectName)               '添加项目
+    ProjectNameTvItem = ParentItem                                                                      '记录工程名称对应的树视图列表项
+    ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem(Lang_CreateOptions_SourceFile, ParentItem)
     frmSolutionExplorer.SolutionTreeView.ExpandItems frmSolutionExplorer.SolutionTreeView.GetParentItem(ParentItem), 2
     ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem(Me.edProjectName.Text & ".cpp", ParentItem)
     frmSolutionExplorer.SolutionTreeView.ExpandItems frmSolutionExplorer.SolutionTreeView.GetParentItem(ParentItem), 2
@@ -417,6 +423,7 @@ Private Sub cmdOK_Click()
         End With
         .ProjectType = NewProjectType
         .ProjectName = Me.edProjectName.Text
+        .Changed = True
     End With
     ProjectFolderPath = ProjPath                                                                        '设置项目文件夹路径
     ProjectFilePath = ProjPath & Me.edProjectName.Text & ".myproj"                                      '设置项目工程文件路径
@@ -430,10 +437,6 @@ Private Sub cmdOK_Click()
     NewCodeWindow.SyntaxEdit.CurrPos.SetPos CodeStartLn, NewCodeWindow.SyntaxEdit.TabSize + 1           '把输入光标移动到适合的位置
     NewCodeWindow.SyntaxEdit.SetFocus                                                                   '让代码框获得焦点
     Unload Me
-End Sub
-
-Private Sub DarkTitleBar_GotFocus()
-
 End Sub
 
 Private Sub edPath_Change()
@@ -454,6 +457,13 @@ Private Sub edProjectName_GotFocus()
     Me.edProjectName.SelLength = Len(Me.edProjectName.Text)
 End Sub
 
+Private Sub edProjectName_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then                                          '响应回车键
+        KeyAscii = 0
+        Call cmdOK_Click
+    End If
+End Sub
+
 Private Sub Form_KeyPress(KeyAscii As Integer)
     If KeyAscii = vbKeyEscape Then                                          '按下Esc键取消新建
         KeyAscii = 0
@@ -462,12 +472,21 @@ Private Sub Form_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub Form_Load()
+    Me.Caption = Lang_CreateOptions_Caption                                                 '设置窗口标题
+    Me.labTip(0).Caption = Lang_CreateOptions_ProjectNameLabel
+    Me.labTip(1).Caption = Lang_CreateOptions_ProjectFolderLabel
+    Me.chkIncludeStdio.Caption = Lang_CreateOptions_Include
+    Me.chkMain.Caption = Lang_CreateOptions_Main_NoArgs
+    Me.chkMainArgs.Caption = Lang_CreateOptions_Main_Args
+    Me.chkWinMain.Caption = Lang_CreateOptions_WinMain
+    Me.cmdBrowse.Caption = Lang_CreateOptions_Browse
+    Me.cmdCancel.Caption = Lang_CreateOptions_Cancel
+    Me.cmdOK.Caption = Lang_CreateOptions_OK
+    '---------------------------------------------------------------------
+    
     frmMain.Enabled = False
     frmMain.DarkWindowBorderSizer.Bind = False
     SetWindowPos Me.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE
-    
-    frmMain.SkinFramework.AutoApplyNewThreads = False
-    frmMain.SkinFramework.AutoApplyNewWindows = False
     
     '获取“我的文档”路径作为默认路径
     Dim MyDocPath(MAX_PATH) As Byte
@@ -480,22 +499,22 @@ Private Sub Form_Load()
     
     '根据不同的工程类型取不同的名字
     Select Case NewProjectType
-        Case 1
-            Me.edProjectName.Text = "新窗口程序"
-            Me.edPath.Text = MyDocPathStr & "\新窗口程序"
+    Case 1
+        Me.edProjectName.Text = Lang_CreateOptions_WindowProgram
+        Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_WindowProgram
         
-        Case 2
-            Me.edProjectName.Text = "新控制台程序"
-            Me.edPath.Text = MyDocPathStr & "\新控制台程序"
+    Case 2
+        Me.edProjectName.Text = Lang_CreateOptions_ConsoleProgram
+        Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_ConsoleProgram
         
-        Case 3
-            Me.edProjectName.Text = "新空白C++程序"
-            Me.edPath.Text = MyDocPathStr & "\新空白C++程序"
+    Case 3
+        Me.edProjectName.Text = Lang_CreateOptions_PlainCPP
+        Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_PlainCPP
         
     End Select
     Me.edProjectName.ToolTipText = Me.edProjectName.Text
     Me.edPath.ToolTipText = Me.edPath.Text
-    PathChanged = False                                                             '记录为用户没有更改过路径
+    PathChanged = False                                                         '记录为用户没有更改过路径
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)

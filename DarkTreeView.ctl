@@ -42,7 +42,7 @@ Dim wndTreeView     As Long                                                     
 Private Sub UserControl_Initialize()
     '创建树视图控件
     wndTreeView = CreateWindowExA(0, "SysTreeView32", "", _
-        WS_VISIBLE Or WS_CHILD Or TVS_HASBUTTONS Or TVS_SHOWSELALWAYS Or TVS_EDITLABELS Or TVS_FULLROWSELECT Or TVS_LINESATROOT Or TVS_LINESATROOT, _
+        WS_VISIBLE Or WS_CHILD Or TVS_HASBUTTONS Or TVS_SHOWSELALWAYS Or TVS_EDITLABELS Or TVS_FULLROWSELECT Or TVS_HASLINES Or TVS_LINESATROOT Or TVS_LINESATROOT, _
         0, 0, 100, 300, UserControl.hWnd, 0, App.hInstance, 0)  'Or TVS_HASLINES
 
     '设置控件颜色

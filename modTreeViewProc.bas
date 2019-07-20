@@ -128,3 +128,16 @@ Public Function TreeViewUserCtlWindowProc(ByVal hWnd As Long, ByVal uMsg As Long
     End Select
     TreeViewUserCtlWindowProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
 End Function
+
+'描述:      处理树视图里面编辑标签的文本框的选择文本（EM_SETSEL）消息，如果文本里面有“.”就只选择“.”前面的内容
+'参数:      hWnd: 窗口句柄
+'.          uMsg: 消息值
+'.          wParam, lParam: 消息的参数
+'返回值:    消息处理返回值
+Public Function TreeViewEditBoxWindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+    If uMsg = EM_SETSEL Then                                        '拦截选择文本消息，修改文本选择的位置
+        wParam = 0                                                      '从文本开头选择
+        lParam = GetPropA(hWnd, "DotPos")                               '选择到“.”的位置
+    End If
+    TreeViewEditBoxWindowProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
+End Function

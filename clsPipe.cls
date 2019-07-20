@@ -161,7 +161,7 @@ End Function
 
 '描述:      获取目标进程的输出
 '参数:      lpStrOutput: 存放输出的字符串
-'           EndingStr:
+'           EndingStr: 当输出的结尾是EndingStr时，就停止获取输出
 '返回值:    1代表获取成功，0代表获取失败
 Public Function DosOutput(ByRef strOutput As String, ByVal EndingStr As String) As Long
     Dim ret         As Long                                                 '函数的返回值
