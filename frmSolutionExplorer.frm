@@ -112,7 +112,8 @@ Public Sub SolutionTreeView_EndLabelEdit(ByVal hTreeItem As Long, NewText As Str
         If hTreeItem = ProjectNameTvItem Then                                                       '如果列表项对应的是工程名称，则更改工程文件名
             Name ProjectFilePath As ProjectFolderPath & NewText & ".myproj"
             If Err.Number <> 0 Then                                                                     '重命名时发生错误
-                NoSkinMsgBox "为文件" & ProjectFilePath & " 重命名失败: " & Err.Number & " - " & Err.Description, vbExclamation, "错误"
+                NoSkinMsgBox Lang_SolutionExplorer_RenameFailure_1 & ProjectFilePath & _
+                    Lang_SolutionExplorer_RenameFailure_2 & Err.Number & " - " & Err.Description, vbExclamation, Lang_Msgbox_Error
                 bCancel = True
             Else                                                                                        '重命名成功
                 ProjectFilePath = ProjectFolderPath & NewText & ".myproj"                                   '更新工程文件路径
@@ -125,7 +126,8 @@ Public Sub SolutionTreeView_EndLabelEdit(ByVal hTreeItem As Long, NewText As Str
             If hTreeItem = TvItemBinding(i).TVITEM Then                                                 '找到匹配的文件就进行重命名
                 Name CurrentProject.Files(i).FilePath As ProjectFolderPath & NewText
                 If Err.Number <> 0 Then                                                                     '重命名时发生错误
-                    NoSkinMsgBox "为文件" & CurrentProject.Files(i).FilePath & " 重命名失败: " & Err.Number & " - " & Err.Description, vbExclamation, "错误"
+                    NoSkinMsgBox Lang_SolutionExplorer_RenameFailure_1 & CurrentProject.Files(i).FilePath & _
+                        Lang_SolutionExplorer_RenameFailure_2 & Err.Number & " - " & Err.Description, vbExclamation, Lang_Msgbox_Error
                     bCancel = True
                 Else                                                                                        '重命名成功
                     CurrentProject.Files(i).TargetWindow.Caption = NewText                                      '刷新窗口标题

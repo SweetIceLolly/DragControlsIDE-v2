@@ -295,6 +295,7 @@ Public Sub AddForm(Frm As Form)
     Frm.DarkTitleBar.Visible = False
     Frm.DarkWindowBorder.Bind = False
     Frm.DarkWindowBorderSizer.Bind = False
+    SetWindowLongA Frm.hWnd, GWL_STYLE, GetWindowLongA(Frm.hWnd, GWL_STYLE) Or WS_CHILD
     Call Frm.Form_Resize
     
     Load WindowFrame(Index)
@@ -390,6 +391,7 @@ Private Sub ClickCover_MouseMove(Button As Integer, Shift As Integer, X As Singl
             Windows(DropIndex).DarkTitleBar.Visible = True
             Windows(DropIndex).DarkWindowBorder.Bind = True
             Windows(DropIndex).DarkWindowBorderSizer.Bind = True
+            SetWindowLongA Windows(DropIndex).hWnd, GWL_STYLE, GetWindowLongA(Windows(DropIndex).hWnd, GWL_STYLE) And (Not WS_CHILD)
             Call Windows(DropIndex).Form_Resize
             SetParent Windows(DropIndex).hWnd, 0
             Dim rtn As Long

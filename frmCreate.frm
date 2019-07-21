@@ -193,20 +193,26 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub cmdNewWindowProgram_Click()
+    On Error Resume Next
     frmCreateOptions.NewProjectType = 1                 '设置工程类型
     frmCreateOptions.Show                               '显示新建选项
+    frmCreateOptions.edProjectName.SetFocus
     Unload Me
 End Sub
 
 Private Sub cmdNewConsoleProgram_Click()
+    On Error Resume Next
     frmCreateOptions.NewProjectType = 2                 '设置工程类型
     frmCreateOptions.Show                               '显示新建选项
+    frmCreateOptions.edProjectName.SetFocus
     Unload Me
 End Sub
 
 Private Sub cmdNewPlainCpp_Click()
+    On Error Resume Next
     frmCreateOptions.NewProjectType = 3                 '设置工程类型
     frmCreateOptions.Show                               '显示新建选项
+    frmCreateOptions.edProjectName.SetFocus
     Unload Me
 End Sub
 

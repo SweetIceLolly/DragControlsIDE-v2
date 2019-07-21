@@ -406,12 +406,14 @@ Private Sub cmdOK_Click()
         GenCode = GenCode & "int main(int argc, char *argv[]) {" & vbCrLf & vbTab & vbCrLf & "}" & vbCrLf
          CodeStartLn = CodeStartLn + 1
     ElseIf Me.chkWinMain.Value = True Then                                                              'WinMain
+        '#include <windows.h>
+        '
         'int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
         '[Tab]
         '}
-        GenCode = GenCode & "int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {" & _
-             vbCrLf & vbTab & vbCrLf & "}" & vbCrLf
-         CodeStartLn = CodeStartLn + 1
+        GenCode = GenCode & "#include <windows.h>" & vbCrLf & vbCrLf & _
+            "int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {" & vbCrLf & vbTab & vbCrLf & "}" & vbCrLf
+         CodeStartLn = CodeStartLn + 3
     End If
     With CurrentProject                                                                                 '设置工程信息
         ReDim .Files(0)

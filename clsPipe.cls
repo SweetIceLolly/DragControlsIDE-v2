@@ -194,6 +194,7 @@ Public Function DosOutput(ByRef strOutput As String, ByVal EndingStr As String) 
             strOutput = strOutput & StrConv(OutData, vbUnicode)
             strOutput = Left(strOutput, Len(strOutput) - 1)
             strOutput = Replace(strOutput, vbLf, vbCrLf)
+            Debug.Print strOutput       'ToDO
         End If
         
         DoEvents                                                                '不要霸占着整条线程

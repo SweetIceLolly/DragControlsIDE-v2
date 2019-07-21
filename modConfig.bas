@@ -7,13 +7,20 @@ Attribute VB_Name = "modConfig"
 
 Option Explicit
 
-'定义cpp文件信息结构
+'定义代码文件信息结构
 Public Type SourceFile
     IsHeaderFile            As Boolean                                          '是否为头文件
     PrevLine                As Long                                             '保存时处在的行号
     Changed                 As Boolean                                          '文件是否被更改
     FilePath                As String                                           '文件路径
     TargetWindow            As frmCodeWindow                                    '对应的代码窗体，每次运行的时候都会不一样
+End Type
+
+'定义保存专用的代码文件信息结构
+Public Type SourceFile_Save
+    IsHeaderFile            As Boolean                                          '是否为头文件
+    PrevLine                As Long                                             '保存时处在的行号
+    FilePath                As String                                           '文件路径
 End Type
 
 '定义工程文件结构
@@ -24,6 +31,13 @@ Public Type ProjectFileStruct
     Files()                 As SourceFile                                       '工程包括的所有文件
 End Type
 
+'定义保存专用的工程文件结构
+Public Type ProjectFileStruct_Save
+    ProjectName             As String                                           '工程名称
+    ProjectType             As Integer                                          '工程类型。请见frmMain的ProjectType变量的说明
+    Files()                 As SourceFile_Save                                  '工程包括的所有文件
+End Type
+
 '定义树视图列表项与文件序号绑定的结构
 Public Type TvItemToFileIndex
     TVITEM                  As Long                                             '文件序号对应的树视图列表项
@@ -32,6 +46,12 @@ End Type
 
 '===================================================================
 '所有文本变量。由于是多语言，故使用变量来代表每一个出现的字符串
+Public Lang_Msgbox_Error                        As String
+Public Lang_Msgbox_Confirm                      As String
+Public Lang_TitleBar_Max                        As String
+Public Lang_TitleBar_Restore                    As String
+Public Lang_TitleBar_Min                        As String
+Public Lang_TitleBar_Close                      As String
 Public Lang_Application_Title                   As String
 Public Lang_Breakpoints_Caption                 As String
 Public Lang_CallStack_Caption                   As String
@@ -87,10 +107,12 @@ Public Lang_Main_RunFailed                      As String
 Public Lang_Main_GdbFailed                      As String
 Public Lang_Main_GdbAttachFailed_1              As String
 Public Lang_Main_GdbAttachFailed_2              As String
+Public Lang_Main_GdbLoadSymbolsFailure_1        As String
+Public Lang_Main_GdbLoadSymbolsFailure_2        As String
 Public Lang_Main_DebugInfo_1                    As String
 Public Lang_Main_DebugInfo_2                    As String
-Public Lang_Msgbox_Error                        As String
-Public Lang_Msgbox_Confirm                      As String
+Public Lang_SolutionExplorer_RenameFailure_1    As String
+Public Lang_SolutionExplorer_RenameFailure_2    As String
 '===================================================================
 
 Public CurrentProject       As ProjectFileStruct                                '当前工程的信息
@@ -141,6 +163,10 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     '读取所有的字符串
     Lang_Msgbox_Error = "错误"
     Lang_Msgbox_Confirm = "确认"
+    Lang_TitleBar_Max = "最大化"
+    Lang_TitleBar_Restore = "还原"
+    Lang_TitleBar_Min = "最小化"
+    Lang_TitleBar_Close = "关闭"
     Lang_Application_Title = "拖控件大法"
     Lang_Breakpoints_Caption = "断点列表"
     Lang_CallStack_Caption = "调用堆栈"
@@ -196,6 +222,10 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_Main_GdbFailed = "创建gdb调试管道失败！无法进行调试。"
     Lang_Main_GdbAttachFailed_1 = "gdb附加到进程"
     Lang_Main_GdbAttachFailed_2 = "失败，无法进行调试。"
+    Lang_Main_GdbLoadSymbolsFailure_1 = "从可执行文件"
+    Lang_Main_GdbLoadSymbolsFailure_2 = " 加载符号失败！这意味着断点、查看本地变量等功能将无法正常工作，是否继续调试？"
     Lang_Main_DebugInfo_1 = "调试正在进行: gdb.exe 进程ID: "
     Lang_Main_DebugInfo_2 = " 进程ID: "
+    Lang_SolutionExplorer_RenameFailure_1 = "为文件"
+    Lang_SolutionExplorer_RenameFailure_2 = " 重命名失败: "
 End Function

@@ -17,8 +17,8 @@ Begin VB.Form frmCodeWindow
    ScaleWidth      =   8865
    Begin XtremeSyntaxEdit.SyntaxEdit SyntaxEdit 
       Height          =   1935
-      Left            =   240
-      TabIndex        =   3
+      Left            =   1080
+      TabIndex        =   0
       Top             =   1200
       Width           =   3015
       _Version        =   983043
@@ -36,7 +36,7 @@ Begin VB.Form frmCodeWindow
       EndProperty
       EnableSyntaxColorization=   -1  'True
       ShowLineNumbers =   -1  'True
-      ShowSelectionMargin=   -1  'True
+      ShowSelectionMargin=   0   'False
       ShowScrollBarVert=   -1  'True
       ShowScrollBarHorz=   -1  'True
       EnableVirtualSpace=   0   'False
@@ -46,10 +46,23 @@ Begin VB.Form frmCodeWindow
       AutoCompleteWndWidth=   160
       EnableEditAccelerators=   -1  'True
    End
+   Begin VB.PictureBox picSelMargin 
+      Appearance      =   0  'Flat
+      BackColor       =   &H00333333&
+      BorderStyle     =   0  'None
+      ForeColor       =   &H80000008&
+      Height          =   1935
+      Left            =   240
+      ScaleHeight     =   1935
+      ScaleWidth      =   255
+      TabIndex        =   4
+      Top             =   1320
+      Width           =   255
+   End
    Begin DragControlsIDE.DarkComboBox comObject 
       Height          =   315
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   1
       Top             =   660
       Width           =   4095
       _ExtentX        =   7223
@@ -79,7 +92,7 @@ Begin VB.Form frmCodeWindow
    Begin DragControlsIDE.DarkTitleBar DarkTitleBar 
       Height          =   495
       Left            =   0
-      TabIndex        =   2
+      TabIndex        =   3
       Top             =   0
       Width           =   8865
       _ExtentX        =   15637
@@ -113,7 +126,7 @@ Begin VB.Form frmCodeWindow
    Begin DragControlsIDE.DarkComboBox comEvent 
       Height          =   315
       Left            =   4560
-      TabIndex        =   1
+      TabIndex        =   2
       Top             =   660
       Width           =   4095
       _ExtentX        =   7223
@@ -155,8 +168,9 @@ Private Sub Form_Load()
     
     '设置代码框属性
     Me.DarkTitleBar.Top = Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelY
-    Me.SyntaxEdit.Move Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelX, _
+    Me.SyntaxEdit.Move Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelX + Me.picSelMargin.Width, _
         Me.DarkTitleBar.Height + Me.comObject.Height + 240 + Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelY
+    Me.picSelMargin.Move Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelX, Me.SyntaxEdit.Top, 300, Me.SyntaxEdit.Height
     Me.SyntaxEdit.PaintManager.BackColor = RGB(28, 28, 28)
     Me.SyntaxEdit.PaintManager.LineNumberBackColor = RGB(28, 28, 28)
     Me.SyntaxEdit.PaintManager.LineNumberTextColor = RGB(86, 156, 214)
@@ -194,10 +208,12 @@ Public Sub Form_Resize()
         Me.comEvent.Top = 120
         Me.SyntaxEdit.Top = 120 + Me.comObject.Height + 120
     End If
+    Me.picSelMargin.Top = Me.SyntaxEdit.Top
     
     '设置代码框大小
     Me.SyntaxEdit.Width = Me.ScaleWidth - Me.SyntaxEdit.Left - Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelX
     Me.SyntaxEdit.Height = Me.ScaleHeight - Me.SyntaxEdit.Top - Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelY
+    Me.picSelMargin.Height = Me.SyntaxEdit.Height
     
     '设置组合框大小和位置
     Me.comObject.Width = (Me.ScaleWidth - 480) / 2
@@ -207,5 +223,6 @@ End Sub
 
 Private Sub SyntaxEdit_TextChanged(ByVal nRowFrom As Long, ByVal nRowTo As Long, ByVal nActions As Long)
     CurrentProject.Files(FileIndex).Changed = True                                                      '代码框的内容一旦更改，就把文件视为更改了
+    
 End Sub
 

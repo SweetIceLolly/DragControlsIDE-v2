@@ -3,6 +3,7 @@ Option Explicit
 
 'WndProc to handle messages for Dark♂ListView
 'Date: 2018.8.30
+'Huge modification made on 2019.7.21
 
 Public PrevListViewProc     As Long
 Public PrevLVUserCtlProc    As Long
@@ -61,9 +62,14 @@ Public Function ListViewProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wPara
         
         Case WM_SETFOCUS
             SetFocus GetPropA(hWnd, "PARENT_CTL")
-            
+        
+        Case LVM_SETBKCOLOR, LVM_SETTEXTBKCOLOR                                     '拦截调整背景颜色消息，防止被皮肤控件更改颜色
+            lParam = RGB(51, 51, 55)
+        
+        Case LVM_SETTEXTCOLOR                                                       '拦截调整文本颜色消息，防止被皮肤控件更改颜色
+            lParam = RGB(240, 240, 240)
+        
     End Select
-    ShowScrollBar hWnd, SB_BOTH, 0
     ListViewProc = CallWindowProc(PrevListViewProc, hWnd, uMsg, wParam, lParam)
 End Function
 
@@ -87,83 +93,7 @@ Public Function ListViewNotifyMessageProc(ByVal hWnd As Long, ByVal uMsg As Long
             Case NM_SETFOCUS
                 CtlList(GetPropA(nm.hWndFrom, "ID")).RaiseGotFocus
                 
-            Case NM_CUSTOMDRAW
-                CopyMemory nmcd, ByVal lParam, ByVal Len(nmcd)
-                Select Case nmcd.nmcd.dwDrawStage
-                    Case CDDS_PREPAINT
-                        ListViewNotifyMessageProc = CDRF_NOTIFYITEMDRAW
-                        Exit Function
-                    
-                    Case CDDS_ITEMPREPAINT, CDDS_ITEMPREPAINT Or CDDS_SUBITEM
-                        Dim hBrush      As Long
-                        Dim ItemRect    As RECT
-                        Dim tmpRect     As RECT
-                        Dim tmpStr(255) As Byte
-                        Dim lvi         As LVITEM
-                        Dim hRgn        As Long
-                        Dim i           As Long
-                        Dim hHeader     As Long
-                        
-                        SendMessageA nm.hWndFrom, LVM_GETITEMRECT, nmcd.nmcd.dwItemSpec, ByVal VarPtr(ItemRect)
-                        hRgn = CreateRectRgnIndirect(ItemRect)
-                        SetTextColor nmcd.nmcd.hDC, RGB(240, 240, 240)
-                        hHeader = SendMessageA(nm.hWndFrom, LVM_GETHEADER, 0, 0)
-                        If nmcd.nmcd.dwItemSpec >= SendMessageA(nm.hWndFrom, LVM_GETTOPINDEX, 0, 0) Then
-                            If SendMessageA(nm.hWndFrom, LVM_GETNEXTITEM, -1, LVNI_SELECTED Or LVIS_FOCUSED) = nmcd.nmcd.dwItemSpec Then
-                                hBrush = CreateSolidBrush(RGB(71, 71, 75))
-                                FillRgn nmcd.nmcd.hDC, hRgn, hBrush
-                                DeleteObject hBrush
-                                DeleteObject hRgn
-                                For i = 0 To SendMessageA(hHeader, HDM_GETITEMCOUNT, 0, 0)
-                                    With lvi
-                                        .mask = LVIF_TEXT
-                                        .cchTextMax = 255
-                                        .pszText = VarPtr(tmpStr(0))
-                                        .iItem = nmcd.nmcd.dwItemSpec
-                                        .iSubItem = i
-                                    End With
-                                    SendMessageA nm.hWndFrom, LVM_GETITEM, 0, ByVal VarPtr(lvi)
-                                    SendMessageA hHeader, HDM_GETITEMRECT, i, ByVal VarPtr(tmpRect)
-                                    SetRect tmpRect, tmpRect.Left + ItemRect.Left, ItemRect.Top, tmpRect.Right, ItemRect.bottom
-                                    DrawTextA nmcd.nmcd.hDC, Split(StrConv(tmpStr, vbUnicode), vbNullChar)(0), -1, _
-                                        tmpRect, DT_LEFT Or DT_END_ELLIPSIS Or DT_MODIFYSTRING
-                                Next i
-                            Else
-                                hBrush = CreateSolidBrush(RGB(51, 51, 55))
-                                FillRgn nmcd.nmcd.hDC, hRgn, hBrush
-                                DeleteObject hBrush
-                                DeleteObject hRgn
-                                For i = 0 To SendMessageA(hHeader, HDM_GETITEMCOUNT, 0, 0)
-                                    With lvi
-                                        .mask = LVIF_TEXT
-                                        .cchTextMax = 255
-                                        .pszText = VarPtr(tmpStr(0))
-                                        .iItem = nmcd.nmcd.dwItemSpec
-                                        .iSubItem = i
-                                    End With
-                                    SendMessageA nm.hWndFrom, LVM_GETITEM, 0, ByVal VarPtr(lvi)
-                                    SendMessageA hHeader, HDM_GETITEMRECT, i, ByVal VarPtr(tmpRect)
-                                    SetRect tmpRect, tmpRect.Left + ItemRect.Left, ItemRect.Top, tmpRect.Right, ItemRect.bottom
-                                    DrawTextA nmcd.nmcd.hDC, Split(StrConv(tmpStr, vbUnicode), vbNullChar)(0), -1, _
-                                        tmpRect, DT_LEFT Or DT_END_ELLIPSIS Or DT_MODIFYSTRING
-                                Next i
-                            End If
-                        End If
-                        
-                        ListViewNotifyMessageProc = CDRF_SKIPDEFAULT
-                        Exit Function
-                End Select
         End Select
-    ElseIf uMsg = WM_MOUSEWHEEL Then
-        If wParam < 0 Then
-            CtlList(GetPropA(hWnd, "ID")).ScrollDown
-            CtlList(GetPropA(hWnd, "ID")).ScrollDown
-            CtlList(GetPropA(hWnd, "ID")).ScrollDown
-        Else
-            CtlList(GetPropA(hWnd, "ID")).ScrollUp
-            CtlList(GetPropA(hWnd, "ID")).ScrollUp
-            CtlList(GetPropA(hWnd, "ID")).ScrollUp
-        End If
     End If
     ListViewNotifyMessageProc = CallWindowProc(PrevLVUserCtlProc, hWnd, uMsg, wParam, lParam)
 End Function

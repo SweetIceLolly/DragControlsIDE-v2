@@ -27,6 +27,12 @@ Begin VB.Form frmMain
    ScaleHeight     =   7905
    ScaleWidth      =   16845
    StartUpPosition =   2  'CenterScreen
+   Begin VB.Timer tmrCheckProcess 
+      Enabled         =   0   'False
+      Interval        =   50
+      Left            =   13440
+      Top             =   7320
+   End
    Begin DragControlsIDE.DarkMenu DarkMenu 
       Align           =   1  'Align Top
       Height          =   315
@@ -34,574 +40,582 @@ Begin VB.Form frmMain
       TabIndex        =   3
       Top             =   495
       Width           =   16845
-      _extentx        =   29713
-      _extenty        =   609
-      font            =   "frmMain.frx":1BCC2
-      menu_item_count =   70
-      levels_count    =   70
-      levels_2        =   1
-      levels_3        =   1
-      levels_4        =   1
-      levels_5        =   1
-      levels_6        =   1
-      levels_7        =   1
-      levels_9        =   1
-      levels_10       =   1
-      levels_11       =   1
-      levels_12       =   1
-      levels_13       =   1
-      levels_14       =   1
-      levels_15       =   1
-      levels_16       =   1
-      levels_17       =   1
-      levels_18       =   1
-      levels_19       =   1
-      levels_20       =   1
-      levels_21       =   1
-      levels_22       =   1
-      levels_23       =   1
-      levels_24       =   1
-      levels_25       =   1
-      levels_26       =   1
-      levels_27       =   1
-      levels_29       =   1
-      levels_30       =   1
-      levels_31       =   1
-      levels_32       =   1
-      levels_33       =   1
-      levels_34       =   1
-      levels_36       =   1
-      levels_37       =   1
-      levels_39       =   1
-      levels_40       =   2
-      levels_41       =   2
-      levels_42       =   2
-      levels_43       =   2
-      levels_44       =   2
-      levels_45       =   2
-      levels_46       =   2
-      levels_47       =   2
-      levels_48       =   2
-      levels_49       =   2
-      levels_50       =   2
-      levels_51       =   2
-      levels_52       =   2
-      levels_53       =   1
-      levels_54       =   1
-      levels_55       =   1
-      levels_56       =   1
-      levels_57       =   1
-      levels_58       =   1
-      levels_59       =   1
-      levels_60       =   1
-      levels_62       =   1
-      levels_63       =   1
-      levels_64       =   1
-      levels_65       =   1
-      levels_66       =   1
-      levels_68       =   1
-      levels_69       =   1
-      levels_70       =   1
-      menuid_1        =   0
-      menutext_1      =   "文件"
-      menuvisible_1   =   -1  'True
-      menuicon_1      =   "frmMain.frx":1BCF6
-      submenu_item_count_1=   6
-      submenuid_1_0   =   0
-      submenutext_1_1 =   "新建项目 (&N)       Ctrl+N"
-      submenuid_1_1   =   2
-      submenutext_1_2 =   "加载项目 (&O)       Ctrl+O"
-      submenuid_1_2   =   3
-      submenutext_1_3 =   "保存 (&S)           Ctrl+S"
-      submenuid_1_3   =   4
-      submenutext_1_4 =   "另存为 (&A)         Ctrl+Shift+S"
-      submenuid_1_4   =   5
-      submenutext_1_5 =   "-"
-      submenuid_1_5   =   6
-      submenutext_1_6 =   "退出 (&E)"
-      submenuid_1_6   =   7
-      menuid_2        =   1
-      menutext_2      =   "新建项目 (&N)       Ctrl+N"
-      menuvisible_2   =   -1  'True
-      menuicon_2      =   "frmMain.frx":1BD16
-      submenuid_2_0   =   0
-      menuid_3        =   2
-      menutext_3      =   "加载项目 (&O)       Ctrl+O"
-      menuvisible_3   =   -1  'True
-      menuicon_3      =   "frmMain.frx":1BD36
-      submenuid_3_0   =   0
-      menuid_4        =   3
-      menutext_4      =   "保存 (&S)           Ctrl+S"
-      menuvisible_4   =   -1  'True
-      menuicon_4      =   "frmMain.frx":1BD56
-      submenuid_4_0   =   0
-      menuid_5        =   4
-      menutext_5      =   "另存为 (&A)         Ctrl+Shift+S"
-      menuvisible_5   =   -1  'True
-      menuicon_5      =   "frmMain.frx":1BD76
-      submenuid_5_0   =   0
-      menuid_6        =   5
-      menutext_6      =   "-"
-      menuvisible_6   =   -1  'True
-      menuicon_6      =   "frmMain.frx":1BD96
-      submenuid_6_0   =   0
-      menuid_7        =   6
-      menutext_7      =   "退出 (&E)"
-      menuvisible_7   =   -1  'True
-      menuicon_7      =   "frmMain.frx":1BDB6
-      submenuid_7_0   =   0
-      menuid_8        =   7
-      menutext_8      =   "编辑"
-      menuvisible_8   =   -1  'True
-      menuicon_8      =   "frmMain.frx":1BDD6
-      submenu_item_count_8=   19
-      submenuid_8_0   =   0
-      submenutext_8_1 =   "撤销 (&U)           Ctrl+Z"
-      submenuid_8_1   =   9
-      submenutext_8_2 =   "重复 (&R)           Ctrl+Y"
-      submenuid_8_2   =   10
-      submenutext_8_3 =   "-"
-      submenuid_8_3   =   11
-      submenutext_8_4 =   "剪切 (&U)           Ctrl+X"
-      submenuid_8_4   =   12
-      submenutext_8_5 =   "复制 (&C)           Ctrl+C"
-      submenuid_8_5   =   13
-      submenutext_8_6 =   "粘贴 (&P)           Ctrl+V"
-      submenuid_8_6   =   14
-      submenutext_8_7 =   "全选 (&S)           Ctrl+A"
-      submenuid_8_7   =   15
-      submenutext_8_8 =   "删除行 (&D)         Ctrl+L"
-      submenuid_8_8   =   16
-      submenutext_8_9 =   "-"
-      submenuid_8_9   =   17
-      submenutext_8_10=   "查找 (&F)           Ctrl+F"
-      submenuid_8_10  =   18
-      submenutext_8_11=   "替换 (&E)           Ctrl+H"
-      submenuid_8_11  =   19
-      submenutext_8_12=   "-"
-      submenuid_8_12  =   20
-      submenutext_8_13=   "向外缩进 (&I)       Tab"
-      submenuid_8_13  =   21
-      submenutext_8_14=   "向内缩进 (&O)       Shift+Tab"
-      submenuid_8_14  =   22
-      submenutext_8_15=   "-"
-      submenuid_8_15  =   23
-      submenutext_8_16=   "添加/移除断点 (&B)  F9"
-      submenuid_8_16  =   24
-      submenutext_8_17=   "清除所有断点 (&M)"
-      submenuid_8_17  =   25
-      submenutext_8_18=   "-"
-      submenuid_8_18  =   26
-      submenutext_8_19=   "跳转到行 (&J)       Ctrl+G"
-      submenuid_8_19  =   27
-      menuid_9        =   8
-      menutext_9      =   "撤销 (&U)           Ctrl+Z"
-      menuvisible_9   =   -1  'True
-      menuicon_9      =   "frmMain.frx":1BDF6
-      submenuid_9_0   =   0
-      menuid_10       =   9
-      menutext_10     =   "重复 (&R)           Ctrl+Y"
-      menuvisible_10  =   -1  'True
-      menuicon_10     =   "frmMain.frx":1BE16
-      submenuid_10_0  =   0
-      menuid_11       =   10
-      menutext_11     =   "-"
-      menuvisible_11  =   -1  'True
-      menuicon_11     =   "frmMain.frx":1BE36
-      submenuid_11_0  =   0
-      menuid_12       =   11
-      menutext_12     =   "剪切 (&U)           Ctrl+X"
-      menuvisible_12  =   -1  'True
-      menuicon_12     =   "frmMain.frx":1BE56
-      submenuid_12_0  =   0
-      menuid_13       =   12
-      menutext_13     =   "复制 (&C)           Ctrl+C"
-      menuvisible_13  =   -1  'True
-      menuicon_13     =   "frmMain.frx":1BE76
-      submenuid_13_0  =   0
-      menuid_14       =   13
-      menutext_14     =   "粘贴 (&P)           Ctrl+V"
-      menuvisible_14  =   -1  'True
-      menuicon_14     =   "frmMain.frx":1BE96
-      submenuid_14_0  =   0
-      menuid_15       =   14
-      menutext_15     =   "全选 (&S)           Ctrl+A"
-      menuvisible_15  =   -1  'True
-      menuicon_15     =   "frmMain.frx":1BEB6
-      submenuid_15_0  =   0
-      menuid_16       =   15
-      menutext_16     =   "删除行 (&D)         Ctrl+L"
-      menuvisible_16  =   -1  'True
-      menuicon_16     =   "frmMain.frx":1BED6
-      submenuid_16_0  =   0
-      menuid_17       =   16
-      menutext_17     =   "-"
-      menuvisible_17  =   -1  'True
-      menuicon_17     =   "frmMain.frx":1BEF6
-      submenuid_17_0  =   0
-      menuid_18       =   17
-      menutext_18     =   "查找 (&F)           Ctrl+F"
-      menuvisible_18  =   -1  'True
-      menuicon_18     =   "frmMain.frx":1BF16
-      submenuid_18_0  =   0
-      menuid_19       =   18
-      menutext_19     =   "替换 (&E)           Ctrl+H"
-      menuvisible_19  =   -1  'True
-      menuicon_19     =   "frmMain.frx":1BF36
-      submenuid_19_0  =   0
-      menuid_20       =   19
-      menutext_20     =   "-"
-      menuvisible_20  =   -1  'True
-      menuicon_20     =   "frmMain.frx":1BF56
-      submenuid_20_0  =   0
-      menuid_21       =   20
-      menutext_21     =   "向外缩进 (&I)       Tab"
-      menuvisible_21  =   -1  'True
-      menuicon_21     =   "frmMain.frx":1BF76
-      submenuid_21_0  =   0
-      menuid_22       =   21
-      menutext_22     =   "向内缩进 (&O)       Shift+Tab"
-      menuvisible_22  =   -1  'True
-      menuicon_22     =   "frmMain.frx":1BF96
-      submenuid_22_0  =   0
-      menuid_23       =   22
-      menutext_23     =   "-"
-      menuvisible_23  =   -1  'True
-      menuicon_23     =   "frmMain.frx":1BFB6
-      submenuid_23_0  =   0
-      menuid_24       =   23
-      menutext_24     =   "添加/移除断点 (&B)  F9"
-      menuvisible_24  =   -1  'True
-      menuicon_24     =   "frmMain.frx":1BFD6
-      submenuid_24_0  =   0
-      menuid_25       =   24
-      menutext_25     =   "清除所有断点 (&M)"
-      menuvisible_25  =   -1  'True
-      menuicon_25     =   "frmMain.frx":1BFF6
-      submenuid_25_0  =   0
-      menuid_26       =   25
-      menutext_26     =   "-"
-      menuvisible_26  =   -1  'True
-      menuicon_26     =   "frmMain.frx":1C016
-      submenuid_26_0  =   0
-      menuid_27       =   26
-      menutext_27     =   "跳转到行 (&J)       Ctrl+G"
-      menuvisible_27  =   -1  'True
-      menuicon_27     =   "frmMain.frx":1C036
-      submenuid_27_0  =   0
-      menuid_28       =   27
-      menutext_28     =   "视图"
-      menuvisible_28  =   -1  'True
-      menuicon_28     =   "frmMain.frx":1C056
-      submenu_item_count_28=   6
-      submenuid_28_0  =   0
-      submenutext_28_1=   "工具栏 (&T)"
-      submenuid_28_1  =   29
-      submenutext_28_2=   "控件箱 (&C)"
-      submenuid_28_2  =   30
-      submenutext_28_3=   "属性 (&P)           F4"
-      submenuid_28_3  =   31
-      submenutext_28_4=   "工程资源管理器 (&M)"
-      submenuid_28_4  =   32
-      submenutext_28_5=   "错误列表 (&E)       Ctrl+E"
-      submenuid_28_5  =   33
-      submenutext_28_6=   "输出 (&O)           Ctrl+Alt+O"
-      submenuid_28_6  =   34
-      menuid_29       =   28
-      menutext_29     =   "工具栏 (&T)"
-      menucheckbox_29 =   -1  'True
-      menuvisible_29  =   -1  'True
-      menuicon_29     =   "frmMain.frx":1C076
-      submenuid_29_0  =   0
-      menuid_30       =   29
-      menutext_30     =   "控件箱 (&C)"
-      menucheckbox_30 =   -1  'True
-      menuvisible_30  =   -1  'True
-      menuicon_30     =   "frmMain.frx":1C096
-      submenuid_30_0  =   0
-      menuid_31       =   30
-      menutext_31     =   "属性 (&P)           F4"
-      menucheckbox_31 =   -1  'True
-      menuvisible_31  =   -1  'True
-      menuicon_31     =   "frmMain.frx":1C0B6
-      submenuid_31_0  =   0
-      menuid_32       =   31
-      menutext_32     =   "工程资源管理器 (&M)"
-      menucheckbox_32 =   -1  'True
-      menuvisible_32  =   -1  'True
-      menuicon_32     =   "frmMain.frx":1C0D6
-      submenuid_32_0  =   0
-      menuid_33       =   32
-      menutext_33     =   "错误列表 (&E)       Ctrl+E"
-      menucheckbox_33 =   -1  'True
-      menuvisible_33  =   -1  'True
-      menuicon_33     =   "frmMain.frx":1C0F6
-      submenuid_33_0  =   0
-      menuid_34       =   33
-      menutext_34     =   "输出 (&O)           Ctrl+Alt+O"
-      menucheckbox_34 =   -1  'True
-      menuvisible_34  =   -1  'True
-      menuicon_34     =   "frmMain.frx":1C116
-      submenuid_34_0  =   0
-      menuid_35       =   34
-      menutext_35     =   "生成"
-      menuvisible_35  =   -1  'True
-      menuicon_35     =   "frmMain.frx":1C136
-      submenu_item_count_35=   2
-      submenuid_35_0  =   0
-      submenutext_35_1=   "生成代码文件 (&C)"
-      submenuid_35_1  =   36
-      submenutext_35_2=   "生成可执行文件 (&E) Ctrl+F5"
-      submenuid_35_2  =   37
-      menuid_36       =   35
-      menutext_36     =   "生成代码文件 (&C)"
-      menuvisible_36  =   -1  'True
-      menuicon_36     =   "frmMain.frx":1C156
-      submenuid_36_0  =   0
-      menuid_37       =   36
-      menutext_37     =   "生成可执行文件 (&E) Ctrl+F5"
-      menuvisible_37  =   -1  'True
-      menuicon_37     =   "frmMain.frx":1C176
-      submenuid_37_0  =   0
-      menuid_38       =   37
-      menutext_38     =   "调试"
-      menuvisible_38  =   -1  'True
-      menuicon_38     =   "frmMain.frx":1C196
-      submenu_item_count_38=   9
-      submenuid_38_0  =   0
-      submenutext_38_1=   "窗口"
-      submenuid_38_1  =   39
-      submenutext_38_2=   "运行 (&R)           F5"
-      submenuid_38_2  =   53
-      submenutext_38_3=   "中断 (&B)           Ctrl+Alt+Break"
-      submenuid_38_3  =   54
-      submenutext_38_4=   "停止 (&E)           Shift+F5"
-      submenuid_38_4  =   55
-      submenutext_38_5=   "重新运行 (&S)       Ctrl+Shift+F5"
-      submenuid_38_5  =   56
-      submenutext_38_6=   "-"
-      submenuid_38_6  =   57
-      submenutext_38_7=   "逐语句执行         F11"
-      submenuid_38_7  =   58
-      submenutext_38_8=   "逐过程执行         F10"
-      submenuid_38_8  =   59
-      submenutext_38_9=   "执行到返回         Shift+F11"
-      submenuid_38_9  =   60
-      menuid_39       =   38
-      menutext_39     =   "窗口"
-      menuvisible_39  =   -1  'True
-      menuicon_39     =   "frmMain.frx":1C1B6
-      submenu_item_count_39=   13
-      submenuid_39_0  =   0
-      submenutext_39_1=   "断点列表 (&B)       Ctrl+Alt+B"
-      submenuid_39_1  =   40
-      submenutext_39_2=   "-"
-      submenuid_39_2  =   41
-      submenutext_39_3=   "监视窗口 (&W)       Ctrl+Alt+W"
-      submenuid_39_3  =   42
-      submenutext_39_4=   "本地 (&L)           Ctrl+Alt+L"
-      submenuid_39_4  =   43
-      submenutext_39_5=   "立即窗口 (&I)       Ctrl+Alt+I"
-      submenuid_39_5  =   44
-      submenutext_39_6=   "-"
-      submenuid_39_6  =   45
-      submenutext_39_7=   "调用堆栈 (&C)       Ctrl+Alt+C"
-      submenuid_39_7  =   46
-      submenutext_39_8=   "线程 (&T)           Ctrl+Alt+T"
-      submenuid_39_8  =   47
-      submenutext_39_9=   "模块 (&M)           Ctrl+Alt+M"
-      submenuid_39_9  =   48
-      submenutext_39_10=   "-"
-      submenuid_39_10 =   49
-      submenutext_39_11=   "内存 (&E)           Ctrl+Alt+E"
-      submenuid_39_11 =   50
-      submenutext_39_12=   "寄存器 (&R)         Ctrl+Alt+R"
-      submenuid_39_12 =   51
-      submenutext_39_13=   "反汇编 (&D)         Ctrl+Alt+D"
-      submenuid_39_13 =   52
-      menuid_40       =   39
-      menutext_40     =   "断点列表 (&B)       Ctrl+Alt+B"
-      menucheckbox_40 =   -1  'True
-      menuvisible_40  =   -1  'True
-      menuicon_40     =   "frmMain.frx":1C1D6
-      submenuid_40_0  =   0
-      menuid_41       =   40
-      menutext_41     =   "-"
-      menuvisible_41  =   -1  'True
-      menuicon_41     =   "frmMain.frx":1C1F6
-      submenuid_41_0  =   0
-      menuid_42       =   41
-      menutext_42     =   "监视窗口 (&W)       Ctrl+Alt+W"
-      menucheckbox_42 =   -1  'True
-      menuvisible_42  =   -1  'True
-      menuicon_42     =   "frmMain.frx":1C216
-      submenuid_42_0  =   0
-      menuid_43       =   42
-      menutext_43     =   "本地 (&L)           Ctrl+Alt+L"
-      menucheckbox_43 =   -1  'True
-      menuvisible_43  =   -1  'True
-      menuicon_43     =   "frmMain.frx":1C236
-      submenuid_43_0  =   0
-      menuid_44       =   43
-      menutext_44     =   "立即窗口 (&I)       Ctrl+Alt+I"
-      menucheckbox_44 =   -1  'True
-      menuvisible_44  =   -1  'True
-      menuicon_44     =   "frmMain.frx":1C256
-      submenuid_44_0  =   0
-      menuid_45       =   44
-      menutext_45     =   "-"
-      menuvisible_45  =   -1  'True
-      menuicon_45     =   "frmMain.frx":1C276
-      submenuid_45_0  =   0
-      menuid_46       =   45
-      menutext_46     =   "调用堆栈 (&C)       Ctrl+Alt+C"
-      menucheckbox_46 =   -1  'True
-      menuvisible_46  =   -1  'True
-      menuicon_46     =   "frmMain.frx":1C296
-      submenuid_46_0  =   0
-      menuid_47       =   46
-      menutext_47     =   "线程 (&T)           Ctrl+Alt+T"
-      menucheckbox_47 =   -1  'True
-      menuvisible_47  =   -1  'True
-      menuicon_47     =   "frmMain.frx":1C2B6
-      submenuid_47_0  =   0
-      menuid_48       =   47
-      menutext_48     =   "模块 (&M)           Ctrl+Alt+M"
-      menucheckbox_48 =   -1  'True
-      menuvisible_48  =   -1  'True
-      menuicon_48     =   "frmMain.frx":1C2D6
-      submenuid_48_0  =   0
-      menuid_49       =   48
-      menutext_49     =   "-"
-      menuvisible_49  =   -1  'True
-      menuicon_49     =   "frmMain.frx":1C2F6
-      submenuid_49_0  =   0
-      menuid_50       =   49
-      menutext_50     =   "内存 (&E)           Ctrl+Alt+E"
-      menucheckbox_50 =   -1  'True
-      menuvisible_50  =   -1  'True
-      menuicon_50     =   "frmMain.frx":1C316
-      submenuid_50_0  =   0
-      menuid_51       =   50
-      menutext_51     =   "寄存器 (&R)         Ctrl+Alt+R"
-      menucheckbox_51 =   -1  'True
-      menuvisible_51  =   -1  'True
-      menuicon_51     =   "frmMain.frx":1C336
-      submenuid_51_0  =   0
-      menuid_52       =   51
-      menutext_52     =   "反汇编 (&D)         Ctrl+Alt+D"
-      menucheckbox_52 =   -1  'True
-      menuvisible_52  =   -1  'True
-      menuicon_52     =   "frmMain.frx":1C356
-      submenuid_52_0  =   0
-      menuid_53       =   52
-      menutext_53     =   "运行 (&R)           F5"
-      menuvisible_53  =   -1  'True
-      menuicon_53     =   "frmMain.frx":1C376
-      submenuid_53_0  =   0
-      menuid_54       =   53
-      menutext_54     =   "中断 (&B)           Ctrl+Alt+Break"
-      menuvisible_54  =   -1  'True
-      menuicon_54     =   "frmMain.frx":1C396
-      submenuid_54_0  =   0
-      menuid_55       =   54
-      menutext_55     =   "停止 (&E)           Shift+F5"
-      menuvisible_55  =   -1  'True
-      menuicon_55     =   "frmMain.frx":1C3B6
-      submenuid_55_0  =   0
-      menuid_56       =   55
-      menutext_56     =   "重新运行 (&S)       Ctrl+Shift+F5"
-      menuvisible_56  =   -1  'True
-      menuicon_56     =   "frmMain.frx":1C3D6
-      submenuid_56_0  =   0
-      menuid_57       =   56
-      menutext_57     =   "-"
-      menuvisible_57  =   -1  'True
-      menuicon_57     =   "frmMain.frx":1C3F6
-      submenuid_57_0  =   0
-      menuid_58       =   57
-      menutext_58     =   "逐语句执行         F11"
-      menuvisible_58  =   -1  'True
-      menuicon_58     =   "frmMain.frx":1C416
-      submenuid_58_0  =   0
-      menuid_59       =   58
-      menutext_59     =   "逐过程执行         F10"
-      menuvisible_59  =   -1  'True
-      menuicon_59     =   "frmMain.frx":1C436
-      submenuid_59_0  =   0
-      menuid_60       =   59
-      menutext_60     =   "执行到返回         Shift+F11"
-      menuvisible_60  =   -1  'True
-      menuicon_60     =   "frmMain.frx":1C456
-      submenuid_60_0  =   0
-      menuid_61       =   60
-      menutext_61     =   "工具"
-      menuvisible_61  =   -1  'True
-      menuicon_61     =   "frmMain.frx":1C476
-      submenu_item_count_61=   5
-      submenuid_61_0  =   0
-      submenutext_61_1=   "窗口工具 (&W)"
-      submenuid_61_1  =   62
-      submenutext_61_2=   "消息拦截 (&M)"
-      submenuid_61_2  =   63
-      submenutext_61_3=   "进程 (&P)"
-      submenuid_61_3  =   64
-      submenutext_61_4=   "-"
-      submenuid_61_4  =   65
-      submenutext_61_5=   "设置 (&O)"
-      submenuid_61_5  =   66
-      menuid_62       =   61
-      menutext_62     =   "窗口工具 (&W)"
-      menuvisible_62  =   -1  'True
-      menuicon_62     =   "frmMain.frx":1C496
-      submenuid_62_0  =   0
-      menuid_63       =   62
-      menutext_63     =   "消息拦截 (&M)"
-      menuvisible_63  =   -1  'True
-      menuicon_63     =   "frmMain.frx":1C4B6
-      submenuid_63_0  =   0
-      menuid_64       =   63
-      menutext_64     =   "进程 (&P)"
-      menuvisible_64  =   -1  'True
-      menuicon_64     =   "frmMain.frx":1C4D6
-      submenuid_64_0  =   0
-      menuid_65       =   64
-      menutext_65     =   "-"
-      menuvisible_65  =   -1  'True
-      menuicon_65     =   "frmMain.frx":1C4F6
-      submenuid_65_0  =   0
-      menuid_66       =   65
-      menutext_66     =   "设置 (&O)"
-      menuvisible_66  =   -1  'True
-      menuicon_66     =   "frmMain.frx":1C516
-      submenuid_66_0  =   0
-      menuid_67       =   66
-      menutext_67     =   "帮助"
-      menuvisible_67  =   -1  'True
-      menuicon_67     =   "frmMain.frx":1C536
-      submenu_item_count_67=   3
-      submenuid_67_0  =   0
-      submenutext_67_1=   "帮助文档 (&D)       F1"
-      submenuid_67_1  =   68
-      submenutext_67_2=   "示例程序 (&E)"
-      submenuid_67_2  =   69
-      submenutext_67_3=   "关于拖控件大法 (&A) Ctrl+F1"
-      submenuid_67_3  =   70
-      menuid_68       =   67
-      menutext_68     =   "帮助文档 (&D)       F1"
-      menuvisible_68  =   -1  'True
-      menuicon_68     =   "frmMain.frx":1C556
-      submenuid_68_0  =   0
-      menuid_69       =   68
-      menutext_69     =   "示例程序 (&E)"
-      menuvisible_69  =   -1  'True
-      menuicon_69     =   "frmMain.frx":1C576
-      submenuid_69_0  =   0
-      menuid_70       =   69
-      menutext_70     =   "关于拖控件大法 (&A) Ctrl+F1"
-      menuvisible_70  =   -1  'True
-      menuicon_70     =   "frmMain.frx":1C596
-      submenuid_70_0  =   0
+      _ExtentX        =   29713
+      _ExtentY        =   609
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MENU_ITEM_COUNT =   70
+      LEVELS_COUNT    =   70
+      LEVELS_2        =   1
+      LEVELS_3        =   1
+      LEVELS_4        =   1
+      LEVELS_5        =   1
+      LEVELS_6        =   1
+      LEVELS_7        =   1
+      LEVELS_9        =   1
+      LEVELS_10       =   1
+      LEVELS_11       =   1
+      LEVELS_12       =   1
+      LEVELS_13       =   1
+      LEVELS_14       =   1
+      LEVELS_15       =   1
+      LEVELS_16       =   1
+      LEVELS_17       =   1
+      LEVELS_18       =   1
+      LEVELS_19       =   1
+      LEVELS_20       =   1
+      LEVELS_21       =   1
+      LEVELS_22       =   1
+      LEVELS_23       =   1
+      LEVELS_24       =   1
+      LEVELS_25       =   1
+      LEVELS_26       =   1
+      LEVELS_27       =   1
+      LEVELS_29       =   1
+      LEVELS_30       =   1
+      LEVELS_31       =   1
+      LEVELS_32       =   1
+      LEVELS_33       =   1
+      LEVELS_34       =   1
+      LEVELS_36       =   1
+      LEVELS_37       =   1
+      LEVELS_39       =   1
+      LEVELS_40       =   2
+      LEVELS_41       =   2
+      LEVELS_42       =   2
+      LEVELS_43       =   2
+      LEVELS_44       =   2
+      LEVELS_45       =   2
+      LEVELS_46       =   2
+      LEVELS_47       =   2
+      LEVELS_48       =   2
+      LEVELS_49       =   2
+      LEVELS_50       =   2
+      LEVELS_51       =   2
+      LEVELS_52       =   2
+      LEVELS_53       =   1
+      LEVELS_54       =   1
+      LEVELS_55       =   1
+      LEVELS_56       =   1
+      LEVELS_57       =   1
+      LEVELS_58       =   1
+      LEVELS_59       =   1
+      LEVELS_60       =   1
+      LEVELS_62       =   1
+      LEVELS_63       =   1
+      LEVELS_64       =   1
+      LEVELS_65       =   1
+      LEVELS_66       =   1
+      LEVELS_68       =   1
+      LEVELS_69       =   1
+      LEVELS_70       =   1
+      MenuID_1        =   0
+      MenuText_1      =   "文件"
+      MenuVisible_1   =   -1  'True
+      MenuIcon_1      =   "frmMain.frx":1BCC2
+      SUBMENU_ITEM_COUNT_1=   6
+      SubMenuID_1_0   =   0
+      SubMenuText_1_1 =   "新建项目 (&N)       Ctrl+N"
+      SubMenuID_1_1   =   2
+      SubMenuText_1_2 =   "加载项目 (&O)       Ctrl+O"
+      SubMenuID_1_2   =   3
+      SubMenuText_1_3 =   "保存 (&S)           Ctrl+S"
+      SubMenuID_1_3   =   4
+      SubMenuText_1_4 =   "另存为 (&A)         Ctrl+Shift+S"
+      SubMenuID_1_4   =   5
+      SubMenuText_1_5 =   "-"
+      SubMenuID_1_5   =   6
+      SubMenuText_1_6 =   "退出 (&E)"
+      SubMenuID_1_6   =   7
+      MenuID_2        =   1
+      MenuText_2      =   "新建项目 (&N)       Ctrl+N"
+      MenuVisible_2   =   -1  'True
+      MenuIcon_2      =   "frmMain.frx":1BCE2
+      SubMenuID_2_0   =   0
+      MenuID_3        =   2
+      MenuText_3      =   "加载项目 (&O)       Ctrl+O"
+      MenuVisible_3   =   -1  'True
+      MenuIcon_3      =   "frmMain.frx":1BD02
+      SubMenuID_3_0   =   0
+      MenuID_4        =   3
+      MenuText_4      =   "保存 (&S)           Ctrl+S"
+      MenuVisible_4   =   -1  'True
+      MenuIcon_4      =   "frmMain.frx":1BD22
+      SubMenuID_4_0   =   0
+      MenuID_5        =   4
+      MenuText_5      =   "另存为 (&A)         Ctrl+Shift+S"
+      MenuVisible_5   =   -1  'True
+      MenuIcon_5      =   "frmMain.frx":1BD42
+      SubMenuID_5_0   =   0
+      MenuID_6        =   5
+      MenuText_6      =   "-"
+      MenuVisible_6   =   -1  'True
+      MenuIcon_6      =   "frmMain.frx":1BD62
+      SubMenuID_6_0   =   0
+      MenuID_7        =   6
+      MenuText_7      =   "退出 (&E)"
+      MenuVisible_7   =   -1  'True
+      MenuIcon_7      =   "frmMain.frx":1BD82
+      SubMenuID_7_0   =   0
+      MenuID_8        =   7
+      MenuText_8      =   "编辑"
+      MenuVisible_8   =   -1  'True
+      MenuIcon_8      =   "frmMain.frx":1BDA2
+      SUBMENU_ITEM_COUNT_8=   19
+      SubMenuID_8_0   =   0
+      SubMenuText_8_1 =   "撤销 (&U)           Ctrl+Z"
+      SubMenuID_8_1   =   9
+      SubMenuText_8_2 =   "重复 (&R)           Ctrl+Y"
+      SubMenuID_8_2   =   10
+      SubMenuText_8_3 =   "-"
+      SubMenuID_8_3   =   11
+      SubMenuText_8_4 =   "剪切 (&U)           Ctrl+X"
+      SubMenuID_8_4   =   12
+      SubMenuText_8_5 =   "复制 (&C)           Ctrl+C"
+      SubMenuID_8_5   =   13
+      SubMenuText_8_6 =   "粘贴 (&P)           Ctrl+V"
+      SubMenuID_8_6   =   14
+      SubMenuText_8_7 =   "全选 (&S)           Ctrl+A"
+      SubMenuID_8_7   =   15
+      SubMenuText_8_8 =   "删除行 (&D)         Ctrl+L"
+      SubMenuID_8_8   =   16
+      SubMenuText_8_9 =   "-"
+      SubMenuID_8_9   =   17
+      SubMenuText_8_10=   "查找 (&F)           Ctrl+F"
+      SubMenuID_8_10  =   18
+      SubMenuText_8_11=   "替换 (&E)           Ctrl+H"
+      SubMenuID_8_11  =   19
+      SubMenuText_8_12=   "-"
+      SubMenuID_8_12  =   20
+      SubMenuText_8_13=   "向外缩进 (&I)       Tab"
+      SubMenuID_8_13  =   21
+      SubMenuText_8_14=   "向内缩进 (&O)       Shift+Tab"
+      SubMenuID_8_14  =   22
+      SubMenuText_8_15=   "-"
+      SubMenuID_8_15  =   23
+      SubMenuText_8_16=   "添加/移除断点 (&B)  F9"
+      SubMenuID_8_16  =   24
+      SubMenuText_8_17=   "清除所有断点 (&M)"
+      SubMenuID_8_17  =   25
+      SubMenuText_8_18=   "-"
+      SubMenuID_8_18  =   26
+      SubMenuText_8_19=   "跳转到行 (&J)       Ctrl+G"
+      SubMenuID_8_19  =   27
+      MenuID_9        =   8
+      MenuText_9      =   "撤销 (&U)           Ctrl+Z"
+      MenuVisible_9   =   -1  'True
+      MenuIcon_9      =   "frmMain.frx":1BDC2
+      SubMenuID_9_0   =   0
+      MenuID_10       =   9
+      MenuText_10     =   "重复 (&R)           Ctrl+Y"
+      MenuVisible_10  =   -1  'True
+      MenuIcon_10     =   "frmMain.frx":1BDE2
+      SubMenuID_10_0  =   0
+      MenuID_11       =   10
+      MenuText_11     =   "-"
+      MenuVisible_11  =   -1  'True
+      MenuIcon_11     =   "frmMain.frx":1BE02
+      SubMenuID_11_0  =   0
+      MenuID_12       =   11
+      MenuText_12     =   "剪切 (&U)           Ctrl+X"
+      MenuVisible_12  =   -1  'True
+      MenuIcon_12     =   "frmMain.frx":1BE22
+      SubMenuID_12_0  =   0
+      MenuID_13       =   12
+      MenuText_13     =   "复制 (&C)           Ctrl+C"
+      MenuVisible_13  =   -1  'True
+      MenuIcon_13     =   "frmMain.frx":1BE42
+      SubMenuID_13_0  =   0
+      MenuID_14       =   13
+      MenuText_14     =   "粘贴 (&P)           Ctrl+V"
+      MenuVisible_14  =   -1  'True
+      MenuIcon_14     =   "frmMain.frx":1BE62
+      SubMenuID_14_0  =   0
+      MenuID_15       =   14
+      MenuText_15     =   "全选 (&S)           Ctrl+A"
+      MenuVisible_15  =   -1  'True
+      MenuIcon_15     =   "frmMain.frx":1BE82
+      SubMenuID_15_0  =   0
+      MenuID_16       =   15
+      MenuText_16     =   "删除行 (&D)         Ctrl+L"
+      MenuVisible_16  =   -1  'True
+      MenuIcon_16     =   "frmMain.frx":1BEA2
+      SubMenuID_16_0  =   0
+      MenuID_17       =   16
+      MenuText_17     =   "-"
+      MenuVisible_17  =   -1  'True
+      MenuIcon_17     =   "frmMain.frx":1BEC2
+      SubMenuID_17_0  =   0
+      MenuID_18       =   17
+      MenuText_18     =   "查找 (&F)           Ctrl+F"
+      MenuVisible_18  =   -1  'True
+      MenuIcon_18     =   "frmMain.frx":1BEE2
+      SubMenuID_18_0  =   0
+      MenuID_19       =   18
+      MenuText_19     =   "替换 (&E)           Ctrl+H"
+      MenuVisible_19  =   -1  'True
+      MenuIcon_19     =   "frmMain.frx":1BF02
+      SubMenuID_19_0  =   0
+      MenuID_20       =   19
+      MenuText_20     =   "-"
+      MenuVisible_20  =   -1  'True
+      MenuIcon_20     =   "frmMain.frx":1BF22
+      SubMenuID_20_0  =   0
+      MenuID_21       =   20
+      MenuText_21     =   "向外缩进 (&I)       Tab"
+      MenuVisible_21  =   -1  'True
+      MenuIcon_21     =   "frmMain.frx":1BF42
+      SubMenuID_21_0  =   0
+      MenuID_22       =   21
+      MenuText_22     =   "向内缩进 (&O)       Shift+Tab"
+      MenuVisible_22  =   -1  'True
+      MenuIcon_22     =   "frmMain.frx":1BF62
+      SubMenuID_22_0  =   0
+      MenuID_23       =   22
+      MenuText_23     =   "-"
+      MenuVisible_23  =   -1  'True
+      MenuIcon_23     =   "frmMain.frx":1BF82
+      SubMenuID_23_0  =   0
+      MenuID_24       =   23
+      MenuText_24     =   "添加/移除断点 (&B)  F9"
+      MenuVisible_24  =   -1  'True
+      MenuIcon_24     =   "frmMain.frx":1BFA2
+      SubMenuID_24_0  =   0
+      MenuID_25       =   24
+      MenuText_25     =   "清除所有断点 (&M)"
+      MenuVisible_25  =   -1  'True
+      MenuIcon_25     =   "frmMain.frx":1BFC2
+      SubMenuID_25_0  =   0
+      MenuID_26       =   25
+      MenuText_26     =   "-"
+      MenuVisible_26  =   -1  'True
+      MenuIcon_26     =   "frmMain.frx":1BFE2
+      SubMenuID_26_0  =   0
+      MenuID_27       =   26
+      MenuText_27     =   "跳转到行 (&J)       Ctrl+G"
+      MenuVisible_27  =   -1  'True
+      MenuIcon_27     =   "frmMain.frx":1C002
+      SubMenuID_27_0  =   0
+      MenuID_28       =   27
+      MenuText_28     =   "视图"
+      MenuVisible_28  =   -1  'True
+      MenuIcon_28     =   "frmMain.frx":1C022
+      SUBMENU_ITEM_COUNT_28=   6
+      SubMenuID_28_0  =   0
+      SubMenuText_28_1=   "工具栏 (&T)"
+      SubMenuID_28_1  =   29
+      SubMenuText_28_2=   "控件箱 (&C)"
+      SubMenuID_28_2  =   30
+      SubMenuText_28_3=   "属性 (&P)           F4"
+      SubMenuID_28_3  =   31
+      SubMenuText_28_4=   "工程资源管理器 (&M)"
+      SubMenuID_28_4  =   32
+      SubMenuText_28_5=   "错误列表 (&E)       Ctrl+E"
+      SubMenuID_28_5  =   33
+      SubMenuText_28_6=   "输出 (&O)           Ctrl+Alt+O"
+      SubMenuID_28_6  =   34
+      MenuID_29       =   28
+      MenuText_29     =   "工具栏 (&T)"
+      MenuCheckBox_29 =   -1  'True
+      MenuVisible_29  =   -1  'True
+      MenuIcon_29     =   "frmMain.frx":1C042
+      SubMenuID_29_0  =   0
+      MenuID_30       =   29
+      MenuText_30     =   "控件箱 (&C)"
+      MenuCheckBox_30 =   -1  'True
+      MenuVisible_30  =   -1  'True
+      MenuIcon_30     =   "frmMain.frx":1C062
+      SubMenuID_30_0  =   0
+      MenuID_31       =   30
+      MenuText_31     =   "属性 (&P)           F4"
+      MenuCheckBox_31 =   -1  'True
+      MenuVisible_31  =   -1  'True
+      MenuIcon_31     =   "frmMain.frx":1C082
+      SubMenuID_31_0  =   0
+      MenuID_32       =   31
+      MenuText_32     =   "工程资源管理器 (&M)"
+      MenuCheckBox_32 =   -1  'True
+      MenuVisible_32  =   -1  'True
+      MenuIcon_32     =   "frmMain.frx":1C0A2
+      SubMenuID_32_0  =   0
+      MenuID_33       =   32
+      MenuText_33     =   "错误列表 (&E)       Ctrl+E"
+      MenuCheckBox_33 =   -1  'True
+      MenuVisible_33  =   -1  'True
+      MenuIcon_33     =   "frmMain.frx":1C0C2
+      SubMenuID_33_0  =   0
+      MenuID_34       =   33
+      MenuText_34     =   "输出 (&O)           Ctrl+Alt+O"
+      MenuCheckBox_34 =   -1  'True
+      MenuVisible_34  =   -1  'True
+      MenuIcon_34     =   "frmMain.frx":1C0E2
+      SubMenuID_34_0  =   0
+      MenuID_35       =   34
+      MenuText_35     =   "生成"
+      MenuVisible_35  =   -1  'True
+      MenuIcon_35     =   "frmMain.frx":1C102
+      SUBMENU_ITEM_COUNT_35=   2
+      SubMenuID_35_0  =   0
+      SubMenuText_35_1=   "生成代码文件 (&C)"
+      SubMenuID_35_1  =   36
+      SubMenuText_35_2=   "生成可执行文件 (&E) Ctrl+F5"
+      SubMenuID_35_2  =   37
+      MenuID_36       =   35
+      MenuText_36     =   "生成代码文件 (&C)"
+      MenuVisible_36  =   -1  'True
+      MenuIcon_36     =   "frmMain.frx":1C122
+      SubMenuID_36_0  =   0
+      MenuID_37       =   36
+      MenuText_37     =   "生成可执行文件 (&E) Ctrl+F5"
+      MenuVisible_37  =   -1  'True
+      MenuIcon_37     =   "frmMain.frx":1C142
+      SubMenuID_37_0  =   0
+      MenuID_38       =   37
+      MenuText_38     =   "调试"
+      MenuVisible_38  =   -1  'True
+      MenuIcon_38     =   "frmMain.frx":1C162
+      SUBMENU_ITEM_COUNT_38=   9
+      SubMenuID_38_0  =   0
+      SubMenuText_38_1=   "窗口"
+      SubMenuID_38_1  =   39
+      SubMenuText_38_2=   "运行 (&R)           F5"
+      SubMenuID_38_2  =   53
+      SubMenuText_38_3=   "中断 (&B)           Ctrl+Alt+Break"
+      SubMenuID_38_3  =   54
+      SubMenuText_38_4=   "停止 (&E)           Shift+F5"
+      SubMenuID_38_4  =   55
+      SubMenuText_38_5=   "重新运行 (&S)       Ctrl+Shift+F5"
+      SubMenuID_38_5  =   56
+      SubMenuText_38_6=   "-"
+      SubMenuID_38_6  =   57
+      SubMenuText_38_7=   "逐语句执行         F11"
+      SubMenuID_38_7  =   58
+      SubMenuText_38_8=   "逐过程执行         F10"
+      SubMenuID_38_8  =   59
+      SubMenuText_38_9=   "执行到返回         Shift+F11"
+      SubMenuID_38_9  =   60
+      MenuID_39       =   38
+      MenuText_39     =   "窗口"
+      MenuVisible_39  =   -1  'True
+      MenuIcon_39     =   "frmMain.frx":1C182
+      SUBMENU_ITEM_COUNT_39=   13
+      SubMenuID_39_0  =   0
+      SubMenuText_39_1=   "断点列表 (&B)       Ctrl+Alt+B"
+      SubMenuID_39_1  =   40
+      SubMenuText_39_2=   "-"
+      SubMenuID_39_2  =   41
+      SubMenuText_39_3=   "监视窗口 (&W)       Ctrl+Alt+W"
+      SubMenuID_39_3  =   42
+      SubMenuText_39_4=   "本地 (&L)           Ctrl+Alt+L"
+      SubMenuID_39_4  =   43
+      SubMenuText_39_5=   "立即窗口 (&I)       Ctrl+Alt+I"
+      SubMenuID_39_5  =   44
+      SubMenuText_39_6=   "-"
+      SubMenuID_39_6  =   45
+      SubMenuText_39_7=   "调用堆栈 (&C)       Ctrl+Alt+C"
+      SubMenuID_39_7  =   46
+      SubMenuText_39_8=   "线程 (&T)           Ctrl+Alt+T"
+      SubMenuID_39_8  =   47
+      SubMenuText_39_9=   "模块 (&M)           Ctrl+Alt+M"
+      SubMenuID_39_9  =   48
+      SubMenuText_39_10=   "-"
+      SubMenuID_39_10 =   49
+      SubMenuText_39_11=   "内存 (&E)           Ctrl+Alt+E"
+      SubMenuID_39_11 =   50
+      SubMenuText_39_12=   "寄存器 (&R)         Ctrl+Alt+R"
+      SubMenuID_39_12 =   51
+      SubMenuText_39_13=   "反汇编 (&D)         Ctrl+Alt+D"
+      SubMenuID_39_13 =   52
+      MenuID_40       =   39
+      MenuText_40     =   "断点列表 (&B)       Ctrl+Alt+B"
+      MenuCheckBox_40 =   -1  'True
+      MenuVisible_40  =   -1  'True
+      MenuIcon_40     =   "frmMain.frx":1C1A2
+      SubMenuID_40_0  =   0
+      MenuID_41       =   40
+      MenuText_41     =   "-"
+      MenuVisible_41  =   -1  'True
+      MenuIcon_41     =   "frmMain.frx":1C1C2
+      SubMenuID_41_0  =   0
+      MenuID_42       =   41
+      MenuText_42     =   "监视窗口 (&W)       Ctrl+Alt+W"
+      MenuCheckBox_42 =   -1  'True
+      MenuVisible_42  =   -1  'True
+      MenuIcon_42     =   "frmMain.frx":1C1E2
+      SubMenuID_42_0  =   0
+      MenuID_43       =   42
+      MenuText_43     =   "本地 (&L)           Ctrl+Alt+L"
+      MenuCheckBox_43 =   -1  'True
+      MenuVisible_43  =   -1  'True
+      MenuIcon_43     =   "frmMain.frx":1C202
+      SubMenuID_43_0  =   0
+      MenuID_44       =   43
+      MenuText_44     =   "立即窗口 (&I)       Ctrl+Alt+I"
+      MenuCheckBox_44 =   -1  'True
+      MenuVisible_44  =   -1  'True
+      MenuIcon_44     =   "frmMain.frx":1C222
+      SubMenuID_44_0  =   0
+      MenuID_45       =   44
+      MenuText_45     =   "-"
+      MenuVisible_45  =   -1  'True
+      MenuIcon_45     =   "frmMain.frx":1C242
+      SubMenuID_45_0  =   0
+      MenuID_46       =   45
+      MenuText_46     =   "调用堆栈 (&C)       Ctrl+Alt+C"
+      MenuCheckBox_46 =   -1  'True
+      MenuVisible_46  =   -1  'True
+      MenuIcon_46     =   "frmMain.frx":1C262
+      SubMenuID_46_0  =   0
+      MenuID_47       =   46
+      MenuText_47     =   "线程 (&T)           Ctrl+Alt+T"
+      MenuCheckBox_47 =   -1  'True
+      MenuVisible_47  =   -1  'True
+      MenuIcon_47     =   "frmMain.frx":1C282
+      SubMenuID_47_0  =   0
+      MenuID_48       =   47
+      MenuText_48     =   "模块 (&M)           Ctrl+Alt+M"
+      MenuCheckBox_48 =   -1  'True
+      MenuVisible_48  =   -1  'True
+      MenuIcon_48     =   "frmMain.frx":1C2A2
+      SubMenuID_48_0  =   0
+      MenuID_49       =   48
+      MenuText_49     =   "-"
+      MenuVisible_49  =   -1  'True
+      MenuIcon_49     =   "frmMain.frx":1C2C2
+      SubMenuID_49_0  =   0
+      MenuID_50       =   49
+      MenuText_50     =   "内存 (&E)           Ctrl+Alt+E"
+      MenuCheckBox_50 =   -1  'True
+      MenuVisible_50  =   -1  'True
+      MenuIcon_50     =   "frmMain.frx":1C2E2
+      SubMenuID_50_0  =   0
+      MenuID_51       =   50
+      MenuText_51     =   "寄存器 (&R)         Ctrl+Alt+R"
+      MenuCheckBox_51 =   -1  'True
+      MenuVisible_51  =   -1  'True
+      MenuIcon_51     =   "frmMain.frx":1C302
+      SubMenuID_51_0  =   0
+      MenuID_52       =   51
+      MenuText_52     =   "反汇编 (&D)         Ctrl+Alt+D"
+      MenuCheckBox_52 =   -1  'True
+      MenuVisible_52  =   -1  'True
+      MenuIcon_52     =   "frmMain.frx":1C322
+      SubMenuID_52_0  =   0
+      MenuID_53       =   52
+      MenuText_53     =   "运行 (&R)           F5"
+      MenuVisible_53  =   -1  'True
+      MenuIcon_53     =   "frmMain.frx":1C342
+      SubMenuID_53_0  =   0
+      MenuID_54       =   53
+      MenuText_54     =   "中断 (&B)           Ctrl+Alt+Break"
+      MenuVisible_54  =   -1  'True
+      MenuIcon_54     =   "frmMain.frx":1C362
+      SubMenuID_54_0  =   0
+      MenuID_55       =   54
+      MenuText_55     =   "停止 (&E)           Shift+F5"
+      MenuVisible_55  =   -1  'True
+      MenuIcon_55     =   "frmMain.frx":1C382
+      SubMenuID_55_0  =   0
+      MenuID_56       =   55
+      MenuText_56     =   "重新运行 (&S)       Ctrl+Shift+F5"
+      MenuVisible_56  =   -1  'True
+      MenuIcon_56     =   "frmMain.frx":1C3A2
+      SubMenuID_56_0  =   0
+      MenuID_57       =   56
+      MenuText_57     =   "-"
+      MenuVisible_57  =   -1  'True
+      MenuIcon_57     =   "frmMain.frx":1C3C2
+      SubMenuID_57_0  =   0
+      MenuID_58       =   57
+      MenuText_58     =   "逐语句执行         F11"
+      MenuVisible_58  =   -1  'True
+      MenuIcon_58     =   "frmMain.frx":1C3E2
+      SubMenuID_58_0  =   0
+      MenuID_59       =   58
+      MenuText_59     =   "逐过程执行         F10"
+      MenuVisible_59  =   -1  'True
+      MenuIcon_59     =   "frmMain.frx":1C402
+      SubMenuID_59_0  =   0
+      MenuID_60       =   59
+      MenuText_60     =   "执行到返回         Shift+F11"
+      MenuVisible_60  =   -1  'True
+      MenuIcon_60     =   "frmMain.frx":1C422
+      SubMenuID_60_0  =   0
+      MenuID_61       =   60
+      MenuText_61     =   "工具"
+      MenuVisible_61  =   -1  'True
+      MenuIcon_61     =   "frmMain.frx":1C442
+      SUBMENU_ITEM_COUNT_61=   5
+      SubMenuID_61_0  =   0
+      SubMenuText_61_1=   "窗口工具 (&W)"
+      SubMenuID_61_1  =   62
+      SubMenuText_61_2=   "消息拦截 (&M)"
+      SubMenuID_61_2  =   63
+      SubMenuText_61_3=   "进程 (&P)"
+      SubMenuID_61_3  =   64
+      SubMenuText_61_4=   "-"
+      SubMenuID_61_4  =   65
+      SubMenuText_61_5=   "设置 (&O)"
+      SubMenuID_61_5  =   66
+      MenuID_62       =   61
+      MenuText_62     =   "窗口工具 (&W)"
+      MenuVisible_62  =   -1  'True
+      MenuIcon_62     =   "frmMain.frx":1C462
+      SubMenuID_62_0  =   0
+      MenuID_63       =   62
+      MenuText_63     =   "消息拦截 (&M)"
+      MenuVisible_63  =   -1  'True
+      MenuIcon_63     =   "frmMain.frx":1C482
+      SubMenuID_63_0  =   0
+      MenuID_64       =   63
+      MenuText_64     =   "进程 (&P)"
+      MenuVisible_64  =   -1  'True
+      MenuIcon_64     =   "frmMain.frx":1C4A2
+      SubMenuID_64_0  =   0
+      MenuID_65       =   64
+      MenuText_65     =   "-"
+      MenuVisible_65  =   -1  'True
+      MenuIcon_65     =   "frmMain.frx":1C4C2
+      SubMenuID_65_0  =   0
+      MenuID_66       =   65
+      MenuText_66     =   "设置 (&O)"
+      MenuVisible_66  =   -1  'True
+      MenuIcon_66     =   "frmMain.frx":1C4E2
+      SubMenuID_66_0  =   0
+      MenuID_67       =   66
+      MenuText_67     =   "帮助"
+      MenuVisible_67  =   -1  'True
+      MenuIcon_67     =   "frmMain.frx":1C502
+      SUBMENU_ITEM_COUNT_67=   3
+      SubMenuID_67_0  =   0
+      SubMenuText_67_1=   "帮助文档 (&D)       F1"
+      SubMenuID_67_1  =   68
+      SubMenuText_67_2=   "示例程序 (&E)"
+      SubMenuID_67_2  =   69
+      SubMenuText_67_3=   "关于拖控件大法 (&A) Ctrl+F1"
+      SubMenuID_67_3  =   70
+      MenuID_68       =   67
+      MenuText_68     =   "帮助文档 (&D)       F1"
+      MenuVisible_68  =   -1  'True
+      MenuIcon_68     =   "frmMain.frx":1C522
+      SubMenuID_68_0  =   0
+      MenuID_69       =   68
+      MenuText_69     =   "示例程序 (&E)"
+      MenuVisible_69  =   -1  'True
+      MenuIcon_69     =   "frmMain.frx":1C542
+      SubMenuID_69_0  =   0
+      MenuID_70       =   69
+      MenuText_70     =   "关于拖控件大法 (&A) Ctrl+F1"
+      MenuVisible_70  =   -1  'True
+      MenuIcon_70     =   "frmMain.frx":1C562
+      SubMenuID_70_0  =   0
    End
    Begin VB.PictureBox picToolBar 
       Appearance      =   0  'Flat
@@ -657,29 +671,29 @@ Begin VB.Form frmMain
             Top             =   480
             Visible         =   0   'False
             Width           =   8175
-            _extentx        =   14420
-            _extenty        =   6376
+            _ExtentX        =   14420
+            _ExtentY        =   6376
          End
       End
    End
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorderSizer 
       Left            =   16200
       Top             =   7200
-      _extentx        =   847
-      _extenty        =   847
-      thickness       =   3
-      minwidth        =   400
-      minheight       =   100
-      transparency    =   1
-      usesetparent    =   0   'False
+      _ExtentX        =   847
+      _ExtentY        =   847
+      Thickness       =   3
+      MinWidth        =   400
+      MinHeight       =   100
+      Transparency    =   1
+      UseSetParent    =   0   'False
    End
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorder 
       Left            =   15600
       Top             =   7200
-      _extentx        =   847
-      _extenty        =   847
-      minwidth        =   400
-      minheight       =   100
+      _ExtentX        =   847
+      _ExtentY        =   847
+      MinWidth        =   400
+      MinHeight       =   100
    End
    Begin DragControlsIDE.DarkTitleBar DarkTitleBar 
       Align           =   1  'Align Top
@@ -688,14 +702,22 @@ Begin VB.Form frmMain
       TabIndex        =   1
       Top             =   0
       Width           =   16845
-      _extentx        =   29713
-      _extenty        =   873
-      font            =   "frmMain.frx":1C5B6
-      caption         =   "拖控件大法"
-      maxbuttonvisible=   0   'False
-      minbuttonvisible=   0   'False
-      bindcaption     =   -1  'True
-      picture         =   "frmMain.frx":1C5EA
+      _ExtentX        =   29713
+      _ExtentY        =   873
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "拖控件大法"
+      MaxButtonVisible=   0   'False
+      MinButtonVisible=   0   'False
+      BindCaption     =   -1  'True
+      Picture         =   "frmMain.frx":1C582
    End
    Begin XtremeSkinFramework.SkinFramework SkinFramework 
       Left            =   14160
@@ -777,13 +799,14 @@ Private Sub mnuSave_Click()
     Next i
     
     If CurrentProject.Changed Then                                                      '如果工程文件尚未保存
+        'ToDo
         Open ProjectFilePath For Binary As #1                                               '保存工程文件
             If Err.Number <> 0 Then
                 Close #1
                 NoSkinMsgBox Lang_Main_SaveFailure_1 & ProjectFilePath & " :" & Err.Number & " - " & Err.Description, vbExclamation, Lang_Msgbox_Error
                 Exit Sub
             End If
-            'Put #1, , CurrentProject                                                           'ToDo: Make another user type or what?
+            'Put #1, , CurrentProject
         Close #1
         CurrentProject.Changed = False                                                          '标记工程文件为已保存
     End If
@@ -814,32 +837,40 @@ End Sub
 Private Sub mnuRun_Click()
     On Error Resume Next
     
-    Dim GccPipe             As New clsPipe                                              'g++管道
-    Dim GccCmdLine          As String                                                   'g++命令行
-    Dim ExePath             As String                                                   'exe文件编译路径
-    Dim PipeOutput          As String                                                   '管道输出的内容
-    Dim GccOutputContent()  As String                                                   '逐行分开的g++输出内容
+    Dim GccPipe             As New clsPipe                                      'g++管道
+    Dim GccCmdLine          As String                                           'g++命令行
+    Dim ExePath             As String                                           'exe文件编译路径
+    Dim PipeOutput          As String                                           '管道输出的内容
+    Dim GccOutputContent()  As String                                           '逐行分开的g++输出内容
     Dim i                   As Long
     
     '提示保存文件
-    For i = 0 To UBound(CurrentProject.Files)
-        If CurrentProject.Files(i).Changed Then
-            If NoSkinMsgBox(Lang_Main_SaveBeforeCompile, vbQuestion Or vbYesNo, Lang_Msgbox_Confirm) = vbYes Then
-                Call mnuSave_Click
+    Dim NeedToSaveFiles     As Boolean                                          '是否需要提示保存文件
+    If CurrentProject.Changed Then                                              '如果工程文件需要保存，就提示保存文件
+        NeedToSaveFiles = True
+    Else                                                                        '或者有任意一个代码文件需要保存，就提示保存文件
+        For i = 0 To UBound(CurrentProject.Files)
+            If CurrentProject.Files(i).Changed Then
+                NeedToSaveFiles = True
+                Exit For
             End If
-            Exit For
+        Next i
+    End If
+    If NeedToSaveFiles Then                                                     '提示保存文件
+        If NoSkinMsgBox(Lang_Main_SaveBeforeCompile, vbQuestion Or vbYesNo, Lang_Msgbox_Confirm) = vbYes Then
+            Call mnuSave_Click
         End If
-    Next i
-
+    End If
+    
     '使用g++进行编译
-    '                   ↓转到当前程序所在的盘符                    ↓调用g++.exe进行编译    ↓编译为调试程序           ↓所有的cpp代码文件
-    '命令格式: cmd /c 【盘符】: && cd "【g++.exe所在目录】" && "【g++.exe路径】" [-mwindows] -g -o "【输出路径】" "【cpp文件1】" "【cpp文件2】"
+    '                   ↓转到当前程序所在的盘符                    ↓调用g++.exe进行编译      ↓编译为调试程序           ↓所有的cpp代码文件
+'命令格式: cmd /c 【盘符】: && cd "【g++.exe所在目录】" && "【g++.exe路径】" [-mwindows] -g -o "【输出路径】" "【cpp文件1】" "【cpp文件2】"
     '                                       ↑转到g++.exe所在的目录                 ↑是否为命令行程序   ↑编译的EXE输出路径
     frmOutput.OutputLog Lang_Main_StartingGcc
     ExePath = ProjectFolderPath & CurrentProject.ProjectName & ".exe"
     GccCmdLine = "cmd /c " & Left(GetAppPath(), 1) & ": && " & _
-       "cd """ & GetAppPath() & "GCC\bin"" && " & _
-       """" & GetAppPath() & "GCC\bin\g++.exe"" -g -o """ & ExePath & """"
+    "cd """ & GetAppPath() & "GCC\bin"" && " & _
+    """" & GetAppPath() & "GCC\bin\g++.exe"" -g -o """ & ExePath & """"
     For i = 0 To UBound(CurrentProject.Files)
         If Not CurrentProject.Files(i).IsHeaderFile Then
             GccCmdLine = GccCmdLine & " """ & CurrentProject.Files(i).FilePath & """"
@@ -848,21 +879,21 @@ Private Sub mnuRun_Click()
     If GccPipe.InitDosIO(GccCmdLine) = 0 Then
         frmOutput.OutputLog Lang_Main_GccStartFailed
     End If
-    frmMain.DarkMenu.HideMenu                                                           '先隐藏菜单
-    Do While ProcessExists(GccPipe.hProcess)                                            '等待g++执行完成
+    frmMain.DarkMenu.HideMenu                                                   '先隐藏菜单
+    Do While ProcessExists(GccPipe.hProcess)                                    '等待g++执行完成
         Sleep 50
         DoEvents
     Loop
-    GccPipe.DosOutput PipeOutput, vbNullChar & vbNullChar                               '获取g++输出
+    GccPipe.DosOutput PipeOutput, vbNullChar & vbNullChar                       '获取g++输出
     GccOutputContent = Split(PipeOutput, vbCrLf)
     If UBound(GccOutputContent) >= 0 Then
-        For i = 0 To UBound(GccOutputContent)                                               '逐行输出
-            If GccOutputContent(i) <> "" Then                                                   '如果不是空行
+        For i = 0 To UBound(GccOutputContent)                                   '逐行输出
+            If GccOutputContent(i) <> "" Then                                   '如果不是空行
                 frmOutput.OutputLog GccOutputContent(i)
             End If
         Next i
     End If
-    If Dir(ExePath, vbNormal Or vbReadOnly Or vbHidden Or vbSystem) = "" Then           '如果exe路径不存在，则说明编译不成功
+    If Dir(ExePath, vbNormal Or vbReadOnly Or vbHidden Or vbSystem) = "" Then   '如果exe路径不存在，则说明编译不成功
         frmOutput.OutputLog Lang_Main_CompileFailed
         Exit Sub
     Else
@@ -870,16 +901,16 @@ Private Sub mnuRun_Click()
     End If
     
     '创建待调试进程。该进程启动之后会挂起，等待gdb附加
-    Dim si                  As STARTUPINFO                                              '进程启动信息
-    Dim sa                  As SECURITY_ATTRIBUTES                                      '安全属性
+    Dim si                  As STARTUPINFO                                      '进程启动信息
+    Dim sa                  As SECURITY_ATTRIBUTES                              '安全属性
     
-    With sa                                                                             '设置安全属性
+    With sa                                                                     '设置安全属性
         .bInheritHandle = 1
         .lpSecurityDescriptor = 0
         .nLength = Len(sa)
     End With
     If CreateProcess(0, ExePath, sa, sa, ByVal 1, _
-       NORMAL_PRIORITY_CLASS Or CREATE_SUSPENDED, ByVal 0, ByVal 0, si, DebugProgramInfo) <> 1 Then
+        NORMAL_PRIORITY_CLASS Or CREATE_SUSPENDED, ByVal 0, ByVal 0, si, DebugProgramInfo) <> 1 Then
         
         frmOutput.OutputLog Lang_Main_RunFailed & ExePath & " (" & Err.LastDllError & ")"
         Exit Sub
@@ -887,23 +918,36 @@ Private Sub mnuRun_Click()
     
     '创建gdb管道
     Set GdbPipe = New clsPipe
-    If GdbPipe.InitDosIO(GetAppPath() & "GCC\gdb\gdb.exe -q -nw") = 0 Then              '创建gdb调试管道失败
-        TerminateProcess DebugProgramInfo.hProcess, 0                                       '杀掉待调试进程，放弃调试
-        Set GdbPipe = Nothing                                                               '关闭gdb管道
+    If GdbPipe.InitDosIO(GetAppPath() & "GCC\gdb\gdb.exe -q -nw") = 0 Then      '创建gdb调试管道失败
+        TerminateProcess DebugProgramInfo.hProcess, 0                           '杀掉待调试进程，放弃调试
+        Set GdbPipe = Nothing                                                   '关闭gdb管道
         frmOutput.OutputLog Lang_Main_GdbFailed
         Exit Sub
     End If
-    GdbPipe.DosInput "attach " & DebugProgramInfo.dwProcessId & vbCrLf                  '附加到待调试进程
-    GdbPipe.DosOutput PipeOutput, "(gdb) "                                              '获取gdb的输出
-    If InStr(PipeOutput, "Can't attach") <> 0 Then                                      'gdb输出“Can't attach to process.”，附加进程失败
-        TerminateProcess DebugProgramInfo.hProcess, 0                                       '杀掉待调试进程，放弃调试
-        Set GdbPipe = Nothing                                                               '关闭gdb管道
+    GdbPipe.DosInput "file """ & Replace(ExePath, "\", "/") & """" & vbCrLf     '从exe文件读取符号
+    GdbPipe.DosOutput PipeOutput, "." & vbCrLf & "(gdb) "                       '获取gdb的输出
+    If InStr(PipeOutput, "no debugging symbols found") <> 0 Or _
+        InStr(PipeOutput, "No such file or directory") <> 0 Then                'gdb输出“no debugging symbols found”或者“No such file or directory”，加载符号失败
+        frmOutput.OutputLog CStr(Split(PipeOutput, vbCrLf)(0))                  '输出加载符号的错误
+        If MsgBox(Lang_Main_GdbLoadSymbolsFailure_1 & ExePath & Lang_Main_GdbLoadSymbolsFailure_2, vbExclamation Or vbYesNo, Lang_Msgbox_Confirm) = vbNo Then
+            TerminateProcess DebugProgramInfo.hProcess, 0                       '杀掉待调试进程，放弃调试
+            Set GdbPipe = Nothing                                               '关闭gdb管道
+            Exit Sub
+        End If
+    End If
+    GdbPipe.DosInput "set pagination off" & vbCrLf                              '关闭gdb的"Type to continue, or q to quit"消息
+    GdbPipe.DosInput "attach " & DebugProgramInfo.dwProcessId & vbCrLf          '附加到待调试进程
+    GdbPipe.DosOutput PipeOutput, "(gdb) "                                      '获取gdb的输出
+    If InStr(PipeOutput, "Can't attach") <> 0 Then                              'gdb输出“Can't attach to process.”，附加进程失败
+        TerminateProcess DebugProgramInfo.hProcess, 0                           '杀掉待调试进程，放弃调试
+        Set GdbPipe = Nothing                                                   '关闭gdb管道
         frmOutput.OutputLog Lang_Main_GdbAttachFailed_1 & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ") " & Lang_Main_GdbAttachFailed_2
         Exit Sub
     End If
-    GdbPipe.DosInput "continue" & vbCrLf                                                '使目标进程继续运行
+    GdbPipe.DosInput "continue" & vbCrLf                                        '使目标进程继续运行
     frmOutput.OutputLog Lang_Main_DebugInfo_1 & GdbPipe.dwProcessId & "(" & Hex(GdbPipe.dwProcessId) & "); " & _
-        Right(ExePath, Len(ExePath) - InStrRev(ExePath, "\")) & Lang_Main_DebugInfo_2 & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ")"
+    Right(ExePath, Len(ExePath) - InStrRev(ExePath, "\")) & Lang_Main_DebugInfo_2 & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ")"
+    Me.tmrCheckProcess.Enabled = True                                           '开始等待进程结束
 End Sub
 
 '描述:      隐藏启动界面
@@ -942,6 +986,9 @@ Private Sub DarkMenu_MenuItemClicked(MenuID As Integer)
         
         Case 4                                                                          '另存为
             Call mnuSaveAs_Click
+        
+        Case 39                                                                         '断点列表
+            Me.DockingPane.ShowPane 6
         
         Case 52                                                                         '运行
             Call mnuRun_Click
@@ -1093,8 +1140,8 @@ End Sub
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     On Error Resume Next
     
-    '恢复窗口子类化
-    SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(Me.hWnd, "PrevWndProc")
+    '关闭菜单
+    Me.DarkMenu.HideMenu
     
     '检查“新建项目”窗口是否关闭
     If frmCreateOptions.Visible = True Then
@@ -1111,6 +1158,14 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
             Exit Sub
         End If
     End If
+    
+    '如果创建了工程，则检查是否有文件未保存
+    If CurrentProject.ProjectType <> 0 Then
+        'ToDo
+    End If
+    
+    '恢复窗口子类化
+    SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(Me.hWnd, "PrevWndProc")
     
     '关闭所有窗口
     Dim CodeWindow  As Form
@@ -1181,3 +1236,4 @@ Private Sub TabBar_WindowDropOut(Frm As Form, Index As Integer)
     Frm.SetFocus                                                                    '窗口拖出去后让对应的窗口获得焦点
     Frm.SyntaxEdit.SetFocus
 End Sub
+
