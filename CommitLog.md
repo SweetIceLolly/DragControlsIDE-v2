@@ -1,5 +1,27 @@
 【日志】
 
+# 2019.7.21
+
+大幅删改ListView的代码。由于有皮肤控件帮忙，ListView可以更优雅的实现，于是去除所有不必要的控件和代码。另外把该控件的hWnd变量重命名为了lvHwnd。~~mmp是谁这样子起变量名的！！！让我发现不打死他！好像是自己起的哦...~~
+
+把代码框左边的侧边栏去掉，并换成图片框控件。因为这个天杀的代码框居然没有提供获取断点的接口！！！我去年买了个表看样子要自己实现下断点的功能了。
+
+优化用户体验，包括显示frmCreateOptions的时候让edProjectName获取焦点，自动生成WinMain代码的时候自动#include <windows.h>
+
+为DarkVScrollBar控件的Public Property Let BarHeight添加了On Error Resume Next，因为有一定的出错几率。
+
+TabBar现在会为子窗体添加WS_CHILD样式，使母窗体不失去焦点。
+
+运行前的保存提示考虑工程文件。
+
+gdb在附加进程前先发送`file 【待调试进程】`加载符号和`set pagination off`关闭gdb的"Type to continue, or q to quit"消息。
+
+在主窗体的QueryUnload事件中添加隐藏菜单的代码，因为发现有一定的几率即使主窗体关闭后菜单也没被隐藏。
+
+调整主窗体的QueryUnload事件中恢复窗口子类化的顺序，因为有时候会取消掉窗口关闭。
+
+添加保存专用的代码文件信息结构和工程文件结构。
+
 # 2019.7.20
 
 把DarkComboBox的Image控件换成PNG控件，因为Image控件的颜色会被皮肤控件影响。
