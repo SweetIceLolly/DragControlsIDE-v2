@@ -1,5 +1,27 @@
 【日志】
 
+# 2019.7.22
+
+把DarkButton的AutoRedraw设置成True，大概可以减少闪烁吧。
+
+把frmCreateOptions和frmSaveBox的标题栏改名，使他们不能被拖进TabBar。
+
+frmMain添加IsSaveRequired函数，用来检查是否有文件未保存。
+
+把frmMain保存的代码放到了frmSaveBox里，能够直观的显示所有需要保存的文件，并让用户可以自行选择保存的文件。
+
+优化frmMain中mnuRun_Click的保存文件的代码，更加易于使用。
+
+frmMain的mnuRun_Click添加检查同名exe文件的过程，遇到同名的exe文件时会提示用户。
+
+frmMain的Form_QueryUnload中添加保存文件的代码。
+
+添加断点信息结构。同时也为代码文件信息结构中添加断点信息。
+
+把代码文件信息结构的用户类型命名改得好听一点。（x
+
+添加GetFileName函数，用于从指定路径分隔出文件名（即最后一个“\”后面的文本）
+
 # 2019.7.21
 
 大幅删改ListView的代码。由于有皮肤控件帮忙，ListView可以更优雅的实现，于是去除所有不必要的控件和代码。另外把该控件的hWnd变量重命名为了lvHwnd。~~mmp是谁这样子起变量名的！！！让我发现不打死他！好像是自己起的哦...~~
