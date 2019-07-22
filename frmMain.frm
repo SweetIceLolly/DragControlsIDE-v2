@@ -772,45 +772,61 @@ Dim NewCreateWindow         As frmCreate                                        
 Private WithEvents GdbPipe  As clsPipe                                                  'gdb调试管道
 Attribute GdbPipe.VB_VarHelpID = -1
 
+'描述:      检查当前是否有未保存的文件
+'返回值:    如果有未保存的文件，则返回True
+Private Function IsSaveRequired() As Boolean
+    IsSaveRequired = False
+    If CurrentProject.Changed Then                                              '工程文件需要保存
+        IsSaveRequired = True
+    Else                                                                        '有任意一个代码文件需要保存
+        Dim i               As Long
+        
+        For i = 0 To UBound(CurrentProject.Files)
+            If CurrentProject.Files(i).Changed Then
+                IsSaveRequired = True
+                Exit For
+            End If
+        Next i
+    End If
+End Function
+
 '描述:      “加载项目”菜单
 Private Sub mnuOpen_Click()
     NoSkinMsgBox ShowOpen(Me.hWnd, "Dilidi - Open", "洗屁屁文件(*.cpp)" & vbNullChar & "*.cpp")
 End Sub
 
 '描述:      “保存”菜单
-Private Sub mnuSave_Click()
-    On Error Resume Next
+'返回值:    1=保存成功; 2=保存失败; 3=取消; 4=不保存
+Private Function mnuSave_Click() As Integer
     Dim i                   As Long
     
+    frmSaveBox.InitFileIndexMap                                                         '初始化序号映射表
+    If CurrentProject.Changed Then                                                      '当前工程文件被更改
+        frmSaveBox.AddFileIndexMap -1
+    End If
     For i = 0 To UBound(CurrentProject.Files)                                           '检查还没有保存的文件
-        If CurrentProject.Files(i).Changed = True Then                                      '逐个保存未保存的文件
-            Open CurrentProject.Files(i).FilePath For Output As #1
-                If Err.Number <> 0 Then                                                             '保存文件失败
-                    Close #1
-                    If NoSkinMsgBox(Lang_Main_SaveFailure_1 & CurrentProject.Files(i).FilePath & " :" & _
-                       Err.Number & " - " & Err.Description & Lang_Main_saveFailure_2, vbExclamation, Lang_Msgbox_Error) = vbNo Then
-                        Exit Sub
-                    End If
-                End If
-                Print #1, CurrentProject.Files(i).TargetWindow.SyntaxEdit.Text
-            Close #1
-            CurrentProject.Files(i).Changed = False                                             '标记文件为已保存
+        If CurrentProject.Files(i).Changed Then                                             '检查到还没有保存的文件
+            frmSaveBox.AddFileIndexMap i
         End If
     Next i
-    
-    If CurrentProject.Changed Then                                                      '如果工程文件尚未保存
-        'ToDo
-        Open ProjectFilePath For Binary As #1                                               '保存工程文件
-            If Err.Number <> 0 Then
-                Close #1
-                NoSkinMsgBox Lang_Main_SaveFailure_1 & ProjectFilePath & " :" & Err.Number & " - " & Err.Description, vbExclamation, Lang_Msgbox_Error
-                Exit Sub
-            End If
-            'Put #1, , CurrentProject
-        Close #1
-        CurrentProject.Changed = False                                                          '标记工程文件为已保存
+    For i = 0 To frmSaveBox.lstFiles.ListCount - 1                                      '勾选所有文件
+        frmSaveBox.lstFiles.Selected(i) = True
+    Next i
+    frmSaveBox.bSaveFlag = 0                                                            '初始化保存结果
+    frmSaveBox.bBlock = True                                                            '阻塞代码执行
+    Me.Enabled = False
+    frmSaveBox.Show
+    SetWindowPos frmSaveBox.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE    '让保存对话框置顶
+    Do                                                                                  '等待保存对话框关闭
+        Sleep 50
+        DoEvents
+    Loop Until Not frmSaveBox.bBlock
+    mnuSave_Click = frmSaveBox.bSaveFlag                                                '返回保存结果
+    If mnuSave_Click = 0 Then                                                           '没有选择操作则视为取消
+        mnuSave_Click = 3
     End If
-End Sub
+    Unload frmSaveBox                                                                   '卸载掉保存对话框，释放资源
+End Function
 
 '描述:      “另存为”菜单
 Private Sub mnuSaveAs_Click()
@@ -819,6 +835,7 @@ End Sub
 
 '描述:      “新建项目”菜单
 Private Sub mnuNewProject_Click()
+    frmCreate.Hide                                                                      '隐藏启动界面里的“新建项目”窗体
     If Not NewCreateWindow Is Nothing Then                                              '卸载掉上一个“新建项目”窗体
         Unload NewCreateWindow
         Set NewCreateWindow = Nothing
@@ -843,34 +860,41 @@ Private Sub mnuRun_Click()
     Dim PipeOutput          As String                                           '管道输出的内容
     Dim GccOutputContent()  As String                                           '逐行分开的g++输出内容
     Dim i                   As Long
+    Dim SaveRtn             As Integer                                          '保存返回值
     
-    '提示保存文件
-    Dim NeedToSaveFiles     As Boolean                                          '是否需要提示保存文件
-    If CurrentProject.Changed Then                                              '如果工程文件需要保存，就提示保存文件
-        NeedToSaveFiles = True
-    Else                                                                        '或者有任意一个代码文件需要保存，就提示保存文件
-        For i = 0 To UBound(CurrentProject.Files)
-            If CurrentProject.Files(i).Changed Then
-                NeedToSaveFiles = True
-                Exit For
-            End If
-        Next i
-    End If
-    If NeedToSaveFiles Then                                                     '提示保存文件
+    If IsSaveRequired() Then                                                    '提示保存文件
         If NoSkinMsgBox(Lang_Main_SaveBeforeCompile, vbQuestion Or vbYesNo, Lang_Msgbox_Confirm) = vbYes Then
-            Call mnuSave_Click
+            SaveRtn = mnuSave_Click()
+            If SaveRtn = 2 Then                                                         '保存时出错
+                If NoSkinMsgBox(Lang_Main_SaveFailedBeforeCompile, vbQuestion Or vbYesNo, Lang_Msgbox_Confirm) = vbNo Then
+                    frmOutput.OutputLog Lang_Main_DebugAborted
+                    Exit Sub
+                End If
+            ElseIf SaveRtn = 3 Or SaveRtn = 4 Then                                      '用户取消保存 或者 用户选择不保存 则取消接下来的操作
+                frmOutput.OutputLog Lang_Main_DebugAborted
+                Exit Sub
+            End If
+        End If
+    End If
+    
+    If Dir(ExePath, vbNormal Or vbReadOnly Or vbHidden Or vbSystem) <> "" Then  '检测到同名的exe文件
+        If NoSkinMsgBox(Lang_Main_ReplaceExe_1 & ExePath & Lang_Main_ReplaceExe_2, vbQuestion Or vbYesNo, Lang_Msgbox_Confirm) = vbYes Then
+            Kill ExePath                                                                '删除掉同名文件
+        Else
+            frmOutput.OutputLog Lang_Main_DebugAborted
+            Exit Sub
         End If
     End If
     
     '使用g++进行编译
     '                   ↓转到当前程序所在的盘符                    ↓调用g++.exe进行编译      ↓编译为调试程序           ↓所有的cpp代码文件
-'命令格式: cmd /c 【盘符】: && cd "【g++.exe所在目录】" && "【g++.exe路径】" [-mwindows] -g -o "【输出路径】" "【cpp文件1】" "【cpp文件2】"
+    '命令格式: cmd /c 【盘符】: && cd "【g++.exe所在目录】" && "【g++.exe路径】" [-mwindows] -g -o "【输出路径】" "【cpp文件1】" "【cpp文件2】"
     '                                       ↑转到g++.exe所在的目录                 ↑是否为命令行程序   ↑编译的EXE输出路径
     frmOutput.OutputLog Lang_Main_StartingGcc
     ExePath = ProjectFolderPath & CurrentProject.ProjectName & ".exe"
     GccCmdLine = "cmd /c " & Left(GetAppPath(), 1) & ": && " & _
-    "cd """ & GetAppPath() & "GCC\bin"" && " & _
-    """" & GetAppPath() & "GCC\bin\g++.exe"" -g -o """ & ExePath & """"
+        "cd """ & GetAppPath() & "GCC\bin"" && " & _
+        """" & GetAppPath() & "GCC\bin\g++.exe"" -g -o """ & ExePath & """"
     For i = 0 To UBound(CurrentProject.Files)
         If Not CurrentProject.Files(i).IsHeaderFile Then
             GccCmdLine = GccCmdLine & " """ & CurrentProject.Files(i).FilePath & """"
@@ -879,7 +903,6 @@ Private Sub mnuRun_Click()
     If GccPipe.InitDosIO(GccCmdLine) = 0 Then
         frmOutput.OutputLog Lang_Main_GccStartFailed
     End If
-    frmMain.DarkMenu.HideMenu                                                   '先隐藏菜单
     Do While ProcessExists(GccPipe.hProcess)                                    '等待g++执行完成
         Sleep 50
         DoEvents
@@ -919,19 +942,20 @@ Private Sub mnuRun_Click()
     '创建gdb管道
     Set GdbPipe = New clsPipe
     If GdbPipe.InitDosIO(GetAppPath() & "GCC\gdb\gdb.exe -q -nw") = 0 Then      '创建gdb调试管道失败
-        TerminateProcess DebugProgramInfo.hProcess, 0                           '杀掉待调试进程，放弃调试
-        Set GdbPipe = Nothing                                                   '关闭gdb管道
+        TerminateProcess DebugProgramInfo.hProcess, 0                               '杀掉待调试进程，放弃调试
+        Set GdbPipe = Nothing                                                       '关闭gdb管道
         frmOutput.OutputLog Lang_Main_GdbFailed
         Exit Sub
     End If
     GdbPipe.DosInput "file """ & Replace(ExePath, "\", "/") & """" & vbCrLf     '从exe文件读取符号
     GdbPipe.DosOutput PipeOutput, "." & vbCrLf & "(gdb) "                       '获取gdb的输出
     If InStr(PipeOutput, "no debugging symbols found") <> 0 Or _
-        InStr(PipeOutput, "No such file or directory") <> 0 Then                'gdb输出“no debugging symbols found”或者“No such file or directory”，加载符号失败
-        frmOutput.OutputLog CStr(Split(PipeOutput, vbCrLf)(0))                  '输出加载符号的错误
+        InStr(PipeOutput, "No such file or directory") <> 0 Then                    'gdb输出“no debugging symbols found”或者“No such file or directory”，加载符号失败
+        frmOutput.OutputLog CStr(Split(PipeOutput, vbCrLf)(0))                      '输出加载符号的错误
         If MsgBox(Lang_Main_GdbLoadSymbolsFailure_1 & ExePath & Lang_Main_GdbLoadSymbolsFailure_2, vbExclamation Or vbYesNo, Lang_Msgbox_Confirm) = vbNo Then
-            TerminateProcess DebugProgramInfo.hProcess, 0                       '杀掉待调试进程，放弃调试
-            Set GdbPipe = Nothing                                               '关闭gdb管道
+            TerminateProcess DebugProgramInfo.hProcess, 0                               '杀掉待调试进程，放弃调试
+            Set GdbPipe = Nothing                                                       '关闭gdb管道
+            frmOutput.OutputLog Lang_Main_DebugAborted
             Exit Sub
         End If
     End If
@@ -939,9 +963,10 @@ Private Sub mnuRun_Click()
     GdbPipe.DosInput "attach " & DebugProgramInfo.dwProcessId & vbCrLf          '附加到待调试进程
     GdbPipe.DosOutput PipeOutput, "(gdb) "                                      '获取gdb的输出
     If InStr(PipeOutput, "Can't attach") <> 0 Then                              'gdb输出“Can't attach to process.”，附加进程失败
-        TerminateProcess DebugProgramInfo.hProcess, 0                           '杀掉待调试进程，放弃调试
-        Set GdbPipe = Nothing                                                   '关闭gdb管道
+        TerminateProcess DebugProgramInfo.hProcess, 0                               '杀掉待调试进程，放弃调试
+        Set GdbPipe = Nothing                                                       '关闭gdb管道
         frmOutput.OutputLog Lang_Main_GdbAttachFailed_1 & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ") " & Lang_Main_GdbAttachFailed_2
+        frmOutput.OutputLog Lang_Main_DebugAborted
         Exit Sub
     End If
     GdbPipe.DosInput "continue" & vbCrLf                                        '使目标进程继续运行
@@ -966,7 +991,7 @@ End Sub
 
 '描述:      显示启动界面
 Public Sub ShowStartupPage()
-    frmCreate.DarkTitleBar_NoDrop.Visible = False                                              '不显示标题栏和边框
+    frmCreate.DarkTitleBar_NoDrop.Visible = False                                       '不显示标题栏和边框
     frmCreate.DarkWindowBorder.Bind = False
     SetParent frmCreate.hWnd, Me.picClientArea.hWnd                                     '让“新建项目”作为本窗体的子窗体
     frmCreate.Move 0, 0                                                                 '设置其位置
@@ -974,6 +999,7 @@ Public Sub ShowStartupPage()
 End Sub
 
 Private Sub DarkMenu_MenuItemClicked(MenuID As Integer)
+    Me.DarkMenu.HideMenu                                                            '按下菜单后就立即隐藏菜单
     Select Case MenuID
         Case 1                                                                          '新建
             Call mnuNewProject_Click
@@ -1161,7 +1187,15 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     
     '如果创建了工程，则检查是否有文件未保存
     If CurrentProject.ProjectType <> 0 Then
-        'ToDo
+        If IsSaveRequired() Then
+            Dim SaveRtn     As Integer                      '保存返回值
+            
+            SaveRtn = mnuSave_Click()
+            If SaveRtn = 2 Or SaveRtn = 3 Then              '保存出错或者用户取消保存
+                Cancel = 1
+                Exit Sub
+            End If
+        End If
     End If
     
     '恢复窗口子类化
@@ -1237,3 +1271,6 @@ Private Sub TabBar_WindowDropOut(Frm As Form, Index As Integer)
     Frm.SyntaxEdit.SetFocus
 End Sub
 
+Private Sub tmrCheckProcess_Timer()
+    'ToDo
+End Sub

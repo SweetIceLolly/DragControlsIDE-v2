@@ -7,6 +7,7 @@ Begin VB.UserControl DarkTreeView
    ClientWidth     =   4065
    ScaleHeight     =   3960
    ScaleWidth      =   4065
+   ToolboxBitmap   =   "DarkTreeView.ctx":0000
 End
 Attribute VB_Name = "DarkTreeView"
 Attribute VB_GlobalNameSpace = False

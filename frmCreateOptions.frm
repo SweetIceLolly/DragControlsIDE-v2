@@ -119,7 +119,7 @@ Begin VB.Form frmCreateOptions
       EndProperty
       Text            =   "ÐÂ¿Õ°×C++³ÌÐò"
    End
-   Begin DragControlsIDE.DarkTitleBar DarkTitleBar 
+   Begin DragControlsIDE.DarkTitleBar DarkTitleBar_NoDrop 
       Align           =   1  'Align Top
       Height          =   495
       Left            =   0
@@ -422,6 +422,7 @@ Private Sub cmdOK_Click()
             .Changed = True
             .IsHeaderFile = False
             .PrevLine = CodeStartLn
+            ReDim .Breakpoints(0)
         End With
         .ProjectType = NewProjectType
         .ProjectName = Me.edProjectName.Text
@@ -522,6 +523,8 @@ End Sub
 Private Sub Form_Unload(Cancel As Integer)
     If frmMain.ProjectType = 0 Then
         frmMain.ShowStartupPage
+    Else
+        frmMain.HideStartupPage
     End If
     frmMain.Enabled = True
     frmMain.DarkWindowBorderSizer.Bind = True

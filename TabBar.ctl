@@ -8,6 +8,7 @@ Begin VB.UserControl TabBar
    ClientWidth     =   7425
    ScaleHeight     =   4485
    ScaleWidth      =   7425
+   ToolboxBitmap   =   "TabBar.ctx":0000
    Begin VB.Timer DropInCheck 
       Interval        =   100
       Left            =   6912
@@ -62,7 +63,7 @@ Begin VB.UserControl TabBar
          Begin VB.Image MoreBtnIcon 
             Height          =   165
             Left            =   150
-            Picture         =   "TabBar.ctx":0000
+            Picture         =   "TabBar.ctx":0312
             Top             =   150
             Width           =   240
          End
@@ -122,7 +123,7 @@ Begin VB.UserControl TabBar
          Width           =   252
          _ExtentX        =   450
          _ExtentY        =   370
-         Image           =   "TabBar.ctx":0252
+         Image           =   "TabBar.ctx":0564
       End
       Begin VB.Label TabBg 
          BackColor       =   &H00CC7A00&

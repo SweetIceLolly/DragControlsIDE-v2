@@ -52,6 +52,7 @@ Class=clsPipe; clsPipe.cls
 Module=modTreeViewProc; modTreeViewProc.bas
 UserControl=DarkTreeView.ctl
 Form=frmCreateOptions.frm
+Form=frmSaveBox.frm
 ResFile32="DragControlsIDE.res"
 IconForm="frmMain"
 Startup="frmMain"

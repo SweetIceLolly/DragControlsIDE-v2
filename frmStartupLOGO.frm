@@ -1,6 +1,7 @@
 VERSION 5.00
 Begin VB.Form frmStartupLogo 
    Appearance      =   0  'Flat
+   AutoRedraw      =   -1  'True
    BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "ÍÏ¿Ø¼þ´ó·¨"
