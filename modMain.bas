@@ -16,6 +16,8 @@ Private Declare Function SystemParametersInfo Lib "user32" Alias "SystemParamete
     ByVal uParam As Long, ByRef lpvParam As Any, ByVal fuWinIni As Long) As Long
 
 Public DebugProgramInfo     As PROCESS_INFORMATION                                      '正在调试中的进程信息
+
+Public bpRedrawFileIndex    As Long                                                     '需要重绘断点的代码窗口所对应的文件序号
     
 '描述:      获取本程序的路径。如果路径后面缺少"\"，则自动加上
 '返回值:    以"\"结尾的路径
@@ -110,6 +112,18 @@ Public Function MainWindowMaximizeCloseFixProc(ByVal hWnd As Long, ByVal uMsg As
         End If
     End If
     MainWindowMaximizeCloseFixProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
+End Function
+
+'描述:      在代码文本框重绘的同时重绘断点
+'参数:      hWnd: 窗口句柄
+'.          uMsg: 消息值
+'.          wParam, lParam: 消息的参数
+'返回值:    消息处理返回值
+Public Function EditBreakpointsRedrawProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+    If uMsg = WM_PAINT Then                                                                 '拦截到WM_PAINT消息的时候顺便重绘断点
+        bpRedrawFileIndex = GetPropA(hWnd, "FileIndex")
+    End If
+    EditBreakpointsRedrawProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
 End Function
 
 '描述:      显示“打开”通用对话框

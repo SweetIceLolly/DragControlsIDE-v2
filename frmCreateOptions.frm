@@ -319,10 +319,45 @@ End Sub
 Private Sub cmdOK_Click()
     On Error Resume Next
     
-    '检测路径
-    Dim ProjPath    As String
+    '去掉路径里左右两边的空格
+    Dim ProjPath        As String                                                                       '工程路径
+    Dim ProjName        As String                                                                       '工程名称
+    Dim PrevPathChanged As Boolean                                                                      '之前的PathChanged标志
     
-    ProjPath = IIf(Right(Me.edPath.Text, 1) = "\", Me.edPath.Text, Me.edPath.Text & "\")                '添加"\"到路径末尾
+    PrevPathChanged = PathChanged
+    Me.edPath.Text = Trim(Me.edPath.Text)
+    Me.edProjectName.Text = Trim(Me.edProjectName.Text)
+    PathChanged = PrevPathChanged
+    ProjName = Me.edProjectName.Text
+    ProjPath = Me.edPath.Text
+    ProjPath = IIf(Right(ProjPath, 1) = "\", ProjPath, ProjPath & "\")                                  '添加"\"到路径末尾
+    If Len(Trim(ProjName)) = 0 Then                                                                     '没有输入工程名称
+        NoSkinMsgBox Lang_CreateOptions_ProjectNameRequired, vbExclamation, Lang_Msgbox_Error
+        Me.edProjectName.SetFocus
+        Exit Sub
+    End If
+    If ProjName = "." Or ProjName = ".." Then                                                           '检查名称是否为“.”或者“..”
+        NoSkinMsgBox Lang_CreateOptions_InvalidProjectName & ProjName, vbExclamation, Lang_Msgbox_Error
+        Me.edProjectName.SetFocus
+        Exit Sub
+    End If
+    
+    '检查非法字符
+    Dim InvalidChars    As String                                                                       '非法字符
+    Dim i               As Integer, j               As Integer
+    
+    InvalidChars = """/\:?<>*|"
+    For i = 1 To Len(ProjName)                                                                          '检查非法字符
+        For j = 1 To Len(InvalidChars)
+            If Mid(ProjName, i, 1) = Mid(InvalidChars, i, 1) Then
+                NoSkinMsgBox Lang_CreateOptions_InvalidProjectName & ProjName, vbExclamation, Lang_Msgbox_Error
+                Me.edProjectName.SetFocus
+                Exit Sub
+            End If
+        Next j
+    Next i
+    
+    '检测路径
     If Dir(Me.edPath.Text, vbDirectory Or vbNormal Or vbReadOnly Or vbHidden Or vbSystem) = "" Then     '检测到路径不存在
         MkDir Me.edPath.Text                                                                                '尝试创建文件夹
         If Err.Number <> 0 Then                                                                             '创建文件夹失败
@@ -338,24 +373,6 @@ Private Sub cmdOK_Click()
         End If
     End If
     
-    '尝试创建项目文件
-    Dim ProjCppPath As String                                                                           '项目的主cpp文件
-    
-    ProjCppPath = ProjPath & Me.edProjectName.Text & ".cpp"
-    If Dir(ProjCppPath, vbDirectory Or vbNormal Or vbReadOnly Or vbHidden Or vbSystem) <> "" Then
-        If NoSkinMsgBox(Lang_CreateOptions_NameConflict_1 & ProjCppPath & Lang_CreateOptions_NameConflict_2, vbQuestion Or vbYesNo, Lang_Msgbox_Confirm) <> vbYes Then
-            Exit Sub
-        End If
-    End If
-    Open ProjCppPath For Binary As #1
-        If Err.Number <> 0 Then                                                                             '创建文件失败
-            Close #1
-            NoSkinMsgBox Lang_CreateOptions_CreationFailure_1 & ProjCppPath & " :" & Err.Number & " - " & Err.Description & Lang_CreateOptions_CreationFailure_2, vbExclamation, Lang_Msgbox_Error
-            Me.edProjectName.SetFocus
-            Exit Sub
-        End If
-    Close #1
-    
     '更新窗体状态
     frmMain.ProjectType = NewProjectType                                                                '设置工程类型
     Call frmMain.HideStartupPage                                                                        '隐藏启动界面
@@ -365,7 +382,7 @@ Private Sub cmdOK_Click()
     End If
     frmMain.DockingPane.ShowPane 3                                                                      '显示工程资源管理器
     frmMain.DockingPane.ShowPane 5                                                                      '显示输出
-    frmMain.Caption = Me.edProjectName.Text & " - " & Lang_Application_Title                            '更改标题
+    frmMain.Caption = ProjName & " - " & Lang_Application_Title                                         '更改标题
     frmMain.SkinFramework.AutoApplyNewThreads = True                                                    '重新激活皮肤，否则代码框的滚动条就不能画到了
     frmMain.SkinFramework.AutoApplyNewWindows = True
     
@@ -375,13 +392,13 @@ Private Sub cmdOK_Click()
     Dim CodeStartLn     As Long                                                                         '生成代码后光标所在的行
     Dim NewCodeWindow   As frmCodeWindow                                                                '新创建的代码窗口
     
-    CurrentProject.ProjectName = Me.edProjectName.Text
+    CurrentProject.ProjectName = ProjName
     frmSolutionExplorer.SolutionTreeView.RemoveItem 0                                                   '清空树视图
     ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem(CurrentProject.ProjectName)               '添加项目
     ProjectNameTvItem = ParentItem                                                                      '记录工程名称对应的树视图列表项
     ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem(Lang_CreateOptions_SourceFile, ParentItem)
     frmSolutionExplorer.SolutionTreeView.ExpandItems frmSolutionExplorer.SolutionTreeView.GetParentItem(ParentItem), 2
-    ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem(Me.edProjectName.Text & ".cpp", ParentItem)
+    ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem(ProjName & ".cpp", ParentItem)
     frmSolutionExplorer.SolutionTreeView.ExpandItems frmSolutionExplorer.SolutionTreeView.GetParentItem(ParentItem), 2
     frmSolutionExplorer.SolutionTreeView.SelectItem ParentItem
     ReDim TvItemBinding(0)                                                                              '添加一个树视图列表项和文件序号的绑定
@@ -418,20 +435,20 @@ Private Sub cmdOK_Click()
     With CurrentProject                                                                                 '设置工程信息
         ReDim .Files(0)
         With .Files(0)
-            .FilePath = ProjCppPath
+            .FilePath = ProjPath & ProjName & ".cpp"
             .Changed = True
             .IsHeaderFile = False
             .PrevLine = CodeStartLn
             ReDim .Breakpoints(0)
         End With
         .ProjectType = NewProjectType
-        .ProjectName = Me.edProjectName.Text
+        .ProjectName = ProjName
         .Changed = True
     End With
     ProjectFolderPath = ProjPath                                                                        '设置项目文件夹路径
-    ProjectFilePath = ProjPath & Me.edProjectName.Text & ".myproj"                                      '设置项目工程文件路径
+    ProjectFilePath = ProjPath & ProjName & ".myproj"                                                   '设置项目工程文件路径
     Set NewCodeWindow = CreateNewCodeWindow(0)                                                          '新建一个代码窗口
-    NewCodeWindow.Caption = Me.edProjectName.Text & ".cpp"
+    NewCodeWindow.Caption = ProjName & ".cpp"
     frmMain.TabBar.AddForm NewCodeWindow
     CodeWindows.Add NewCodeWindow
     NewCodeWindow.FileIndex = 0                                                                         '设置代码窗口对应的代码文件序号

@@ -24,6 +24,27 @@ Begin VB.Form frmPopupMenu
       Left            =   480
       Top             =   2040
    End
+   Begin ImageX.aicAlphaImage imgShowSubMenu 
+      Height          =   225
+      Index           =   0
+      Left            =   1320
+      Top             =   480
+      Visible         =   0   'False
+      Width           =   225
+      _ExtentX        =   397
+      _ExtentY        =   397
+      Image           =   "frmPopupMenu.frx":0000
+      Enabled         =   0   'False
+   End
+   Begin VB.Image imgSubMenu 
+      Enabled         =   0   'False
+      Height          =   225
+      Left            =   1680
+      Picture         =   "frmPopupMenu.frx":0018
+      Top             =   480
+      Visible         =   0   'False
+      Width           =   225
+   End
    Begin ImageX.aicAlphaImage imgMenuCheckBox 
       Height          =   345
       Index           =   0
@@ -32,7 +53,7 @@ Begin VB.Form frmPopupMenu
       Width           =   345
       _ExtentX        =   609
       _ExtentY        =   609
-      Image           =   "frmPopupMenu.frx":0000
+      Image           =   "frmPopupMenu.frx":036E
       Enabled         =   0   'False
    End
    Begin VB.Line lnSplitter 
@@ -48,7 +69,7 @@ Begin VB.Form frmPopupMenu
       Enabled         =   0   'False
       Height          =   225
       Left            =   1320
-      Picture         =   "frmPopupMenu.frx":0018
+      Picture         =   "frmPopupMenu.frx":0386
       Top             =   1560
       Visible         =   0   'False
       Width           =   225
@@ -57,18 +78,8 @@ Begin VB.Form frmPopupMenu
       Enabled         =   0   'False
       Height          =   225
       Left            =   1680
-      Picture         =   "frmPopupMenu.frx":036E
+      Picture         =   "frmPopupMenu.frx":06DC
       Top             =   1560
-      Visible         =   0   'False
-      Width           =   225
-   End
-   Begin VB.Image imgShowSubMenu 
-      Enabled         =   0   'False
-      Height          =   225
-      Index           =   0
-      Left            =   1320
-      Picture         =   "frmPopupMenu.frx":06C4
-      Top             =   720
       Visible         =   0   'False
       Width           =   225
    End
@@ -229,7 +240,7 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
         End With
     Next i
     
-    For i = 1 To Me.labItem.ubound
+    For i = 1 To Me.labItem.UBound
         Unload Me.labItem(i)
     Next i
     
@@ -241,6 +252,8 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
             Else
                 Me.labItem(0).AutoSize = True
                 Me.labItem(0).Top = ITEM_DISTANCE
+                Me.imgMenuCheckBox(0).Height = Me.labItem(0).Height + ITEM_DISTANCE
+                Me.imgMenuCheckBox(0).Top = Me.labItem(0).Top
             End If
             Me.labItem(i - 1).Caption = String(SpaceCount, " ") & Menus(CurrSubMenuID(i)).MenuText & String(SpaceCount, " ")
             If i > 1 Then
@@ -251,9 +264,10 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
                 HasCheckBox = True
                 If nCheckBoxes > 0 Then
                     Load Me.imgMenuCheckBox(nCheckBoxes)
+                    Me.imgMenuCheckBox(nCheckBoxes).Height = Me.labItem(i - 1).Height + ITEM_DISTANCE
                 End If
                 Me.imgMenuCheckBox(nCheckBoxes).Left = 60 'ITEM_HORZ_MARGIN
-                Me.imgMenuCheckBox(nCheckBoxes).Top = Me.labItem(i - 1).Top + Me.labItem(i - 1).Height / 2 - Me.imgMenuCheckBox(nCheckBoxes).Height / 2
+                Me.imgMenuCheckBox(nCheckBoxes).Top = Me.labItem(i - 1).Top '+ Me.labItem(i - 1).Height / 2 - Me.imgMenuCheckBox(nCheckBoxes).Height / 2
                 If Menus(CurrSubMenuID(i)).Checked Then
                     Me.imgMenuCheckBox(nCheckBoxes).LoadImage_FromStdPicture Me.imgChecked.Picture
                 Else
@@ -266,9 +280,10 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
                 HasCheckBox = True
                 If nCheckBoxes > 0 Then
                     Load Me.imgMenuCheckBox(nCheckBoxes)
+                    Me.imgMenuCheckBox(nCheckBoxes).Height = Me.labItem(i - 1).Height + ITEM_DISTANCE
                 End If
                 Me.imgMenuCheckBox(nCheckBoxes).Left = ITEM_HORZ_MARGIN + 90
-                Me.imgMenuCheckBox(nCheckBoxes).Top = Me.labItem(i - 1).Top + Me.labItem(i - 1).Height / 2 - Me.imgMenuCheckBox(nCheckBoxes).Height / 2
+                Me.imgMenuCheckBox(nCheckBoxes).Top = Me.labItem(i - 1).Top '+ Me.labItem(i - 1).Height / 2 - Me.imgMenuCheckBox(nCheckBoxes).Height / 2
                 Me.imgMenuCheckBox(nCheckBoxes).LoadImage_FromArray Menus(CurrSubMenuID(i)).MenuIcon
                 Me.imgMenuCheckBox(nCheckBoxes).Visible = True
                 Me.imgMenuCheckBox(nCheckBoxes).ZOrder 0
@@ -302,7 +317,7 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
     Next i
     
     If HasCheckBox Then
-        For i = 0 To Me.labItem.ubound
+        For i = 0 To Me.labItem.UBound
             Me.labItem(i).Caption = "   " & Me.labItem(i).Caption
             If i > 0 Then
                 Dim NextVisibleItem As Integer
@@ -322,8 +337,8 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
         NewWidth = NewWidth + Me.imgMenuCheckBox(0).Width + ITEM_HORZ_MARGIN
     End If
     LabelWidth = ControlWidth
-    Me.Height = Me.labItem(Me.labItem.ubound).Top + Me.labItem(Me.labItem.ubound).Height + ITEM_DISTANCE * 2
-    For i = Me.labItem.ubound To 0 Step -1
+    Me.Height = Me.labItem(Me.labItem.UBound).Top + Me.labItem(Me.labItem.UBound).Height + ITEM_DISTANCE * 2
+    For i = Me.labItem.UBound To 0 Step -1
         If Me.labItem(i).Visible = True Then
             Exit For
         End If
@@ -334,17 +349,17 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
         If Me.Width < MIN_WIDTH Then
             Me.Width = MIN_WIDTH
         End If
-        For i = 0 To Me.labItem.ubound
+        For i = 0 To Me.labItem.UBound
             Me.labItem(i).Width = Me.Width
         Next i
         If HasSubMenu Then
             NewWidth = NewWidth + Me.imgShowSubMenu(0).Width + ITEM_HORZ_MARGIN
-            For i = 0 To Me.imgShowSubMenu.ubound
+            For i = 0 To Me.imgShowSubMenu.UBound
                 Me.imgShowSubMenu(i).Left = Me.Width - Me.imgShowSubMenu(0).Width - ITEM_HORZ_MARGIN * 2
                 Me.imgShowSubMenu(i).ZOrder 0
             Next i
         End If
-        For i = 0 To Me.labItem.ubound
+        For i = 0 To Me.labItem.UBound
             If Trim(Me.labItem(i).Caption) = "-" Then
                 Me.labItem(i).Visible = False
                 If nSplitters > 0 Then
@@ -362,15 +377,15 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
                 '------------------------------------------------
                 Dim j As Integer
                 
-                For j = i + 1 To Me.labItem.ubound
+                For j = i + 1 To Me.labItem.UBound
                     Me.labItem(j).Top = Me.labItem(j).Top - Me.labItem(i).Height + SPLITTER_VERT_MARGIN * 2
                 Next j
-                For j = 0 To Me.imgMenuCheckBox.ubound
+                For j = 0 To Me.imgMenuCheckBox.UBound
                     If Me.imgMenuCheckBox(j).Top > Me.labItem(i).Top Then
                         Me.imgMenuCheckBox(j).Top = Me.imgMenuCheckBox(j).Top - Me.labItem(i).Height + SPLITTER_VERT_MARGIN * 2
                     End If
                 Next j
-                For j = 0 To Me.imgShowSubMenu.ubound
+                For j = 0 To Me.imgShowSubMenu.UBound
                     If Me.imgShowSubMenu(j).Top > Me.labItem(i).Top Then
                         Me.imgShowSubMenu(j).Top = Me.imgShowSubMenu(j).Top - Me.labItem(i).Height + SPLITTER_VERT_MARGIN * 2
                     End If
@@ -379,6 +394,8 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
             End If
         Next i
     End If
+    Me.labItem(0).BackColor = RGB(27, 27, 28)
+    Me.labItem(0).BackColor = RGB(51, 51, 52)
 End Sub
 
 Public Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -388,13 +405,13 @@ Public Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
         Case vbKeyDown
             IsUsingKeyboard = True
             KeybdIndex = KeybdIndex + 1
-            If KeybdIndex > Me.labItem.ubound Then
+            If KeybdIndex > Me.labItem.UBound Then
                 KeybdIndex = 0
             End If
             PrevKeybdIndex = KeybdIndex
             Do While Menus(CurrSubMenuID(KeybdIndex + 1)).MenuText = "-" Or Menus(CurrSubMenuID(KeybdIndex + 1)).Enabled = False
                 KeybdIndex = KeybdIndex + 1
-                If KeybdIndex > Me.labItem.ubound Then
+                If KeybdIndex > Me.labItem.UBound Then
                     KeybdIndex = 0
                 End If
                 If KeybdIndex = PrevKeybdIndex Then
@@ -411,13 +428,13 @@ Public Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
             IsUsingKeyboard = True
             KeybdIndex = KeybdIndex - 1
             If KeybdIndex < 0 Then
-                KeybdIndex = Me.labItem.ubound
+                KeybdIndex = Me.labItem.UBound
             End If
             PrevKeybdIndex = KeybdIndex
             Do While Menus(CurrSubMenuID(KeybdIndex + 1)).MenuText = "-" Or Menus(CurrSubMenuID(KeybdIndex + 1)).Enabled = False
                 KeybdIndex = KeybdIndex - 1
                 If KeybdIndex < 0 Then
-                    KeybdIndex = Me.labItem.ubound
+                    KeybdIndex = Me.labItem.UBound
                 End If
                 If KeybdIndex = PrevKeybdIndex Then
                     Exit Sub
@@ -468,6 +485,7 @@ End Sub
 
 Private Sub Form_Load()
     KeybdIndex = -1
+    Me.imgShowSubMenu(0).LoadImage_FromStdPicture Me.imgSubMenu.Picture
 End Sub
 
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
@@ -532,7 +550,7 @@ Private Sub labItem_MouseMove(Index As Integer, Button As Integer, Shift As Inte
         PrevX = X
         PrevY = Y
         If Index <> PrevItem Then
-            For i = 0 To Me.labItem.ubound
+            For i = 0 To Me.labItem.UBound
                 Me.labItem(i).BackColor = RGB(27, 27, 28)
             Next i
             Me.labItem(Index).BackColor = RGB(51, 51, 52)
@@ -572,7 +590,7 @@ Private Sub tmrCheckFocus_Timer()
     If WindowFromPoint(pt.X, pt.Y) <> Me.hWnd And Not IsUsingKeyboard Then
         PrevItem = -1
         Me.tmrPopupTimeout.Enabled = False
-        For i = 0 To Me.labItem.ubound
+        For i = 0 To Me.labItem.UBound
             If Not SubMenuWindow Is Nothing Then
                 If i <> SubMenuWindow.MatchItem Then
                     Me.labItem(i).BackColor = RGB(27, 27, 28)

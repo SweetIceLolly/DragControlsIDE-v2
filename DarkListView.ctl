@@ -42,6 +42,10 @@ Const m_def_FullRowSelect = True
 
 'Property Variables:
 Dim m_FullRowSelect As Boolean
+Dim m_GridLines     As Boolean
+Dim m_CheckBoxes    As Boolean
+
+Dim CurrExStyle     As Long
 
 'Please note that this function is for internal usage only and is NOT suggested to call directly
 Public Sub RaiseMouseMove(Button As Long, Shift As Long, X As Integer, Y As Integer)
@@ -199,6 +203,27 @@ Public Function SetColumnWidth(Index As Long, NewWidth As Long) As Long
     SetColumnWidth = SendMessageA(lvHwnd, LVM_SETCOLUMNWIDTH, Index, ByVal NewWidth)
 End Function
 
+'描述:      设置列表项的勾选状态（只适用于有选择框的ListVIew）
+'参数:      Index: 列表项序号
+'.          bChecked: 勾选状态。True: 勾选; False: 不勾选
+Public Sub SetItemChecked(Index As Long, bChecked As Boolean)
+    Dim lvi         As LVITEM
+    
+    '资料: https://docs.microsoft.com/en-us/windows/win32/controls/lvm-setitemstate
+    With lvi
+        .stateMask = LVIS_STATEIMAGEMASK
+        .state = IIf(bChecked, 2, 1) * (2 ^ 12)             'x * 2^12 = x << 12
+    End With
+    SendMessageA lvHwnd, LVM_SETITEMSTATE, ByVal Index, ByVal VarPtr(lvi)
+End Sub
+
+'描述:      获取列表项的勾选状态（只适用于有选择框的ListVIew）
+'参数:      Index: 列表项序号
+'返回值:    True: 勾选; False: 不勾选
+Public Function GetItemChecked(Index As Long) As Boolean
+    
+End Function
+
 Public Sub Clear()
     SendMessageA lvHwnd, LVM_DELETEALLITEMS, 0, 0
 End Sub
@@ -278,9 +303,10 @@ End Sub
 Private Sub UserControl_KeyUp(KeyCode As Integer, Shift As Integer)
     RaiseEvent KeyUp(KeyCode, Shift)
 End Sub
- 
+
 Private Sub UserControl_Initialize()
-    lvHwnd = CreateWindowExA(WS_EX_NOPARENTNOTIFY, "SysListView32", "", _
+    CurrExStyle = WS_EX_NOPARENTNOTIFY
+    lvHwnd = CreateWindowExA(CurrExStyle, "SysListView32", "", _
         WS_VISIBLE Or WS_CHILD Or WS_BORDER Or WS_TABSTOP Or LVS_ALIGNLEFT Or LVS_REPORT Or LVS_SINGLESEL, _
         0, 0, UserControl.ScaleWidth / Screen.TwipsPerPixelX, _
         UserControl.ScaleHeight / Screen.TwipsPerPixelY, UserControl.hWnd, 0, App.hInstance, 0)
@@ -295,14 +321,34 @@ End Sub
 
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     On Error Resume Next
+    
     If Ambient.UserMode Then
         PrevLVUserCtlProc = SetWindowLongA(UserControl.hWnd, GWL_WNDPROC, AddressOf ListViewNotifyMessageProc)
         PrevListViewProc = SetWindowLongA(lvHwnd, GWL_WNDPROC, AddressOf ListViewProc)
     End If
+    
     m_FullRowSelect = PropBag.ReadProperty("FullRowSelect", m_def_FullRowSelect)
     If m_FullRowSelect Then
-        SendMessageA lvHwnd, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT
+        CurrExStyle = CurrExStyle Or LVS_EX_FULLROWSELECT
+    Else
+        CurrExStyle = CurrExStyle And (Not LVS_EX_FULLROWSELECT)
     End If
+    
+    m_GridLines = PropBag.ReadProperty("GridLines", False)
+    If m_GridLines Then
+        CurrExStyle = CurrExStyle Or LVS_EX_GRIDLINES
+    Else
+        CurrExStyle = CurrExStyle And (Not LVS_EX_GRIDLINES)
+    End If
+    
+    m_CheckBoxes = PropBag.ReadProperty("CheckBoxes", False)
+    If m_CheckBoxes Then
+        CurrExStyle = CurrExStyle Or LVS_EX_CHECKBOXES
+    Else
+        CurrExStyle = CurrExStyle And Not (LVS_EX_CHECKBOXES)
+    End If
+    
+    SendMessageA lvHwnd, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, CurrExStyle
 End Sub
 
 Private Sub UserControl_Resize()
@@ -321,11 +367,42 @@ End Property
 Public Property Let FullRowSelect(ByVal New_FullRowSelect As Boolean)
     m_FullRowSelect = New_FullRowSelect
     If New_FullRowSelect Then
-        SendMessageA lvHwnd, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT
+        CurrExStyle = CurrExStyle Or LVS_EX_FULLROWSELECT
     Else
-        SendMessageA lvHwnd, LVM_SETEXTENDEDLISTVIEWSTYLE, LVS_EX_FULLROWSELECT, 0
+        CurrExStyle = CurrExStyle And (Not LVS_EX_FULLROWSELECT)
     End If
+    SendMessageA lvHwnd, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, CurrExStyle
     PropertyChanged "FullRowSelect"
+End Property
+
+Public Property Get GridLines() As Boolean
+    GridLines = m_GridLines
+End Property
+
+Public Property Let GridLines(ByVal New_GridLines As Boolean)
+    m_GridLines = New_GridLines
+    If New_GridLines Then
+        CurrExStyle = CurrExStyle Or LVS_EX_GRIDLINES
+    Else
+        CurrExStyle = CurrExStyle And (Not LVS_EX_GRIDLINES)
+    End If
+    SendMessageA lvHwnd, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, CurrExStyle
+    PropertyChanged "GridLines"
+End Property
+
+Public Property Get CheckBoxes() As Boolean
+    CheckBoxes = m_CheckBoxes
+End Property
+
+Public Property Let CheckBoxes(ByVal New_CheckBoxes As Boolean)
+    m_CheckBoxes = New_CheckBoxes
+    If New_CheckBoxes Then
+        CurrExStyle = CurrExStyle Or LVS_EX_CHECKBOXES
+    Else
+        CurrExStyle = CurrExStyle And (Not LVS_EX_CHECKBOXES)
+    End If
+    SendMessageA lvHwnd, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, CurrExStyle
+    PropertyChanged "CheckBoxes"
 End Property
 
 Public Property Get ListViewHwnd() As Long
@@ -335,10 +412,14 @@ End Property
 'Initialize Properties for User Control
 Private Sub UserControl_InitProperties()
     m_FullRowSelect = m_def_FullRowSelect
+    m_GridLines = False
+    m_CheckBoxes = False
 End Sub
 
 'Write property values to storage
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
     Call PropBag.WriteProperty("FullRowSelect", m_FullRowSelect, m_def_FullRowSelect)
+    Call PropBag.WriteProperty("GridLines", m_GridLines, False)
+    Call PropBag.WriteProperty("CheckBoxes", m_CheckBoxes, False)
 End Sub
 

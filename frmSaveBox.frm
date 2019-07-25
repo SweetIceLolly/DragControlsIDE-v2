@@ -16,9 +16,9 @@ Begin VB.Form frmSaveBox
       Appearance      =   0  'Flat
       BackColor       =   &H00333333&
       ForeColor       =   &H00FFFFFF&
-      Height          =   1830
+      Height          =   1590
       Left            =   240
-      Style           =   1  'Checkbox
+      MultiSelect     =   2  'Extended
       TabIndex        =   3
       Top             =   960
       Width           =   2775
@@ -182,7 +182,7 @@ Private Sub cmdYes_Click()
     On Error Resume Next
     Dim i           As Long
     Dim lstIndex    As Long
-    
+    'ToDo: detect files of the same name
     SetWindowPos Me.hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE  '取消窗口置顶，防止遮挡对话框
     bSaveFlag = 1                                                               '先标记为保存失败
     For lstIndex = 0 To Me.lstFiles.ListCount - 1                               '保存所有勾选了的文件
@@ -276,4 +276,12 @@ End Sub
 Private Sub Form_Resize()
     On Error Resume Next
     Me.lstFiles.Move 240, Me.labTip.Top + Me.labTip.Height + 240, Me.ScaleWidth - 480, Me.cmdYes.Top - Me.lstFiles.Top - 240
+End Sub
+
+Private Sub lstFiles_Click()
+    If Me.lstFiles.SelCount = 0 Then                                            '如果没有选择文件，就不给按下“是”
+        Me.cmdYes.Enabled = False
+    Else
+        Me.cmdYes.Enabled = True
+    End If
 End Sub
