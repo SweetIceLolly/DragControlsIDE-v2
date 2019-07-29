@@ -18,8 +18,8 @@ Begin VB.Form frmSolutionExplorer
       TabIndex        =   0
       Top             =   0
       Width           =   3015
-      _extentx        =   5318
-      _extenty        =   5106
+      _ExtentX        =   5318
+      _ExtentY        =   5106
    End
 End
 Attribute VB_Name = "frmSolutionExplorer"
@@ -86,12 +86,9 @@ Public Sub SolutionTreeView_DoubleClick(ByVal Button As Long, ByVal Shift As Lon
         If CurrSelItem = TvItemBinding(i).TVITEM Then
             If CurrentProject.Files(TvItemBinding(i).FileIndex).TargetWindow Is Nothing Then
                 Dim NewCodeWindow   As frmCodeWindow                                                        '新建的代码框窗体
-                Dim FileTitle       As String                                                               '文件名
                 
                 Set NewCodeWindow = CreateNewCodeWindow(TvItemBinding(i).FileIndex)                         '创建新的代码窗体并设置绑定的文件序号
-                FileTitle = CurrentProject.Files(TvItemBinding(i).FileIndex).FilePath
-                FileTitle = Right(FileTitle, Len(FileTitle) - InStrRev(FileTitle, "\"))                     '截取出文件名
-                NewCodeWindow.Caption = FileTitle
+                NewCodeWindow.Caption = GetFileName(CurrentProject.Files(TvItemBinding(i).FileIndex).FilePath)
                 frmMain.TabBar.AddForm NewCodeWindow
             Else
                 frmMain.TabBar.SwitchToByForm CurrentProject.Files(TvItemBinding(i).FileIndex).TargetWindow '切换到对应的窗口

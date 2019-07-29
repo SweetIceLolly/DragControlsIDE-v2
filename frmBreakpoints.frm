@@ -44,6 +44,7 @@ Private Sub Form_Load()
         GetWindowLongA(Me.lvBreakpoints.ListViewHwnd, GWL_STYLE) And (Not LVS_SINGLESEL)        '让ListView支持多选
     Me.lvBreakpoints.AddColumnHeader Lang_Breakpoints_ListViewHeader_File, 150                  '添加ListView表头
     Me.lvBreakpoints.AddColumnHeader Lang_Breakpoints_ListViewHeader_Line
+    Me.lvBreakpoints.AddColumnHeader Lang_Breakpoints_ListViewHeader_Address
 End Sub
 
 Private Sub Form_Resize()

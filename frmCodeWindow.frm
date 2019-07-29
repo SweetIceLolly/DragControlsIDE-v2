@@ -59,7 +59,6 @@ Begin VB.Form frmCodeWindow
       ForeColor       =   &H80000008&
       Height          =   1935
       Left            =   240
-      Picture         =   "frmCodeWindow.frx":1BCC2
       ScaleHeight     =   1935
       ScaleWidth      =   255
       TabIndex        =   4
@@ -117,7 +116,7 @@ Begin VB.Form frmCodeWindow
       MaxButtonVisible=   0   'False
       MinButtonVisible=   0   'False
       BindCaption     =   -1  'True
-      Picture         =   "frmCodeWindow.frx":1C04C
+      Picture         =   "frmCodeWindow.frx":1BCC2
    End
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorderSizer 
       Left            =   8280
@@ -151,6 +150,30 @@ Begin VB.Form frmCodeWindow
          Strikethrough   =   0   'False
       EndProperty
    End
+   Begin VB.Image imgDisabledBreakpoint 
+      Height          =   240
+      Left            =   6120
+      Picture         =   "frmCodeWindow.frx":1C914
+      Top             =   4440
+      Visible         =   0   'False
+      Width           =   240
+   End
+   Begin VB.Image imgBreakpoint 
+      Height          =   240
+      Left            =   5760
+      Picture         =   "frmCodeWindow.frx":1CC9E
+      Top             =   4440
+      Visible         =   0   'False
+      Width           =   240
+   End
+   Begin VB.Image imgCurrentLine 
+      Height          =   240
+      Left            =   5400
+      Picture         =   "frmCodeWindow.frx":1D028
+      Top             =   4440
+      Visible         =   0   'False
+      Width           =   240
+   End
 End
 Attribute VB_Name = "frmCodeWindow"
 Attribute VB_GlobalNameSpace = False
@@ -167,9 +190,8 @@ Option Explicit
 
 Public WindowObj    As Object                                                       '窗口自身
 Public FileIndex    As Long                                                         '在CurrentProject.Files对应的文件序号
-
-Dim BreakpointPic   As StdPicture                                                   '断点图片
-Dim RowHeight       As Integer                                                      '代码行的高度（用于计算断点绘图位置）
+Public RowHeight    As Integer                                                      '代码行的高度（用于计算断点绘图位置）
+Public BreakLine    As Long                                                         '在调试期间中断的行（-1代表没有）
 
 '描述:      重新通过代码框的字体计算每行代码的高度
 Public Sub ReCalcRowHeight()
@@ -191,9 +213,13 @@ Public Sub RedrawBreakpoints()
     For i = 0 To UBound(CurrentProject.Files(FileIndex).Breakpoints)                '遍历当前文件的断点，如果是在可视的行数范围内的就画出来
         ln = CurrentProject.Files(FileIndex).Breakpoints(i).CodeLn
         If ln >= lnStart And ln <= lnEnd Then
-            Me.picSelMargin.PaintPicture BreakpointPic, 0, RowHeight * (ln - lnStart), 240, 240
+            Me.picSelMargin.PaintPicture Me.imgBreakpoint.Picture, 0, RowHeight * (ln - lnStart), 240, 240
         End If
     Next i
+    
+    If BreakLine >= lnStart And BreakLine <= lnEnd Then
+        Me.picSelMargin.PaintPicture Me.imgCurrentLine.Picture, 0, RowHeight * (BreakLine - lnStart), 240, 240
+    End If
 End Sub
 
 Private Sub DarkTitleBar_GotFocus()
@@ -207,10 +233,6 @@ Private Sub Form_Load()
     Me.DarkTitleBar.MaxButtonVisible = True
     Me.DarkTitleBar.MinButtonVisible = True
     
-    Set BreakpointPic = Me.picSelMargin.Picture                                                                         '设置断点图片
-    Set Me.picSelMargin.Picture = Nothing
-    Call ReCalcRowHeight                                                                                                '重新计算代码行高度
-    
     '设置代码框属性
     Me.DarkTitleBar.Top = Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelY
     Me.picSelMargin.Move Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelX, Me.SyntaxEdit.Top, 300, Me.SyntaxEdit.Height
@@ -221,6 +243,7 @@ Private Sub Form_Load()
     Me.SyntaxEdit.PaintManager.LineNumberTextColor = RGB(86, 156, 214)
     Me.SyntaxEdit.DataManager.FileExt = ".cpp"
     Me.SyntaxEdit.ConfigFile = App.Path & "\SyntaxEdit.ini"
+    Call ReCalcRowHeight                                                                                                '重新计算代码行高度
     
     '设置窗口子类化，处理最大化问题及处理任务栏右键关闭
     Dim lpObj               As Long                                                                                     '指向窗口自身的物件指针
@@ -282,6 +305,7 @@ Private Sub picSelMargin_MouseDown(Button As Integer, Shift As Integer, X As Sin
     
     Me.SyntaxEdit.RowColCodeFromPoint X, Y / Screen.TwipsPerPixelY, CurrRow, CurrCol    '获取鼠标坐标对应的行
     Me.SyntaxEdit.SetFocus
+    CurrentProject.Changed = True                                                       '更改断点也视为更改了文件
     
     With CurrentProject.Files(FileIndex)
         BreakpointCount = UBound(.Breakpoints)
@@ -314,6 +338,23 @@ Private Sub picSelMargin_MouseDown(Button As Integer, Shift As Integer, X As Sin
         frmBreakpoints.lvBreakpoints.SetItemChecked .Breakpoints(BreakpointCount).ListViewIndex, True
         Call RedrawBreakpoints                                                          '重绘所有断点
     End With
+End Sub
+
+Private Sub picSelMargin_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    Dim CurrRow         As Long, CurrCol        As Long                                 '鼠标坐标对应的代码行、列。其中列是没用的，但是这个垃圾控件愣是要我传这个参数...
+    Dim i               As Long
+    
+    Me.SyntaxEdit.RowColCodeFromPoint X, Y / Screen.TwipsPerPixelY, CurrRow, CurrCol    '获取鼠标坐标对应的行
+    With CurrentProject.Files(FileIndex)
+        For i = 0 To UBound(.Breakpoints)                                                   '尝试查找该行有没有对应的断点
+            If .Breakpoints(i).CodeLn = CurrRow Then                                            '找到匹配的断点就显示断点信息
+                'ToDo
+                Me.picSelMargin.ToolTipText = "断点于第" & .Breakpoints(i).CodeLn & "行: " & IIf(.Breakpoints(i).Enabled, "ok", "no")
+                Exit Sub
+            End If
+        Next i
+    End With
+    Me.picSelMargin.ToolTipText = ""                                                    '找不到就啥信息都不显示
 End Sub
 
 Private Sub SyntaxEdit_TextChanged(ByVal nRowFrom As Long, ByVal nRowTo As Long, ByVal nActions As Long)

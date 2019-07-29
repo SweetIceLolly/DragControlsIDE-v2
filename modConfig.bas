@@ -14,6 +14,12 @@ Public Type BreakpointInfo
     ListViewIndex                               As Long                                     '在断点列表窗口中的列表框中对应的列表项序号
 End Type
 
+'定义gdb断点信息结构。每个gdb断点都应该对应到CurrentProject.Files(FileIndex).Breakpoints(BreakpointIndex)
+Public Type GdbBreakpointMapInfo
+    FileIndex                                   As Long                                     '对应的文件序号
+    BreakpointIndex                             As Long                                     '对应的断点序号
+End Type
+
 '定义代码文件信息结构
 Public Type SourceFileStruct
     IsHeaderFile                                As Boolean                                  '是否为头文件
@@ -123,8 +129,14 @@ Public Lang_Main_GdbAttachFailed_2              As String
 Public Lang_Main_GdbLoadSymbolsFailure_1        As String
 Public Lang_Main_GdbLoadSymbolsFailure_2        As String
 Public Lang_Main_DebugAborted                   As String
+Public Lang_Main_GdbBreakpointError_1           As String
+Public Lang_Main_GdbBreakpointError_2           As String
+Public Lang_Main_GdbBreakpointError_3           As String
+Public Lang_Main_GdbBreakpoint_Invalid          As String
 Public Lang_Main_DebugInfo_1                    As String
 Public Lang_Main_DebugInfo_2                    As String
+Public Lang_Main_Debug_OpenSourceFailure        As String
+Public Lang_Main_Debug_Returned                 As String
 
 Public Lang_SolutionExplorer_Caption            As String
 Public Lang_SolutionExplorer_RenameFailure_1    As String
@@ -141,14 +153,19 @@ Public Lang_SaveBox_SaveFailure_2               As String
 Public Lang_Breakpoints_Caption                 As String
 Public Lang_Breakpoints_ListViewHeader_File     As String
 Public Lang_Breakpoints_ListViewHeader_Line     As String
+Public Lang_Breakpoints_ListViewHeader_Address  As String
 '===================================================================
 
 Public CurrentProject                           As ProjectFileStruct                        '当前工程的信息
 Public ProjectFolderPath                        As String                                   '当前工程文件夹的位置（以"\"结尾）
 Public ProjectFilePath                          As String                                   '当前项目工程文件的位置
+
 Public TvItemBinding()                          As TvItemToFileIndex                        '当前工程的TreeView列表项和文件序号的绑定
 Public ProjectNameTvItem                        As Long                                     'TreeView列表项和工程名称的绑定
+
 Public CodeWindows                              As New Collection                           '当前工程所有的代码窗口
+Public GdbBreakpoints()                         As GdbBreakpointMapInfo                     '当前调试中的断点信息（gdb）
+
 Public IsExiting                                As Boolean                                  '当前程序是否正在退出
 
 '描述:      获取指定路径里的文件名（即最后一个“\”后面的内容）
@@ -267,8 +284,14 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_Main_GdbLoadSymbolsFailure_1 = "从可执行文件"
     Lang_Main_GdbLoadSymbolsFailure_2 = " 加载符号失败！这意味着断点、查看本地变量等调试功能将无法正常工作，是否继续调试？"
     Lang_Main_DebugAborted = "放弃调试。"
+    Lang_Main_GdbBreakpointError_1 = "断点错误: 在文件 "
+    Lang_Main_GdbBreakpointError_2 = " 中找不到第"
+    Lang_Main_GdbBreakpointError_3 = "行。"
+    Lang_Main_GdbBreakpoint_Invalid = "<断点无效>"
     Lang_Main_DebugInfo_1 = "调试正在进行: gdb.exe 进程ID: "
     Lang_Main_DebugInfo_2 = " 进程ID: "
+    Lang_Main_Debug_OpenSourceFailure = "无法打开代码文件: "
+    Lang_Main_Debug_Returned = "程序退出并返回: "
     
     Lang_SolutionExplorer_Caption = "工程资源管理器"
     Lang_SolutionExplorer_RenameFailure_1 = "为文件"
@@ -284,5 +307,6 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     
     Lang_Breakpoints_ListViewHeader_File = "文件"
     Lang_Breakpoints_ListViewHeader_Line = "行号"
+    Lang_Breakpoints_ListViewHeader_Address = "地址"
 End Function
 

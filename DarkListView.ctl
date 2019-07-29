@@ -30,12 +30,13 @@ Event ItemSelectionChanged()
 Event MouseMove(Button As Long, Shift As Long, X As Integer, Y As Integer)
 Event MouseDown(Button As Integer, Shift As Long, X As Integer, Y As Integer)
 Event MouseUp(Button As Integer, Shift As Long, X As Integer, Y As Integer)
-Event DoubleClick(Button As Integer, Shift As Long, X As Integer, Y As Integer)
 Event KeyDown(KeyCode As Integer, Shift As Integer)
 Event KeyUp(KeyCode As Integer, Shift As Integer)
 Event ColumnClick(HeaderIndex As Integer)
 Event ListViewLostFocus()
 Event ListViewGotFocus()
+Event Click(iItem As Long, iSubItem As Long, X As Long, Y As Long)
+Event DoubleClick(iItem As Long, iSubItem As Long, X As Long, Y As Long)
 
 'Default Property Values:
 Const m_def_FullRowSelect = True
@@ -63,11 +64,6 @@ Public Sub RaiseMouseUp(Button As Integer, Shift As Long, X As Integer, Y As Int
 End Sub
 
 'Please note that this function is for internal usage only and is NOT suggested to call directly
-Public Sub RaiseDoubleClick(Button As Integer, Shift As Long, X As Integer, Y As Integer)
-    RaiseEvent DoubleClick(Button, Shift, X, Y)
-End Sub
-
-'Please note that this function is for internal usage only and is NOT suggested to call directly
 Public Sub RaiseKeyDown(KeyCode As Integer, Shift As Integer)
     RaiseEvent KeyDown(KeyCode, Shift)
 End Sub
@@ -90,6 +86,15 @@ End Sub
 'Please note that this function is for internal usage only and is NOT suggested to call directly
 Public Sub RaiseGotFocus()
     RaiseEvent ListViewGotFocus
+End Sub
+
+'Please note that this function is for internal usage only and is NOT suggested to call directly
+Public Sub RaiseClick(iItem As Long, iSubItem As Long, X As Long, Y As Long)
+    RaiseEvent Click(iItem, iSubItem, X, Y)
+End Sub
+
+Public Sub RaiseDoubleClick(iItem As Long, iSubItem As Long, X As Long, Y As Long)
+    RaiseEvent DoubleClick(iItem, iSubItem, X, Y)
 End Sub
 
 Public Function AddColumnHeader(Text As String, Optional Width As Integer = 75, Optional Index As Long = -1) As Long
@@ -221,7 +226,8 @@ End Sub
 '参数:      Index: 列表项序号
 '返回值:    True: 勾选; False: 不勾选
 Public Function GetItemChecked(Index As Long) As Boolean
-    
+    'x \ 2^12 = x >> 12
+    GetItemChecked = ((SendMessageA(lvHwnd, LVM_GETITEMSTATE, ByVal Index, LVIS_STATEIMAGEMASK) \ (2 ^ 12) - 1) = 1)
 End Function
 
 Public Sub Clear()

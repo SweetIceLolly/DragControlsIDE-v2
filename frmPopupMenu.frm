@@ -287,6 +287,8 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
                 Me.imgMenuCheckBox(nCheckBoxes).LoadImage_FromArray Menus(CurrSubMenuID(i)).MenuIcon
                 Me.imgMenuCheckBox(nCheckBoxes).Visible = True
                 Me.imgMenuCheckBox(nCheckBoxes).ZOrder 0
+                Me.labItem(i - 1).BackColor = RGB(27, 27, 28)
+                Me.labItem(i - 1).BackColor = RGB(51, 51, 52)
                 nCheckBoxes = nCheckBoxes + 1
             End If
             If UBound(Menus(CurrSubMenuID(i)).SubMenuID) > 0 Then
@@ -490,6 +492,13 @@ End Sub
 
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
     IsUsingKeyboard = False
+    
+    On Error Resume Next
+    Dim i   As Integer
+    For i = 0 To Me.labItem.UBound
+        Me.labItem(i).BackColor = RGB(27, 27, 28)
+        Me.imgMenuCheckBox(i).Refresh
+    Next i
 End Sub
 
 Private Sub Form_Resize()
@@ -543,6 +552,7 @@ Private Sub labItem_MouseDown(Index As Integer, Button As Integer, Shift As Inte
 End Sub
 
 Private Sub labItem_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+    On Error Resume Next
     Dim i           As Integer
     
     If Abs(PrevX - X) > 1 Or Abs(PrevY - Y) > 1 Or IsUsingKeyboard Then
@@ -552,6 +562,7 @@ Private Sub labItem_MouseMove(Index As Integer, Button As Integer, Shift As Inte
         If Index <> PrevItem Then
             For i = 0 To Me.labItem.UBound
                 Me.labItem(i).BackColor = RGB(27, 27, 28)
+                Me.imgMenuCheckBox(i).Refresh
             Next i
             Me.labItem(Index).BackColor = RGB(51, 51, 52)
             PrevItem = Index

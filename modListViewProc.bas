@@ -51,15 +51,6 @@ Public Function ListViewProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wPara
         Case WM_MBUTTONUP
             CtlList(GetPropA(hWnd, "ID")).RaiseMouseUp 4, GetShiftValue(wParam), LoWord(lParam), HiWord(lParam)
         
-        Case WM_LBUTTONDBLCLK
-            CtlList(GetPropA(hWnd, "ID")).RaiseDoubleClick 1, GetShiftValue(wParam), LoWord(lParam), HiWord(lParam)
-        
-        Case WM_RBUTTONDBLCLK
-            CtlList(GetPropA(hWnd, "ID")).RaiseDoubleClick 2, GetShiftValue(wParam), LoWord(lParam), HiWord(lParam)
-        
-        Case WM_MBUTTONDBLCLK
-            CtlList(GetPropA(hWnd, "ID")).RaiseDoubleClick 4, GetShiftValue(wParam), LoWord(lParam), HiWord(lParam)
-        
         Case WM_SETFOCUS
             SetFocus GetPropA(hWnd, "PARENT_CTL")
         
@@ -77,6 +68,7 @@ Public Function ListViewNotifyMessageProc(ByVal hWnd As Long, ByVal uMsg As Long
     Dim nm              As NMHDR
     Dim nmlv            As NMLISTVIEW
     Dim nmcd            As NMLVCUSTOMDRAW
+    Dim nmia            As NMITEMACTIVATE
     
     If uMsg = WM_NOTIFY Then
         CopyMemory nm, ByVal lParam, ByVal Len(nm)
@@ -92,7 +84,15 @@ Public Function ListViewNotifyMessageProc(ByVal hWnd As Long, ByVal uMsg As Long
 
             Case NM_SETFOCUS
                 CtlList(GetPropA(nm.hWndFrom, "ID")).RaiseGotFocus
-                
+            
+            Case NM_CLICK                                                       '选择列表项
+                CopyMemory nmia, ByVal lParam, Len(nmia)
+                CtlList(GetPropA(nm.hWndFrom, "ID")).RaiseClick nmia.iItem, nmia.iSubItem, nmia.ptAction.X, nmia.ptAction.Y
+            
+            Case NM_DBLCLK                                                      '双击列表项
+                CopyMemory nmia, ByVal lParam, Len(nmia)
+                CtlList(GetPropA(nm.hWndFrom, "ID")).RaiseDoubleClick nmia.iItem, nmia.iSubItem, nmia.ptAction.X, nmia.ptAction.Y
+            
         End Select
     End If
     ListViewNotifyMessageProc = CallWindowProc(PrevLVUserCtlProc, hWnd, uMsg, wParam, lParam)
