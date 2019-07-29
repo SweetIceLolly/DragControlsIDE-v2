@@ -1,6 +1,42 @@
 【日志】
 
-# 2019.7.15
+# 2019.7.29
+
+为ListView控件添加Click事件（NM_CLICK）；修改DoubleClick事件的处理方式（WM_xBUTTONDBLCLK -> NM_DBLCLK）；添加GetItemChecked函数的代码，用以获取列表项是否已勾选。
+
+为管道类添加ClearPipe函数，该函数使用ReadFile读取管道内的内容以清空管道。有时候分析gdb输出的时候会分析到之前的无用输出，因此添加该函数。
+
+为代码窗口添加断点、禁用的断点和当前行的图片，供之后使用。
+
+现在更改断点也视为更改了文件。
+
+鼠标移动到断点栏上面会显示对应的端点的信息。
+
+修复有时候菜单图标没绘制出来的问题。
+
+把frmSolutionExplorer中SolutionTreeView_DoubleClick的代码弄得优雅一点。
+
+添加运行、中断、停止的菜单图标。（感谢404帮忙绘制）
+
+添加GdbBreakpointMapInfo用户类型，用来把gdb里面的断点序号跟不同文件里面的断点映射起来。
+
+frmMain添加CurrState全局变量，用来记录当前的调试状态。
+
+frmMain的mnuRun_Click：按下之后先检查CurrState，如果是中断状态的话就向gdb发送继续运行命令。
+
+修复frmMain的mnuRun_Click中对重名EXE文件的检测，原来是ExePath还没赋值就用Dir去检测他了。
+
+改善frmMain的mnuRun_Click代码排版，看起来似乎舒服多了？（x
+
+在frmMain的mnuRun_Click中添加使用gdb下断点的代码。这部分的代码写得好辛苦，总结一下：
+1. 使用DosInput的时候命令后面要添加换行符！否则命令就不执行了... 好几次都栽在这个坑里。
+2. 断点列表里的最后一个元素是没有用到的。
+3. gdb的输出需要逐行分析，否则直接进行分析会很乱、很复杂。而一行行拆开分析就好很多了。
+4. 每次使用DosInput往gdb发送命令时应该先用ClearPipe清理管道，防止把上次的命令输出也一并分析了。
+
+使用frmCheckProcess来定时获取gdb是否有输出内容，有的话对其分析。分别处理了断点命中消息和程序退出消息。
+
+# 2019.7.25
 
 为ListView控件添加GridLines和CurrExStyle属性，并改进了该控件调整样式的方式（使用CurrExStyle变量而不是直接用常数值更改样式，能够使控件的多种样式能同时使用）。
 
