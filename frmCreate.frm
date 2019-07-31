@@ -3,21 +3,21 @@ Begin VB.Form frmCreate
    BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "新建项目"
-   ClientHeight    =   5868
+   ClientHeight    =   5865
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   7548
+   ClientWidth     =   7545
    Icon            =   "frmCreate.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
-   ScaleHeight     =   5868
-   ScaleWidth      =   7548
-   StartUpPosition =   3  '窗口缺省
+   ScaleHeight     =   5865
+   ScaleWidth      =   7545
+   StartUpPosition =   3  'Windows Default
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorder 
       Left            =   6840
       Top             =   5160
-      _ExtentX        =   677
-      _ExtentY        =   677
+      _ExtentX        =   847
+      _ExtentY        =   847
       Sizable         =   0   'False
    End
    Begin DragControlsIDE.DarkTitleBar DarkTitleBar_NoDrop 
@@ -27,8 +27,8 @@ Begin VB.Form frmCreate
       TabIndex        =   8
       Top             =   0
       Width           =   7545
-      _ExtentX        =   13314
-      _ExtentY        =   868
+      _ExtentX        =   13309
+      _ExtentY        =   873
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -52,8 +52,8 @@ Begin VB.Form frmCreate
       TabIndex        =   0
       Top             =   1080
       Width           =   6855
-      _ExtentX        =   12086
-      _ExtentY        =   1355
+      _ExtentX        =   12091
+      _ExtentY        =   1349
       Image           =   "frmCreate.frx":1C914
       HasBorder       =   0   'False
       Caption         =   "       新建窗口程序"
@@ -65,8 +65,8 @@ Begin VB.Form frmCreate
       TabIndex        =   1
       Top             =   1920
       Width           =   6855
-      _ExtentX        =   12086
-      _ExtentY        =   1355
+      _ExtentX        =   12091
+      _ExtentY        =   1349
       Image           =   "frmCreate.frx":1CA47
       HasBorder       =   0   'False
       Caption         =   "       新建控制台程序"
@@ -78,8 +78,8 @@ Begin VB.Form frmCreate
       TabIndex        =   2
       Top             =   2760
       Width           =   6855
-      _ExtentX        =   12086
-      _ExtentY        =   1355
+      _ExtentX        =   12091
+      _ExtentY        =   1349
       Image           =   "frmCreate.frx":1CBC8
       HasBorder       =   0   'False
       Caption         =   "       新建空白C++程序"
@@ -91,8 +91,8 @@ Begin VB.Form frmCreate
       TabIndex        =   3
       Top             =   3600
       Width           =   6855
-      _ExtentX        =   12086
-      _ExtentY        =   1355
+      _ExtentX        =   12091
+      _ExtentY        =   1349
       Image           =   "frmCreate.frx":1CF0D
       HasBorder       =   0   'False
       Caption         =   "       打开工程..."
@@ -193,20 +193,26 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub cmdNewWindowProgram_Click()
+    On Error Resume Next
     frmCreateOptions.NewProjectType = 1                 '设置工程类型
     frmCreateOptions.Show                               '显示新建选项
+    frmCreateOptions.edProjectName.SetFocus
     Unload Me
 End Sub
 
 Private Sub cmdNewConsoleProgram_Click()
+    On Error Resume Next
     frmCreateOptions.NewProjectType = 2                 '设置工程类型
     frmCreateOptions.Show                               '显示新建选项
+    frmCreateOptions.edProjectName.SetFocus
     Unload Me
 End Sub
 
 Private Sub cmdNewPlainCpp_Click()
+    On Error Resume Next
     frmCreateOptions.NewProjectType = 3                 '设置工程类型
     frmCreateOptions.Show                               '显示新建选项
+    frmCreateOptions.edProjectName.SetFocus
     Unload Me
 End Sub
 
@@ -223,6 +229,18 @@ Private Sub Form_KeyPress(KeyAscii As Integer)
         KeyAscii = 0
         Unload Me
     End If
+End Sub
+
+Private Sub Form_Load()
+    '加载语言字符串
+    Me.Caption = Lang_Create_Caption
+    Me.labTip(1).Caption = Lang_Create_CreateLabel
+    Me.labTip(3).Caption = Lang_Create_RecentLabel
+    Me.cmdNewConsoleProgram.Caption = Lang_Create_NewConsoleProgram
+    Me.cmdNewPlainCpp.Caption = Lang_Create_NewEmptyCpp
+    Me.cmdNewWindowProgram.Caption = Lang_Create_NewWindowProgram
+    Me.cmdOpenProject.Caption = Lang_Create_OpenProject
+    '---------------------------------------------------------------------
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)

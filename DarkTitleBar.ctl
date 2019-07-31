@@ -10,14 +10,14 @@ Begin VB.UserControl DarkTitleBar
    ScaleWidth      =   5370
    ToolboxBitmap   =   "DarkTitleBar.ctx":0000
    Begin DragControlsIDE.DarkMenu mnuPopup 
-      Height          =   315
+      Height          =   345
       Left            =   240
       TabIndex        =   4
       Top             =   600
       Visible         =   0   'False
       Width           =   2535
       _ExtentX        =   4471
-      _ExtentY        =   556
+      _ExtentY        =   609
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9.75
@@ -206,11 +206,11 @@ Private Sub cmdMax_Click()
     GetWindowPlacement UserControl.Parent.hWnd, wp
     If wp.ShowCmd = SW_MAXIMIZE Then
         ShowWindow UserControl.Parent.hWnd, SW_RESTORE
-        UserControl.cmdMax.ToolTipText = "最大化"
+        UserControl.cmdMax.ToolTipText = Lang_TitleBar_Max
         Set UserControl.cmdMax.Picture = UserControl.imgMax.Picture
     Else
         ShowWindow UserControl.Parent.hWnd, SW_MAXIMIZE
-        UserControl.cmdMax.ToolTipText = "还原"
+        UserControl.cmdMax.ToolTipText = Lang_TitleBar_Restore
         Set UserControl.cmdMax.Picture = UserControl.imgRestore.Picture
     End If
 End Sub
@@ -308,6 +308,15 @@ Private Sub UserControl_MouseDown(Button As Integer, Shift As Integer, X As Sing
 End Sub
 
 Private Sub UserControl_Initialize()
+    UserControl.cmdClose.ToolTipText = Lang_TitleBar_Close
+    UserControl.cmdMax.ToolTipText = Lang_TitleBar_Max
+    UserControl.cmdMin.ToolTipText = Lang_TitleBar_Min
+    UserControl.mnuPopup.MenuText(1) = Lang_TitleBar_Restore
+    UserControl.mnuPopup.MenuText(2) = Lang_TitleBar_Max
+    UserControl.mnuPopup.MenuText(3) = Lang_TitleBar_Min
+    UserControl.mnuPopup.MenuText(5) = Lang_TitleBar_Close
+    '----------------------------------
+    
     Call UserControl_Resize
 End Sub
 
@@ -332,10 +341,10 @@ Private Sub UserControl_Resize()
     
     GetWindowPlacement UserControl.Parent.hWnd, wp
     If wp.ShowCmd = SW_MAXIMIZE Then
-        UserControl.cmdMax.ToolTipText = "还原"
+        UserControl.cmdMax.ToolTipText = Lang_TitleBar_Restore
         Set UserControl.cmdMax.Picture = UserControl.imgRestore.Picture
     Else
-        UserControl.cmdMax.ToolTipText = "最大化"
+        UserControl.cmdMax.ToolTipText = Lang_TitleBar_Max
         Set UserControl.cmdMax.Picture = UserControl.imgMax.Picture
     End If
 End Sub

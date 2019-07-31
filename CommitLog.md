@@ -1,5 +1,153 @@
 【日志】
 
+# 2019.7.29
+
+为ListView控件添加Click事件（NM_CLICK）；修改DoubleClick事件的处理方式（WM_xBUTTONDBLCLK -> NM_DBLCLK）；添加GetItemChecked函数的代码，用以获取列表项是否已勾选。
+
+为管道类添加ClearPipe函数，该函数使用ReadFile读取管道内的内容以清空管道。有时候分析gdb输出的时候会分析到之前的无用输出，因此添加该函数。
+
+为代码窗口添加断点、禁用的断点和当前行的图片，供之后使用。
+
+现在更改断点也视为更改了文件。
+
+鼠标移动到断点栏上面会显示对应的端点的信息。
+
+修复有时候菜单图标没绘制出来的问题。
+
+把frmSolutionExplorer中SolutionTreeView_DoubleClick的代码弄得优雅一点。
+
+添加运行、中断、停止的菜单图标。（感谢404帮忙绘制）
+
+添加GdbBreakpointMapInfo用户类型，用来把gdb里面的断点序号跟不同文件里面的断点映射起来。
+
+frmMain添加CurrState全局变量，用来记录当前的调试状态。
+
+frmMain的mnuRun_Click：按下之后先检查CurrState，如果是中断状态的话就向gdb发送继续运行命令。
+
+修复frmMain的mnuRun_Click中对重名EXE文件的检测，原来是ExePath还没赋值就用Dir去检测他了。
+
+改善frmMain的mnuRun_Click代码排版，看起来似乎舒服多了？（x
+
+在frmMain的mnuRun_Click中添加使用gdb下断点的代码。这部分的代码写得好辛苦，总结一下：
+1. 使用DosInput的时候命令后面要添加换行符！否则命令就不执行了... 好几次都栽在这个坑里。
+2. 断点列表里的最后一个元素是没有用到的。
+3. gdb的输出需要逐行分析，否则直接进行分析会很乱、很复杂。而一行行拆开分析就好很多了。
+4. 每次使用DosInput往gdb发送命令时应该先用ClearPipe清理管道，防止把上次的命令输出也一并分析了。
+
+使用frmCheckProcess来定时获取gdb是否有输出内容，有的话对其分析。分别处理了断点命中消息和程序退出消息。
+
+# 2019.7.25
+
+为ListView控件添加GridLines和CurrExStyle属性，并改进了该控件调整样式的方式（使用CurrExStyle变量而不是直接用常数值更改样式，能够使控件的多种样式能同时使用）。
+
+为ListView控件添加SetItemChecked方法和GetItemChecked方法（忘记编写了，晚点补上2333），用来获取列表项是否勾选。
+
+为代码窗体添加断点相关的代码，如添加断点、绘制断点、文本更改时更改有关的断点、文本删除时删除断点等。
+
+刷新断点的方式比较不优雅，是靠拦截代码框的WM_PAINT消息，然后做标记，告诉计时器断点需要刷新。暂时没有找到更优雅的方法。
+
+调整代码窗体的Form_Load中的代码顺序，修复界面布局不能正确计算。
+
+新建项目窗体：增加对工程名称、工程路径的命名检测。不允许特殊字符及空路径。按下确定键之后不直接创建cpp文件，而是等用户手动保存之后才创建。这样大概能更好的避免用户手贱把重要文件覆盖掉吧...(雾
+
+frmMain的mnuSave_Click中处理没有文件需要保存的情况。
+
+frmMain在显示frmStartupLogo的时候会Refresh它，否则它的内容显示不出来。
+
+修复菜单项左边的图标跟菜单项不对齐的问题。
+
+frmSaveBox的lstFiles_Click中处理没有选择保存文件的情况。如果用户一个文件都没有选择，就不给按下“是”。
+
+修改modConfig.bas里的代码排版...强迫症（x
+
+# 2019.7.22
+
+把DarkButton的AutoRedraw设置成True，大概可以减少闪烁吧。
+
+把frmCreateOptions和frmSaveBox的标题栏改名，使他们不能被拖进TabBar。
+
+frmMain添加IsSaveRequired函数，用来检查是否有文件未保存。
+
+把frmMain保存的代码放到了frmSaveBox里，能够直观的显示所有需要保存的文件，并让用户可以自行选择保存的文件。
+
+优化frmMain中mnuRun_Click的保存文件的代码，更加易于使用。
+
+frmMain的mnuRun_Click添加检查同名exe文件的过程，遇到同名的exe文件时会提示用户。
+
+frmMain的Form_QueryUnload中添加保存文件的代码。
+
+添加断点信息结构。同时也为代码文件信息结构中添加断点信息。
+
+把代码文件信息结构的用户类型命名改得好听一点。（x
+
+添加GetFileName函数，用于从指定路径分隔出文件名（即最后一个“\”后面的文本）
+
+# 2019.7.21
+
+大幅删改ListView的代码。由于有皮肤控件帮忙，ListView可以更优雅的实现，于是去除所有不必要的控件和代码。另外把该控件的hWnd变量重命名为了lvHwnd。~~mmp是谁这样子起变量名的！！！让我发现不打死他！好像是自己起的哦...~~
+
+把代码框左边的侧边栏去掉，并换成图片框控件。因为这个天杀的代码框居然没有提供获取断点的接口！！！我去年买了个表看样子要自己实现下断点的功能了。
+
+优化用户体验，包括显示frmCreateOptions的时候让edProjectName获取焦点，自动生成WinMain代码的时候自动#include <windows.h>
+
+为DarkVScrollBar控件的Public Property Let BarHeight添加了On Error Resume Next，因为有一定的出错几率。
+
+TabBar现在会为子窗体添加WS_CHILD样式，使母窗体不失去焦点。
+
+运行前的保存提示考虑工程文件。
+
+gdb在附加进程前先发送`file 【待调试进程】`加载符号和`set pagination off`关闭gdb的"Type to continue, or q to quit"消息。
+
+在主窗体的QueryUnload事件中添加隐藏菜单的代码，因为发现有一定的几率即使主窗体关闭后菜单也没被隐藏。
+
+调整主窗体的QueryUnload事件中恢复窗口子类化的顺序，因为有时候会取消掉窗口关闭。
+
+添加保存专用的代码文件信息结构和工程文件结构。
+
+# 2019.7.20
+
+把DarkComboBox的Image控件换成PNG控件，因为Image控件的颜色会被皮肤控件影响。
+
+为TreeView添加了TVS_HASLINES样式。
+
+把TabBar控件的SetFocus方法重命名为SwitchTo。
+
+为TabBar控件添加SwitchToByForm方法，使TabBar能够切换到指定的窗口。
+
+为TabBar控件添加UpdateCaptions方法，使TabBar能够更新所有窗口的标题。
+
+添加了Win32Api.tlb文件到目录里。
+
+clsPipe.cls里DosOutput的EndingStr参数说明之前忘记写了，现在补上。
+
+把所有字符串常量都换成了变量，为之后切换语言的功能做准备。
+
+把加载语言、显示Logo的代码放到了frmMain的Initialize事件中，因为语言必须比用户控件更早加载。
+
+在创建工程后把工程文件标记为已更改。
+
+把工程资源管理器里的“工程”替换成了当前工程的名称，并支持重命名。重命名文件的时候会自动选择“.”前面的字符串。
+
+frmCreateOptions里的edProjectName文本框响应回车键。
+
+frmCreateOptions在Load的时候不关闭皮肤，改成显示选择目录对话框的时候才关闭皮肤，选择完目录之后就立即恢复皮肤。
+
+_保存工程的代码尚未编写！_
+
+处理了gdb附加进程失败的情况。
+
+处理了加载皮肤失败的清空。
+
+为LoadLanguage函数添加了一个可选参数LoadMenuTextOnly，因为加载语言需要分成两步进行，首先在frmMain的Initialize事件中加载各种字符串，然后再在frmMain的Load事件中加载所有菜单语言。
+
+# 2019.7.12
+
+拖延了好几天（啊啊啊最近好忙），终于merge了404的pr...感谢404~
+
+把按钮控件的AutoRedraw设置成True，避免按钮闪烁。
+
+TabBar控件添加RemoveFormByForm方法。
+
 # 2019.7.7
 
 为DarkTitleBar添加了MinVisible和MaxVisible属性，可以选择隐藏最大、最小化按钮。如果有点Bug，有时候运行之后最大、最小化按钮就会自己隐藏，不知道为啥，也修不好，所以干脆运行时用代码设置算了。

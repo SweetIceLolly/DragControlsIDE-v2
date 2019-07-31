@@ -1,0 +1,10 @@
+C:\Users\Yorkin\source\repos\DragControls2\GitControl\GitControl\bin\Debug\GitControl.exe.config
+C:\Users\Yorkin\source\repos\DragControls2\GitControl\GitControl\bin\Debug\GitControl.exe
+C:\Users\Yorkin\source\repos\DragControls2\GitControl\GitControl\bin\Debug\GitControl.pdb
+C:\Users\Yorkin\source\repos\DragControls2\GitControl\GitControl\bin\Debug\Octokit.dll
+C:\Users\Yorkin\source\repos\DragControls2\GitControl\GitControl\bin\Debug\Octokit.xml
+C:\Users\Yorkin\source\repos\DragControls2\GitControl\GitControl\obj\Debug\GitControl.csprojAssemblyReference.cache
+C:\Users\Yorkin\source\repos\DragControls2\GitControl\GitControl\obj\Debug\GitControl.csproj.CoreCompileInputs.cache
+C:\Users\Yorkin\source\repos\DragControls2\GitControl\GitControl\obj\Debug\GitControl.csproj.CopyComplete
+C:\Users\Yorkin\source\repos\DragControls2\GitControl\GitControl\obj\Debug\GitControl.exe
+C:\Users\Yorkin\source\repos\DragControls2\GitControl\GitControl\obj\Debug\GitControl.pdb

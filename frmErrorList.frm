@@ -22,3 +22,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Private Sub Form_Load()
+    Me.Caption = Lang_ErrorList_Caption
+End Sub

@@ -448,6 +448,7 @@ Attribute BarHeight.VB_Description = "Returns/sets the height of the bar."
 End Property
 
 Public Property Let BarHeight(ByVal New_BarHeight As Long)
+    On Error Resume Next
     m_BarHeight = New_BarHeight
     PropertyChanged "BarHeight"
     

@@ -47,6 +47,10 @@ Public Sub OutputLog(strOutput As String)
     Me.edOutput.SelStart = Len(Me.edOutput.Text)                                            '滚动到文本末尾
 End Sub
 
+Private Sub Form_Load()
+    Me.Caption = Lang_Output_Caption
+End Sub
+
 Private Sub Form_Resize()
     On Error Resume Next
     

@@ -159,9 +159,26 @@ Public Function DosInput(ByVal strInput As String) As Long
     DosInput = 1
 End Function
 
+'描述:      清空管道内的内容
+'返回值:    0代表失败，非0代表成功
+Public Function ClearPipe() As Long
+    Dim bRead       As Long
+    Dim szOutData   As Long
+    Dim OutData()   As Byte
+    
+    If PeekNamedPipe(hOutput, 0, 0, ByVal 0, szOutData, ByVal 0) = 0 Then       '获取管道中的数据大小
+        ClearPipe = 0
+        Exit Function
+    End If
+    If szOutData > 0 Then
+        ReDim OutData(szOutData)
+        ClearPipe = ReadFile(hOutput, OutData(0), szOutData, bRead, 0)          '读取管道，以清空管道中的数据
+    End If
+End Function
+
 '描述:      获取目标进程的输出
 '参数:      lpStrOutput: 存放输出的字符串
-'           EndingStr:
+'           EndingStr: 当输出的结尾是EndingStr时，就停止获取输出
 '返回值:    1代表获取成功，0代表获取失败
 Public Function DosOutput(ByRef strOutput As String, ByVal EndingStr As String) As Long
     Dim ret         As Long                                                 '函数的返回值
@@ -194,6 +211,7 @@ Public Function DosOutput(ByRef strOutput As String, ByVal EndingStr As String) 
             strOutput = strOutput & StrConv(OutData, vbUnicode)
             strOutput = Left(strOutput, Len(strOutput) - 1)
             strOutput = Replace(strOutput, vbLf, vbCrLf)
+            Debug.Print strOutput       'ToDO
         End If
         
         DoEvents                                                                '不要霸占着整条线程

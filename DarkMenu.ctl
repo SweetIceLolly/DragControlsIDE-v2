@@ -5,10 +5,10 @@ Begin VB.UserControl DarkMenu
    ClientHeight    =   480
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   5565
+   ClientWidth     =   5568
    PropertyPages   =   "DarkMenu.ctx":0000
    ScaleHeight     =   480
-   ScaleWidth      =   5565
+   ScaleWidth      =   5568
    ToolboxBitmap   =   "DarkMenu.ctx":0014
    Begin VB.Timer tmrCheckFocus 
       Enabled         =   0   'False
@@ -46,7 +46,7 @@ Begin VB.UserControl DarkMenu
       Caption         =   " Item"
       BeginProperty Font 
          Name            =   "Microsoft YaHei UI"
-         Size            =   9.75
+         Size            =   9.6
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -352,7 +352,7 @@ Private Sub labRootItem_MouseMove(Index As Integer, Button As Integer, Shift As 
                 Call labRootItem_MouseDown(Index, 1, 0, 0, 0)
             End If
         Else
-            UserControl.labRootItem(Index).BackColor = RGB(62, 62, 64)
+            UserControl.labRootItem(Index).BackColor = RGB(92, 92, 94)
         End If
         UserControl.tmrCheckFocus.Enabled = True
     End If

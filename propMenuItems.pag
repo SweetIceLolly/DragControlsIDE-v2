@@ -3,12 +3,12 @@ Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "Image.ocx"
 Begin VB.PropertyPage propMenuItems 
    BackColor       =   &H00302D2D&
    Caption         =   "菜单编辑器"
-   ClientHeight    =   4995
+   ClientHeight    =   4992
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   6120
    PaletteMode     =   0  'Halftone
-   ScaleHeight     =   4995
+   ScaleHeight     =   4992
    ScaleWidth      =   6120
    Begin DragControlsIDE.DarkListBox lstMenus 
       Height          =   2190
@@ -16,11 +16,11 @@ Begin VB.PropertyPage propMenuItems
       TabIndex        =   17
       Top             =   2400
       Width           =   5775
-      _ExtentX        =   10186
-      _ExtentY        =   3863
+      _ExtentX        =   10181
+      _ExtentY        =   3725
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
-         Size            =   8.25
+         Size            =   8.4
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -35,8 +35,8 @@ Begin VB.PropertyPage propMenuItems
       TabIndex        =   11
       Top             =   1920
       Width           =   1095
-      _ExtentX        =   1931
-      _ExtentY        =   661
+      _ExtentX        =   1926
+      _ExtentY        =   656
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -54,8 +54,8 @@ Begin VB.PropertyPage propMenuItems
       TabIndex        =   10
       Top             =   1920
       Width           =   1095
-      _ExtentX        =   1931
-      _ExtentY        =   661
+      _ExtentX        =   1926
+      _ExtentY        =   656
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -73,8 +73,8 @@ Begin VB.PropertyPage propMenuItems
       TabIndex        =   7
       Top             =   1920
       Width           =   375
-      _ExtentX        =   661
-      _ExtentY        =   661
+      _ExtentX        =   656
+      _ExtentY        =   656
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -92,8 +92,8 @@ Begin VB.PropertyPage propMenuItems
       TabIndex        =   5
       Top             =   1920
       Width           =   375
-      _ExtentX        =   661
-      _ExtentY        =   661
+      _ExtentX        =   656
+      _ExtentY        =   656
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -111,8 +111,8 @@ Begin VB.PropertyPage propMenuItems
       TabIndex        =   6
       Top             =   1920
       Width           =   375
-      _ExtentX        =   661
-      _ExtentY        =   661
+      _ExtentX        =   656
+      _ExtentY        =   656
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -130,8 +130,8 @@ Begin VB.PropertyPage propMenuItems
       TabIndex        =   8
       Top             =   1920
       Width           =   375
-      _ExtentX        =   661
-      _ExtentY        =   661
+      _ExtentX        =   656
+      _ExtentY        =   656
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -149,8 +149,8 @@ Begin VB.PropertyPage propMenuItems
       TabIndex        =   9
       Top             =   1920
       Width           =   1095
-      _ExtentX        =   1931
-      _ExtentY        =   661
+      _ExtentX        =   1926
+      _ExtentY        =   656
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -168,8 +168,8 @@ Begin VB.PropertyPage propMenuItems
       TabIndex        =   2
       Top             =   1320
       Width           =   1935
-      _ExtentX        =   3413
-      _ExtentY        =   661
+      _ExtentX        =   3408
+      _ExtentY        =   656
       Enabled         =   -1  'True
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
@@ -188,8 +188,8 @@ Begin VB.PropertyPage propMenuItems
       TabIndex        =   0
       Top             =   240
       Width           =   1215
-      _ExtentX        =   2143
-      _ExtentY        =   661
+      _ExtentX        =   2138
+      _ExtentY        =   656
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -207,8 +207,8 @@ Begin VB.PropertyPage propMenuItems
       TabIndex        =   1
       Top             =   720
       Width           =   1215
-      _ExtentX        =   2143
-      _ExtentY        =   661
+      _ExtentX        =   2138
+      _ExtentY        =   656
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
          Size            =   9
@@ -228,8 +228,8 @@ Begin VB.PropertyPage propMenuItems
       TabIndex        =   3
       Top             =   1320
       Width           =   1815
-      _ExtentX        =   3201
-      _ExtentY        =   661
+      _ExtentX        =   3196
+      _ExtentY        =   656
       Enabled         =   -1  'True
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
@@ -249,8 +249,8 @@ Begin VB.PropertyPage propMenuItems
       TabIndex        =   4
       Top             =   1320
       Width           =   1815
-      _ExtentX        =   3201
-      _ExtentY        =   661
+      _ExtentX        =   3196
+      _ExtentY        =   656
       Enabled         =   -1  'True
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Microsoft YaHei UI"
@@ -264,13 +264,32 @@ Begin VB.PropertyPage propMenuItems
       Caption         =   "该菜单可视"
       Value           =   -1  'True
    End
+   Begin DragControlsIDE.DarkButton cmdImgFromFile 
+      Height          =   252
+      Left            =   5280
+      TabIndex        =   18
+      Top             =   1056
+      Width           =   612
+      _ExtentX        =   1080
+      _ExtentY        =   445
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "从文件"
+   End
    Begin ImageX.aicAlphaImage picMenuIcon 
       Height          =   615
       Left            =   5280
       Top             =   360
       Width           =   615
-      _ExtentX        =   1085
-      _ExtentY        =   1085
+      _ExtentX        =   1080
+      _ExtentY        =   1080
       Image           =   "propMenuItems.pgx":0000
       OLEdrop         =   1
    End
@@ -477,6 +496,26 @@ Private Sub cmdDown_Click()
         edMenuText.SelStart = 0
         edMenuText.SelLength = Len(edMenuText.Text)
         edMenuText.SetFocus
+    End If
+End Sub
+
+Private Sub cmdImgFromFile_Click()
+    Dim File As String
+    
+    File = App.Path & "\icons\" & InputBox("", "")
+    
+    On Error Resume Next
+    Dim imgData()   As Byte
+    
+    If picMenuIcon.LoadImage_FromFile(File) Then
+        Open File For Binary As #1
+            ReDim imgData(LOF(1))
+            Get #1, , imgData
+        Close #1
+        Menus(lstMenus.ListIndex + 1).MenuIcon = imgData
+    Else
+        Menus(lstMenus.ListIndex + 1).MenuIcon = StrConv("", vbFromUnicode)
+        labError.Caption = "无效的图片！"
     End If
 End Sub
 

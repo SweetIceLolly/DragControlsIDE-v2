@@ -7,6 +7,7 @@ Begin VB.UserControl DarkTreeView
    ClientWidth     =   4065
    ScaleHeight     =   3960
    ScaleWidth      =   4065
+   ToolboxBitmap   =   "DarkTreeView.ctx":0000
 End
 Attribute VB_Name = "DarkTreeView"
 Attribute VB_GlobalNameSpace = False
@@ -42,7 +43,7 @@ Dim wndTreeView     As Long                                                     
 Private Sub UserControl_Initialize()
     '创建树视图控件
     wndTreeView = CreateWindowExA(0, "SysTreeView32", "", _
-        WS_VISIBLE Or WS_CHILD Or TVS_HASBUTTONS Or TVS_SHOWSELALWAYS Or TVS_EDITLABELS Or TVS_FULLROWSELECT Or TVS_LINESATROOT Or TVS_LINESATROOT, _
+        WS_VISIBLE Or WS_CHILD Or TVS_HASBUTTONS Or TVS_SHOWSELALWAYS Or TVS_EDITLABELS Or TVS_FULLROWSELECT Or TVS_HASLINES Or TVS_LINESATROOT Or TVS_LINESATROOT, _
         0, 0, 100, 300, UserControl.hWnd, 0, App.hInstance, 0)  'Or TVS_HASLINES
 
     '设置控件颜色

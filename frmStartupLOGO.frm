@@ -1,6 +1,7 @@
 VERSION 5.00
 Begin VB.Form frmStartupLogo 
    Appearance      =   0  'Flat
+   AutoRedraw      =   -1  'True
    BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "拖控件大法"
@@ -8,8 +9,9 @@ Begin VB.Form frmStartupLogo
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   5445
+   Icon            =   "frmStartupLogo.frx":0000
    LinkTopic       =   "Form1"
-   Picture         =   "frmStartupLogo.frx":0000
+   Picture         =   "frmStartupLogo.frx":1BCC2
    ScaleHeight     =   1590
    ScaleWidth      =   5445
    StartUpPosition =   2  'CenterScreen
@@ -30,6 +32,8 @@ Private Sub Form_Click()
 End Sub
 
 Private Sub Form_Load()
+    Me.Caption = Lang_Application_Title
+    
     '窗口大小适应不同DPI
     Me.Width = 533 * Screen.TwipsPerPixelX
     Me.Height = 160 * Screen.TwipsPerPixelY

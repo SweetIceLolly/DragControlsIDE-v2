@@ -1,6 +1,7 @@
 VERSION 5.00
 Begin VB.UserControl DarkButton 
    Appearance      =   0  'Flat
+   AutoRedraw      =   -1  'True
    BackColor       =   &H00302D2D&
    BorderStyle     =   1  'Fixed Single
    ClientHeight    =   495

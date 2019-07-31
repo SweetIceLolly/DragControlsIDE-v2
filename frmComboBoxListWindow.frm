@@ -113,12 +113,12 @@ Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub Form_Load()
-    'PrevListWindowProc = SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf ListWindowProc)
+    'PrevListWindowProc = SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf ListWindowProc)    '[ToDo]
     PrevIndex = -1
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
-    'SetWindowLongA Me.hWnd, GWL_WNDPROC, PrevListWindowProc
+    'SetWindowLongA Me.hWnd, GWL_WNDPROC, PrevListWindowProc            '[ToDo]
 End Sub
 
 Private Sub labItem_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
