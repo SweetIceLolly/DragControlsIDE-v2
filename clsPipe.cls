@@ -131,6 +131,9 @@ End Function
 '描述:      关闭Dos输入、输出管道
 '返回值:    1代表关闭管道成功，0代表关闭管道失败
 Public Function CloseDosIO() As Long
+    '向gdb发送退出命令
+    DosInput "q" & vbCrLf
+    
     CloseHandle hInputRead
     CloseHandle hInputWrite
     CloseHandle hOutputRead
@@ -178,16 +181,19 @@ End Function
 
 '描述:      获取目标进程的输出
 '参数:      lpStrOutput: 存放输出的字符串
-'           EndingStr: 当输出的结尾是EndingStr时，就停止获取输出
+'.          EndingStr: 当输出的结尾是EndingStr时，就停止获取输出
+'.          Timeout: 输出超时（ms）。-1代表没有超时
 '返回值:    1代表获取成功，0代表获取失败
-Public Function DosOutput(ByRef strOutput As String, ByVal EndingStr As String) As Long
+Public Function DosOutput(ByRef strOutput As String, ByVal EndingStr As String, Optional Timeout As Long = -1) As Long
     Dim ret         As Long                                                 '函数的返回值
     Dim bRead       As Long                                                 '成功读取的内容大小
     Dim OutData()   As Byte                                                 '读取的内容
     Dim szOutData   As Long                                                 '总共需要读取的内容大小
+    Dim StartTime   As Long                                                 '开始获取输出的时间
     
     bStopOutput = False
     strOutput = ""
+    StartTime = GetTickCount()
     Do
         If bStopOutput Then                                                     '接收到停止获取输出的信号，函数返回
             RaiseEvent OutputFinished
@@ -198,6 +204,12 @@ Public Function DosOutput(ByRef strOutput As String, ByVal EndingStr As String) 
         If ret = 0 Then
             DosOutput = 0
             Exit Function
+        End If
+        
+        If Timeout > 0 Then                                                     '如果设置了超时就检测是否超时
+            If GetTickCount() - StartTime >= Timeout Then
+                Exit Do
+            End If
         End If
         
         If szOutData > 0 Then                                                   '如果管道里有可供读取的内容
@@ -211,7 +223,7 @@ Public Function DosOutput(ByRef strOutput As String, ByVal EndingStr As String) 
             strOutput = strOutput & StrConv(OutData, vbUnicode)
             strOutput = Left(strOutput, Len(strOutput) - 1)
             strOutput = Replace(strOutput, vbLf, vbCrLf)
-            Debug.Print strOutput       'ToDO
+            Debug.Print strOutput
         End If
         
         DoEvents                                                                '不要霸占着整条线程

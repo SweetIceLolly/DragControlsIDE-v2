@@ -75,7 +75,6 @@ Public Lang_ControlBox_Caption                  As String
 Public Lang_Disassembly_Caption                 As String
 Public Lang_ErrorList_Caption                   As String
 Public Lang_Immediate_Caption                   As String
-Public Lang_Locals_Caption                      As String
 Public Lang_Memory_Caption                      As String
 Public Lang_Modules_Caption                     As String
 Public Lang_Output_Caption                      As String
@@ -154,6 +153,12 @@ Public Lang_Breakpoints_Caption                 As String
 Public Lang_Breakpoints_ListViewHeader_File     As String
 Public Lang_Breakpoints_ListViewHeader_Line     As String
 Public Lang_Breakpoints_ListViewHeader_Address  As String
+
+Public Lang_Locals_Caption                      As String
+Public Lang_Locals_ListViewHeader_Name          As String
+Public Lang_Locals_ListViewHeader_Type          As String
+Public Lang_Locals_ListViewHeader_Value         As String
+Public Lang_Locals_Error                        As String
 '===================================================================
 
 Public CurrentProject                           As ProjectFileStruct                        '当前工程的信息
@@ -230,7 +235,6 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_Disassembly_Caption = "反汇编"
     Lang_ErrorList_Caption = "错误列表"
     Lang_Immediate_Caption = "立即窗口"
-    Lang_Locals_Caption = "本地"
     Lang_Memory_Caption = "内存"
     Lang_Modules_Caption = "模块"
     Lang_Output_Caption = "输出"
@@ -308,5 +312,11 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_Breakpoints_ListViewHeader_File = "文件"
     Lang_Breakpoints_ListViewHeader_Line = "行号"
     Lang_Breakpoints_ListViewHeader_Address = "地址"
+    
+    Lang_Locals_Caption = "本地"
+    Lang_Locals_ListViewHeader_Name = "名称"
+    Lang_Locals_ListViewHeader_Type = "类型"
+    Lang_Locals_ListViewHeader_Value = "值"
+    Lang_Locals_Error = "<错误>"
 End Function
 

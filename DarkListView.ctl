@@ -313,9 +313,9 @@ End Sub
 Private Sub UserControl_Initialize()
     CurrExStyle = WS_EX_NOPARENTNOTIFY
     lvHwnd = CreateWindowExA(CurrExStyle, "SysListView32", "", _
-        WS_VISIBLE Or WS_CHILD Or WS_BORDER Or WS_TABSTOP Or LVS_ALIGNLEFT Or LVS_REPORT Or LVS_SINGLESEL, _
+        WS_VISIBLE Or WS_CHILD Or WS_TABSTOP Or LVS_ALIGNLEFT Or LVS_REPORT Or LVS_SINGLESEL, _
         0, 0, UserControl.ScaleWidth / Screen.TwipsPerPixelX, _
-        UserControl.ScaleHeight / Screen.TwipsPerPixelY, UserControl.hWnd, 0, App.hInstance, 0)
+        UserControl.ScaleHeight / Screen.TwipsPerPixelY, UserControl.hWnd, 0, App.hInstance, 0) 'Or WS_BORDER
     
     SetPropA lvHwnd, "ID", CtlListPushBack(Me)
     SetPropA lvHwnd, "PARENT_CTL", UserControl.hWnd

@@ -257,7 +257,7 @@ Private Sub Form_Load()
     
     RealSyntaxEdit = FindWindowExA(Me.SyntaxEdit.hWnd, 0, "CodejockSyntaxEditor", vbNullString)                         '代码框其实只是一个壳，里面的那个窗口才是真正的代码框窗口
     SetPropA RealSyntaxEdit, "FileIndex", FileIndex
-    SetPropA RealSyntaxEdit, "PrevWndProc", SetWindowLongA(RealSyntaxEdit, GWL_WNDPROC, AddressOf EditBreakpointsRedrawProc)    '[ToDo]
+    'SetPropA RealSyntaxEdit, "PrevWndProc", SetWindowLongA(RealSyntaxEdit, GWL_WNDPROC, AddressOf EditBreakpointsRedrawProc)    '[ToDo]
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)

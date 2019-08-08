@@ -126,6 +126,38 @@ Public Function EditBreakpointsRedrawProc(ByVal hWnd As Long, ByVal uMsg As Long
     EditBreakpointsRedrawProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
 End Function
 
+'描述:      在“本地”窗口的ListView的列表头调整大小的时候调整图片框的宽度
+'参数:      hWnd: 窗口句柄
+'.          uMsg: 消息值
+'.          wParam, lParam: 消息的参数
+'返回值:    消息处理返回值
+Public Function LocalsColumnHeaderLayoutProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+    On Error Resume Next
+    
+    If uMsg = HDM_LAYOUT Then                                                               '拦截到HDM_LAYOUT消息的时候调整图片框宽度
+        Dim ItemRect        As RECT                                                             '第一个列表头的宽度
+        
+        SendMessageA hWnd, HDM_GETITEMRECT, ByVal 0, ByVal VarPtr(ItemRect)                     '获取第一个列表头的宽度
+        ItemRect.Left = (ItemRect.Right - ItemRect.Left) * Screen.TwipsPerPixelX                '计算出宽度（缇），并直接存放在ItemRect.Left
+        
+        '有足够的宽度就把图片框的宽度设置为300，没有足够的宽度就让图片框的宽度随着列表头的宽度变化
+        frmLocals.picSelMargin.Width = IIf(ItemRect.Left > frmLocals.picSelMargin.Width, 300, ItemRect.Left)
+    End If
+    LocalsColumnHeaderLayoutProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
+End Function
+
+'描述:      当“本地”窗口的ListView重绘的时候重绘节点图标
+'参数:      hWnd: 窗口句柄
+'.          uMsg: 消息值
+'.          wParam, lParam: 消息的参数
+'返回值:    消息处理返回值
+Public Function LocalsListViewNodesRedrawProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+    If uMsg = WM_PAINT Then
+        Call frmLocals.RedrawNodeIcons
+    End If
+    LocalsListViewNodesRedrawProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
+End Function
+
 '描述:      显示“打开”通用对话框
 '参数:      hWnd: 调用该函数的窗口句柄
 '.          Title: 对话框标题

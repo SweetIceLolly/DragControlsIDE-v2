@@ -15,7 +15,6 @@ Begin VB.Form frmOutput
    Begin VB.TextBox edOutput 
       Appearance      =   0  'Flat
       BackColor       =   &H00302D2D&
-      BorderStyle     =   0  'None
       ForeColor       =   &H00F1F1F1&
       Height          =   1695
       Left            =   0
