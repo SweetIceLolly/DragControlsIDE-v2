@@ -1,5 +1,39 @@
 【日志】
 
+# 2019.8.8
+
+应404要求改了下DarkImageButton的鼠标移上去的颜色，使颜色更加明显一点。
+
+去掉了DarkListView的WS_BORDER样式，因为他的边框在加载皮肤之后变成了黑框，不是很好看。
+
+为一些更改窗口子类化的地方加了“ToDo”标志，方便之后修改。
+
+clsPipe在关闭管道（CloseDosIO()）的时候会发送退出命令，让gdb退出，大大减小程序退出之后gdb仍在运行的几率。
+
+为clsPipe的DosOutput函数添加一个可选的超时参数，如果传了这个参数，执行超时函数就会返回。
+
+编写了frmLocals里的代码，能够对gdb的输出进行解析，并把本地变量的信息显示出来。这个窗口的代码真是写得我天昏地暗！！！呕心沥血！！！
+
+把frmMain的GdbPipe改成了Public的，不要Private WithEvents了。因为别的窗体也需要用到它。
+
+把清空调试窗口信息的代码单独写成了一个过程。
+
+在编译前提示是否保存的时候添加了取消的选项，按下取消的时候会取消掉编译操作。
+
+建立gdb管道之后发送`set print repeats 0`给gdb，关闭了gdb对于重复的数组元素的“<repeats n times>”输出。
+
+等待附加进程的代码添加了超时，比较不优雅地解决了有时启动的时候会卡死的情况。
+
+在frmMain的Form_QueryUnload事件中添加了关闭管道的代码，减小程序退出之后gdb仍在运行的几率。
+
+优化tmrCheckProcess_Timer里的代码，防止获取gdb断点信息失败之后导致这里的代码出错。
+
+处理了gdb输出`Program exited normally.`的消息。这种情况带代表进程返回了0。
+
+修复了frmPopupMenu的菜单项有时候图标显示不正确的问题。
+
+
+
 # 2019.7.29
 
 为ListView控件添加Click事件（NM_CLICK）；修改DoubleClick事件的处理方式（WM_xBUTTONDBLCLK -> NM_DBLCLK）；添加GetItemChecked函数的代码，用以获取列表项是否已勾选。
