@@ -1,5 +1,39 @@
 【日志】
 
+# 2019.8.12
+
+经过n（n≥5）次拖延后终于添加了.gitigore文件，忽略掉.vbw文件和Vb_autoBak文件夹。
+
+修复了DarkImgeButton控件颜色更改速度不一致的问题（鼠标移上去的时候颜色变亮得快，移出去的时候却变暗得慢）。
+
+修复了DarkListView的严重错误，由于函数忘记返回数值导致控件事件不能和消息处理正确的绑定。
+
+为DarkListView添加hWnd属性，返回用户控件的窗口句柄。
+
+为frmBreakpoints添加ClearEverything过程，用于清空断点列表中的地址。这部分代码本来放在frmMain的ClearDebugWindows过程中，但是为了让风格一致，做了此修改。
+
+编写了frmCallStack里的代码，能够对gdb的输出进行解析，并把调用堆栈的信息显示出来。写了frmLocals的代码之后觉得写这个窗口的代码轻松不少。
+
+为一些有机会出错的过程添加了On Error Resume Next，在编译前应该去掉这些行的注释，尽量避免程序崩溃。（我已经尽量对所有可能出现的情况进行了考虑，但是恐有遗漏之处，考虑有不周到的地方，所以为了保险起见，还是添加这句）
+
+为frmLocals添加ExpandItem过程，把展开列表项的代码单独写到一个过程里。让
+
+改善了frmLocals的ArrayParser，处理了一开始查找字符串的时候找不到“"”的情况。
+
+在frmLocals的Form_Load事件中初始化VarNodes数组，否则很大几率会导致编译的EXE未响应（即使已经加了On Error Resume Next）。
+
+为frmLocals添加工具提示文本，在按下列表项之后显示其信息。
+
+为frmLocals的ListView响应键盘的左、右方向键。
+
+优化frmLocals的picSelMargin_MouseDown事件代码，把计算节点层数的代码移到了If分支里面，避免无谓的计算。
+
+把窗体加载的时候一些NoSkinMsgBox换成了MsgBox，以及做了一些字符串常量和字符串变量的更换，因为考虑到窗体还没初始化完成，一些字符串资源尚未加载完成的情况。
+
+把DockingPane创建的窗口名从常量改成了变量。
+
+添加modTooltips.bas，工具提示文本模块。
+
 # 2019.8.8
 
 应404要求改了下DarkImageButton的鼠标移上去的颜色，使颜色更加明显一点。
