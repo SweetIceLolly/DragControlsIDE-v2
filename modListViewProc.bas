@@ -22,6 +22,7 @@ Public Function CtlListPushBack(Ctl As DarkListView) As Integer
         NewIndex = 0
     End If
     Set CtlList(NewIndex) = Ctl
+    CtlListPushBack = NewIndex
 End Function
 
 Public Function ListViewProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long

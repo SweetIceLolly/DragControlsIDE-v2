@@ -111,7 +111,7 @@ Private Sub labTip_MouseUp(Button As Integer, Shift As Integer, X As Single, Y A
 End Sub
 
 Private Sub tmrSetColor_Timer()
-    Dim pt      As Point
+    Dim pt      As POINT
     Dim Target  As Long
     
     If Not Enabled Then
@@ -136,9 +136,9 @@ Private Sub tmrSetColor_Timer()
             BackB = MOUSEIN_B
         End If
     Else
-        BackR = BackR - 1
-        BackG = BackG - 1
-        BackB = BackB - 1
+        BackR = BackR - (MOUSEIN_R - NORMAL_R) / 30
+        BackG = BackG - (MOUSEIN_G - NORMAL_G) / 30
+        BackB = BackB - (MOUSEIN_B - NORMAL_B) / 30
         If BackR < NORMAL_R Or BackG < NORMAL_G Or BackB < NORMAL_B Then
             BackR = NORMAL_R
             BackG = NORMAL_G
@@ -211,7 +211,7 @@ End Sub
 
 Private Sub UserControl_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = vbLeftButton Then
-        Dim pt      As Point
+        Dim pt      As POINT
         Dim Target  As Long
         
         GetCursorPos pt

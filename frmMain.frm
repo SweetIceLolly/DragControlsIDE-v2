@@ -781,18 +781,16 @@ Attribute GdbPipe.VB_VarHelpID = -1
 
 '描述:      清空所有调试窗口里面的信息
 Private Sub ClearDebugWindows()
-    Dim i                   As Long
-    
-    For i = 0 To frmBreakpoints.lvBreakpoints.GetItemCount                          '断点对应的地址
-        frmBreakpoints.lvBreakpoints.SetItemText "", i, 2
-    Next i
-    
+    Call frmBreakpoints.ClearEverything                                             '断点
     Call frmLocals.ClearEverything                                                  '本地
+    Call frmCallStack.ClearEverything                                               '调用堆栈
 End Sub
 
 '描述:      检查当前是否有未保存的文件
 '返回值:    如果有未保存的文件，则返回True
 Private Function IsSaveRequired() As Boolean
+    'On Error Resume Next       'todo
+    
     IsSaveRequired = False
     If CurrentProject.Changed Then                                              '工程文件需要保存
         IsSaveRequired = True
@@ -1107,6 +1105,9 @@ Private Sub DarkMenu_MenuItemClicked(MenuID As Integer)
         Case 42                                                                         '本地
             Me.DockingPane.ShowPane 8
         
+        Case 45                                                                         '调用堆栈
+            Me.DockingPane.ShowPane 10
+        
         Case 52                                                                         '运行
             Call mnuRun_Click
         
@@ -1114,6 +1115,8 @@ Private Sub DarkMenu_MenuItemClicked(MenuID As Integer)
 End Sub
 
 Private Sub DockingPane_Resize()
+    'On Error Resume Next       'todo
+    
     If ProjectType <> 0 Then                                                            '如果不是在启动界面的话就调整窗口活动客户区大小
         Dim cLeft   As Long, cRight   As Long, cTop   As Long, cBottom   As Long
         
@@ -1133,11 +1136,16 @@ Private Sub Form_Initialize()
     SetWindowPos frmStartupLogo.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE
     frmStartupLogo.SetFocus
     frmStartupLogo.Refresh
+    
+    '创建工具提示文本窗口
+    If CreateToolTip() = 0 Then
+        MsgBox "创建工具提示文本窗口失败！", vbCritical, "错误"
+    End If
 
     '由于字符串资源必须比用户控件更早加载，用户控件才能使用这些字符串资源，于是放在Initialize事件而不是Load事件
     '加载字符串资源
     If Not LoadLanguage(1001) Then
-        NoSkinMsgBox "加载字符串资源失败！" & Err.Number & ": " & Err.Description, vbCritical, Lang_Msgbox_Error
+        MsgBox "加载字符串资源失败！" & Err.Number & ": " & Err.Description, vbCritical, "错误"
     End If
 End Sub
 
@@ -1152,7 +1160,7 @@ Private Sub Form_Load()
     
     '加载菜单文本
     If Not LoadLanguage(1001, True) Then
-        NoSkinMsgBox "加载字符串资源失败！" & Err.Number & ": " & Err.Description, vbCritical, Lang_Msgbox_Error
+        MsgBox "加载字符串资源失败！" & Err.Number & ": " & Err.Description, vbCritical, Lang_Msgbox_Error
     End If
     
     '调整“客户区”
@@ -1168,49 +1176,49 @@ Private Sub Form_Load()
     ClientWidth = Me.picClientArea.ScaleWidth / Screen.TwipsPerPixelX
     Me.DockingPane.CreatePane 1, 100, ClientHeight, DockLeftOf                                                          '控件箱
     Me.DockingPane(1).Handle = frmControlBox.hWnd
-    Me.DockingPane(1).Title = "控件箱"
+    Me.DockingPane(1).Title = Lang_ControlBox_Caption
     Me.DockingPane.CreatePane 2, 250, ClientHeight / 2, DockRightOf                                                     '属性
     Me.DockingPane(2).Handle = frmProperties.hWnd
-    Me.DockingPane(2).Title = "属性"
+    Me.DockingPane(2).Title = Lang_Properties_Caption
     Me.DockingPane.CreatePane 3, 250, ClientHeight / 2, DockRightOf                                                     '工程资源管理器
     Me.DockingPane(3).Handle = frmSolutionExplorer.hWnd
-    Me.DockingPane(3).Title = "工程资源管理器"
+    Me.DockingPane(3).Title = Lang_SolutionExplorer_Caption
     Me.DockingPane.CreatePane 4, ClientWidth / 2, 120, DockBottomOf Or DockLeftOf                                       '错误列表
     Me.DockingPane(4).Handle = frmErrorList.hWnd
-    Me.DockingPane(4).Title = "错误列表"
+    Me.DockingPane(4).Title = Lang_ErrorList_Caption
     Me.DockingPane.CreatePane 5, ClientWidth / 2, 120, DockBottomOf Or DockRightOf                                      '输出
     Me.DockingPane(5).Handle = frmOutput.hWnd
-    Me.DockingPane(5).Title = "输出"
+    Me.DockingPane(5).Title = Lang_Output_Caption
     Me.DockingPane.CreatePane 6, ClientWidth / 2, 120, DockBottomOf Or DockRightOf                                      '断点列表
     Me.DockingPane(6).Handle = frmBreakpoints.hWnd
-    Me.DockingPane(6).Title = "断点列表"
+    Me.DockingPane(6).Title = Lang_Breakpoints_Caption
     Me.DockingPane.CreatePane 7, ClientWidth / 2, 120, DockBottomOf                                                     '监视窗口
     Me.DockingPane(7).Handle = frmWatch.hWnd
-    Me.DockingPane(7).Title = "监视窗口"
+    Me.DockingPane(7).Title = Lang_Watch_Caption
     Me.DockingPane.CreatePane 8, ClientWidth / 2, 120, DockBottomOf                                                     '本地
     Me.DockingPane(8).Handle = frmLocals.hWnd
-    Me.DockingPane(8).Title = "本地"
+    Me.DockingPane(8).Title = Lang_Locals_Caption
     Me.DockingPane.CreatePane 9, ClientWidth / 2, 120, DockBottomOf                                                     '立即窗口
     Me.DockingPane(9).Handle = frmImmediate.hWnd
-    Me.DockingPane(9).Title = "立即窗口"
+    Me.DockingPane(9).Title = Lang_Immediate_Caption
     Me.DockingPane.CreatePane 10, ClientWidth / 2, 120, DockBottomOf                                                    '调用堆栈
     Me.DockingPane(10).Handle = frmCallStack.hWnd
-    Me.DockingPane(10).Title = "调用堆栈"
+    Me.DockingPane(10).Title = Lang_CallStack_Caption
     Me.DockingPane.CreatePane 11, ClientWidth / 2, 120, DockBottomOf                                                    '线程
     Me.DockingPane(11).Handle = frmThreads.hWnd
-    Me.DockingPane(11).Title = "线程"
+    Me.DockingPane(11).Title = Lang_Threads_Caption
     Me.DockingPane.CreatePane 12, ClientWidth / 2, 120, DockBottomOf                                                    '模块
     Me.DockingPane(12).Handle = frmModules.hWnd
-    Me.DockingPane(12).Title = "模块"
+    Me.DockingPane(12).Title = Lang_Modules_Caption
     Me.DockingPane.CreatePane 13, ClientWidth / 2, 250, DockBottomOf                                                    '内存
     Me.DockingPane(13).Handle = frmMemory.hWnd
-    Me.DockingPane(13).Title = "内存"
+    Me.DockingPane(13).Title = Lang_Memory_Caption
     Me.DockingPane.CreatePane 14, ClientWidth / 2, 250, DockBottomOf                                                    '寄存器
     Me.DockingPane(14).Handle = frmRegisters.hWnd
-    Me.DockingPane(14).Title = "寄存器"
+    Me.DockingPane(14).Title = Lang_Registers_Caption
     Me.DockingPane.CreatePane 15, ClientWidth / 2, 250, DockBottomOf                                                    '反汇编
     Me.DockingPane(15).Handle = frmDisassembly.hWnd
-    Me.DockingPane(15).Title = "反汇编"
+    Me.DockingPane(15).Title = Lang_Disassembly_Caption
     For i = 1 To 15                                                                                                     '隐藏所有的Pane
         Me.DockingPane(i).Close
     Next i
@@ -1221,13 +1229,13 @@ Private Sub Form_Load()
     Me.DockingPane.Options.ThemedFloatingFrames = True                                                                  '作为弹窗时边框保持样式
     Me.DockingPane.Options.ShowContentsWhileDragging = True
     If DockingPaneGlobalSettings.ResourceImages.LoadFromFile(GetAppPath & "Skin.dll", "Office2010Black.ini") = False Then
-        NoSkinMsgBox "加载样式失败！", vbCritical, "错误"
+        MsgBox "加载样式失败！", vbCritical, Lang_Msgbox_Error
     End If
     Me.DockingPane.VisualTheme = ThemeResource                                                                          '设置为从资源文件读取样式
     Me.DockingPane.PaintManager.SplitterSize = 2                                                                        '设置分割区域的大小
     
     'If Not Me.SkinFramework.LoadSkin("Skin.cjstyles", "NormalBlue.ini") Then                                            '加载皮肤 [ToDo]
-    '    NoSkinMsgBox "加载皮肤失败！", vbCritical, "错误"
+    '    MsgBox "加载皮肤失败！", vbCritical, Lang_Msgbox_Error todo: multi language
     'End If
     
     '禁用不需要的菜单
@@ -1429,6 +1437,7 @@ Private Sub tmrCheckProcess_Timer()
                 End If
                 
                 '获取各种调试信息
+                Call frmCallStack.GetCallStack                                                      '获取调用堆栈
                 Call frmLocals.GetLocals                                                            '获取本地变量
             ElseIf PipeOutput Like "Program exited *" Then                                  '进程退出消息（Program exited *.）
                 Dim ExitCode            As Long                                                 '进程退出码

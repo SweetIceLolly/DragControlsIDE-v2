@@ -19,9 +19,9 @@ Begin VB.Form frmBreakpoints
       TabIndex        =   0
       Top             =   0
       Width           =   6855
-      _ExtentX        =   8281
-      _ExtentY        =   5318
-      CheckBoxes      =   -1  'True
+      _extentx        =   8281
+      _extenty        =   5318
+      checkboxes      =   -1
    End
 End
 Attribute VB_Name = "frmBreakpoints"
@@ -36,6 +36,15 @@ Attribute VB_Exposed = False
 '====================================================
 
 Option Explicit
+
+'描述:      清空所有东西，为下一次调试做准备
+Public Sub ClearEverything()
+    Dim i                   As Long
+    
+    For i = 0 To Me.lvBreakpoints.GetItemCount                                                  '清空断点对应的地址
+        Me.lvBreakpoints.SetItemText "", i, 2
+    Next i
+End Sub
 
 Private Sub Form_Load()
     Me.Caption = Lang_Breakpoints_Caption

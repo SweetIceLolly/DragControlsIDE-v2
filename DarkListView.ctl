@@ -93,12 +93,12 @@ Public Sub RaiseClick(iItem As Long, iSubItem As Long, X As Long, Y As Long)
     RaiseEvent Click(iItem, iSubItem, X, Y)
 End Sub
 
+'Please note that this function is for internal usage only and is NOT suggested to call directly
 Public Sub RaiseDoubleClick(iItem As Long, iSubItem As Long, X As Long, Y As Long)
     RaiseEvent DoubleClick(iItem, iSubItem, X, Y)
 End Sub
 
 Public Function AddColumnHeader(Text As String, Optional Width As Integer = 75, Optional Index As Long = -1) As Long
-    
     Dim lvCol       As LVCOLUMN
     Dim tmpStr()    As Byte
     
@@ -317,7 +317,7 @@ Private Sub UserControl_Initialize()
         0, 0, UserControl.ScaleWidth / Screen.TwipsPerPixelX, _
         UserControl.ScaleHeight / Screen.TwipsPerPixelY, UserControl.hWnd, 0, App.hInstance, 0) 'Or WS_BORDER
     
-    SetPropA lvHwnd, "ID", CtlListPushBack(Me)
+    SetPropA lvHwnd, "ID", ByVal CtlListPushBack(Me)
     SetPropA lvHwnd, "PARENT_CTL", UserControl.hWnd
     
     SendMessageA lvHwnd, LVM_SETBKCOLOR, ByVal 0, ByVal RGB(51, 51, 55)
@@ -413,6 +413,10 @@ End Property
 
 Public Property Get ListViewHwnd() As Long
     ListViewHwnd = lvHwnd
+End Property
+
+Public Property Get hWnd() As Long
+    hWnd = UserControl.hWnd
 End Property
 
 'Initialize Properties for User Control

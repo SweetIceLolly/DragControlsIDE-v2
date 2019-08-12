@@ -91,8 +91,8 @@ End Sub
 
 '描述:      折叠指定的节点及其子节点
 '参数:      VarNodeIndex: 需要被折叠的节点序号
-'返回值:    被折叠的列表项数
-Private Function FoldItem(VarNodeIndex As Long) As Long
+Private Sub FoldItem(VarNodeIndex As Long)
+    'On Error Resume Next       'todo
     Dim i                       As Long
     Dim j                       As Long
     
@@ -114,26 +114,56 @@ Private Function FoldItem(VarNodeIndex As Long) As Long
             VarNodes(j).ListViewItemIndex = VarNodes(j).ListViewItemIndex - UBound(VarNodes(VarNodeIndex).ChildNodes)
         End If
     Next j
-End Function
+End Sub
+
+'描述:      展开指定的节点
+'参数:      VarNodeIndex: 需要被折叠的节点序号
+Private Sub ExpandItem(VarNodeIndex As Long)
+    'On Error Resume Next       'todo
+    Dim Level                   As Long                                     '当前节点处于第几级
+    Dim ParentIndex             As Long                                     '当前节点所对应的母节点的索引
+    Dim NewItemIndex            As Long                                     '新添加的ListView列表项的索引
+    Dim i                       As Long
+    
+    ParentIndex = VarNodeIndex
+    Level = 1
+    Do                                                                      '计算从当前节点到最顶层的层数
+        ParentIndex = VarNodes(ParentIndex).ParentNode
+        Level = Level + 1
+    Loop Until ParentIndex = -1
+    
+    NewItemIndex = VarNodes(VarNodeIndex).ListViewItemIndex                 '令新列表项插入到当前节点的后面
+    For i = VarNodeIndex + 1 To UBound(VarNodes) - 1                        '遍历VarNodes，如果其对应的列表项是在新列表项之后的就把它向后移
+        If VarNodes(i).ListViewItemIndex > NewItemIndex Then
+            VarNodes(i).ListViewItemIndex = VarNodes(i).ListViewItemIndex + UBound(VarNodes(VarNodeIndex).ChildNodes)
+        End If
+    Next i
+    For i = 0 To UBound(VarNodes(VarNodeIndex).ChildNodes) - 1              '添加所有下一层子节点的列表项
+        NewItemIndex = Me.lvLocals.AddItem(Space(SpaceCount * Level) & VarNodes(VarNodes(VarNodeIndex).ChildNodes(i)).VarName, NewItemIndex + 1)
+        VarNodes(VarNodes(VarNodeIndex).ChildNodes(i)).ListViewItemIndex = NewItemIndex
+        Me.lvLocals.SetItemText VarNodes(VarNodes(VarNodeIndex).ChildNodes(i)).TypeName, NewItemIndex, 1
+        Me.lvLocals.SetItemText VarNodes(VarNodes(VarNodeIndex).ChildNodes(i)).Value, NewItemIndex, 2
+    Next i
+End Sub
 
 '描述:      重绘所有的节点图标
 Public Sub RedrawNodeIcons()
     On Error Resume Next
     Dim i                       As Long
     Dim TopItem                 As Long, BottomItem                 As Long
-    
+
     Me.picSelMargin.Cls
     TopItem = Me.lvLocals.GetTopIndex()                                     '获取ListView中第一个可视的列表项的序号
     BottomItem = TopItem + Me.lvLocals.Height / ListItemHeight              '计算出ListView中最后一个可视的列表项的序号
     For i = 0 To UBound(VarNodes) - 1
-        If VarNodes(i).ChildNodes(0) <> -1 Then                                 '如果这个变量有子节点
-            If VarNodes(i).ListViewItemIndex >= TopItem And _
-               VarNodes(i).ListViewItemIndex <= BottomItem Then                     '并且在可视的范围内
-                
-                Me.picSelMargin.PaintPicture IIf(VarNodes(i).Expanded, Me.imgExpanded.Picture, Me.imgFolded.Picture), _
-                    0, (VarNodes(i).ListViewItemIndex - TopItem) * ListItemHeight + 60
-            End If
-        End If
+         If VarNodes(i).ChildNodes(0) <> -1 Then                                 '如果这个变量有子节点
+             If VarNodes(i).ListViewItemIndex >= TopItem And _
+                VarNodes(i).ListViewItemIndex <= BottomItem Then                     '并且在可视的范围内
+
+                 Me.picSelMargin.PaintPicture IIf(VarNodes(i).Expanded, Me.imgExpanded.Picture, Me.imgFolded.Picture), _
+                     0, (VarNodes(i).ListViewItemIndex - TopItem) * ListItemHeight + 60
+             End If
+         End If
     Next i
 End Sub
 
@@ -145,6 +175,7 @@ End Sub
 '.          Value: 变量的值
 '返回值:    新添加的VarNodes元素索引
 Private Function AddVarItem(ParentNode As Long, VarName As String, DisplayName As String, TypeName As String, Value As String) As Long
+    'On Error Resume Next       'todo
     Dim NewItemIndex            As Long
     
     NewItemIndex = UBound(VarNodes)
@@ -180,6 +211,7 @@ End Function
 '.          NewVarNodesIndex: 返回新添加的VarNodes元素序号
 '返回值:    变量输出的长度
 Private Function StringParser(ParentItem As Long, OutputString As String, Optional ByRef NewVarNodesIndex As Long) As Long
+    'On Error Resume Next       'todo
     Dim VarName                 As String                                   '变量完整的名称（类似于a.b.c）
     Dim VarTypeName             As String                                   '变量类型
     Dim VarValue                As String                                   '变量的值
@@ -234,6 +266,7 @@ End Function
 '参数:      ParentItem: 母节点序号
 '.          OutputString: 需要分析的字符串
 Private Sub ArrayParser(ParentItem As Long, OutputString As String)
+    'On Error Resume Next       'todo
     Dim SplitTmp()              As String                                   '字符串分割缓存
     Dim tmpStr                  As String                                   '字符串处理缓存
     Dim NewVarNodesIndex        As Long                                     '新添加的VarNodes元素索引
@@ -273,47 +306,9 @@ Private Sub ArrayParser(ParentItem As Long, OutputString As String)
     BracketStartPos = 1                                                                         '初始化第一个“{”的位置
     
     VarName = VarName & "["                                                                     '变量名后面加上“[”，为之后添加数组元素序号做准备
-    If StartQuotePos >= 0 And Left(tmpStr, StartQuotePos) = String(StartQuotePos, "{") Then     '这是一个字符串数组（var = {{...(n个{)...{"*）
-        If StartQuotePos > 0 Then                                                                   '如果是多维数组，就继续使用ArrayParser来处理
-            For i = 2 To Len(tmpStr)                                                                    '查找第一个“{”所匹配的下一个“}”
-                If Mid(tmpStr, i, 1) = "{" Then
-                    BracketLevel = BracketLevel + 1
-                ElseIf Mid(tmpStr, i, 1) = "}" Then
-                    If BracketLevel <= 0 Then                                                               '查找到匹配的“}”。此时i是下一个匹配的“}”的位置
-                        NewParentVarNodesIndex = AddVarItem(NewVarNodesIndex, VarName & ArrayElementIndex & "]", _
-                            VarName & ArrayElementIndex & "]", VarTypeName, _
-                            Mid(tmpStr, BracketStartPos, i - BracketStartPos + 1))
-                        Call ArrayParser(NewParentVarNodesIndex, _
-                            VarName & ArrayElementIndex & "] = " & Mid(tmpStr, BracketStartPos, i - BracketStartPos + 1))
-                        ArrayElementIndex = ArrayElementIndex + 1
-                        BracketStartPos = i + 3                                                                 '跳过“, ”
-                        BracketLevel = -1
-                    Else
-                        BracketLevel = BracketLevel - 1
-                    End If
-                ElseIf Mid(tmpStr, i, 1) = """" Then                                                        '遇到“"”，查找到下一个匹配的”"“，确保不会分析到字符串中间去
-                    Do
-                        i = i + 1
-                    Loop Until (Mid(tmpStr, i, 1) = """" And Mid(tmpStr, i - 1, 1) <> "\") Or i > Len(tmpStr)   '一直向后查找“"”，直到不处于字符串中间
-                End If
-            Next i
-        Else                                                                                        '否则就依次添加所有元素
-            StartQuotePos = 1
-            For i = 2 To Len(tmpStr)                                                                    '查找开头的“"”对应的下一个“"”
-                Do                                                                                          '一直向后查找“"”，直到不处于字符串中间
-                    i = i + 1
-                Loop Until (Mid(tmpStr, i, 1) = """" And Mid(tmpStr, i - 1, 1) <> "\") Or i > Len(tmpStr)   '跳过“\"”，这是在字符串里面的“"”
-                Call AddVarItem(NewVarNodesIndex, VarName & ArrayElementIndex & "]", VarName & ArrayElementIndex & "]", _
-                    VarTypeName, Mid(tmpStr, StartQuotePos + 1, i - StartQuotePos - 1))
-                ArrayElementIndex = ArrayElementIndex + 1
-                i = i + 3                                                                                   '跳过“, ”
-                StartQuotePos = i                                                                           '记录新的“"”的位置
-            Next i
-        End If
-    Else                                                                                        '这不是一个字符串数组
-        If UBound(SplitTmp) = 1 Then                                                                '等号只出现了一次，说明是不含有类的数组（数值数组）
-            SplitTmp = Split(tmpStr, ", ")                                                              '以“, ”隔开
-            If Left(SplitTmp(0), 1) = "{" Then                                                          '如果是多维数组，就继续使用ArrayParser来处理
+    If StartQuotePos >= 0 Then                                                                  '如果找到了“"”，再做进一步的判断
+        If Left(tmpStr, StartQuotePos) = String(StartQuotePos, "{") Then                            '这是一个字符串数组（var = {{...(n个{)...{"*）
+            If StartQuotePos > 0 Then                                                                   '如果是多维数组，就继续使用ArrayParser来处理
                 For i = 2 To Len(tmpStr)                                                                    '查找第一个“{”所匹配的下一个“}”
                     If Mid(tmpStr, i, 1) = "{" Then
                         BracketLevel = BracketLevel + 1
@@ -325,19 +320,38 @@ Private Sub ArrayParser(ParentItem As Long, OutputString As String)
                             Call ArrayParser(NewParentVarNodesIndex, _
                                 VarName & ArrayElementIndex & "] = " & Mid(tmpStr, BracketStartPos, i - BracketStartPos + 1))
                             ArrayElementIndex = ArrayElementIndex + 1
-                            BracketStartPos = i + 3
+                            BracketStartPos = i + 3                                                                 '跳过“, ”
                             BracketLevel = -1
-                        Else                                                                                    '查找到的“}”是内层的，层数减1，继续查找下一个
+                        Else
                             BracketLevel = BracketLevel - 1
                         End If
+                    ElseIf Mid(tmpStr, i, 1) = """" Then                                                        '遇到“"”，查找到下一个匹配的”"“，确保不会分析到字符串中间去
+                        Do
+                            i = i + 1
+                        Loop Until (Mid(tmpStr, i, 1) = """" And Mid(tmpStr, i - 1, 1) <> "\") Or i > Len(tmpStr)   '一直向后查找“"”，直到不处于字符串中间
                     End If
                 Next i
             Else                                                                                        '否则就依次添加所有元素
-                For i = 0 To UBound(SplitTmp)                                                               '添加所有元素
-                    Call AddVarItem(NewVarNodesIndex, VarName & i & "]", VarName & i & "]", VarTypeName, SplitTmp(i))
+                StartQuotePos = 1
+                For i = 2 To Len(tmpStr)                                                                    '查找开头的“"”对应的下一个“"”
+                    Do                                                                                          '一直向后查找“"”，直到不处于字符串中间
+                        i = i + 1
+                    Loop Until (Mid(tmpStr, i, 1) = """" And Mid(tmpStr, i - 1, 1) <> "\") Or i > Len(tmpStr)   '跳过“\"”，这是在字符串里面的“"”
+                    Call AddVarItem(NewVarNodesIndex, VarName & ArrayElementIndex & "]", VarName & ArrayElementIndex & "]", _
+                        VarTypeName, Mid(tmpStr, StartQuotePos + 1, i - StartQuotePos - 1))
+                    ArrayElementIndex = ArrayElementIndex + 1
+                    i = i + 3                                                                                   '跳过“, ”
+                    StartQuotePos = i                                                                           '记录新的“"”的位置
                 Next i
             End If
-        Else                                                                                        '等号出现了多次，说明是某个类的数组
+            Exit Sub                                                                                    '退出过程，不要执行下面的数值数组分析
+        End If
+    End If
+        
+    '这不是一个字符串数组
+    If UBound(SplitTmp) = 1 Then                                                                '等号只出现了一次，说明是不含有类的数组（数值数组）
+        SplitTmp = Split(tmpStr, ", ")                                                              '以“, ”隔开
+        If Left(SplitTmp(0), 1) = "{" Then                                                          '如果是多维数组，就继续使用ArrayParser来处理
             For i = 2 To Len(tmpStr)                                                                    '查找第一个“{”所匹配的下一个“}”
                 If Mid(tmpStr, i, 1) = "{" Then
                     BracketLevel = BracketLevel + 1
@@ -346,7 +360,7 @@ Private Sub ArrayParser(ParentItem As Long, OutputString As String)
                         NewParentVarNodesIndex = AddVarItem(NewVarNodesIndex, VarName & ArrayElementIndex & "]", _
                             VarName & ArrayElementIndex & "]", VarTypeName, _
                             Mid(tmpStr, BracketStartPos, i - BracketStartPos + 1))
-                        Call BracketsParser(NewParentVarNodesIndex, _
+                        Call ArrayParser(NewParentVarNodesIndex, _
                             VarName & ArrayElementIndex & "] = " & Mid(tmpStr, BracketStartPos, i - BracketStartPos + 1))
                         ArrayElementIndex = ArrayElementIndex + 1
                         BracketStartPos = i + 3
@@ -356,7 +370,30 @@ Private Sub ArrayParser(ParentItem As Long, OutputString As String)
                     End If
                 End If
             Next i
+        Else                                                                                        '否则就依次添加所有元素
+            For i = 0 To UBound(SplitTmp)                                                               '添加所有元素
+                Call AddVarItem(NewVarNodesIndex, VarName & i & "]", VarName & i & "]", VarTypeName, SplitTmp(i))
+            Next i
         End If
+    Else                                                                                        '等号出现了多次，说明是某个类的数组
+        For i = 2 To Len(tmpStr)                                                                    '查找第一个“{”所匹配的下一个“}”
+            If Mid(tmpStr, i, 1) = "{" Then
+                BracketLevel = BracketLevel + 1
+            ElseIf Mid(tmpStr, i, 1) = "}" Then
+                If BracketLevel <= 0 Then                                                               '查找到匹配的“}”。此时i是下一个匹配的“}”的位置
+                    NewParentVarNodesIndex = AddVarItem(NewVarNodesIndex, VarName & ArrayElementIndex & "]", _
+                        VarName & ArrayElementIndex & "]", VarTypeName, _
+                        Mid(tmpStr, BracketStartPos, i - BracketStartPos + 1))
+                    Call BracketsParser(NewParentVarNodesIndex, _
+                        VarName & ArrayElementIndex & "] = " & Mid(tmpStr, BracketStartPos, i - BracketStartPos + 1))
+                    ArrayElementIndex = ArrayElementIndex + 1
+                    BracketStartPos = i + 3
+                    BracketLevel = -1
+                Else                                                                                    '查找到的“}”是内层的，层数减1，继续查找下一个
+                    BracketLevel = BracketLevel - 1
+                End If
+            End If
+        Next i
     End If
 End Sub
 
@@ -365,6 +402,7 @@ End Sub
 '.          OutputString: 需要分析的字符串
 '.          Start: 开始分析的位置
 Private Sub BracketsParser(ParentItem As Long, OutputString As String)
+    'On Error Resume Next       'todo
     Dim VarOutputLength         As Long                                     '该变量的输出的长度
     Dim SplitTmp()              As String                                   '字符串分割缓存
     Dim tmpStr                  As String                                   '字符串处理缓存
@@ -393,18 +431,21 @@ End Sub
 
 '描述:      获取本地变量列表
 Public Sub GetLocals()
+    'On Error Resume Next       'todo
     Dim PipeOutput              As String                                   '管道的输出
     Dim OutputLines()           As String                                   '输出的每一行
     Dim VarInfoSplitTemp()      As String                                   '对输出的每一行的分割缓存
     Dim i                       As Long
-
+    
     ReDim VarNodes(0)                                                       '初始化变量列表
     Me.lvLocals.Clear
+    frmMain.DockingPane.Panes(8).Title = Lang_Locals_Retrieving_Caption
     
     frmMain.GdbPipe.ClearPipe                                               '清空管道里的内容
     frmMain.GdbPipe.DosInput "info locals" & vbCrLf                         '向gdb发送获取本地变量命令
     frmMain.GdbPipe.DosInput "info args" & vbCrLf                           '向gdb发送获取参数变量命令
     frmMain.GdbPipe.DosOutput PipeOutput, "(gdb) "                          '获取gdb输出
+    
     OutputLines = Split(PipeOutput, vbCrLf)                                 '逐行分割开输出
     For i = 0 To UBound(OutputLines)                                        '逐行进行分析
         If Trim(OutputLines(i)) <> "(gdb)" Then                                 '去掉无用输出“(gdb) ”
@@ -433,6 +474,7 @@ Public Sub GetLocals()
     Call RedrawNodeIcons                                                    '刷新节点图标
     frmMain.GdbPipe.StopRecvOutput                                          '停止管道正在进行的工作
     frmMain.GdbPipe.ClearPipe                                               '捡手尾：清空管道里的内容
+    frmMain.DockingPane.Panes(8).Title = Lang_Locals_Caption
 End Sub
 
 Private Sub Form_Load()
@@ -444,6 +486,8 @@ Private Sub Form_Load()
     Me.lvLocals.AddColumnHeader Lang_Locals_ListViewHeader_Name, 175
     Me.lvLocals.AddColumnHeader Lang_Locals_ListViewHeader_Type, 100
     Me.lvLocals.AddColumnHeader Lang_Locals_ListViewHeader_Value
+    
+    ReDim VarNodes(0)                                                                               '初始化VarNodes数组
     
     '获取列表头的高度
     Dim tmpRect                 As RECT
@@ -489,13 +533,59 @@ Private Sub Form_Resize()
     Me.lvLocals.Height = Me.ScaleHeight
 End Sub
 
+Private Sub lvLocals_Click(iItem As Long, iSubItem As Long, X As Long, Y As Long)
+    'On Error Resume Next       'todo
+    Dim i                       As Long
+    
+    For i = 0 To UBound(VarNodes)                                           '查找列表项所匹配的VarNodes
+        If VarNodes(i).ListViewItemIndex = iItem Then
+            CtlAddToolTip Me.lvLocals.ListViewHwnd, "类型: " & VarNodes(i).TypeName & vbCrLf & _
+                "值: " & IIf(Len(VarNodes(i).Value) > 200, Left(VarNodes(i).Value, 100) & " ... " & Right(VarNodes(i).Value, 100), VarNodes(i).Value), _
+                "本地变量信息: " & VarNodes(i).VarName, TTI_INFO
+            Exit For
+        End If
+    Next i
+End Sub
+
+Private Sub lvLocals_KeyDown(KeyCode As Integer, Shift As Integer)
+    'On Error Resume Next       'todo
+    Dim ItemIndex               As Long                                     '当前选择的列表项
+    Dim i                       As Long
+    
+    If KeyCode <> VK_LEFT And KeyCode <> VK_RIGHT Then                      '只处理左、右方向键的事件
+        Exit Sub
+    End If
+    
+    ItemIndex = Me.lvLocals.GetSelectedItem()                               '获取选择的列表项
+    If ItemIndex = -1 Then                                                  '获取失败处理
+        Exit Sub
+    End If
+    For i = 0 To UBound(VarNodes)                                           '查找列表项对应的VarNodes序号
+        If VarNodes(i).ListViewItemIndex = ItemIndex Then
+            If KeyCode = VK_LEFT Then                                               '按下左方向键，折叠当前节点（前提是该节点已展开）
+                If VarNodes(i).Expanded = True Then
+                    Call FoldItem(i)
+                    VarNodes(i).Expanded = False
+                End If
+                Me.lvLocals.SetSelectedItem ItemIndex - 1                           '让上一个列表项获取焦点
+            ElseIf KeyCode = VK_RIGHT Then                                          '按下右方向键，展开当前节点（前提是该节点未展开且有子节点）
+                If VarNodes(i).Expanded = False And UBound(VarNodes(i).ChildNodes) > 0 Then
+                    Call ExpandItem(i)
+                    VarNodes(i).Expanded = True
+                End If
+                Me.lvLocals.SetSelectedItem ItemIndex + 1                               '让下一个列表项获取焦点
+            End If
+            
+            Exit For
+        End If
+    Next i
+    Me.lvLocals.EnsureVisible Me.lvLocals.GetSelectedItem(), True           '确保当前选择的列表项能让用户看到
+End Sub
+
 Private Sub picSelMargin_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     Dim ItemIndex               As Long                                     '鼠标按下坐标所对应的列表项序号
-    Dim Level                   As Long                                     '当前节点处于第几级
-    Dim ParentIndex             As Long                                     '当前节点所对应的母节点的索引
-    Dim NewItemIndex            As Long                                     '新添加的ListView列表项的索引
-    Dim i                       As Long, j                      As Long
+    Dim i                       As Long
     
     ItemIndex = Me.lvLocals.GetTopIndex() + Y / ListItemHeight - 1          '计算出对应的列表项序号
     If ItemIndex = -1 Then
@@ -503,29 +593,11 @@ Private Sub picSelMargin_MouseDown(Button As Integer, Shift As Integer, X As Sin
     End If
     For i = 0 To UBound(VarNodes)                                           '在VarNodes中查找哪个元素有匹配的列表项序号
         If VarNodes(i).ListViewItemIndex = ItemIndex Then
-            ParentIndex = i
-            Level = 1
-            Do                                                                      '计算从当前节点到最顶层的层数
-                ParentIndex = VarNodes(ParentIndex).ParentNode
-                Level = Level + 1
-            Loop Until ParentIndex = -1
-            
             If VarNodes(i).Expanded Then                                            '如果该节点处于展开状态，就把他折叠
                 Call FoldItem(i)
                 VarNodes(i).Expanded = False                                            '把当前节点标记为已折叠
             Else                                                                    '如果该节点处于折叠状态，就把他展开
-                NewItemIndex = VarNodes(i).ListViewItemIndex                            '令新列表项插入到当前节点的后面
-                For j = i + 1 To UBound(VarNodes) - 1                                   '遍历VarNodes，如果其对应的列表项是在新列表项之后的就把它向后移
-                    If VarNodes(j).ListViewItemIndex > NewItemIndex Then
-                        VarNodes(j).ListViewItemIndex = VarNodes(j).ListViewItemIndex + UBound(VarNodes(i).ChildNodes)
-                    End If
-                Next j
-                For j = 0 To UBound(VarNodes(i).ChildNodes) - 1                         '添加所有下一层子节点的列表项
-                    NewItemIndex = Me.lvLocals.AddItem(Space(SpaceCount * Level) & VarNodes(VarNodes(i).ChildNodes(j)).VarName, NewItemIndex + 1)
-                    VarNodes(VarNodes(i).ChildNodes(j)).ListViewItemIndex = NewItemIndex
-                    Me.lvLocals.SetItemText VarNodes(VarNodes(i).ChildNodes(j)).TypeName, NewItemIndex, 1
-                    Me.lvLocals.SetItemText VarNodes(VarNodes(i).ChildNodes(j)).Value, NewItemIndex, 2
-                Next j
+                Call ExpandItem(i)
                 VarNodes(i).Expanded = True                                             '把当前节点标记为已展开
             End If
             

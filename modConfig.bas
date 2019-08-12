@@ -69,7 +69,6 @@ Public Lang_TitleBar_Restore                    As String
 Public Lang_TitleBar_Min                        As String
 Public Lang_TitleBar_Close                      As String
 
-Public Lang_CallStack_Caption                   As String
 Public Lang_CodeWindow_Caption                  As String
 Public Lang_ControlBox_Caption                  As String
 Public Lang_Disassembly_Caption                 As String
@@ -155,10 +154,15 @@ Public Lang_Breakpoints_ListViewHeader_Line     As String
 Public Lang_Breakpoints_ListViewHeader_Address  As String
 
 Public Lang_Locals_Caption                      As String
+Public Lang_Locals_Retrieving_Caption           As String
 Public Lang_Locals_ListViewHeader_Name          As String
 Public Lang_Locals_ListViewHeader_Type          As String
 Public Lang_Locals_ListViewHeader_Value         As String
 Public Lang_Locals_Error                        As String
+
+Public Lang_CallStack_Caption                   As String
+Public Lang_CallStack_Retrieving_Caption        As String
+Public Lang_CallStack_Args                      As String
 '===================================================================
 
 Public CurrentProject                           As ProjectFileStruct                        '当前工程的信息
@@ -229,7 +233,6 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_TitleBar_Close = "关闭"
     
     Lang_Breakpoints_Caption = "断点列表"
-    Lang_CallStack_Caption = "调用堆栈"
     Lang_CodeWindow_Caption = "代码窗口"
     Lang_ControlBox_Caption = "控件箱"
     Lang_Disassembly_Caption = "反汇编"
@@ -314,9 +317,14 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_Breakpoints_ListViewHeader_Address = "地址"
     
     Lang_Locals_Caption = "本地"
+    Lang_Locals_Retrieving_Caption = "本地 - 正在获取..."
     Lang_Locals_ListViewHeader_Name = "名称"
     Lang_Locals_ListViewHeader_Type = "类型"
     Lang_Locals_ListViewHeader_Value = "值"
     Lang_Locals_Error = "<错误>"
+    
+    Lang_CallStack_Caption = "调用堆栈"
+    Lang_CallStack_Retrieving_Caption = "调用堆栈 - 正在获取..."
+    Lang_CallStack_Args = "参数"
 End Function
 
