@@ -18,8 +18,8 @@ Begin VB.Form frmCallStack
       TabIndex        =   0
       Top             =   240
       Width           =   3615
-      _extentx        =   6376
-      _extenty        =   4683
+      _ExtentX        =   6376
+      _ExtentY        =   4683
    End
 End
 Attribute VB_Name = "frmCallStack"
@@ -137,6 +137,15 @@ Private Sub Form_Resize()
     
     Me.lvCallStack.Width = Me.ScaleWidth
     Me.lvCallStack.Height = Me.ScaleHeight
+End Sub
+
+Private Sub lvCallStack_Click(iItem As Long, iSubItem As Long, X As Long, Y As Long)
+    'On Error Resume Next       'todo
+    
+    CtlAddToolTip Me.lvCallStack.ListViewHwnd, Lang_Breakpoints_ListViewHeader_Address & ": " & CallStackInfo(iItem).Address & vbCrLf & _
+        Lang_CallStack_Args & ": " & CallStackInfo(iItem).Args & vbCrLf & _
+        Lang_Breakpoints_ListViewHeader_File & ": " & CallStackInfo(iItem).File & ":" & CallStackInfo(iItem).Line, _
+        Lang_CallStack_Tooltip_Title, TTI_INFO
 End Sub
 
 Private Sub lvCallStack_DoubleClick(iItem As Long, iSubItem As Long, X As Long, Y As Long)

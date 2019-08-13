@@ -15,6 +15,11 @@ Public Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByV
 Private Declare Function SystemParametersInfo Lib "user32" Alias "SystemParametersInfoA" (ByVal uAction As Long, _
     ByVal uParam As Long, ByRef lpvParam As Any, ByVal fuWinIni As Long) As Long
 
+'把字符串转成字节数组
+Private Declare Function WideCharToMultiByte Lib "kernel32" (ByVal CodePage As Long, ByVal dwFlags As Long, _
+    ByVal lpWideCharStr As Long, ByVal cchWideChar As Long, ByVal lpMultiByteStr As Long, ByVal cbMultiByte As Long, _
+    ByVal lpDefaultChar As Long, ByVal lpUsedDefaultChar As Long) As Long
+
 Public DebugProgramInfo     As PROCESS_INFORMATION                                      '正在调试中的进程信息
 
 Public bpRedrawFileIndex    As Long                                                     '需要重绘断点的代码窗口所对应的文件序号
@@ -26,6 +31,27 @@ Public Function GetAppPath() As String
     If Right(GetAppPath, 1) <> "\" Then
         GetAppPath = GetAppPath & "\"
     End If
+End Function
+
+'描述:      把字符串转换成字节数组
+'参数:      strInput: 需要转换的字符串
+'.          AutoAddNullChar: 可选的。是否自动在字符串末尾添加'\0'。默认为True
+'返回值:    转换出来的字节数组
+Public Function StrconvEx(ByVal strInput As String, Optional AutoAddNullChar As Boolean = True) As Byte()
+    Dim nBytes      As Long
+    Dim tmpBuf()    As Byte
+    
+    If AutoAddNullChar Then
+        strInput = strInput & vbNullChar                                                        '在字符串末尾加上'\0'
+    End If
+    nBytes = WideCharToMultiByte(CP_ACP, 0, ByVal StrPtr(strInput), -1, 0, 0, 0, 0)         '获取需要的缓冲区大小
+    ReDim tmpBuf(nBytes - 1)                                                                '分配缓冲区
+    WideCharToMultiByte CP_ACP, 0, ByVal StrPtr(strInput), -1, _
+        ByVal VarPtr(tmpBuf(0)), nBytes - 1, 0, 0                                           '转码
+    If Not AutoAddNullChar Then                                                             '如果用户指定不自动添加'\0'，去掉末尾的'\0'
+        ReDim Preserve tmpBuf(UBound(tmpBuf) - 1)
+    End If
+    StrconvEx = tmpBuf
 End Function
 
 '描述:      判断进程中是否存在有指定PID的进程

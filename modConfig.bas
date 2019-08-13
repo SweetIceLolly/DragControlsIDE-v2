@@ -159,10 +159,12 @@ Public Lang_Locals_ListViewHeader_Name          As String
 Public Lang_Locals_ListViewHeader_Type          As String
 Public Lang_Locals_ListViewHeader_Value         As String
 Public Lang_Locals_Error                        As String
+Public Lang_Locals_Tooltip_Title                As String
 
 Public Lang_CallStack_Caption                   As String
 Public Lang_CallStack_Retrieving_Caption        As String
 Public Lang_CallStack_Args                      As String
+Public Lang_CallStack_Tooltip_Title             As String
 '===================================================================
 
 Public CurrentProject                           As ProjectFileStruct                        '当前工程的信息
@@ -322,9 +324,11 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_Locals_ListViewHeader_Type = "类型"
     Lang_Locals_ListViewHeader_Value = "值"
     Lang_Locals_Error = "<错误>"
+    Lang_Locals_Tooltip_Title = "本地变量信息: "
     
     Lang_CallStack_Caption = "调用堆栈"
     Lang_CallStack_Retrieving_Caption = "调用堆栈 - 正在获取..."
     Lang_CallStack_Args = "参数"
+    Lang_CallStack_Tooltip_Title = "调用堆栈信息:"
 End Function
 

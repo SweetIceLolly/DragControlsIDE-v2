@@ -9,7 +9,7 @@ Option Explicit
 
 Dim hWndTip         As Long                             '工具提示文本窗口句柄
 
-'描述:      创建工具提示文本窗口
+'描述:      创建工具提示文本窗口（在程序初始化时调用）
 '返回值:    创建的工具提示文本窗口句柄
 Public Function CreateToolTip() As Long
     hWndTip = CreateWindowExA(0, "tooltips_class32", vbNullString, WS_POPUP Or TTS_ALWAYSTIP, _
@@ -21,6 +21,11 @@ Public Function CreateToolTip() As Long
     
     CreateToolTip = hWndTip
 End Function
+
+'描述:      关闭工具提示文本窗口（在程序退出时调用）
+Public Sub DestroyToolTip()
+    DestroyWindow hWndTip
+End Sub
 
 '描述:      为指定的控件添加工具提示文本
 '参数:      TargetWindow: 需要添加工具提示文本的窗口
@@ -34,7 +39,7 @@ Public Function CtlAddToolTip(TargetWindow As Long, Tooltip As String, _
     Dim ti          As TTTOOLINFO
     Dim tmpStr()    As Byte
     
-    tmpStr = StrConv(Tooltip & vbNullChar, vbFromUnicode)
+    tmpStr = StrconvEx(Tooltip)
     With ti
         .cbSize = Len(ti)
         .hWnd = TargetWindow
@@ -46,7 +51,7 @@ Public Function CtlAddToolTip(TargetWindow As Long, Tooltip As String, _
     CtlAddToolTip = SendMessageA(hWndTip, TTM_ADDTOOL, 0, ByVal VarPtr(ti))
     
     If Len(Title) > 1 Then
-        tmpStr = StrConv(Title, vbFromUnicode)
+        tmpStr = StrconvEx(Title)
         SendMessageA hWndTip, TTM_SETTITLE, ByVal Icon, ByVal VarPtr(tmpStr(0))
     End If
 End Function

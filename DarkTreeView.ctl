@@ -64,7 +64,7 @@ Public Function AddItem(ItemText As String, Optional ParentItem As Long = 0) As 
     Dim ti          As TVINSERTSTRUCTEX
     Dim TextBuf()   As Byte
     
-    TextBuf = StrConv(ItemText & vbNullChar, vbFromUnicode)
+    TextBuf = StrconvEx(ItemText)
     With ti
         .hInsertAfter = TVI_LAST
         .hParent = ParentItem
@@ -139,7 +139,7 @@ Public Function SetItemText(ByVal Item As Long, NewText As String) As Boolean
     Dim tvi         As TVITEM
     Dim buf()       As Byte
     
-    buf = StrConv(NewText & vbNullChar, vbFromUnicode)
+    buf = StrconvEx(NewText)
     With tvi
         .mask = TVIF_TEXT
         .cchTextMax = UBound(buf)

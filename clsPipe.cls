@@ -151,7 +151,7 @@ Public Function DosInput(ByVal strInput As String) As Long
     Dim InputData() As Byte                                                 '写入的内容
     Dim szInputData As Long                                                 '写入的内容大小
     
-    InputData = StrConv(strInput, vbFromUnicode)                            '输入内容转换成字节数组
+    InputData = StrconvEx(strInput, False)                                  '输入内容转换成字节数组
     szInputData = UBound(InputData) + 1                                     '计算写入内容的大小
     WriteFile hInput, InputData(0), ByVal szInputData, bWritten, 0          '往输入管道写入内容
     

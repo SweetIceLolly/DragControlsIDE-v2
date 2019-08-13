@@ -32,8 +32,8 @@ Begin VB.Form frmLocals
       TabIndex        =   0
       Top             =   0
       Width           =   5775
-      _ExtentX        =   10186
-      _ExtentY        =   4683
+      _extentx        =   10186
+      _extenty        =   4683
    End
    Begin VB.Image imgExpanded 
       Height          =   240
@@ -539,9 +539,10 @@ Private Sub lvLocals_Click(iItem As Long, iSubItem As Long, X As Long, Y As Long
     
     For i = 0 To UBound(VarNodes)                                           '查找列表项所匹配的VarNodes
         If VarNodes(i).ListViewItemIndex = iItem Then
-            CtlAddToolTip Me.lvLocals.ListViewHwnd, "类型: " & VarNodes(i).TypeName & vbCrLf & _
-                "值: " & IIf(Len(VarNodes(i).Value) > 200, Left(VarNodes(i).Value, 100) & " ... " & Right(VarNodes(i).Value, 100), VarNodes(i).Value), _
-                "本地变量信息: " & VarNodes(i).VarName, TTI_INFO
+            CtlAddToolTip Me.lvLocals.ListViewHwnd, Lang_Locals_ListViewHeader_Type & ": " & VarNodes(i).TypeName & vbCrLf & _
+                Lang_Locals_ListViewHeader_Value & ": " & _
+                IIf(Len(VarNodes(i).Value) > 200, Left(VarNodes(i).Value, 100) & " ... " & Right(VarNodes(i).Value, 100), VarNodes(i).Value), _
+                Lang_Locals_Tooltip_Title & VarNodes(i).VarName, TTI_INFO
             Exit For
         End If
     Next i

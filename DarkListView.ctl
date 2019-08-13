@@ -102,7 +102,7 @@ Public Function AddColumnHeader(Text As String, Optional Width As Integer = 75, 
     Dim lvCol       As LVCOLUMN
     Dim tmpStr()    As Byte
     
-    tmpStr = StrConv(Text & vbNullChar, vbFromUnicode)
+    tmpStr = StrconvEx(Text)
     With lvCol
         .mask = LVCF_WIDTH Or LVCF_TEXT Or LVCF_FMT
         .fmt = LVCFMT_LEFT
@@ -123,7 +123,7 @@ Public Function AddItem(Text As String, Optional Index As Long = -1) As Long
     Dim lvi         As LVITEM
     Dim tmpStr()    As Byte
     
-    tmpStr = StrConv(Text & vbNullChar, vbFromUnicode)
+    tmpStr = StrconvEx(Text)
     With lvi
         .iItem = IIf(Index = -1, SendMessageA(lvHwnd, LVM_GETITEMCOUNT, ByVal 0, ByVal 0), Index)
         .mask = LVIF_TEXT
@@ -156,7 +156,7 @@ Public Function SetItemText(Text As String, Index As Long, Optional SubItemIndex
     Dim lvi         As LVITEM
     Dim tmpStr()    As Byte
     
-    tmpStr = StrConv(Text & vbNullChar, vbFromUnicode)
+    tmpStr = StrconvEx(Text)
     With lvi
         .iSubItem = SubItemIndex
         .mask = LVIF_TEXT
@@ -187,7 +187,7 @@ Public Function SetColumnText(Index As Long, NewText As String) As Long
     Dim tmpStr()    As Byte
     Dim lvc         As LVCOLUMN
     
-    tmpStr = StrConv(NewText & vbNullChar, vbFromUnicode)
+    tmpStr = StrconvEx(NewText)
     With lvc
         .mask = LVCF_TEXT
         .cchTextMax = 255
@@ -242,7 +242,7 @@ Public Function FindItem(Text As String, Optional FullMatch As Boolean = True, O
     Dim tmpStr()    As Byte
     Dim lvfi        As LVFINDINFO
     
-    tmpStr = StrConv(Text & vbNullChar, vbFromUnicode)
+    tmpStr = StrconvEx(Text)
     If Not FullMatch Then
         lvfi.Flags = LVFI_PARTIAL
     End If
@@ -315,7 +315,7 @@ Private Sub UserControl_Initialize()
     lvHwnd = CreateWindowExA(CurrExStyle, "SysListView32", "", _
         WS_VISIBLE Or WS_CHILD Or WS_TABSTOP Or LVS_ALIGNLEFT Or LVS_REPORT Or LVS_SINGLESEL, _
         0, 0, UserControl.ScaleWidth / Screen.TwipsPerPixelX, _
-        UserControl.ScaleHeight / Screen.TwipsPerPixelY, UserControl.hWnd, 0, App.hInstance, 0) 'Or WS_BORDER
+        UserControl.ScaleHeight / Screen.TwipsPerPixelY, UserControl.hWnd, 0, App.hInstance, 0)
     
     SetPropA lvHwnd, "ID", ByVal CtlListPushBack(Me)
     SetPropA lvHwnd, "PARENT_CTL", UserControl.hWnd

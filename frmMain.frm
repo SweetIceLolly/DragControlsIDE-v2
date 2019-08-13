@@ -988,7 +988,7 @@ Private Sub mnuRun_Click()
     If InStr(PipeOutput, "no debugging symbols found") <> 0 Or _
         InStr(PipeOutput, "No such file or directory") <> 0 Then                    'gdb输出“no debugging symbols found”或者“No such file or directory”，加载符号失败
         frmOutput.OutputLog CStr(Split(PipeOutput, vbCrLf)(0))                      '输出加载符号的错误
-        If MsgBox(Lang_Main_GdbLoadSymbolsFailure_1 & ExePath & Lang_Main_GdbLoadSymbolsFailure_2, vbExclamation Or vbYesNo, Lang_Msgbox_Confirm) = vbNo Then
+        If NoSkinMsgBox(Lang_Main_GdbLoadSymbolsFailure_1 & ExePath & Lang_Main_GdbLoadSymbolsFailure_2, vbExclamation Or vbYesNo, Lang_Msgbox_Confirm) = vbNo Then
             TerminateProcess DebugProgramInfo.hProcess, 0                               '杀掉待调试进程，放弃调试
             Set GdbPipe = Nothing                                                       '关闭gdb管道
             frmOutput.OutputLog Lang_Main_DebugAborted
@@ -1300,6 +1300,9 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     
     '恢复窗口子类化
     SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(Me.hWnd, "PrevWndProc")
+    
+    '关闭工具提示文本窗口
+    Call DestroyToolTip
     
     '关闭管道
     If Not GdbPipe Is Nothing Then

@@ -429,7 +429,8 @@ Private Sub ClickCover_MouseUp(Button As Integer, Shift As Integer, X As Single,
     End If
     
     If DropIndex <> 0 And Button = 1 Then
-        If FocusIndex <> DropIndex And DropMode = 0 Then SwitchTo DropIndex
+        'If FocusIndex <> DropIndex And DropMode = 0 Then SwitchTo DropIndex
+        If DropMode = 0 Then SwitchTo DropIndex                             '在此处修改成如果DropMode=0就触发SwitchTo，修复文本框不获取焦点的问题
         If DropMode = 1 Then
             TabTitle(DropIndex).ZOrder 1
             TabBg(DropIndex).ZOrder 1
