@@ -1,5 +1,19 @@
 【日志】
 
+# 2019.8.13
+
+修改了DarkButton的颜色，使其跟DarkImageButton的颜色一致。
+
+新添加函数StrConvEx，使用WideCharToMultiByte来替代VB6自己的StrConv，修复了在英文系统上中文会变成问号的问题。
+
+修复了按下TabBar标签页的时候代码框不会获取到焦点的问题。
+
+为调用堆栈的ListView添加了鼠标按键处理，按下鼠标按键能看到调用堆栈信息。
+
+修复了frmMain的mnuRun中一处MsgBox没有改用NoSkinMsgBox的问题，导致弹出的消息框非常非常非常非常难看。
+
+添加DestroyToolTip过程，用来在程序退出前关闭掉工具提示文本窗口以释放资源。
+
 # 2019.8.12
 
 经过n（n≥5）次拖延后终于添加了.gitigore文件，忽略掉.vbw文件和Vb_autoBak文件夹。
