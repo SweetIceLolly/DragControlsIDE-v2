@@ -1,5 +1,29 @@
 【日志】
 
+# 2019.8.25
+
+添加ByteArrayConv函数，替代VB6的StrConv的把字节数组转成字符串的功能。
+
+移除了gcc。改成用户自行安装，并选择安装路径。（如需测试：修改frmMain的Form_Load中`GccPath`和`GdbPath`两个变量）
+
+为断点列表添加按下显示详细信息的功能。
+
+处理不同版本的gdb的路径字符问题（旧版是“/”，新版是“\”）。
+
+为frmCreateOptions里的文本框响应Ctrl+A快捷键。
+
+为本地变量列表响应鼠标双击事件。
+
+添加ProcessExitedHandler过程，以处理调试进程退出之后的收尾工作。
+
+为frmMain的ClearDebugWindows过程添加一个ClearBreakpoints参数，因为有时候清空调试窗口信息的时候不需要清空断点列表里的信息。
+
+修改frmMain中运行部分的代码，让输出更加详细。
+
+修改frmMain中运行部分的代码，在向第一次gdb发送“continue”命令之后使用`ResumeThread`来恢复主线程运行。对于旧版gdb，continue命令能让进程恢复运行；但是对于较新的版本，需要`ResumeThread`才可以恢复进程运行。
+
+处理了新版gdb调试进程退出的输出。
+
 # 2019.8.13
 
 修改了DarkButton的颜色，使其跟DarkImageButton的颜色一致。
