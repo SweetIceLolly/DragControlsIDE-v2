@@ -33,7 +33,7 @@ Public Function ListBoxRedrawProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal 
         If tItem.CtlType = ODT_LISTBOX Then
             ReDim sBuff(SendMessageA(tItem.hWndItem, LB_GETTEXTLEN, tItem.itemID, 0))
             SendMessageA tItem.hWndItem, LB_GETTEXT, tItem.itemID, ByVal VarPtr(sBuff(0))
-            sItem = StrConv(sBuff, vbUnicode) & vbNullChar
+            sItem = ByteArrayConv(sBuff) & vbNullChar
             If (tItem.itemState And ODS_FOCUS) Then
                 hBkBrush = CreateSolidBrush(ByVal RGB(71, 71, 72))
                 FillRect tItem.hDC, tItem.rcItem, hBkBrush

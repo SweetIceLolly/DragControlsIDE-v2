@@ -348,8 +348,8 @@ Private Sub picSelMargin_MouseMove(Button As Integer, Shift As Integer, X As Sin
     With CurrentProject.Files(FileIndex)
         For i = 0 To UBound(.Breakpoints)                                                   '尝试查找该行有没有对应的断点
             If .Breakpoints(i).CodeLn = CurrRow Then                                            '找到匹配的断点就显示断点信息
-                'ToDo
-                Me.picSelMargin.ToolTipText = "断点于第" & .Breakpoints(i).CodeLn & "行: " & IIf(.Breakpoints(i).Enabled, "ok", "no")
+                Me.picSelMargin.ToolTipText = Lang_Breakpoints_Info_1 & .Breakpoints(i).CodeLn & Lang_Breakpoints_Info_2 & _
+                    IIf(.Breakpoints(i).Enabled, Lang_Breakpoints_Info_3, Lang_Breakpoints_Info_4)
                 Exit Sub
             End If
         Next i

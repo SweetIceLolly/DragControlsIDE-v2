@@ -19,6 +19,9 @@ Private Declare Function SystemParametersInfo Lib "user32" Alias "SystemParamete
 Private Declare Function WideCharToMultiByte Lib "kernel32" (ByVal CodePage As Long, ByVal dwFlags As Long, _
     ByVal lpWideCharStr As Long, ByVal cchWideChar As Long, ByVal lpMultiByteStr As Long, ByVal cbMultiByte As Long, _
     ByVal lpDefaultChar As Long, ByVal lpUsedDefaultChar As Long) As Long
+'把字节数组转成字符串
+Private Declare Function MultiByteToWideChar Lib "kernel32" (ByVal CodePage As Long, ByVal dwFlags As Long, _
+    ByVal lpMultiByteStr As Long, ByVal cchMultiByte As Long, ByVal lpWideCharStr As Long, ByVal cchWideChar As Long) As Long
 
 Public DebugProgramInfo     As PROCESS_INFORMATION                                      '正在调试中的进程信息
 
@@ -37,7 +40,7 @@ End Function
 '参数:      strInput: 需要转换的字符串
 '.          AutoAddNullChar: 可选的。是否自动在字符串末尾添加'\0'。默认为True
 '返回值:    转换出来的字节数组
-Public Function StrconvEx(ByVal strInput As String, Optional AutoAddNullChar As Boolean = True) As Byte()
+Public Function StrConvEx(ByVal strInput As String, Optional AutoAddNullChar As Boolean = True) As Byte()
     Dim nBytes      As Long
     Dim tmpBuf()    As Byte
     
@@ -51,7 +54,27 @@ Public Function StrconvEx(ByVal strInput As String, Optional AutoAddNullChar As 
     If Not AutoAddNullChar Then                                                             '如果用户指定不自动添加'\0'，去掉末尾的'\0'
         ReDim Preserve tmpBuf(UBound(tmpBuf) - 1)
     End If
-    StrconvEx = tmpBuf
+    StrConvEx = tmpBuf
+End Function
+
+'描述:      把字节数组转换成字符串
+'参数:      ByteArrInput: 需要转换的字节数组
+'返回值:    转换出来的字符串
+Public Function ByteArrayConv(ByteArrInput() As Byte) As String
+    Dim nBytes      As Long                                                                                     '缓冲区需要分配的大小
+    Dim tmpStr      As String                                                                                   '缓存字符串
+    Dim NullCharPos As Long                                                                                     ''\0'在字符串中的位置
+    
+    nBytes = MultiByteToWideChar(CP_ACP, 0, ByVal VarPtr(ByteArrInput(0)), UBound(ByteArrInput) + 1, 0, 0)      '获取需要的缓冲区大小
+    tmpStr = String(nBytes, vbNullChar)                                                                         '分配缓冲区
+    nBytes = MultiByteToWideChar(CP_ACP, 0, ByVal VarPtr(ByteArrInput(0)), _
+        UBound(ByteArrInput) + 1, ByVal StrPtr(tmpStr), nBytes)                                                 '转码
+    NullCharPos = InStr(tmpStr, vbNullChar)
+    If NullCharPos > 0 Then
+        ByteArrayConv = Left(tmpStr, NullCharPos - 1)
+    Else
+        ByteArrayConv = tmpStr
+    End If
 End Function
 
 '描述:      判断进程中是否存在有指定PID的进程

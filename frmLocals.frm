@@ -32,8 +32,8 @@ Begin VB.Form frmLocals
       TabIndex        =   0
       Top             =   0
       Width           =   5775
-      _extentx        =   10186
-      _extenty        =   4683
+      _ExtentX        =   10186
+      _ExtentY        =   4683
    End
    Begin VB.Image imgExpanded 
       Height          =   240
@@ -305,6 +305,7 @@ Private Sub ArrayParser(ParentItem As Long, OutputString As String)
     StartQuotePos = InStr(tmpStr, """") - 1                                                     '查找第一个“"”的位置
     BracketStartPos = 1                                                                         '初始化第一个“{”的位置
     
+    'ToDo: handle 【, <incomplete sequence \214>,】
     VarName = VarName & "["                                                                     '变量名后面加上“[”，为之后添加数组元素序号做准备
     If StartQuotePos >= 0 Then                                                                  '如果找到了“"”，再做进一步的判断
         If Left(tmpStr, StartQuotePos) = String(StartQuotePos, "{") Then                            '这是一个字符串数组（var = {{...(n个{)...{"*）
@@ -548,6 +549,25 @@ Private Sub lvLocals_Click(iItem As Long, iSubItem As Long, X As Long, Y As Long
     Next i
 End Sub
 
+Private Sub lvLocals_DoubleClick(iItem As Long, iSubItem As Long, X As Long, Y As Long)
+    'On Error Resume Next       'todo
+    Dim i                       As Long
+    
+    '处理列表项双击
+    For i = 0 To UBound(VarNodes)                                           '查找列表项所匹配的VarNodes
+        If VarNodes(i).ListViewItemIndex = iItem Then
+            If VarNodes(i).Expanded Then                                            '折叠已展开的节点
+                Call FoldItem(i)
+                VarNodes(i).Expanded = False
+            ElseIf UBound(VarNodes(i).ChildNodes) > 0 Then                          '如果该节点已折叠，而且有子节点，就展开它
+                Call ExpandItem(i)
+                VarNodes(i).Expanded = True
+            End If
+            Exit For
+        End If
+    Next i
+End Sub
+
 Private Sub lvLocals_KeyDown(KeyCode As Integer, Shift As Integer)
     'On Error Resume Next       'todo
     Dim ItemIndex               As Long                                     '当前选择的列表项
@@ -564,7 +584,7 @@ Private Sub lvLocals_KeyDown(KeyCode As Integer, Shift As Integer)
     For i = 0 To UBound(VarNodes)                                           '查找列表项对应的VarNodes序号
         If VarNodes(i).ListViewItemIndex = ItemIndex Then
             If KeyCode = VK_LEFT Then                                               '按下左方向键，折叠当前节点（前提是该节点已展开）
-                If VarNodes(i).Expanded = True Then
+                If VarNodes(i).Expanded Then
                     Call FoldItem(i)
                     VarNodes(i).Expanded = False
                 End If

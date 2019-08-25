@@ -121,9 +121,14 @@ Public Lang_Main_GccStartFailed                 As String
 Public Lang_Main_CompileSucceed                 As String
 Public Lang_Main_CompileFailed                  As String
 Public Lang_Main_RunFailed                      As String
+Public Lang_Main_RunSucceed                     As String
 Public Lang_Main_GdbFailed                      As String
+Public Lang_Main_GdbSucceed                     As String
+Public Lang_Main_GdbAttaching                   As String
 Public Lang_Main_GdbAttachFailed_1              As String
 Public Lang_Main_GdbAttachFailed_2              As String
+Public Lang_Main_GdbLoadingSymbols_1            As String
+Public Lang_Main_GdbLoadingSymbols_2            As String
 Public Lang_Main_GdbLoadSymbolsFailure_1        As String
 Public Lang_Main_GdbLoadSymbolsFailure_2        As String
 Public Lang_Main_DebugAborted                   As String
@@ -133,7 +138,10 @@ Public Lang_Main_GdbBreakpointError_3           As String
 Public Lang_Main_GdbBreakpoint_Invalid          As String
 Public Lang_Main_DebugInfo_1                    As String
 Public Lang_Main_DebugInfo_2                    As String
+Public Lang_Main_RunningInfo_1                  As String
+Public Lang_Main_RunningInfo_2                  As String
 Public Lang_Main_Debug_OpenSourceFailure        As String
+Public Lang_Main_Debug_BreakpointHit            As String
 Public Lang_Main_Debug_Returned                 As String
 
 Public Lang_SolutionExplorer_Caption            As String
@@ -152,6 +160,10 @@ Public Lang_Breakpoints_Caption                 As String
 Public Lang_Breakpoints_ListViewHeader_File     As String
 Public Lang_Breakpoints_ListViewHeader_Line     As String
 Public Lang_Breakpoints_ListViewHeader_Address  As String
+Public Lang_Breakpoints_Info_1                  As String
+Public Lang_Breakpoints_Info_2                  As String
+Public Lang_Breakpoints_Info_3                  As String
+Public Lang_Breakpoints_Info_4                  As String
 
 Public Lang_Locals_Caption                      As String
 Public Lang_Locals_Retrieving_Caption           As String
@@ -165,11 +177,15 @@ Public Lang_CallStack_Caption                   As String
 Public Lang_CallStack_Retrieving_Caption        As String
 Public Lang_CallStack_Args                      As String
 Public Lang_CallStack_Tooltip_Title             As String
+Public Lang_CallStack_NoArg                     As String
 '===================================================================
 
 Public CurrentProject                           As ProjectFileStruct                        '当前工程的信息
 Public ProjectFolderPath                        As String                                   '当前工程文件夹的位置（以"\"结尾）
 Public ProjectFilePath                          As String                                   '当前项目工程文件的位置
+
+Public GccPath                                  As String                                   'g++路径
+Public GdbPath                                  As String                                   'gdb路径
 
 Public TvItemBinding()                          As TvItemToFileIndex                        '当前工程的TreeView列表项和文件序号的绑定
 Public ProjectNameTvItem                        As Long                                     'TreeView列表项和工程名称的绑定
@@ -234,7 +250,6 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_TitleBar_Min = "最小化"
     Lang_TitleBar_Close = "关闭"
     
-    Lang_Breakpoints_Caption = "断点列表"
     Lang_CodeWindow_Caption = "代码窗口"
     Lang_ControlBox_Caption = "控件箱"
     Lang_Disassembly_Caption = "反汇编"
@@ -282,14 +297,19 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_Main_SaveFailedBeforeCompile = "保存文件时发生错误！是否继续进行编译？"
     Lang_Main_ReplaceExe_1 = "检测到在编译目录中有文件与即将编译的可执行文件重名: "
     Lang_Main_ReplaceExe_2 = " 是否继续编译？该文件将会被覆盖。"
-    Lang_Main_StartingGcc = "正在启动g++进行编译..."
-    Lang_Main_GccStartFailed = "无法启动g++！"
+    Lang_Main_StartingGcc = "正在启动g++进行编译: "
+    Lang_Main_GccStartFailed = "无法启动g++: "
     Lang_Main_CompileSucceed = "编译完成: EXE路径: "
     Lang_Main_CompileFailed = "编译失败！"
     Lang_Main_RunFailed = "无法运行 "
+    Lang_Main_RunSucceed = "创建待调试进程: 进程ID: "
     Lang_Main_GdbFailed = "创建gdb调试管道失败！无法进行调试。"
+    Lang_Main_GdbSucceed = "创建gdb调试管道: 进程ID: "
+    Lang_Main_GdbAttaching = "正在附加进程..."
     Lang_Main_GdbAttachFailed_1 = "gdb附加到进程"
     Lang_Main_GdbAttachFailed_2 = "失败，无法进行调试。"
+    Lang_Main_GdbLoadingSymbols_1 = "正在从文件"
+    Lang_Main_GdbLoadingSymbols_2 = "读取符号..."
     Lang_Main_GdbLoadSymbolsFailure_1 = "从可执行文件"
     Lang_Main_GdbLoadSymbolsFailure_2 = " 加载符号失败！这意味着断点、查看本地变量等调试功能将无法正常工作，是否继续调试？"
     Lang_Main_DebugAborted = "放弃调试。"
@@ -297,9 +317,10 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_Main_GdbBreakpointError_2 = " 中找不到第"
     Lang_Main_GdbBreakpointError_3 = "行。"
     Lang_Main_GdbBreakpoint_Invalid = "<断点无效>"
-    Lang_Main_DebugInfo_1 = "调试正在进行: gdb.exe 进程ID: "
-    Lang_Main_DebugInfo_2 = " 进程ID: "
+    Lang_Main_RunningInfo_1 = "进程"
+    Lang_Main_RunningInfo_2 = "正在运行"
     Lang_Main_Debug_OpenSourceFailure = "无法打开代码文件: "
+    Lang_Main_Debug_BreakpointHit = "断电命中于"
     Lang_Main_Debug_Returned = "程序退出并返回: "
     
     Lang_SolutionExplorer_Caption = "工程资源管理器"
@@ -314,9 +335,14 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_SaveBox_SaveFailure_1 = "无法保存文件："
     Lang_SaveBox_SaveFailure_2 = " ，是否继续保存其他文件？"
     
+    Lang_Breakpoints_Caption = "断点列表"
     Lang_Breakpoints_ListViewHeader_File = "文件"
     Lang_Breakpoints_ListViewHeader_Line = "行号"
     Lang_Breakpoints_ListViewHeader_Address = "地址"
+    Lang_Breakpoints_Info_1 = "断点于第"
+    Lang_Breakpoints_Info_2 = "行: "
+    Lang_Breakpoints_Info_3 = "已启用"
+    Lang_Breakpoints_Info_4 = "已禁用"
     
     Lang_Locals_Caption = "本地"
     Lang_Locals_Retrieving_Caption = "本地 - 正在获取..."
@@ -330,5 +356,6 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_CallStack_Retrieving_Caption = "调用堆栈 - 正在获取..."
     Lang_CallStack_Args = "参数"
     Lang_CallStack_Tooltip_Title = "调用堆栈信息:"
+    Lang_CallStack_NoArg = "<无参数>"
 End Function
 

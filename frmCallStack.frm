@@ -79,7 +79,10 @@ Public Sub GetCallStack()
                 StrPos = InStrRev(OutputLines(i), ":")                                                                  '（#n func(arg types) (args) at file:line）
                 CallStackInfo(i).Line = CLng(Right(OutputLines(i), Len(OutputLines(i)) - StrPos))                       '（#n func(arg types) (args) at file:[line]）
                 OutputLines(i) = Left(OutputLines(i), StrPos - 1)                                                       '（[#n func(arg types) (args) at file]:line）
-                StrPos = InStrRev(OutputLines(i), ":/")                                                                 '向前查找“:/”
+                StrPos = InStrRev(OutputLines(i), ":\")                                                                 '向前查找“:\”（新版gdb）
+                If StrPos = 0 Then                                                                                      '找不到“:\”就查找“:/”（旧版gdb）
+                    StrPos = InStrRev(OutputLines(i), ":/")
+                End If
                 StrPos = InStrRev(OutputLines(i), " at ", StrPos)                                                       '从“:/”的位置继续向前查找“ at ”
                 CallStackInfo(i).File = Replace(Right(OutputLines(i), Len(OutputLines(i)) - StrPos - 3), "/", "\")      '（#n func(arg types) (args) at [file]）
                 OutputLines(i) = Left(OutputLines(i), StrPos - 1)                                                       '（[#n func(arg types) (args)] at file）
@@ -103,7 +106,7 @@ Public Sub GetCallStack()
                     End If
                 Next StrPos
                 If StrPos = Len(OutputLines(i)) Then                                                                    '输出里面没有参数
-                    CallStackInfo(i).Args = ""                                                                              '设置参数为空
+                    CallStackInfo(i).Args = Lang_CallStack_NoArg                                                            '设置参数为空
                 Else                                                                                                    '输出里面有参数
                     CallStackInfo(i).Args = Right(OutputLines(i), Len(OutputLines(i)) - StrPos - 1)                         '（func(arg types) [(args)]）
                 End If

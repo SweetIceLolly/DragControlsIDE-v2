@@ -779,9 +779,33 @@ Dim NewCreateWindow         As frmCreate                                        
 Public GdbPipe              As clsPipe                                                  'gdb调试管道
 Attribute GdbPipe.VB_VarHelpID = -1
 
+'描述:      在目标进程退出之后进行收尾工作
+'参数:      ExitCode: 程序的退出码
+Private Sub ProcessExitedHandler(ExitCode As Long)
+    Dim i                   As Long
+    
+    Me.tmrCheckProcess.Enabled = False                                                  '停止计时器
+    CurrState = 0                                                                       '更新调试状态
+    For i = 0 To UBound(CurrentProject.Files)                                           '把所有文件的中断行清掉
+        CurrentProject.Files(i).TargetWindow.BreakLine = -1
+        Call CurrentProject.Files(i).TargetWindow.RedrawBreakpoints
+    Next i
+    
+    frmOutput.OutputLog Lang_Main_Debug_Returned & ExitCode & "(0x" & Hex(ExitCode) & ")"
+                
+    GdbPipe.DosInput "q" & vbCrLf                                                       '关闭管道
+    Call ClearDebugWindows(True)                                                        '清空所有调试窗口的信息
+    
+    '禁用菜单项
+    'ToDo
+End Sub
+
 '描述:      清空所有调试窗口里面的信息
-Private Sub ClearDebugWindows()
-    Call frmBreakpoints.ClearEverything                                             '断点
+'参数:      ClearBreakpoints: 可选的。指定是否清空断点列表里面的地址。通常在调试期间不需要清空断点列表，在调试完成后才需要
+Private Sub ClearDebugWindows(Optional ClearBreakpoints As Boolean = False)
+    If ClearBreakpoints Then                                                        '断点
+        Call frmBreakpoints.ClearEverything
+    End If
     Call frmLocals.ClearEverything                                                  '本地
     Call frmCallStack.ClearEverything                                               '调用堆栈
 End Sub
@@ -917,24 +941,26 @@ Private Sub mnuRun_Click()
             Exit Sub
         End If
     End If
+    frmOutput.edOutput.Text = ""                                                '清空输出
     '======================================================================
     
     '使用g++进行编译
     '                   ↓转到当前程序所在的盘符                    ↓调用g++.exe进行编译      ↓编译为调试程序           ↓所有的cpp代码文件
     '命令格式: cmd /c 【盘符】: && cd "【g++.exe所在目录】" && "【g++.exe路径】" [-mwindows] -g -o "【输出路径】" "【cpp文件1】" "【cpp文件2】"
     '                                       ↑转到g++.exe所在的目录                 ↑是否为命令行程序   ↑编译的EXE输出路径
-    frmOutput.OutputLog Lang_Main_StartingGcc
-    GccCmdLine = "cmd /c " & Left(GetAppPath(), 1) & ": && " & _
-        "cd """ & GetAppPath() & "GCC\bin"" && " & _
-        """" & GetAppPath() & "GCC\bin\g++.exe"" -g -o """ & ExePath & """"
+    GccCmdLine = "cmd /c " & Left(GccPath, 1) & ": && " & _
+        "cd """ & Left(GccPath, InStrRev(GccPath, "\")) & """ && " & _
+        """" & GccPath & """ -static -g -o """ & ExePath & """"
     For i = 0 To UBound(CurrentProject.Files)
         If Not CurrentProject.Files(i).IsHeaderFile Then
             GccCmdLine = GccCmdLine & " """ & CurrentProject.Files(i).FilePath & """"
         End If
     Next i
-    If GccPipe.InitDosIO(GccCmdLine) = 0 Then
-        frmOutput.OutputLog Lang_Main_GccStartFailed
+    If GccPipe.InitDosIO(GccCmdLine) = 0 Then                                   'g++管道启动失败
+        frmOutput.OutputLog Lang_Main_GccStartFailed & GccCmdLine
+        Exit Sub
     End If
+    frmOutput.OutputLog Lang_Main_StartingGcc & GccCmdLine
     Do While ProcessExists(GccPipe.hProcess)                                    '等待g++执行完成
         Sleep 50
         DoEvents
@@ -971,20 +997,23 @@ Private Sub mnuRun_Click()
         frmOutput.OutputLog Lang_Main_RunFailed & ExePath & " (" & Err.LastDllError & ")"
         Exit Sub
     End If
+    frmOutput.OutputLog Lang_Main_RunSucceed & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ")"
     '======================================================================
     
     '创建gdb管道
     Set GdbPipe = New clsPipe
-    If GdbPipe.InitDosIO(GetAppPath() & "GCC\gdb\gdb.exe -q -nw") = 0 Then      '创建gdb调试管道失败
+    If GdbPipe.InitDosIO(GdbPath & " -q -nw") = 0 Then                          '创建gdb调试管道失败
         TerminateProcess DebugProgramInfo.hProcess, 0                               '杀掉待调试进程，放弃调试
         Set GdbPipe = Nothing                                                       '关闭gdb管道
         frmOutput.OutputLog Lang_Main_GdbFailed
         Exit Sub
     End If
+    frmOutput.OutputLog Lang_Main_GdbSucceed & GdbPipe.dwProcessId & "(" & Hex(GdbPipe.dwProcessId) & ")"
     '======================================================================
     
+    frmOutput.OutputLog Lang_Main_GdbLoadingSymbols_1 & ExePath & Lang_Main_GdbLoadingSymbols_2
     GdbPipe.DosInput "file """ & Replace(ExePath, "\", "/") & """" & vbCrLf     '从exe文件读取符号
-    GdbPipe.DosOutput PipeOutput, "." & vbCrLf & "(gdb) "                       '获取gdb的输出
+    GdbPipe.DosOutput PipeOutput, "(gdb) ", 5000                                '获取gdb的输出
     If InStr(PipeOutput, "no debugging symbols found") <> 0 Or _
         InStr(PipeOutput, "No such file or directory") <> 0 Then                    'gdb输出“no debugging symbols found”或者“No such file or directory”，加载符号失败
         frmOutput.OutputLog CStr(Split(PipeOutput, vbCrLf)(0))                      '输出加载符号的错误
@@ -1001,7 +1030,8 @@ Private Sub mnuRun_Click()
     GdbPipe.DosInput "set print repeats 0" & vbCrLf                             '关闭gdb对于重复的数组元素的“<repeats n times>”输出
     '======================================================================
     
-    GdbPipe.DosInput "attach " & DebugProgramInfo.dwProcessId & vbCrLf          '附加到待调试进程 todo: show attaching
+    frmOutput.OutputLog Lang_Main_GdbAttaching
+    GdbPipe.DosInput "attach " & DebugProgramInfo.dwProcessId & vbCrLf          '附加到待调试进程
     GdbPipe.DosOutput PipeOutput, "(gdb) "                                      '获取gdb的输出
     If InStr(PipeOutput, "Can't attach") <> 0 Then                              'gdb输出“Can't attach to process.”，附加进程失败
         TerminateProcess DebugProgramInfo.hProcess, 0                               '杀掉待调试进程，放弃调试
@@ -1053,11 +1083,9 @@ Private Sub mnuRun_Click()
     '======================================================================
     
     GdbPipe.DosInput "continue" & vbCrLf                                        '使目标进程继续运行
+    ResumeThread DebugProgramInfo.hThread                                       '继续执行目标进程的主线程
+    frmOutput.OutputLog Lang_Main_RunningInfo_1 & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ") " & Lang_Main_RunningInfo_2
     CurrState = 1                                                               '更新调试状态
-    '======================================================================
-    
-    frmOutput.OutputLog Lang_Main_DebugInfo_1 & GdbPipe.dwProcessId & "(0x" & Hex(GdbPipe.dwProcessId) & "); " & _
-        GetFileName(ExePath) & Lang_Main_DebugInfo_2 & DebugProgramInfo.dwProcessId & "(0x" & Hex(DebugProgramInfo.dwProcessId) & ")"
     Me.tmrCheckProcess.Enabled = True                                           '开始等待进程结束
 End Sub
 
@@ -1238,6 +1266,11 @@ Private Sub Form_Load()
     '    MsgBox "加载皮肤失败！", vbCritical, Lang_Msgbox_Error todo: multi language
     'End If
     
+    'todo 删掉-----------------
+    GccPath = "C:\Program Files (x86)\MinGW\bin\g++.exe"                                                                '设置g++路径
+    GdbPath = "C:\Program Files (x86)\MinGW\bin\gdb.exe"                                                                '设置gdb路径
+    '--------------------------
+    
     '禁用不需要的菜单
     Me.DarkMenu.MenuEnabled(3) = False                                                                                  '保存
     Me.DarkMenu.MenuEnabled(4) = False                                                                                  '另存为
@@ -1385,8 +1418,8 @@ Private Sub tmrCheckProcess_Timer()
     Dim PipeOutput                  As String                                       '管道输出内容
     Dim PipeOutputLine()            As String                                       '管道输出的每一行
     Dim SplitTmp                    As String                                       '字符串分割缓存
+    Dim ExitCode                    As Long                                         '进程退出码
     Dim i                           As Long
-    Dim j                           As Long
     
     If GdbPipe.DosOutput(PipeOutput, "(gdb) ") = 1 Then                             '获取gdb是否有新消息
         PipeOutputLine = Split(PipeOutput, vbCrLf)                                      '分割出gdb输出的每一行
@@ -1438,19 +1471,27 @@ Private Sub tmrCheckProcess_Timer()
                         .TargetWindow.RedrawBreakpoints                                                 '绘制中断行的小箭头
                     End With
                 End If
+                frmOutput.OutputLog lang_main_debug_breakpointhit & ": " & _
+                    CurrentProject.Files(GdbBreakpoints(BreakpointIndex).FileIndex).FilePath & ":" & SourceLn
                 
                 '获取各种调试信息
-                Call frmCallStack.GetCallStack                                                      '获取调用堆栈
-                Call frmLocals.GetLocals                                                            '获取本地变量
-            ElseIf PipeOutput Like "Program exited *" Then                                  '进程退出消息（Program exited *.）
-                Dim ExitCode            As Long                                                 '进程退出码
+                Call frmCallStack.GetCallStack                                                  '获取调用堆栈
+                Call frmLocals.GetLocals                                                        '获取本地变量
+            '======================================================================================================================
+            
+            ElseIf PipeOutput Like "[[]Inferior * exited *" Then                            '进程退出信息（[Inferior * (process *) exited *]）（新版gdb）
+                SplitTmp = Right(PipeOutput, Len(PipeOutput) - InStrRev(PipeOutput, " exited ") - 7)    '（[Inferior * (process *) exited 【*]】）
+                SplitTmp = Left(SplitTmp, InStrRev(SplitTmp, "]") - 1)                                  '（【*】]）
                 
-                Me.tmrCheckProcess.Enabled = False                                              '停止计时器
-                CurrState = 0                                                                   '更新调试状态
-                For j = 0 To UBound(CurrentProject.Files)                                       '把所有文件的中断行清掉
-                    CurrentProject.Files(j).TargetWindow.BreakLine = -1
-                    Call CurrentProject.Files(j).TargetWindow.RedrawBreakpoints
-                Next j
+                If SplitTmp = "normally" Then                                                   '程序正常结束，返回0
+                    ExitCode = 0
+                Else                                                                            '否则就把返回值（八进制）转成十进制
+                    ExitCode = CLng("&O" & Right(SplitTmp, Len(SplitTmp) - InStrRev(SplitTmp, " ")))
+                End If
+                Call ProcessExitedHandler(ExitCode)
+            
+            '======================================================================================================================
+            ElseIf PipeOutput Like "Program exited *" Then                                  '进程退出消息（Program exited *.）（旧版gdb）
                 SplitTmp = Right(PipeOutput, Len(PipeOutput) - InStrRev(PipeOutput, " "))       '（Program exited with code [*.]）或（Program exited [normally.]）
                 SplitTmp = Left(SplitTmp, Len(SplitTmp) - 1)                                    '（[*].）或（[normally].）
                 
@@ -1459,13 +1500,7 @@ Private Sub tmrCheckProcess_Timer()
                 Else                                                                            '否则就把返回值（八进制）转成十进制
                     ExitCode = CLng("&O" & SplitTmp)
                 End If
-                frmOutput.OutputLog Lang_Main_Debug_Returned & ExitCode & "(0x" & Hex(ExitCode) & ")"
-                
-                GdbPipe.DosInput "q" & vbCrLf                                                   '关闭管道
-                Call ClearDebugWindows                                                          '清空所有调试窗口的信息
-                
-                '禁用菜单项
-                'ToDo
+                Call ProcessExitedHandler(ExitCode)
             End If
         Next i
     Else

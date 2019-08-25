@@ -19,9 +19,9 @@ Begin VB.Form frmBreakpoints
       TabIndex        =   0
       Top             =   0
       Width           =   6855
-      _extentx        =   8281
-      _extenty        =   5318
-      checkboxes      =   -1
+      _ExtentX        =   8281
+      _ExtentY        =   5318
+      CheckBoxes      =   -1  'True
    End
 End
 Attribute VB_Name = "frmBreakpoints"
@@ -59,3 +59,22 @@ End Sub
 Private Sub Form_Resize()
     Me.lvBreakpoints.Move 0, 0, Me.ScaleWidth, Me.ScaleHeight
 End Sub
+
+Private Sub lvBreakpoints_Click(iItem As Long, iSubItem As Long, X As Long, Y As Long)
+    'On Error Resume Next       'todo
+    Dim strTip              As String                                                           '工具提示文本
+    Dim strAddress          As String                                                           '断点对应的地址
+    
+    strTip = "断点于 " & Me.lvBreakpoints.GetItemText(iItem) & ":" & Me.lvBreakpoints.GetItemText(iItem, 1) & vbCrLf
+    strAddress = Me.lvBreakpoints.GetItemText(iItem, 2)
+    If strAddress <> "" Then                                                                    '列表项里有显示对应的地址
+        strTip = strTip & "对应地址: " & strAddress & vbCrLf
+    End If
+    If Me.lvBreakpoints.GetItemChecked(iItem) Then                                              '断点已启用
+        strTip = strTip & "(已启用)"
+    Else                                                                                        '断点已禁用
+        strTip = strTip & "(已禁用)"
+    End If
+    CtlAddToolTip Me.lvBreakpoints.ListViewHwnd, strTip, "断点信息", TTI_INFO
+End Sub
+

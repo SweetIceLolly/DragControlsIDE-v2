@@ -151,7 +151,7 @@ Public Function DosInput(ByVal strInput As String) As Long
     Dim InputData() As Byte                                                 '写入的内容
     Dim szInputData As Long                                                 '写入的内容大小
     
-    InputData = StrconvEx(strInput, False)                                  '输入内容转换成字节数组
+    InputData = StrConvEx(strInput, False)                                  '输入内容转换成字节数组
     szInputData = UBound(InputData) + 1                                     '计算写入内容的大小
     WriteFile hInput, InputData(0), ByVal szInputData, bWritten, 0          '往输入管道写入内容
     
@@ -220,9 +220,8 @@ Public Function DosOutput(ByRef strOutput As String, ByVal EndingStr As String, 
                 Exit Function
             End If
             
-            strOutput = strOutput & StrConv(OutData, vbUnicode)
-            strOutput = Left(strOutput, Len(strOutput) - 1)
-            strOutput = Replace(strOutput, vbLf, vbCrLf)
+            strOutput = strOutput & ByteArrayConv(OutData)                          '对输出进行转码，防止英文系统上中文乱码
+            strOutput = Replace(strOutput, vbLf, vbCrLf)                            '处理换行符
             Debug.Print strOutput
         End If
         

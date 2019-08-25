@@ -102,7 +102,7 @@ Public Function AddColumnHeader(Text As String, Optional Width As Integer = 75, 
     Dim lvCol       As LVCOLUMN
     Dim tmpStr()    As Byte
     
-    tmpStr = StrconvEx(Text)
+    tmpStr = StrConvEx(Text)
     With lvCol
         .mask = LVCF_WIDTH Or LVCF_TEXT Or LVCF_FMT
         .fmt = LVCFMT_LEFT
@@ -123,7 +123,7 @@ Public Function AddItem(Text As String, Optional Index As Long = -1) As Long
     Dim lvi         As LVITEM
     Dim tmpStr()    As Byte
     
-    tmpStr = StrconvEx(Text)
+    tmpStr = StrConvEx(Text)
     With lvi
         .iItem = IIf(Index = -1, SendMessageA(lvHwnd, LVM_GETITEMCOUNT, ByVal 0, ByVal 0), Index)
         .mask = LVIF_TEXT
@@ -149,14 +149,14 @@ Public Function GetItemText(Index As Long, Optional SubItemIndex As Long = 0) As
         .iSubItem = SubItemIndex
     End With
     SendMessageA lvHwnd, LVM_GETITEM, 0, ByVal VarPtr(lvi)
-    GetItemText = Split(StrConv(tmpStr, vbUnicode), vbNullChar)(0)
+    GetItemText = ByteArrayConv(tmpStr)
 End Function
 
 Public Function SetItemText(Text As String, Index As Long, Optional SubItemIndex As Long = 0) As Long
     Dim lvi         As LVITEM
     Dim tmpStr()    As Byte
     
-    tmpStr = StrconvEx(Text)
+    tmpStr = StrConvEx(Text)
     With lvi
         .iSubItem = SubItemIndex
         .mask = LVIF_TEXT
@@ -180,14 +180,14 @@ Public Function GetColumnText(Index As Long) As String
         .pszText = VarPtr(tmpStr(0))
     End With
     SendMessageA lvHwnd, LVM_GETCOLUMN, Index, ByVal VarPtr(lvc)
-    GetColumnText = Split(StrConv(tmpStr, vbUnicode), vbNullChar)(0)
+    GetColumnText = ByteArrayConv(tmpStr)
 End Function
 
 Public Function SetColumnText(Index As Long, NewText As String) As Long
     Dim tmpStr()    As Byte
     Dim lvc         As LVCOLUMN
     
-    tmpStr = StrconvEx(NewText)
+    tmpStr = StrConvEx(NewText)
     With lvc
         .mask = LVCF_TEXT
         .cchTextMax = 255
@@ -242,7 +242,7 @@ Public Function FindItem(Text As String, Optional FullMatch As Boolean = True, O
     Dim tmpStr()    As Byte
     Dim lvfi        As LVFINDINFO
     
-    tmpStr = StrconvEx(Text)
+    tmpStr = StrConvEx(Text)
     If Not FullMatch Then
         lvfi.Flags = LVFI_PARTIAL
     End If
