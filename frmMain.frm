@@ -1338,6 +1338,7 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     Call DestroyToolTip
     
     '关闭管道
+    Me.tmrCheckProcess.Enabled = False                      '停止计时器
     If Not GdbPipe Is Nothing Then
         GdbPipe.StopRecvOutput
         GdbPipe.CloseDosIO
@@ -1471,7 +1472,7 @@ Private Sub tmrCheckProcess_Timer()
                         .TargetWindow.RedrawBreakpoints                                                 '绘制中断行的小箭头
                     End With
                 End If
-                frmOutput.OutputLog lang_main_debug_breakpointhit & ": " & _
+                frmOutput.OutputLog Lang_Main_Debug_BreakpointHit & ": " & _
                     CurrentProject.Files(GdbBreakpoints(BreakpointIndex).FileIndex).FilePath & ":" & SourceLn
                 
                 '获取各种调试信息
