@@ -3,22 +3,22 @@ Begin VB.Form frmCreate
    BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
    Caption         =   "新建项目"
-   ClientHeight    =   5865
+   ClientHeight    =   5868
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   7545
+   ClientWidth     =   7548
    Icon            =   "frmCreate.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
-   ScaleHeight     =   5865
-   ScaleWidth      =   7545
-   StartUpPosition =   3  'Windows Default
+   ScaleHeight     =   5868
+   ScaleWidth      =   7548
+   StartUpPosition =   3  '窗口缺省
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorder 
       Left            =   6840
       Top             =   5160
-      _extentx        =   847
-      _extenty        =   847
-      sizable         =   0
+      _ExtentX        =   677
+      _ExtentY        =   677
+      Sizable         =   0   'False
    End
    Begin DragControlsIDE.DarkTitleBar DarkTitleBar_NoDrop 
       Align           =   1  'Align Top
@@ -27,15 +27,15 @@ Begin VB.Form frmCreate
       TabIndex        =   8
       Top             =   0
       Width           =   7545
-      _extentx        =   13309
-      _extenty        =   873
+      _extentx        =   13314
+      _extenty        =   868
       font            =   "frmCreate.frx":1BCC2
       caption         =   "新建项目"
-      maxbuttonenabled=   0
-      minbuttonenabled=   0
-      maxbuttonvisible=   0
-      minbuttonvisible=   0
-      bindcaption     =   -1
+      maxbuttonenabled=   0   'False
+      minbuttonenabled=   0   'False
+      maxbuttonvisible=   0   'False
+      minbuttonvisible=   0   'False
+      bindcaption     =   -1  'True
       picture         =   "frmCreate.frx":1BCF6
    End
    Begin DragControlsIDE.DarkImageButton cmdNewWindowProgram 
@@ -44,12 +44,12 @@ Begin VB.Form frmCreate
       TabIndex        =   0
       Top             =   1080
       Width           =   6855
-      _extentx        =   12091
-      _extenty        =   1349
-      image           =   "frmCreate.frx":1C948
-      alignment       =   0
-      hasborder       =   0
-      caption         =   "       新建窗口程序"
+      _ExtentX        =   12086
+      _ExtentY        =   1355
+      Image           =   "frmCreate.frx":1C948
+      HasBorder       =   0   'False
+      Caption         =   "       新建窗口程序"
+      Alignment       =   0
    End
    Begin DragControlsIDE.DarkImageButton cmdNewConsoleProgram 
       Height          =   765
@@ -57,12 +57,12 @@ Begin VB.Form frmCreate
       TabIndex        =   1
       Top             =   1920
       Width           =   6855
-      _extentx        =   12091
-      _extenty        =   1349
-      image           =   "frmCreate.frx":1CA7B
-      alignment       =   0
-      hasborder       =   0
-      caption         =   "       新建控制台程序"
+      _ExtentX        =   12086
+      _ExtentY        =   1355
+      Image           =   "frmCreate.frx":1CA7B
+      HasBorder       =   0   'False
+      Caption         =   "       新建控制台程序"
+      Alignment       =   0
    End
    Begin DragControlsIDE.DarkImageButton cmdNewPlainCpp 
       Height          =   765
@@ -70,12 +70,12 @@ Begin VB.Form frmCreate
       TabIndex        =   2
       Top             =   2760
       Width           =   6855
-      _extentx        =   12091
-      _extenty        =   1349
-      image           =   "frmCreate.frx":1CBFC
-      alignment       =   0
-      hasborder       =   0
-      caption         =   "       新建空白C++程序"
+      _ExtentX        =   12086
+      _ExtentY        =   1355
+      Image           =   "frmCreate.frx":1CBFC
+      HasBorder       =   0   'False
+      Caption         =   "       新建空白C++程序"
+      Alignment       =   0
    End
    Begin DragControlsIDE.DarkImageButton cmdOpenProject 
       Height          =   765
@@ -83,12 +83,12 @@ Begin VB.Form frmCreate
       TabIndex        =   3
       Top             =   3600
       Width           =   6855
-      _extentx        =   12091
-      _extenty        =   1349
-      image           =   "frmCreate.frx":1CF41
-      alignment       =   0
-      hasborder       =   0
-      caption         =   "       打开工程..."
+      _ExtentX        =   12086
+      _ExtentY        =   1355
+      Image           =   "frmCreate.frx":1CF41
+      HasBorder       =   0   'False
+      Caption         =   "       打开工程..."
+      Alignment       =   0
    End
    Begin VB.Label labTip 
       Appearance      =   0  'Flat
@@ -192,7 +192,9 @@ Option Explicit
 
 Private Sub cmdNewWindowProgram_Click()
     On Error Resume Next
-    frmCreateOptions.NewProjectType = 1                 '设置工程类型
+    'frmCreateOptions.NewProjectType = 1                 '设置工程类型
+    frmCreateOptions.TypeOption(1).Focused = True
+    frmCreateOptions.RefreshName
     frmCreateOptions.Show                               '显示新建选项
     frmCreateOptions.edProjectName.SetFocus
     Unload Me
@@ -200,7 +202,9 @@ End Sub
 
 Private Sub cmdNewConsoleProgram_Click()
     On Error Resume Next
-    frmCreateOptions.NewProjectType = 2                 '设置工程类型
+    'frmCreateOptions.NewProjectType = 2                 '设置工程类型
+    frmCreateOptions.TypeOption(2).Focused = True
+    frmCreateOptions.RefreshName
     frmCreateOptions.Show                               '显示新建选项
     frmCreateOptions.edProjectName.SetFocus
     Unload Me
@@ -208,7 +212,9 @@ End Sub
 
 Private Sub cmdNewPlainCpp_Click()
     On Error Resume Next
-    frmCreateOptions.NewProjectType = 3                 '设置工程类型
+    'frmCreateOptions.NewProjectType = 3                 '设置工程类型
+    frmCreateOptions.TypeOption(3).Focused = True
+    frmCreateOptions.RefreshName
     frmCreateOptions.Show                               '显示新建选项
     frmCreateOptions.edProjectName.SetFocus
     Unload Me

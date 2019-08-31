@@ -1,244 +1,348 @@
 VERSION 5.00
 Begin VB.Form frmCreateOptions 
-   BackColor       =   &H00302D2D&
+   BackColor       =   &H00403D3D&
    BorderStyle     =   0  'None
    Caption         =   "新建项目"
-   ClientHeight    =   4500
+   ClientHeight    =   6876
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   7575
+   ClientWidth     =   10116
    Icon            =   "frmCreateOptions.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
-   ScaleHeight     =   4500
-   ScaleWidth      =   7575
-   StartUpPosition =   2  'CenterScreen
+   ScaleHeight     =   6876
+   ScaleWidth      =   10116
+   StartUpPosition =   2  '屏幕中心
+   Begin DragControlsIDE.ImgOptionBox TypeOption 
+      Height          =   1380
+      Index           =   1
+      Left            =   384
+      TabIndex        =   16
+      Top             =   1392
+      Width           =   1308
+      _ExtentX        =   2307
+      _ExtentY        =   2434
+      Image           =   "frmCreateOptions.frx":1BCC2
+      Content         =   "窗口程序"
+   End
+   Begin VB.PictureBox BtnFrame 
+      Appearance      =   0  'Flat
+      BackColor       =   &H00504D4D&
+      BorderStyle     =   0  'None
+      ForeColor       =   &H80000008&
+      Height          =   924
+      Left            =   0
+      ScaleHeight     =   924
+      ScaleWidth      =   10164
+      TabIndex        =   1
+      Top             =   5976
+      Width           =   10164
+      Begin DragControlsIDE.DarkButton cmdCancel 
+         Height          =   492
+         Left            =   8568
+         TabIndex        =   2
+         Top             =   192
+         Width           =   1332
+         _ExtentX        =   2350
+         _ExtentY        =   868
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Caption         =   "取消"
+         HasBorder       =   0   'False
+      End
+      Begin DragControlsIDE.DarkButton cmdOK 
+         Height          =   492
+         Left            =   6936
+         TabIndex        =   3
+         Top             =   192
+         Width           =   1332
+         _ExtentX        =   2350
+         _ExtentY        =   868
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Caption         =   "确定"
+         HasBorder       =   0   'False
+      End
+   End
+   Begin VB.PictureBox ProjectFrame 
+      Appearance      =   0  'Flat
+      BackColor       =   &H00302D2D&
+      BorderStyle     =   0  'None
+      ForeColor       =   &H80000008&
+      Height          =   5508
+      Left            =   5352
+      ScaleHeight     =   5508
+      ScaleWidth      =   4788
+      TabIndex        =   4
+      Top             =   480
+      Width           =   4788
+      Begin DragControlsIDE.DarkCheckBox chkMainArgs 
+         Height          =   372
+         Left            =   240
+         TabIndex        =   11
+         Top             =   3048
+         Width           =   3636
+         _ExtentX        =   6414
+         _ExtentY        =   656
+         Enabled         =   -1  'True
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Caption         =   "帮我写好main （有参数）"
+      End
+      Begin DragControlsIDE.DarkCheckBox chkMain 
+         Height          =   372
+         Left            =   240
+         TabIndex        =   5
+         Top             =   2616
+         Width           =   3636
+         _ExtentX        =   6414
+         _ExtentY        =   656
+         Enabled         =   -1  'True
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Caption         =   "帮我写好main （无参数）"
+      End
+      Begin DragControlsIDE.DarkButton cmdBrowse 
+         Height          =   336
+         Left            =   3552
+         TabIndex        =   6
+         Top             =   1992
+         Width           =   864
+         _ExtentX        =   1524
+         _ExtentY        =   593
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Caption         =   "浏览..."
+         HasBorder       =   0   'False
+      End
+      Begin DragControlsIDE.DarkEdit edProjectName 
+         Height          =   372
+         Left            =   288
+         TabIndex        =   7
+         Top             =   1128
+         Width           =   4140
+         _ExtentX        =   7303
+         _ExtentY        =   656
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "新空白C++程序"
+      End
+      Begin DragControlsIDE.DarkCheckBox chkIncludeStdio 
+         Height          =   372
+         Left            =   240
+         TabIndex        =   10
+         Top             =   3912
+         Width           =   3636
+         _ExtentX        =   6414
+         _ExtentY        =   656
+         Enabled         =   -1  'True
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Caption         =   "#include <stdio.h>"
+      End
+      Begin DragControlsIDE.DarkEdit edPath 
+         Height          =   372
+         Left            =   288
+         TabIndex        =   8
+         Top             =   1968
+         Width           =   4140
+         _ExtentX        =   7303
+         _ExtentY        =   656
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "C:\Project"
+      End
+      Begin DragControlsIDE.DarkCheckBox chkWinMain 
+         Height          =   372
+         Left            =   240
+         TabIndex        =   9
+         Top             =   3480
+         Width           =   3636
+         _ExtentX        =   6414
+         _ExtentY        =   656
+         Enabled         =   -1  'True
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Caption         =   "帮我写好WinMain"
+      End
+      Begin VB.Label labTip 
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "设置"
+         BeginProperty Font 
+            Name            =   "微软雅黑"
+            Size            =   12
+            Charset         =   134
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   324
+         Index           =   2
+         Left            =   288
+         TabIndex        =   14
+         Top             =   240
+         Width           =   480
+      End
+      Begin VB.Label labTip 
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "项目名称:"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   192
+         Index           =   0
+         Left            =   288
+         TabIndex        =   13
+         Top             =   768
+         Width           =   768
+      End
+      Begin VB.Label labTip 
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "项目文件夹:"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   192
+         Index           =   1
+         Left            =   288
+         TabIndex        =   12
+         Top             =   1608
+         Width           =   948
+      End
+   End
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorder 
-      Left            =   6840
-      Top             =   3240
-      _ExtentX        =   847
-      _ExtentY        =   847
+      Left            =   5352
+      Top             =   696
+      _ExtentX        =   677
+      _ExtentY        =   677
       Sizable         =   0   'False
-   End
-   Begin DragControlsIDE.DarkButton cmdCancel 
-      Height          =   495
-      Left            =   6000
-      TabIndex        =   8
-      Top             =   3840
-      Width           =   1335
-      _ExtentX        =   2355
-      _ExtentY        =   873
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Microsoft YaHei UI"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Caption         =   "取消"
-      HasBorder       =   0   'False
-   End
-   Begin DragControlsIDE.DarkButton cmdOK 
-      Height          =   495
-      Left            =   4560
-      TabIndex        =   7
-      Top             =   3840
-      Width           =   1335
-      _ExtentX        =   2355
-      _ExtentY        =   873
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Microsoft YaHei UI"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Caption         =   "确定"
-      HasBorder       =   0   'False
-   End
-   Begin DragControlsIDE.DarkCheckBox chkMain 
-      Height          =   375
-      Left            =   360
-      TabIndex        =   3
-      Top             =   1920
-      Width           =   6975
-      _ExtentX        =   12303
-      _ExtentY        =   661
-      Enabled         =   -1  'True
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Microsoft YaHei UI"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Caption         =   "帮我写好main （无参数）"
-   End
-   Begin DragControlsIDE.DarkButton cmdBrowse 
-      Height          =   375
-      Left            =   6240
-      TabIndex        =   2
-      Top             =   1320
-      Width           =   1095
-      _ExtentX        =   1931
-      _ExtentY        =   661
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Microsoft YaHei UI"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Caption         =   "浏览..."
-      HasBorder       =   0   'False
-   End
-   Begin DragControlsIDE.DarkEdit edProjectName 
-      Height          =   375
-      Left            =   1680
-      TabIndex        =   0
-      Top             =   720
-      Width           =   4335
-      _ExtentX        =   7646
-      _ExtentY        =   661
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Microsoft YaHei UI"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Text            =   "新空白C++程序"
    End
    Begin DragControlsIDE.DarkTitleBar DarkTitleBar_NoDrop 
       Align           =   1  'Align Top
-      Height          =   495
+      Height          =   492
       Left            =   0
-      TabIndex        =   9
+      TabIndex        =   0
       Top             =   0
-      Width           =   7575
-      _extentx        =   13361
-      _extenty        =   873
-      font            =   "frmCreateOptions.frx":1BCC2
+      Width           =   10116
+      _extentx        =   17844
+      _extenty        =   868
+      font            =   "frmCreateOptions.frx":1BE3E
       caption         =   "新建项目"
       maxbuttonenabled=   0   'False
       minbuttonenabled=   0   'False
       maxbuttonvisible=   0   'False
       minbuttonvisible=   0   'False
       bindcaption     =   -1  'True
-      picture         =   "frmCreateOptions.frx":1BCF6
+      picture         =   "frmCreateOptions.frx":1BE72
    End
-   Begin DragControlsIDE.DarkEdit edPath 
-      Height          =   375
-      Left            =   1680
-      TabIndex        =   1
-      Top             =   1320
-      Width           =   4335
-      _ExtentX        =   7646
-      _ExtentY        =   661
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Microsoft YaHei UI"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Text            =   "C:\Project"
+   Begin DragControlsIDE.ImgOptionBox TypeOption 
+      Height          =   1380
+      Index           =   2
+      Left            =   2016
+      TabIndex        =   17
+      Top             =   1392
+      Width           =   1308
+      _ExtentX        =   2307
+      _ExtentY        =   2434
+      Image           =   "frmCreateOptions.frx":1CAC4
+      Content         =   "控制台程序"
    End
-   Begin DragControlsIDE.DarkCheckBox chkWinMain 
-      Height          =   375
-      Left            =   360
-      TabIndex        =   5
-      Top             =   2880
-      Width           =   6975
-      _ExtentX        =   12303
-      _ExtentY        =   661
-      Enabled         =   -1  'True
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Microsoft YaHei UI"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Caption         =   "帮我写好WinMain"
-   End
-   Begin DragControlsIDE.DarkCheckBox chkIncludeStdio 
-      Height          =   375
-      Left            =   360
-      TabIndex        =   6
-      Top             =   3360
-      Width           =   6975
-      _ExtentX        =   12303
-      _ExtentY        =   661
-      Enabled         =   -1  'True
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Microsoft YaHei UI"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Caption         =   "#include <stdio.h>"
-   End
-   Begin DragControlsIDE.DarkCheckBox chkMainArgs 
-      Height          =   375
-      Left            =   360
-      TabIndex        =   4
-      Top             =   2400
-      Width           =   6975
-      _ExtentX        =   12303
-      _ExtentY        =   661
-      Enabled         =   -1  'True
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Microsoft YaHei UI"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Caption         =   "帮我写好main （有参数）"
+   Begin DragControlsIDE.ImgOptionBox TypeOption 
+      Height          =   1380
+      Index           =   3
+      Left            =   3648
+      TabIndex        =   18
+      Top             =   1392
+      Width           =   1308
+      _ExtentX        =   2307
+      _ExtentY        =   2434
+      Image           =   "frmCreateOptions.frx":1CC74
+      Content         =   "空白C++程序"
    End
    Begin VB.Label labTip 
       AutoSize        =   -1  'True
       BackStyle       =   0  'Transparent
-      Caption         =   "项目文件夹:"
+      Caption         =   "类型"
+      BeginProperty Font 
+         Name            =   "微软雅黑"
+         Size            =   12
+         Charset         =   134
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   195
-      Index           =   1
-      Left            =   360
-      TabIndex        =   11
-      Top             =   1320
-      Width           =   945
-   End
-   Begin VB.Label labTip 
-      AutoSize        =   -1  'True
-      BackStyle       =   0  'Transparent
-      Caption         =   "项目名称:"
-      ForeColor       =   &H00FFFFFF&
-      Height          =   195
-      Index           =   0
-      Left            =   360
-      TabIndex        =   10
-      Top             =   720
-      Width           =   765
+      Height          =   324
+      Index           =   3
+      Left            =   384
+      TabIndex        =   15
+      Top             =   744
+      Width           =   480
    End
 End
 Attribute VB_Name = "frmCreateOptions"
@@ -261,9 +365,17 @@ Private Declare Function SHBrowseForFolder Lib "shell32.dll" Alias "SHBrowseForF
 Private Declare Function SHGetFolderPathA Lib "shell32.dll" (ByVal hWnd As Long, ByVal csidl As Long, ByVal hToken As Long, _
     ByVal dwFlags As Long, pszPath As Any) As Long
     
-Public NewProjectType   As Integer                                          '将要新建的项目类型（请见frmMain的ProjectType变量说明）
+'Public NewProjectType   As Integer                                          '将要新建的项目类型（请见frmMain的ProjectType变量说明）
 Dim MyDocPathStr        As String                                           '“我的文档”路径
 Dim PathChanged         As Boolean                                          '用户是否更改过路径。如果没更改过，路径会随着项目名称而变化
+
+Public Property Get NewProjectType() As Integer
+    '检索所有Option
+    Dim i As Integer
+    For i = 1 To TypeOption.UBound
+        If TypeOption(i).Focused Then NewProjectType = i: Exit For
+    Next
+End Property
 
 Private Sub chkMain_Click()
     Me.chkMainArgs.Value = False
@@ -553,4 +665,26 @@ Private Sub Form_Unload(Cancel As Integer)
     frmMain.DarkWindowBorderSizer.Bind = True
     frmMain.SkinFramework.AutoApplyNewThreads = True
     frmMain.SkinFramework.AutoApplyNewWindows = True
+End Sub
+
+Private Sub TypeOption_Click(Index As Integer)
+    Call RefreshName
+End Sub
+
+Public Sub RefreshName()
+    '根据不同的工程类型取不同的名字
+    Select Case NewProjectType
+        Case 1
+            Me.edProjectName.Text = Lang_CreateOptions_WindowProgram
+            Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_WindowProgram
+            
+        Case 2
+            Me.edProjectName.Text = Lang_CreateOptions_ConsoleProgram
+            Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_ConsoleProgram
+            
+        Case 3
+            Me.edProjectName.Text = Lang_CreateOptions_PlainCPP
+            Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_PlainCPP
+    End Select
+    Me.edProjectName.ToolTipText = Me.edProjectName.Text
 End Sub

@@ -4,15 +4,15 @@ Begin VB.Form frmPopupMenu
    BackColor       =   &H001C1B1B&
    BorderStyle     =   0  'None
    Caption         =   "Dark♂Menu"
-   ClientHeight    =   2625
+   ClientHeight    =   2628
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   2025
+   ClientWidth     =   2028
    LinkTopic       =   "Form1"
-   ScaleHeight     =   2625
-   ScaleWidth      =   2025
+   ScaleHeight     =   2628
+   ScaleWidth      =   2028
    ShowInTaskbar   =   0   'False
-   StartUpPosition =   3  'Windows Default
+   StartUpPosition =   3  '窗口缺省
    Begin VB.Timer tmrPopupTimeout 
       Enabled         =   0   'False
       Interval        =   500
@@ -31,19 +31,19 @@ Begin VB.Form frmPopupMenu
       Top             =   480
       Visible         =   0   'False
       Width           =   225
-      _ExtentX        =   397
-      _ExtentY        =   397
+      _ExtentX        =   402
+      _ExtentY        =   402
       Image           =   "frmPopupMenu.frx":0000
       Enabled         =   0   'False
    End
    Begin VB.Image imgSubMenu 
       Enabled         =   0   'False
-      Height          =   225
+      Height          =   180
       Left            =   1680
       Picture         =   "frmPopupMenu.frx":0018
       Top             =   480
       Visible         =   0   'False
-      Width           =   225
+      Width           =   180
    End
    Begin ImageX.aicAlphaImage imgMenuCheckBox 
       Height          =   345
@@ -51,8 +51,8 @@ Begin VB.Form frmPopupMenu
       Left            =   1320
       Top             =   1080
       Width           =   345
-      _ExtentX        =   609
-      _ExtentY        =   609
+      _ExtentX        =   614
+      _ExtentY        =   614
       Image           =   "frmPopupMenu.frx":036E
       Enabled         =   0   'False
    End
@@ -67,21 +67,21 @@ Begin VB.Form frmPopupMenu
    End
    Begin VB.Image imgUnchecked 
       Enabled         =   0   'False
-      Height          =   225
+      Height          =   180
       Left            =   1320
       Picture         =   "frmPopupMenu.frx":0386
       Top             =   1560
       Visible         =   0   'False
-      Width           =   225
+      Width           =   180
    End
    Begin VB.Image imgChecked 
       Enabled         =   0   'False
-      Height          =   225
+      Height          =   180
       Left            =   1680
       Picture         =   "frmPopupMenu.frx":06DC
       Top             =   1560
       Visible         =   0   'False
-      Width           =   225
+      Width           =   180
    End
    Begin VB.Line lnBorderTop 
       BorderColor     =   &H00373333&
@@ -121,7 +121,7 @@ Begin VB.Form frmPopupMenu
       Caption         =   " Item"
       BeginProperty Font 
          Name            =   "Consolas"
-         Size            =   9.75
+         Size            =   9.6
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -251,13 +251,13 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
                 Load Me.labItem(i - 1)
             Else
                 Me.labItem(0).AutoSize = True
-                Me.labItem(0).Top = ITEM_DISTANCE
+                Me.labItem(0).Top = ITEM_DISTANCE '+ ITEM_DISTANCE / 2 - Me.labItem(0).Height / 2
                 Me.imgMenuCheckBox(0).Height = Me.labItem(0).Height + ITEM_DISTANCE
                 Me.imgMenuCheckBox(0).Top = Me.labItem(0).Top
             End If
             Me.labItem(i - 1).Caption = String(SpaceCount, " ") & Menus(CurrSubMenuID(i)).MenuText & String(SpaceCount, " ")
             If i > 1 Then
-                Me.labItem(i - 1).Top = Me.labItem(i - 2).Top + Me.labItem(i - 2).Height + ITEM_DISTANCE
+                Me.labItem(i - 1).Top = Me.labItem(i - 2).Top + Me.labItem(i - 2).Height + ITEM_DISTANCE '+ ITEM_DISTANCE / 2 - Me.labItem(i - 2).Height / 2
                 Me.labItem(i - 2).Height = Me.labItem(i - 1).Top - Me.labItem(i - 2).Top
             End If
             If Menus(CurrSubMenuID(i)).CheckBox = True And Menus(CurrSubMenuID(i)).MenuText <> "-" Then
@@ -306,11 +306,11 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
         Else
             If i > 1 Then
                 Load Me.labItem(i - 1)
-                Me.labItem(i - 1).Top = Me.labItem(i - 2).Top
+                Me.labItem(i - 1).Top = Me.labItem(i - 2).Top '观察①
                 Me.labItem(i - 1).Height = Me.labItem(i - 2).Height
                 Me.labItem(i - 1).Visible = False
             Else
-                Me.labItem(0).Top = -Me.labItem(0).Height
+                Me.labItem(0).Top = -Me.labItem(0).Height '观察②
                 Me.labItem(0).Visible = False
             End If
         End If
