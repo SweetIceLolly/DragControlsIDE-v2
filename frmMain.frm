@@ -702,14 +702,22 @@ Begin VB.Form frmMain
       TabIndex        =   1
       Top             =   0
       Width           =   16845
-      _extentx        =   29718
-      _extenty        =   868
-      font            =   "frmMain.frx":1F5FE
-      caption         =   "拖控件大法"
-      maxbuttonvisible=   0   'False
-      minbuttonvisible=   0   'False
-      bindcaption     =   -1  'True
-      picture         =   "frmMain.frx":1F632
+      _ExtentX        =   29718
+      _ExtentY        =   868
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "拖控件大法"
+      MaxButtonVisible=   0   'False
+      MinButtonVisible=   0   'False
+      BindCaption     =   -1  'True
+      Picture         =   "frmMain.frx":1F5FE
    End
    Begin XtremeSkinFramework.SkinFramework SkinFramework 
       Left            =   14160
@@ -768,12 +776,45 @@ Public CurrState            As Byte
 Public WindowObj            As Object                                                   '窗口自身
 Dim NewCreateWindow         As frmCreate                                                '“新建项目”窗体
 
-Private WithEvents GdbPipe  As clsPipe                                                  'gdb调试管道
+Public GdbPipe              As clsPipe                                                  'gdb调试管道
 Attribute GdbPipe.VB_VarHelpID = -1
+
+'描述:      在目标进程退出之后进行收尾工作
+'参数:      ExitCode: 程序的退出码
+Private Sub ProcessExitedHandler(ExitCode As Long)
+    Dim i                   As Long
+    
+    Me.tmrCheckProcess.Enabled = False                                                  '停止计时器
+    CurrState = 0                                                                       '更新调试状态
+    For i = 0 To UBound(CurrentProject.Files)                                           '把所有文件的中断行清掉
+        CurrentProject.Files(i).TargetWindow.BreakLine = -1
+        Call CurrentProject.Files(i).TargetWindow.RedrawBreakpoints
+    Next i
+    
+    frmOutput.OutputLog Lang_Main_Debug_Returned & ExitCode & "(0x" & Hex(ExitCode) & ")"
+                
+    GdbPipe.DosInput "q" & vbCrLf                                                       '关闭管道
+    Call ClearDebugWindows(True)                                                        '清空所有调试窗口的信息
+    
+    '禁用菜单项
+    'ToDo
+End Sub
+
+'描述:      清空所有调试窗口里面的信息
+'参数:      ClearBreakpoints: 可选的。指定是否清空断点列表里面的地址。通常在调试期间不需要清空断点列表，在调试完成后才需要
+Private Sub ClearDebugWindows(Optional ClearBreakpoints As Boolean = False)
+    If ClearBreakpoints Then                                                        '断点
+        Call frmBreakpoints.ClearEverything
+    End If
+    Call frmLocals.ClearEverything                                                  '本地
+    Call frmCallStack.ClearEverything                                               '调用堆栈
+End Sub
 
 '描述:      检查当前是否有未保存的文件
 '返回值:    如果有未保存的文件，则返回True
 Private Function IsSaveRequired() As Boolean
+    'On Error Resume Next       'todo
+    
     IsSaveRequired = False
     If CurrentProject.Changed Then                                              '工程文件需要保存
         IsSaveRequired = True
@@ -862,15 +903,18 @@ Private Sub mnuRun_Click()
     Dim PipeOutput          As String                                           '管道输出的内容
     Dim GccOutputContent()  As String                                           '逐行分开的g++输出内容
     Dim i                   As Long
+    Dim MsgBoxRtn           As VbMsgBoxResult                                   '保存确认框的返回值
     Dim SaveRtn             As Integer                                          '保存返回值
     
     If CurrState = 2 Then                                                       '处于中断状态
+        Call ClearDebugWindows                                                      '清空所有调试窗口的信息
         GdbPipe.DosInput "continue" & vbCrLf                                        '发送继续运行命令
         Exit Sub
     End If
     
     If IsSaveRequired() Then                                                    '提示保存文件
-        If NoSkinMsgBox(Lang_Main_SaveBeforeCompile, vbQuestion Or vbYesNo, Lang_Msgbox_Confirm) = vbYes Then
+        MsgBoxRtn = NoSkinMsgBox(Lang_Main_SaveBeforeCompile, vbQuestion Or vbYesNoCancel, Lang_Msgbox_Confirm)
+        If MsgBoxRtn = vbYes Then
             SaveRtn = mnuSave_Click()
             If SaveRtn = 2 Then                                                         '保存时出错
                 If NoSkinMsgBox(Lang_Main_SaveFailedBeforeCompile, vbQuestion Or vbYesNo, Lang_Msgbox_Confirm) = vbNo Then
@@ -881,6 +925,9 @@ Private Sub mnuRun_Click()
                 frmOutput.OutputLog Lang_Main_DebugAborted
                 Exit Sub
             End If
+        ElseIf MsgBoxRtn = vbCancel Then
+            frmOutput.OutputLog Lang_Main_DebugAborted                              '用户选择取消调试
+            Exit Sub
         End If
     End If
     '======================================================================
@@ -894,24 +941,26 @@ Private Sub mnuRun_Click()
             Exit Sub
         End If
     End If
+    frmOutput.edOutput.Text = ""                                                '清空输出
     '======================================================================
     
     '使用g++进行编译
     '                   ↓转到当前程序所在的盘符                    ↓调用g++.exe进行编译      ↓编译为调试程序           ↓所有的cpp代码文件
     '命令格式: cmd /c 【盘符】: && cd "【g++.exe所在目录】" && "【g++.exe路径】" [-mwindows] -g -o "【输出路径】" "【cpp文件1】" "【cpp文件2】"
     '                                       ↑转到g++.exe所在的目录                 ↑是否为命令行程序   ↑编译的EXE输出路径
-    frmOutput.OutputLog Lang_Main_StartingGcc
-    GccCmdLine = "cmd /c " & Left(GetAppPath(), 1) & ": && " & _
-        "cd """ & GetAppPath() & "GCC\bin"" && " & _
-        """" & GetAppPath() & "GCC\bin\g++.exe"" -g -o """ & ExePath & """"
+    GccCmdLine = "cmd /c " & Left(GccPath, 1) & ": && " & _
+        "cd """ & Left(GccPath, InStrRev(GccPath, "\")) & """ && " & _
+        """" & GccPath & """ -static -g -o """ & ExePath & """"
     For i = 0 To UBound(CurrentProject.Files)
         If Not CurrentProject.Files(i).IsHeaderFile Then
             GccCmdLine = GccCmdLine & " """ & CurrentProject.Files(i).FilePath & """"
         End If
     Next i
-    If GccPipe.InitDosIO(GccCmdLine) = 0 Then
-        frmOutput.OutputLog Lang_Main_GccStartFailed
+    If GccPipe.InitDosIO(GccCmdLine) = 0 Then                                   'g++管道启动失败
+        frmOutput.OutputLog Lang_Main_GccStartFailed & GccCmdLine
+        Exit Sub
     End If
+    frmOutput.OutputLog Lang_Main_StartingGcc & GccCmdLine
     Do While ProcessExists(GccPipe.hProcess)                                    '等待g++执行完成
         Sleep 50
         DoEvents
@@ -948,24 +997,27 @@ Private Sub mnuRun_Click()
         frmOutput.OutputLog Lang_Main_RunFailed & ExePath & " (" & Err.LastDllError & ")"
         Exit Sub
     End If
+    frmOutput.OutputLog Lang_Main_RunSucceed & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ")"
     '======================================================================
     
     '创建gdb管道
     Set GdbPipe = New clsPipe
-    If GdbPipe.InitDosIO(GetAppPath() & "GCC\gdb\gdb.exe -q -nw") = 0 Then      '创建gdb调试管道失败
+    If GdbPipe.InitDosIO(GdbPath & " -q -nw") = 0 Then                          '创建gdb调试管道失败
         TerminateProcess DebugProgramInfo.hProcess, 0                               '杀掉待调试进程，放弃调试
         Set GdbPipe = Nothing                                                       '关闭gdb管道
         frmOutput.OutputLog Lang_Main_GdbFailed
         Exit Sub
     End If
+    frmOutput.OutputLog Lang_Main_GdbSucceed & GdbPipe.dwProcessId & "(" & Hex(GdbPipe.dwProcessId) & ")"
     '======================================================================
     
+    frmOutput.OutputLog Lang_Main_GdbLoadingSymbols_1 & ExePath & Lang_Main_GdbLoadingSymbols_2
     GdbPipe.DosInput "file """ & Replace(ExePath, "\", "/") & """" & vbCrLf     '从exe文件读取符号
-    GdbPipe.DosOutput PipeOutput, "." & vbCrLf & "(gdb) "                       '获取gdb的输出
+    GdbPipe.DosOutput PipeOutput, "(gdb) ", 5000                                '获取gdb的输出
     If InStr(PipeOutput, "no debugging symbols found") <> 0 Or _
         InStr(PipeOutput, "No such file or directory") <> 0 Then                    'gdb输出“no debugging symbols found”或者“No such file or directory”，加载符号失败
         frmOutput.OutputLog CStr(Split(PipeOutput, vbCrLf)(0))                      '输出加载符号的错误
-        If MsgBox(Lang_Main_GdbLoadSymbolsFailure_1 & ExePath & Lang_Main_GdbLoadSymbolsFailure_2, vbExclamation Or vbYesNo, Lang_Msgbox_Confirm) = vbNo Then
+        If NoSkinMsgBox(Lang_Main_GdbLoadSymbolsFailure_1 & ExePath & Lang_Main_GdbLoadSymbolsFailure_2, vbExclamation Or vbYesNo, Lang_Msgbox_Confirm) = vbNo Then
             TerminateProcess DebugProgramInfo.hProcess, 0                               '杀掉待调试进程，放弃调试
             Set GdbPipe = Nothing                                                       '关闭gdb管道
             frmOutput.OutputLog Lang_Main_DebugAborted
@@ -975,8 +1027,10 @@ Private Sub mnuRun_Click()
     '======================================================================
     
     GdbPipe.DosInput "set pagination off" & vbCrLf                              '关闭gdb的"Type to continue, or q to quit"消息
+    GdbPipe.DosInput "set print repeats 0" & vbCrLf                             '关闭gdb对于重复的数组元素的“<repeats n times>”输出
     '======================================================================
     
+    frmOutput.OutputLog Lang_Main_GdbAttaching
     GdbPipe.DosInput "attach " & DebugProgramInfo.dwProcessId & vbCrLf          '附加到待调试进程
     GdbPipe.DosOutput PipeOutput, "(gdb) "                                      '获取gdb的输出
     If InStr(PipeOutput, "Can't attach") <> 0 Then                              'gdb输出“Can't attach to process.”，附加进程失败
@@ -986,8 +1040,9 @@ Private Sub mnuRun_Click()
         frmOutput.OutputLog Lang_Main_DebugAborted
         Exit Sub
     End If
-    
+    GdbPipe.DosOutput PipeOutput, "(gdb) ", 5000                                '等待gdb输出完成，超时5秒
     '======================================================================
+    
     Dim j                   As Long
     Dim k                   As Long
     Dim CurrFilePath        As String                                           '把所有“\”替换成“/”的文件路径，并以“:”结尾，以便添加行号
@@ -1014,6 +1069,7 @@ Private Sub mnuRun_Click()
                     GdbBreakpoints(CLng(SplitTmp(0))).FileIndex = i                             '记录gdb断点所对应的文件序号和断点序号
                     GdbBreakpoints(CLng(SplitTmp(0))).BreakpointIndex = j
                     frmBreakpoints.lvBreakpoints.SetItemText CStr(Split(SplitTmp(1), ": file")(0)), CurrentProject.Files(i).Breakpoints(j).ListViewIndex, 2
+                    Exit For
                 ElseIf PipeOutput Like "No line * in file *" Then                           '没有指定的行号（“No line * in file "*".”）
                     frmOutput.OutputLog Lang_Main_GdbBreakpointError_1 & CurrentProject.Files(i).FilePath & _
                         Lang_Main_GdbBreakpointError_2 & Replace(Split(PipeOutput, " in file """)(0), "No line ", "") & Lang_Main_GdbBreakpointError_3
@@ -1027,11 +1083,9 @@ Private Sub mnuRun_Click()
     '======================================================================
     
     GdbPipe.DosInput "continue" & vbCrLf                                        '使目标进程继续运行
+    ResumeThread DebugProgramInfo.hThread                                       '继续执行目标进程的主线程
+    frmOutput.OutputLog Lang_Main_RunningInfo_1 & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ") " & Lang_Main_RunningInfo_2
     CurrState = 1                                                               '更新调试状态
-    '======================================================================
-    
-    frmOutput.OutputLog Lang_Main_DebugInfo_1 & GdbPipe.dwProcessId & "(" & Hex(GdbPipe.dwProcessId) & "); " & _
-        Right(ExePath, Len(ExePath) - InStrRev(ExePath, "\")) & Lang_Main_DebugInfo_2 & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ")"
     Me.tmrCheckProcess.Enabled = True                                           '开始等待进程结束
 End Sub
 
@@ -1076,6 +1130,12 @@ Private Sub DarkMenu_MenuItemClicked(MenuID As Integer)
         Case 39                                                                         '断点列表
             Me.DockingPane.ShowPane 6
         
+        Case 42                                                                         '本地
+            Me.DockingPane.ShowPane 8
+        
+        Case 45                                                                         '调用堆栈
+            Me.DockingPane.ShowPane 10
+        
         Case 52                                                                         '运行
             Call mnuRun_Click
         
@@ -1083,6 +1143,8 @@ Private Sub DarkMenu_MenuItemClicked(MenuID As Integer)
 End Sub
 
 Private Sub DockingPane_Resize()
+    'On Error Resume Next       'todo
+    
     If ProjectType <> 0 Then                                                            '如果不是在启动界面的话就调整窗口活动客户区大小
         Dim cLeft   As Long, cRight   As Long, cTop   As Long, cBottom   As Long
         
@@ -1102,11 +1164,16 @@ Private Sub Form_Initialize()
     SetWindowPos frmStartupLogo.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE
     frmStartupLogo.SetFocus
     frmStartupLogo.Refresh
+    
+    '创建工具提示文本窗口
+    If CreateToolTip() = 0 Then
+        MsgBox "创建工具提示文本窗口失败！", vbCritical, "错误"
+    End If
 
     '由于字符串资源必须比用户控件更早加载，用户控件才能使用这些字符串资源，于是放在Initialize事件而不是Load事件
     '加载字符串资源
     If Not LoadLanguage(1001) Then
-        NoSkinMsgBox "加载字符串资源失败！" & Err.Number & ": " & Err.Description, vbCritical, Lang_Msgbox_Error
+        MsgBox "加载字符串资源失败！" & Err.Number & ": " & Err.Description, vbCritical, "错误"
     End If
 End Sub
 
@@ -1121,7 +1188,7 @@ Private Sub Form_Load()
     
     '加载菜单文本
     If Not LoadLanguage(1001, True) Then
-        NoSkinMsgBox "加载字符串资源失败！" & Err.Number & ": " & Err.Description, vbCritical, Lang_Msgbox_Error
+        MsgBox "加载字符串资源失败！" & Err.Number & ": " & Err.Description, vbCritical, Lang_Msgbox_Error
     End If
     
     '调整“客户区”
@@ -1137,49 +1204,49 @@ Private Sub Form_Load()
     ClientWidth = Me.picClientArea.ScaleWidth / Screen.TwipsPerPixelX
     Me.DockingPane.CreatePane 1, 100, ClientHeight, DockLeftOf                                                          '控件箱
     Me.DockingPane(1).Handle = frmControlBox.hWnd
-    Me.DockingPane(1).Title = "控件箱"
+    Me.DockingPane(1).Title = Lang_ControlBox_Caption
     Me.DockingPane.CreatePane 2, 250, ClientHeight / 2, DockRightOf                                                     '属性
     Me.DockingPane(2).Handle = frmProperties.hWnd
-    Me.DockingPane(2).Title = "属性"
+    Me.DockingPane(2).Title = Lang_Properties_Caption
     Me.DockingPane.CreatePane 3, 250, ClientHeight / 2, DockRightOf                                                     '工程资源管理器
     Me.DockingPane(3).Handle = frmSolutionExplorer.hWnd
-    Me.DockingPane(3).Title = "工程资源管理器"
+    Me.DockingPane(3).Title = Lang_SolutionExplorer_Caption
     Me.DockingPane.CreatePane 4, ClientWidth / 2, 120, DockBottomOf Or DockLeftOf                                       '错误列表
     Me.DockingPane(4).Handle = frmErrorList.hWnd
-    Me.DockingPane(4).Title = "错误列表"
+    Me.DockingPane(4).Title = Lang_ErrorList_Caption
     Me.DockingPane.CreatePane 5, ClientWidth / 2, 120, DockBottomOf Or DockRightOf                                      '输出
     Me.DockingPane(5).Handle = frmOutput.hWnd
-    Me.DockingPane(5).Title = "输出"
+    Me.DockingPane(5).Title = Lang_Output_Caption
     Me.DockingPane.CreatePane 6, ClientWidth / 2, 120, DockBottomOf Or DockRightOf                                      '断点列表
     Me.DockingPane(6).Handle = frmBreakpoints.hWnd
-    Me.DockingPane(6).Title = "断点列表"
+    Me.DockingPane(6).Title = Lang_Breakpoints_Caption
     Me.DockingPane.CreatePane 7, ClientWidth / 2, 120, DockBottomOf                                                     '监视窗口
     Me.DockingPane(7).Handle = frmWatch.hWnd
-    Me.DockingPane(7).Title = "监视窗口"
+    Me.DockingPane(7).Title = Lang_Watch_Caption
     Me.DockingPane.CreatePane 8, ClientWidth / 2, 120, DockBottomOf                                                     '本地
     Me.DockingPane(8).Handle = frmLocals.hWnd
-    Me.DockingPane(8).Title = "本地"
+    Me.DockingPane(8).Title = Lang_Locals_Caption
     Me.DockingPane.CreatePane 9, ClientWidth / 2, 120, DockBottomOf                                                     '立即窗口
     Me.DockingPane(9).Handle = frmImmediate.hWnd
-    Me.DockingPane(9).Title = "立即窗口"
+    Me.DockingPane(9).Title = Lang_Immediate_Caption
     Me.DockingPane.CreatePane 10, ClientWidth / 2, 120, DockBottomOf                                                    '调用堆栈
     Me.DockingPane(10).Handle = frmCallStack.hWnd
-    Me.DockingPane(10).Title = "调用堆栈"
+    Me.DockingPane(10).Title = Lang_CallStack_Caption
     Me.DockingPane.CreatePane 11, ClientWidth / 2, 120, DockBottomOf                                                    '线程
     Me.DockingPane(11).Handle = frmThreads.hWnd
-    Me.DockingPane(11).Title = "线程"
+    Me.DockingPane(11).Title = Lang_Threads_Caption
     Me.DockingPane.CreatePane 12, ClientWidth / 2, 120, DockBottomOf                                                    '模块
     Me.DockingPane(12).Handle = frmModules.hWnd
-    Me.DockingPane(12).Title = "模块"
+    Me.DockingPane(12).Title = Lang_Modules_Caption
     Me.DockingPane.CreatePane 13, ClientWidth / 2, 250, DockBottomOf                                                    '内存
     Me.DockingPane(13).Handle = frmMemory.hWnd
-    Me.DockingPane(13).Title = "内存"
+    Me.DockingPane(13).Title = Lang_Memory_Caption
     Me.DockingPane.CreatePane 14, ClientWidth / 2, 250, DockBottomOf                                                    '寄存器
     Me.DockingPane(14).Handle = frmRegisters.hWnd
-    Me.DockingPane(14).Title = "寄存器"
+    Me.DockingPane(14).Title = Lang_Registers_Caption
     Me.DockingPane.CreatePane 15, ClientWidth / 2, 250, DockBottomOf                                                    '反汇编
     Me.DockingPane(15).Handle = frmDisassembly.hWnd
-    Me.DockingPane(15).Title = "反汇编"
+    Me.DockingPane(15).Title = Lang_Disassembly_Caption
     For i = 1 To 15                                                                                                     '隐藏所有的Pane
         Me.DockingPane(i).Close
     Next i
@@ -1190,14 +1257,19 @@ Private Sub Form_Load()
     Me.DockingPane.Options.ThemedFloatingFrames = True                                                                  '作为弹窗时边框保持样式
     Me.DockingPane.Options.ShowContentsWhileDragging = True
     If DockingPaneGlobalSettings.ResourceImages.LoadFromFile(GetAppPath & "Skin.dll", "Office2010Black.ini") = False Then
-        NoSkinMsgBox "加载样式失败！", vbCritical, "错误"
+        MsgBox "加载样式失败！", vbCritical, Lang_Msgbox_Error
     End If
     Me.DockingPane.VisualTheme = ThemeResource                                                                          '设置为从资源文件读取样式
     Me.DockingPane.PaintManager.SplitterSize = 2                                                                        '设置分割区域的大小
     
     'If Not Me.SkinFramework.LoadSkin("Skin.cjstyles", "NormalBlue.ini") Then                                            '加载皮肤 [ToDo]
-    '    NoSkinMsgBox "加载皮肤失败！", vbCritical, "错误"
+    '    MsgBox "加载皮肤失败！", vbCritical, Lang_Msgbox_Error todo: multi language
     'End If
+    
+    'todo 删掉-----------------
+    GccPath = "C:\Program Files\mingw-w64\x86_64-8.1.0-win32-seh-rt_v6-rev0\mingw64\bin\g++.exe"                                                                '设置g++路径
+    GdbPath = "C:\Program Files\mingw-w64\x86_64-8.1.0-win32-seh-rt_v6-rev0\mingw64\bin\gdb.exe"                                                                '设置gdb路径
+    '--------------------------
     
     '禁用不需要的菜单
     Me.DarkMenu.MenuEnabled(3) = False                                                                                  '保存
@@ -1262,6 +1334,15 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     '恢复窗口子类化
     SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(Me.hWnd, "PrevWndProc")
     
+    '关闭工具提示文本窗口
+    Call DestroyToolTip
+    
+    '关闭管道
+    If Not GdbPipe Is Nothing Then
+        GdbPipe.StopRecvOutput
+        GdbPipe.CloseDosIO
+    End If
+    
     '关闭所有窗口
     Dim CodeWindow  As Form
     IsExiting = True                                        '进入退出状态
@@ -1311,7 +1392,7 @@ Private Sub Form_Resize()
 End Sub
 
 Private Sub picClientArea_Click()
-    me.line
+'    me.line
 End Sub
 
 Private Sub picToolBar_Click()
@@ -1341,8 +1422,8 @@ Private Sub tmrCheckProcess_Timer()
     Dim PipeOutput                  As String                                       '管道输出内容
     Dim PipeOutputLine()            As String                                       '管道输出的每一行
     Dim SplitTmp                    As String                                       '字符串分割缓存
+    Dim ExitCode                    As Long                                         '进程退出码
     Dim i                           As Long
-    Dim j                           As Long
     
     If GdbPipe.DosOutput(PipeOutput, "(gdb) ") = 1 Then                             '获取gdb是否有新消息
         PipeOutputLine = Split(PipeOutput, vbCrLf)                                      '分割出gdb输出的每一行
@@ -1360,60 +1441,74 @@ Private Sub tmrCheckProcess_Timer()
                 SourceLn = CLng(Right(SplitTmp, Len(SplitTmp) - InStrRev(SplitTmp, ":")))       '（*:[*]）
                 
                 '如果没有对应的代码窗口就创建一个新的，有的话就切换过去。这部分代码和frmSolutionExplorer的SolutionTreeView_DoubleClick相似
-                With CurrentProject.Files(GdbBreakpoints(BreakpointIndex).FileIndex)
-                    If .TargetWindow Is Nothing Then
-                        Dim NewCodeWindow   As frmCodeWindow
-                        Dim FileData        As String
-                        Dim tmpData         As String
-                        
-                        Set NewCodeWindow = CreateNewCodeWindow(GdbBreakpoints(BreakpointIndex).FileIndex)  '创建新的代码窗体并设置绑定的文件序号
-                        NewCodeWindow.Caption = GetFileName(.FilePath)
-                        
-                        Err.Clear
-                        Open .FilePath For Input As #1                                                      '尝试打开对应的代码文件
-                            If Err.Number <> 0 Then
-                                Close #1
-                                NoSkinMsgBox Lang_Main_Debug_OpenSourceFailure & .FilePath, vbExclamation, Lang_Msgbox_Error
-                            Else
-                                Do While Not EOF(1)
-                                    Line Input #1, tmpData
-                                    FileData = FileData & tmpData & vbCrLf
-                                Loop
-                            End If
-                        Close #1
-                        
-                        Me.TabBar.AddForm NewCodeWindow
-                    Else
-                        frmMain.TabBar.SwitchToByForm .TargetWindow                                         '切换到对应的代码窗体
-                    End If
-                    .TargetWindow.SyntaxEdit.CurrPos.Row = SourceLn                                     '跳转到对应的代码行
-                    .TargetWindow.BreakLine = SourceLn
-                    .TargetWindow.SyntaxEdit.SetFocus
-                    .TargetWindow.RedrawBreakpoints                                                 '绘制中断行的小箭头
-                End With
-            ElseIf PipeOutput Like "Program exited with code *" Then                        '进程退出消息（Program exited with code *.）
-                Dim ExitCode            As Long                                                 '进程退出码
+                '以防万一：有时候获取断点对应的gdb断点的时候会出错，导致GdbBreakpoints的映射有缺漏。这样会导致创建一个无效的代码窗口
+                If BreakpointIndex <= UBound(GdbBreakpoints) Then
+                    With CurrentProject.Files(GdbBreakpoints(BreakpointIndex).FileIndex)
+                        If .TargetWindow Is Nothing Then
+                            Dim NewCodeWindow   As frmCodeWindow
+                            Dim FileData        As String
+                            Dim tmpData         As String
+                            
+                            Set NewCodeWindow = CreateNewCodeWindow(GdbBreakpoints(BreakpointIndex).FileIndex)  '创建新的代码窗体并设置绑定的文件序号
+                            NewCodeWindow.Caption = GetFileName(.FilePath)
+                            
+                            Err.Clear
+                            Open .FilePath For Input As #1                                                      '尝试打开对应的代码文件
+                                If Err.Number <> 0 Then
+                                    Close #1
+                                    NoSkinMsgBox Lang_Main_Debug_OpenSourceFailure & .FilePath, vbExclamation, Lang_Msgbox_Error
+                                Else
+                                    Do While Not EOF(1)
+                                        Line Input #1, tmpData
+                                        FileData = FileData & tmpData & vbCrLf
+                                    Loop
+                                End If
+                            Close #1
+                            
+                            Me.TabBar.AddForm NewCodeWindow
+                        Else
+                            frmMain.TabBar.SwitchToByForm .TargetWindow                                         '切换到对应的代码窗体
+                        End If
+                        .TargetWindow.SyntaxEdit.CurrPos.Row = SourceLn                                     '跳转到对应的代码行
+                        .TargetWindow.BreakLine = SourceLn
+                        .TargetWindow.SyntaxEdit.SetFocus
+                        .TargetWindow.RedrawBreakpoints                                                 '绘制中断行的小箭头
+                    End With
+                End If
+                frmOutput.OutputLog Lang_Main_Debug_BreakpointHit & ": " & _
+                    CurrentProject.Files(GdbBreakpoints(BreakpointIndex).FileIndex).FilePath & ":" & SourceLn
                 
-                CurrState = 0                                                                   '更新调试状态
-                For j = 0 To UBound(CurrentProject.Files)                                       '把所有文件的中断行清掉
-                    CurrentProject.Files(j).TargetWindow.BreakLine = -1
-                    Call CurrentProject.Files(j).TargetWindow.RedrawBreakpoints
-                Next j
-                SplitTmp = Right(PipeOutput, Len(PipeOutput) - InStrRev(PipeOutput, " "))       '（Program exited with code [*.]）
-                SplitTmp = Left(SplitTmp, Len(SplitTmp) - 1)                                    '（[*].）
+                '获取各种调试信息
+                Call frmCallStack.GetCallStack                                                  '获取调用堆栈
+                Call frmLocals.GetLocals                                                        '获取本地变量
+            '======================================================================================================================
+            
+            ElseIf PipeOutput Like "[[]Inferior * exited *" Then                            '进程退出信息（[Inferior * (process *) exited *]）（新版gdb）
+                SplitTmp = Right(PipeOutput, Len(PipeOutput) - InStrRev(PipeOutput, " exited ") - 7)    '（[Inferior * (process *) exited 【*]】）
+                SplitTmp = Left(SplitTmp, InStrRev(SplitTmp, "]") - 1)                                  '（【*】]）
                 
-                '把返回值（八进制）转成十进制
-                ExitCode = CLng("&O" & SplitTmp)
-                frmOutput.OutputLog Lang_Main_Debug_Returned & ExitCode & "(" & Hex(ExitCode) & ")"
+                If SplitTmp = "normally" Then                                                   '程序正常结束，返回0
+                    ExitCode = 0
+                Else                                                                            '否则就把返回值（八进制）转成十进制
+                    ExitCode = CLng("&O" & Right(SplitTmp, Len(SplitTmp) - InStrRev(SplitTmp, " ")))
+                End If
+                Call ProcessExitedHandler(ExitCode)
+            
+            '======================================================================================================================
+            ElseIf PipeOutput Like "Program exited *" Then                                  '进程退出消息（Program exited *.）（旧版gdb）
+                SplitTmp = Right(PipeOutput, Len(PipeOutput) - InStrRev(PipeOutput, " "))       '（Program exited with code [*.]）或（Program exited [normally.]）
+                SplitTmp = Left(SplitTmp, Len(SplitTmp) - 1)                                    '（[*].）或（[normally].）
                 
-                '关闭管道
-                GdbPipe.DosInput "q" & vbCrLf
-                
-                '禁用菜单项
-                'ToDo
+                If SplitTmp = "normally" Then                                                   '程序正常结束，返回0
+                    ExitCode = 0
+                Else                                                                            '否则就把返回值（八进制）转成十进制
+                    ExitCode = CLng("&O" & SplitTmp)
+                End If
+                Call ProcessExitedHandler(ExitCode)
             End If
         Next i
     Else
+        Me.tmrCheckProcess.Enabled = False
         MsgBox "gdb BOOMED!"
     End If
 End Sub

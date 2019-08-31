@@ -94,7 +94,7 @@ Public Function TreeViewUserCtlWindowProc(ByVal hWnd As Long, ByVal uMsg As Long
                     CopyMemory nmtvdi, ByVal lParam, ByVal Len(nmtvdi)
                     If nmtvdi.Item.pszText <> 0 Then
                         CopyMemory buf(0), ByVal nmtvdi.Item.pszText, ByVal 260                 '获取nmtvdi.Item.pszText指针指向的字符串
-                        ItemText = Split(StrConv(buf, vbUnicode), vbNullChar)(0)                'Byte数组转成String, 并从\0处截断文本
+                        ItemText = ByteArrayConv(buf)                                           'Byte数组转成String, 并从\0处截断文本
                     Else
                         ItemText = vbNullChar
                     End If

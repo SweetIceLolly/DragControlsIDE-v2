@@ -4,12 +4,12 @@ Begin VB.UserControl DarkImageButton
    Appearance      =   0  'Flat
    AutoRedraw      =   -1  'True
    BackColor       =   &H00302D2D&
-   ClientHeight    =   576
+   ClientHeight    =   570
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   2136
-   ScaleHeight     =   576
-   ScaleWidth      =   2136
+   ClientWidth     =   2130
+   ScaleHeight     =   570
+   ScaleWidth      =   2130
    ToolboxBitmap   =   "DarkImageButton.ctx":0000
    Begin VB.Timer tmrSetColor 
       Enabled         =   0   'False
@@ -70,13 +70,13 @@ Option Explicit
 
 '               R   G   B
 'Normal:        45, 45, 48
-'Mouse in:      62, 62, 64
+'Mouse in:      92, 92, 94
 'Mouse down:    0, 122, 204
 
 Private Const SZ_BORDER = 30
 
 Private Const NORMAL_R = 45, NORMAL_G = 45, NORMAL_B = 48
-Private Const MOUSEIN_R = 62, MOUSEIN_G = 62, MOUSEIN_B = 64
+Private Const MOUSEIN_R = 92, MOUSEIN_G = 92, MOUSEIN_B = 94
 Private Const MOUSEDOWN_R = 0, MOUSEDOWN_G = 122, MOUSEDOWN_B = 204
 
 Private BackR   As Integer
@@ -136,9 +136,9 @@ Private Sub tmrSetColor_Timer()
             BackB = MOUSEIN_B
         End If
     Else
-        BackR = BackR - 1
-        BackG = BackG - 1
-        BackB = BackB - 1
+        BackR = BackR - (MOUSEIN_R - NORMAL_R) / 30
+        BackG = BackG - (MOUSEIN_G - NORMAL_G) / 30
+        BackB = BackB - (MOUSEIN_B - NORMAL_B) / 30
         If BackR < NORMAL_R Or BackG < NORMAL_G Or BackB < NORMAL_B Then
             BackR = NORMAL_R
             BackG = NORMAL_G

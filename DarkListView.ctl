@@ -93,16 +93,16 @@ Public Sub RaiseClick(iItem As Long, iSubItem As Long, X As Long, Y As Long)
     RaiseEvent Click(iItem, iSubItem, X, Y)
 End Sub
 
+'Please note that this function is for internal usage only and is NOT suggested to call directly
 Public Sub RaiseDoubleClick(iItem As Long, iSubItem As Long, X As Long, Y As Long)
     RaiseEvent DoubleClick(iItem, iSubItem, X, Y)
 End Sub
 
 Public Function AddColumnHeader(Text As String, Optional Width As Integer = 75, Optional Index As Long = -1) As Long
-    
     Dim lvCol       As LVCOLUMN
     Dim tmpStr()    As Byte
     
-    tmpStr = StrConv(Text & vbNullChar, vbFromUnicode)
+    tmpStr = StrConvEx(Text)
     With lvCol
         .mask = LVCF_WIDTH Or LVCF_TEXT Or LVCF_FMT
         .fmt = LVCFMT_LEFT
@@ -123,7 +123,7 @@ Public Function AddItem(Text As String, Optional Index As Long = -1) As Long
     Dim lvi         As LVITEM
     Dim tmpStr()    As Byte
     
-    tmpStr = StrConv(Text & vbNullChar, vbFromUnicode)
+    tmpStr = StrConvEx(Text)
     With lvi
         .iItem = IIf(Index = -1, SendMessageA(lvHwnd, LVM_GETITEMCOUNT, ByVal 0, ByVal 0), Index)
         .mask = LVIF_TEXT
@@ -149,14 +149,14 @@ Public Function GetItemText(Index As Long, Optional SubItemIndex As Long = 0) As
         .iSubItem = SubItemIndex
     End With
     SendMessageA lvHwnd, LVM_GETITEM, 0, ByVal VarPtr(lvi)
-    GetItemText = Split(StrConv(tmpStr, vbUnicode), vbNullChar)(0)
+    GetItemText = ByteArrayConv(tmpStr)
 End Function
 
 Public Function SetItemText(Text As String, Index As Long, Optional SubItemIndex As Long = 0) As Long
     Dim lvi         As LVITEM
     Dim tmpStr()    As Byte
     
-    tmpStr = StrConv(Text & vbNullChar, vbFromUnicode)
+    tmpStr = StrConvEx(Text)
     With lvi
         .iSubItem = SubItemIndex
         .mask = LVIF_TEXT
@@ -180,14 +180,14 @@ Public Function GetColumnText(Index As Long) As String
         .pszText = VarPtr(tmpStr(0))
     End With
     SendMessageA lvHwnd, LVM_GETCOLUMN, Index, ByVal VarPtr(lvc)
-    GetColumnText = Split(StrConv(tmpStr, vbUnicode), vbNullChar)(0)
+    GetColumnText = ByteArrayConv(tmpStr)
 End Function
 
 Public Function SetColumnText(Index As Long, NewText As String) As Long
     Dim tmpStr()    As Byte
     Dim lvc         As LVCOLUMN
     
-    tmpStr = StrConv(NewText & vbNullChar, vbFromUnicode)
+    tmpStr = StrConvEx(NewText)
     With lvc
         .mask = LVCF_TEXT
         .cchTextMax = 255
@@ -242,7 +242,7 @@ Public Function FindItem(Text As String, Optional FullMatch As Boolean = True, O
     Dim tmpStr()    As Byte
     Dim lvfi        As LVFINDINFO
     
-    tmpStr = StrConv(Text & vbNullChar, vbFromUnicode)
+    tmpStr = StrConvEx(Text)
     If Not FullMatch Then
         lvfi.Flags = LVFI_PARTIAL
     End If
@@ -313,11 +313,11 @@ End Sub
 Private Sub UserControl_Initialize()
     CurrExStyle = WS_EX_NOPARENTNOTIFY
     lvHwnd = CreateWindowExA(CurrExStyle, "SysListView32", "", _
-        WS_VISIBLE Or WS_CHILD Or WS_BORDER Or WS_TABSTOP Or LVS_ALIGNLEFT Or LVS_REPORT Or LVS_SINGLESEL, _
+        WS_VISIBLE Or WS_CHILD Or WS_TABSTOP Or LVS_ALIGNLEFT Or LVS_REPORT Or LVS_SINGLESEL, _
         0, 0, UserControl.ScaleWidth / Screen.TwipsPerPixelX, _
         UserControl.ScaleHeight / Screen.TwipsPerPixelY, UserControl.hWnd, 0, App.hInstance, 0)
     
-    SetPropA lvHwnd, "ID", CtlListPushBack(Me)
+    SetPropA lvHwnd, "ID", ByVal CtlListPushBack(Me)
     SetPropA lvHwnd, "PARENT_CTL", UserControl.hWnd
     
     SendMessageA lvHwnd, LVM_SETBKCOLOR, ByVal 0, ByVal RGB(51, 51, 55)
@@ -413,6 +413,10 @@ End Property
 
 Public Property Get ListViewHwnd() As Long
     ListViewHwnd = lvHwnd
+End Property
+
+Public Property Get hWnd() As Long
+    hWnd = UserControl.hWnd
 End Property
 
 'Initialize Properties for User Control

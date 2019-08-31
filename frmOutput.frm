@@ -15,7 +15,15 @@ Begin VB.Form frmOutput
    Begin VB.TextBox edOutput 
       Appearance      =   0  'Flat
       BackColor       =   &H00302D2D&
-      BorderStyle     =   0  'None
+      BeginProperty Font 
+         Name            =   "Consolas"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       ForeColor       =   &H00F1F1F1&
       Height          =   1695
       Left            =   0

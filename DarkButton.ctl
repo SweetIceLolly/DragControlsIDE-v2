@@ -68,13 +68,13 @@ Option Explicit
 
 '               R   G   B
 'Normal:        45, 45, 48
-'Mouse in:      62, 62, 64
+'Mouse in:      92, 92, 94
 'Mouse down:    0, 122, 204
 
 Private Const SZ_BORDER = 30
 
 Private Const NORMAL_R = 45, NORMAL_G = 45, NORMAL_B = 48
-Private Const MOUSEIN_R = 62, MOUSEIN_G = 62, MOUSEIN_B = 64
+Private Const MOUSEIN_R = 92, MOUSEIN_G = 92, MOUSEIN_B = 94
 Private Const MOUSEDOWN_R = 0, MOUSEDOWN_G = 122, MOUSEDOWN_B = 204
 
 Dim BackR       As Integer

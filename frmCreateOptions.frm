@@ -126,24 +126,16 @@ Begin VB.Form frmCreateOptions
       TabIndex        =   9
       Top             =   0
       Width           =   7575
-      _ExtentX        =   13361
-      _ExtentY        =   873
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Microsoft YaHei UI"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Caption         =   "新建项目"
-      MaxButtonEnabled=   0   'False
-      MinButtonEnabled=   0   'False
-      MaxButtonVisible=   0   'False
-      MinButtonVisible=   0   'False
-      BindCaption     =   -1  'True
-      Picture         =   "frmCreateOptions.frx":1BCC2
+      _extentx        =   13361
+      _extenty        =   873
+      font            =   "frmCreateOptions.frx":1BCC2
+      caption         =   "新建项目"
+      maxbuttonenabled=   0   'False
+      minbuttonenabled=   0   'False
+      maxbuttonvisible=   0   'False
+      minbuttonvisible=   0   'False
+      bindcaption     =   -1  'True
+      picture         =   "frmCreateOptions.frx":1BCF6
    End
    Begin DragControlsIDE.DarkEdit edPath 
       Height          =   375
@@ -464,6 +456,13 @@ Private Sub edPath_Change()
     Me.edPath.ToolTipText = Me.edPath.Text
 End Sub
 
+Private Sub edPath_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode = vbKeyA And Shift = vbCtrlMask Then                         '响应Ctrl+A
+        Me.edPath.SelStart = 0
+        Me.edPath.SelLength = Len(Me.edPath.Text)
+    End If
+End Sub
+
 Private Sub edProjectName_Change()
     Me.edProjectName.ToolTipText = Me.edProjectName.Text
     If Not PathChanged Then                                                 '如果用户没有更改过路径，就自动更改项目文件夹路径
@@ -475,6 +474,13 @@ End Sub
 Private Sub edProjectName_GotFocus()
     Me.edProjectName.SelStart = 0
     Me.edProjectName.SelLength = Len(Me.edProjectName.Text)
+End Sub
+
+Private Sub edProjectName_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode = vbKeyA And Shift = vbCtrlMask Then                         '响应Ctrl+A
+        Me.edProjectName.SelStart = 0
+        Me.edProjectName.SelLength = Len(Me.edProjectName.Text)
+    End If
 End Sub
 
 Private Sub edProjectName_KeyPress(KeyAscii As Integer)
@@ -514,7 +520,7 @@ Private Sub Form_Load()
     
     rtn = SHGetFolderPathA(0, CSIDL_PERSONAL, 0, 0, MyDocPath(0))
     If rtn = S_OK Then
-        MyDocPathStr = Split(StrConv(MyDocPath, vbUnicode), vbNullChar)(0) & "\MyProjects"
+        MyDocPathStr = ByteArrayConv(MyDocPath) & "\MyProjects"
     End If
     
     '根据不同的工程类型取不同的名字

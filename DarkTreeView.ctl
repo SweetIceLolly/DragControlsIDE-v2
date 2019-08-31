@@ -64,7 +64,7 @@ Public Function AddItem(ItemText As String, Optional ParentItem As Long = 0) As 
     Dim ti          As TVINSERTSTRUCTEX
     Dim TextBuf()   As Byte
     
-    TextBuf = StrConv(ItemText & vbNullChar, vbFromUnicode)
+    TextBuf = StrConvEx(ItemText)
     With ti
         .hInsertAfter = TVI_LAST
         .hParent = ParentItem
@@ -128,7 +128,7 @@ Public Function GetItemText(ByVal Item As Long) As String
         .hItem = Item
     End With
     SendMessageA wndTreeView, TVM_GETITEM, 0, ByVal VarPtr(tvi)
-    GetItemText = Split(StrConv(tmp, vbUnicode), vbNullChar)(0)
+    GetItemText = ByteArrayConv(tmp)
 End Function
 
 '描述:      获取指定列表项的文本
@@ -139,7 +139,7 @@ Public Function SetItemText(ByVal Item As Long, NewText As String) As Boolean
     Dim tvi         As TVITEM
     Dim buf()       As Byte
     
-    buf = StrConv(NewText & vbNullChar, vbFromUnicode)
+    buf = StrConvEx(NewText)
     With tvi
         .mask = TVIF_TEXT
         .cchTextMax = UBound(buf)

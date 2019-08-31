@@ -182,7 +182,7 @@ Private Sub cmdYes_Click()
     On Error Resume Next
     Dim i           As Long
     Dim lstIndex    As Long
-    'ToDo: detect files of the same name
+    
     SetWindowPos Me.hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE  '取消窗口置顶，防止遮挡对话框
     bSaveFlag = 1                                                               '先标记为保存失败
     For lstIndex = 0 To Me.lstFiles.ListCount - 1                               '保存所有勾选了的文件

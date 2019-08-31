@@ -53,6 +53,7 @@ Module=modTreeViewProc; modTreeViewProc.bas
 UserControl=DarkTreeView.ctl
 Form=frmCreateOptions.frm
 Form=frmSaveBox.frm
+Module=modTooltips; modTooltips.bas
 ResFile32="DragControlsIDE.res"
 IconForm="frmMain"
 Startup="frmMain"
