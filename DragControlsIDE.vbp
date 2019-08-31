@@ -55,6 +55,7 @@ Form=frmCreateOptions.frm
 Form=frmSaveBox.frm
 Module=modTooltips; modTooltips.bas
 ResFile32="DragControlsIDE.res"
+UserControl=ImgOptionBox.ctl
 IconForm="frmMain"
 Startup="frmMain"
 HelpFile=""

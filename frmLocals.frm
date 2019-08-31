@@ -266,7 +266,7 @@ End Function
 '参数:      ParentItem: 母节点序号
 '.          OutputString: 需要分析的字符串
 Private Sub ArrayParser(ParentItem As Long, OutputString As String)
-    'On Error Resume Next       'todo
+    On Error Resume Next       'todo
     Dim SplitTmp()              As String                                   '字符串分割缓存
     Dim tmpStr                  As String                                   '字符串处理缓存
     Dim NewVarNodesIndex        As Long                                     '新添加的VarNodes元素索引
@@ -305,7 +305,6 @@ Private Sub ArrayParser(ParentItem As Long, OutputString As String)
     StartQuotePos = InStr(tmpStr, """") - 1                                                     '查找第一个“"”的位置
     BracketStartPos = 1                                                                         '初始化第一个“{”的位置
     
-    'ToDo: handle 【, <incomplete sequence \214>,】
     VarName = VarName & "["                                                                     '变量名后面加上“[”，为之后添加数组元素序号做准备
     If StartQuotePos >= 0 Then                                                                  '如果找到了“"”，再做进一步的判断
         If Left(tmpStr, StartQuotePos) = String(StartQuotePos, "{") Then                            '这是一个字符串数组（var = {{...(n个{)...{"*）
@@ -315,6 +314,9 @@ Private Sub ArrayParser(ParentItem As Long, OutputString As String)
                         BracketLevel = BracketLevel + 1
                     ElseIf Mid(tmpStr, i, 1) = "}" Then
                         If BracketLevel <= 0 Then                                                               '查找到匹配的“}”。此时i是下一个匹配的“}”的位置
+                            If BracketStartPos >= i + 1 Then                                                        '检查括号位置是否超出查找的位置。如果超出，就退出过程
+                                Exit Sub
+                            End If
                             NewParentVarNodesIndex = AddVarItem(NewVarNodesIndex, VarName & ArrayElementIndex & "]", _
                                 VarName & ArrayElementIndex & "]", VarTypeName, _
                                 Mid(tmpStr, BracketStartPos, i - BracketStartPos + 1))
@@ -326,22 +328,35 @@ Private Sub ArrayParser(ParentItem As Long, OutputString As String)
                         Else
                             BracketLevel = BracketLevel - 1
                         End If
-                    ElseIf Mid(tmpStr, i, 1) = """" Then                                                        '遇到“"”，查找到下一个匹配的”"“，确保不会分析到字符串中间去
+                    ElseIf Mid(tmpStr, i, 1) = """" Then                                                        '遇到“"”，查找下一个匹配的“"”，确保不会分析到字符串中间去
                         Do
                             i = i + 1
                         Loop Until (Mid(tmpStr, i, 1) = """" And Mid(tmpStr, i - 1, 1) <> "\") Or i > Len(tmpStr)   '一直向后查找“"”，直到不处于字符串中间
+                    ElseIf Mid(tmpStr, i, 1) = "<" Then                                                         '遇到“”，查找下一个匹配的“”，确保不会分析到“<>”中间去（处理新版gdb的“<incomplete sequence \*>”输出）
+                        Do
+                            i = i + 1
+                        Loop Until Mid(tmpStr, i, 1) = ">" Or i > Len(tmpStr)                                       '一直向后查找“>”，直到不处于“<>”中间
+                        i = i + 2                                                                                   '跳过“, ”
                     End If
                 Next i
             Else                                                                                        '否则就依次添加所有元素
-                StartQuotePos = 1
-                For i = 2 To Len(tmpStr)                                                                    '查找开头的“"”对应的下一个“"”
-                    Do                                                                                          '一直向后查找“"”，直到不处于字符串中间
-                        i = i + 1
-                    Loop Until (Mid(tmpStr, i, 1) = """" And Mid(tmpStr, i - 1, 1) <> "\") Or i > Len(tmpStr)   '跳过“\"”，这是在字符串里面的“"”
+                StartQuotePos = 0
+                For i = 1 To Len(tmpStr)                                                                    '查找开头的“"”对应的下一个“"”
+                    If Mid(tmpStr, i, 1) = """" Then                                                            '如果是以“"”开头的元素
+                        Do                                                                                          '一直向后查找“"”，直到不处于字符串中间
+                            i = i + 1
+                        Loop Until (Mid(tmpStr, i, 1) = """" And Mid(tmpStr, i - 1, 1) <> "\") Or i > Len(tmpStr)   '跳过“\"”，这是在字符串里面的“"”
+                    ElseIf Mid(tmpStr, i, 1) = "<" Then                                                         '如果是以“<”开头的元素（处理新版gdb的“<incomplete sequence \*>”输出）
+                        Do                                                                                          '一直向后查找“>”，直到不处于“<>”中间
+                            i = i + 1
+                        Loop Until Mid(tmpStr, i, 1) = ">" Or i > Len(tmpStr)
+                    Else                                                                                        '其它东西？应该不会出现这种情况吧
+                        i = Len(tmpStr)                                                                             '如果真的出现这种情况... 直接跳到结尾吧
+                    End If
                     Call AddVarItem(NewVarNodesIndex, VarName & ArrayElementIndex & "]", VarName & ArrayElementIndex & "]", _
-                        VarTypeName, Mid(tmpStr, StartQuotePos + 1, i - StartQuotePos - 1))
+                        VarTypeName, Mid(tmpStr, StartQuotePos + 1, i - StartQuotePos))
                     ArrayElementIndex = ArrayElementIndex + 1
-                    i = i + 3                                                                                   '跳过“, ”
+                    i = i + 2                                                                                   '跳过“, ”
                     StartQuotePos = i                                                                           '记录新的“"”的位置
                 Next i
             End If
