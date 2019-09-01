@@ -2,12 +2,12 @@ VERSION 5.00
 Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "Image.ocx"
 Begin VB.UserControl ImgOptionBox 
    BackColor       =   &H00303030&
-   ClientHeight    =   3024
+   ClientHeight    =   3030
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   2688
-   ScaleHeight     =   3024
-   ScaleWidth      =   2688
+   ClientWidth     =   2685
+   ScaleHeight     =   3030
+   ScaleWidth      =   2685
    Begin VB.Label InputCover 
       Appearance      =   0  'Flat
       BackColor       =   &H80000005&
@@ -55,14 +55,20 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+'====================================================
+'描述:      ImageOptionBox控件
+'作者:      Error 404
+'文件:      ImgOptionBox.ctl
+'====================================================
+
 Event Click()
 
 Dim imgData()   As Byte
 Dim imgFileName As String
 Dim IsFocus As Boolean
 
-Public Sub ChangeAppearance(mode As Boolean)
-    If mode Then
+Public Sub ChangeAppearance(Mode As Boolean)
+    If Mode Then
         focusBorder.Visible = True
         UserControl.BackColor = RGB(160, 160, 170)
         MyLabel.ForeColor = RGB(255, 255, 255)
@@ -91,6 +97,8 @@ Public Property Let Focused(f As Boolean)
     End If
     IsFocus = f
     Call ChangeAppearance(IsFocus)
+    
+    RaiseEvent Click
 End Property
 
 Public Property Get Content() As String
@@ -153,6 +161,5 @@ End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
     Call PropBag.WriteProperty("Image", imgData, StrConv("", vbFromUnicode))
-    
     Call PropBag.WriteProperty("Content", MyLabel.Caption, "")
 End Sub

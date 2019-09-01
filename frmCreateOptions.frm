@@ -3,48 +3,48 @@ Begin VB.Form frmCreateOptions
    BackColor       =   &H00403D3D&
    BorderStyle     =   0  'None
    Caption         =   "新建项目"
-   ClientHeight    =   6876
+   ClientHeight    =   6870
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   10116
+   ClientWidth     =   10110
    Icon            =   "frmCreateOptions.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
-   ScaleHeight     =   6876
-   ScaleWidth      =   10116
-   StartUpPosition =   2  '屏幕中心
+   ScaleHeight     =   6870
+   ScaleWidth      =   10110
+   StartUpPosition =   2  'CenterScreen
    Begin DragControlsIDE.ImgOptionBox TypeOption 
       Height          =   1380
       Index           =   1
       Left            =   384
-      TabIndex        =   16
+      TabIndex        =   0
       Top             =   1392
       Width           =   1308
-      _ExtentX        =   2307
+      _ExtentX        =   2302
       _ExtentY        =   2434
       Image           =   "frmCreateOptions.frx":1BCC2
       Content         =   "窗口程序"
    End
-   Begin VB.PictureBox BtnFrame 
+   Begin VB.PictureBox picBtnFrame 
       Appearance      =   0  'Flat
       BackColor       =   &H00504D4D&
       BorderStyle     =   0  'None
       ForeColor       =   &H80000008&
       Height          =   924
       Left            =   0
-      ScaleHeight     =   924
-      ScaleWidth      =   10164
-      TabIndex        =   1
+      ScaleHeight     =   930
+      ScaleWidth      =   10170
+      TabIndex        =   13
       Top             =   5976
       Width           =   10164
       Begin DragControlsIDE.DarkButton cmdCancel 
          Height          =   492
          Left            =   8568
-         TabIndex        =   2
+         TabIndex        =   11
          Top             =   192
          Width           =   1332
-         _ExtentX        =   2350
-         _ExtentY        =   868
+         _ExtentX        =   2355
+         _ExtentY        =   873
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Microsoft YaHei UI"
             Size            =   9
@@ -60,11 +60,11 @@ Begin VB.Form frmCreateOptions
       Begin DragControlsIDE.DarkButton cmdOK 
          Height          =   492
          Left            =   6936
-         TabIndex        =   3
+         TabIndex        =   10
          Top             =   192
          Width           =   1332
-         _ExtentX        =   2350
-         _ExtentY        =   868
+         _ExtentX        =   2355
+         _ExtentY        =   873
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Microsoft YaHei UI"
             Size            =   9
@@ -78,26 +78,26 @@ Begin VB.Form frmCreateOptions
          HasBorder       =   0   'False
       End
    End
-   Begin VB.PictureBox ProjectFrame 
+   Begin VB.PictureBox picProjectFrame 
       Appearance      =   0  'Flat
       BackColor       =   &H00302D2D&
       BorderStyle     =   0  'None
       ForeColor       =   &H80000008&
       Height          =   5508
       Left            =   5352
-      ScaleHeight     =   5508
-      ScaleWidth      =   4788
-      TabIndex        =   4
+      ScaleHeight     =   5505
+      ScaleWidth      =   4785
+      TabIndex        =   14
       Top             =   480
       Width           =   4788
       Begin DragControlsIDE.DarkCheckBox chkMainArgs 
          Height          =   372
          Left            =   240
-         TabIndex        =   11
+         TabIndex        =   7
          Top             =   3048
          Width           =   3636
-         _ExtentX        =   6414
-         _ExtentY        =   656
+         _ExtentX        =   6403
+         _ExtentY        =   661
          Enabled         =   -1  'True
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Microsoft YaHei UI"
@@ -113,11 +113,11 @@ Begin VB.Form frmCreateOptions
       Begin DragControlsIDE.DarkCheckBox chkMain 
          Height          =   372
          Left            =   240
-         TabIndex        =   5
+         TabIndex        =   6
          Top             =   2616
          Width           =   3636
-         _ExtentX        =   6414
-         _ExtentY        =   656
+         _ExtentX        =   6403
+         _ExtentY        =   661
          Enabled         =   -1  'True
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Microsoft YaHei UI"
@@ -133,11 +133,11 @@ Begin VB.Form frmCreateOptions
       Begin DragControlsIDE.DarkButton cmdBrowse 
          Height          =   336
          Left            =   3552
-         TabIndex        =   6
+         TabIndex        =   5
          Top             =   1992
          Width           =   864
-         _ExtentX        =   1524
-         _ExtentY        =   593
+         _ExtentX        =   1535
+         _ExtentY        =   582
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Microsoft YaHei UI"
             Size            =   9
@@ -153,11 +153,11 @@ Begin VB.Form frmCreateOptions
       Begin DragControlsIDE.DarkEdit edProjectName 
          Height          =   372
          Left            =   288
-         TabIndex        =   7
+         TabIndex        =   3
          Top             =   1128
          Width           =   4140
          _ExtentX        =   7303
-         _ExtentY        =   656
+         _ExtentY        =   661
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Microsoft YaHei UI"
             Size            =   9
@@ -172,11 +172,11 @@ Begin VB.Form frmCreateOptions
       Begin DragControlsIDE.DarkCheckBox chkIncludeStdio 
          Height          =   372
          Left            =   240
-         TabIndex        =   10
+         TabIndex        =   9
          Top             =   3912
          Width           =   3636
-         _ExtentX        =   6414
-         _ExtentY        =   656
+         _ExtentX        =   6403
+         _ExtentY        =   661
          Enabled         =   -1  'True
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Microsoft YaHei UI"
@@ -192,11 +192,11 @@ Begin VB.Form frmCreateOptions
       Begin DragControlsIDE.DarkEdit edPath 
          Height          =   372
          Left            =   288
-         TabIndex        =   8
+         TabIndex        =   4
          Top             =   1968
          Width           =   4140
          _ExtentX        =   7303
-         _ExtentY        =   656
+         _ExtentY        =   661
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Microsoft YaHei UI"
             Size            =   9
@@ -211,11 +211,11 @@ Begin VB.Form frmCreateOptions
       Begin DragControlsIDE.DarkCheckBox chkWinMain 
          Height          =   372
          Left            =   240
-         TabIndex        =   9
+         TabIndex        =   8
          Top             =   3480
          Width           =   3636
-         _ExtentX        =   6414
-         _ExtentY        =   656
+         _ExtentX        =   6403
+         _ExtentY        =   661
          Enabled         =   -1  'True
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Microsoft YaHei UI"
@@ -245,7 +245,7 @@ Begin VB.Form frmCreateOptions
          Height          =   324
          Index           =   2
          Left            =   288
-         TabIndex        =   14
+         TabIndex        =   17
          Top             =   240
          Width           =   480
       End
@@ -257,7 +257,7 @@ Begin VB.Form frmCreateOptions
          Height          =   192
          Index           =   0
          Left            =   288
-         TabIndex        =   13
+         TabIndex        =   16
          Top             =   768
          Width           =   768
       End
@@ -269,58 +269,66 @@ Begin VB.Form frmCreateOptions
          Height          =   192
          Index           =   1
          Left            =   288
-         TabIndex        =   12
+         TabIndex        =   15
          Top             =   1608
          Width           =   948
       End
    End
    Begin DragControlsIDE.DarkWindowBorder DarkWindowBorder 
-      Left            =   5352
-      Top             =   696
-      _ExtentX        =   677
-      _ExtentY        =   677
+      Left            =   5355
+      Top             =   690
+      _ExtentX        =   847
+      _ExtentY        =   847
       Sizable         =   0   'False
    End
    Begin DragControlsIDE.DarkTitleBar DarkTitleBar_NoDrop 
       Align           =   1  'Align Top
       Height          =   492
       Left            =   0
-      TabIndex        =   0
+      TabIndex        =   12
       Top             =   0
       Width           =   10116
-      _extentx        =   17844
-      _extenty        =   868
-      font            =   "frmCreateOptions.frx":1BE3E
-      caption         =   "新建项目"
-      maxbuttonenabled=   0   'False
-      minbuttonenabled=   0   'False
-      maxbuttonvisible=   0   'False
-      minbuttonvisible=   0   'False
-      bindcaption     =   -1  'True
-      picture         =   "frmCreateOptions.frx":1BE72
+      _ExtentX        =   17833
+      _ExtentY        =   873
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "新建项目"
+      MaxButtonEnabled=   0   'False
+      MinButtonEnabled=   0   'False
+      MaxButtonVisible=   0   'False
+      MinButtonVisible=   0   'False
+      BindCaption     =   -1  'True
+      Picture         =   "frmCreateOptions.frx":1BE3E
    End
    Begin DragControlsIDE.ImgOptionBox TypeOption 
       Height          =   1380
       Index           =   2
       Left            =   2016
-      TabIndex        =   17
+      TabIndex        =   1
       Top             =   1392
       Width           =   1308
-      _ExtentX        =   2307
+      _ExtentX        =   2302
       _ExtentY        =   2434
-      Image           =   "frmCreateOptions.frx":1CAC4
+      Image           =   "frmCreateOptions.frx":1CA90
       Content         =   "控制台程序"
    End
    Begin DragControlsIDE.ImgOptionBox TypeOption 
       Height          =   1380
       Index           =   3
       Left            =   3648
-      TabIndex        =   18
+      TabIndex        =   2
       Top             =   1392
       Width           =   1308
-      _ExtentX        =   2307
+      _ExtentX        =   2302
       _ExtentY        =   2434
-      Image           =   "frmCreateOptions.frx":1CC74
+      Image           =   "frmCreateOptions.frx":1CC40
       Content         =   "空白C++程序"
    End
    Begin VB.Label labTip 
@@ -340,7 +348,7 @@ Begin VB.Form frmCreateOptions
       Height          =   324
       Index           =   3
       Left            =   384
-      TabIndex        =   15
+      TabIndex        =   18
       Top             =   744
       Width           =   480
    End
@@ -365,17 +373,28 @@ Private Declare Function SHBrowseForFolder Lib "shell32.dll" Alias "SHBrowseForF
 Private Declare Function SHGetFolderPathA Lib "shell32.dll" (ByVal hWnd As Long, ByVal csidl As Long, ByVal hToken As Long, _
     ByVal dwFlags As Long, pszPath As Any) As Long
     
-'Public NewProjectType   As Integer                                          '将要新建的项目类型（请见frmMain的ProjectType变量说明）
+Public NewProjectType   As Integer                                          '将要新建的项目类型（请见frmMain的ProjectType变量说明）
 Dim MyDocPathStr        As String                                           '“我的文档”路径
 Dim PathChanged         As Boolean                                          '用户是否更改过路径。如果没更改过，路径会随着项目名称而变化
 
-Public Property Get NewProjectType() As Integer
-    '检索所有Option
-    Dim i As Integer
-    For i = 1 To TypeOption.UBound
-        If TypeOption(i).Focused Then NewProjectType = i: Exit For
-    Next
-End Property
+'描述:      根据不同的工程类型取不同的名字和不同的路径名
+Public Sub RefreshName()
+    Select Case NewProjectType
+        Case 1
+            Me.edProjectName.Text = Lang_CreateOptions_WindowProgram
+            Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_WindowProgram
+            
+        Case 2
+            Me.edProjectName.Text = Lang_CreateOptions_ConsoleProgram
+            Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_ConsoleProgram
+            
+        Case 3
+            Me.edProjectName.Text = Lang_CreateOptions_PlainCPP
+            Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_PlainCPP
+    End Select
+    Me.edProjectName.ToolTipText = Me.edProjectName.Text
+    Me.edPath.ToolTipText = Me.edPath.Text
+End Sub
 
 Private Sub chkMain_Click()
     Me.chkMainArgs.Value = False
@@ -635,23 +654,7 @@ Private Sub Form_Load()
         MyDocPathStr = ByteArrayConv(MyDocPath) & "\MyProjects"
     End If
     
-    '根据不同的工程类型取不同的名字
-    Select Case NewProjectType
-    Case 1
-        Me.edProjectName.Text = Lang_CreateOptions_WindowProgram
-        Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_WindowProgram
-        
-    Case 2
-        Me.edProjectName.Text = Lang_CreateOptions_ConsoleProgram
-        Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_ConsoleProgram
-        
-    Case 3
-        Me.edProjectName.Text = Lang_CreateOptions_PlainCPP
-        Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_PlainCPP
-        
-    End Select
-    Me.edProjectName.ToolTipText = Me.edProjectName.Text
-    Me.edPath.ToolTipText = Me.edPath.Text
+    Call RefreshName
     PathChanged = False                                                         '记录为用户没有更改过路径
 End Sub
 
@@ -668,23 +671,8 @@ Private Sub Form_Unload(Cancel As Integer)
 End Sub
 
 Private Sub TypeOption_Click(Index As Integer)
+    On Error Resume Next
+    NewProjectType = Index                                                      '更新项目类型
     Call RefreshName
-End Sub
-
-Public Sub RefreshName()
-    '根据不同的工程类型取不同的名字
-    Select Case NewProjectType
-        Case 1
-            Me.edProjectName.Text = Lang_CreateOptions_WindowProgram
-            Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_WindowProgram
-            
-        Case 2
-            Me.edProjectName.Text = Lang_CreateOptions_ConsoleProgram
-            Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_ConsoleProgram
-            
-        Case 3
-            Me.edProjectName.Text = Lang_CreateOptions_PlainCPP
-            Me.edPath.Text = MyDocPathStr & "\" & Lang_CreateOptions_PlainCPP
-    End Select
-    Me.edProjectName.ToolTipText = Me.edProjectName.Text
+    Me.edProjectName.SetFocus
 End Sub
