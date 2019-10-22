@@ -178,6 +178,8 @@ Public IsLastMenu   As Boolean
 Dim PrevX           As Single, _
     PrevY           As Single
 
+Public NoWhitelist  As Boolean          '如果从Pane上弹出菜单，第一次失焦会允许菜单不消失，第二次就关闭菜单
+
 Public Sub CloseMenu()
     On Error Resume Next
     
@@ -208,7 +210,7 @@ Private Sub PopupNewMenu(LabelIndex As Integer)
         End If
     End With
     If BoundCtl.Transparent Then
-        SetLayeredWindowAttributes Me.hWnd, 0, TRANSPARENT_VALUE, LWA_ALPHA
+        SetLayeredWindowAttributes Me.hwnd, 0, TRANSPARENT_VALUE, LWA_ALPHA
     End If
 End Sub
 
@@ -228,8 +230,8 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
     Set BoundCtl = FromControl
     PrevItem = -1
     If BoundCtl.Transparent Then
-        SetWindowLongA Me.hWnd, GWL_EXSTYLE, GetWindowLongA(Me.hWnd, GWL_EXSTYLE) Or WS_EX_LAYERED
-        SetLayeredWindowAttributes Me.hWnd, 0, 255, LWA_ALPHA
+        SetWindowLongA Me.hwnd, GWL_EXSTYLE, GetWindowLongA(Me.hwnd, GWL_EXSTYLE) Or WS_EX_LAYERED
+        SetLayeredWindowAttributes Me.hwnd, 0, 255, LWA_ALPHA
     End If
     
     ReDim Menus(FromControl.GetMenuCount)
@@ -284,6 +286,8 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
                 End If
                 Me.imgMenuCheckBox(nCheckBoxes).Left = ITEM_HORZ_MARGIN + 90
                 Me.imgMenuCheckBox(nCheckBoxes).Top = Me.labItem(i - 1).Top '+ Me.labItem(i - 1).Height / 2 - Me.imgMenuCheckBox(nCheckBoxes).Height / 2
+                Me.imgMenuCheckBox(nCheckBoxes).Width = 16 * Screen.TwipsPerPixelX
+                Me.imgMenuCheckBox(nCheckBoxes).Height = 16 * Screen.TwipsPerPixelY
                 Me.imgMenuCheckBox(nCheckBoxes).LoadImage_FromArray Menus(CurrSubMenuID(i)).MenuIcon
                 Me.imgMenuCheckBox(nCheckBoxes).Visible = True
                 Me.imgMenuCheckBox(nCheckBoxes).ZOrder 0
@@ -589,9 +593,11 @@ End Sub
 Private Sub tmrCheckFocus_Timer()
     Dim pt          As POINT
     Dim i           As Integer
+    Dim CurrTarget  As Long
+    Dim ClassName   As String * 255
     
     GetCursorPos pt
-    If WindowFromPoint(pt.X, pt.Y) <> Me.hWnd And Not IsUsingKeyboard Then
+    If WindowFromPoint(pt.X, pt.Y) <> Me.hwnd And Not IsUsingKeyboard Then
         PrevItem = -1
         Me.tmrPopupTimeout.Enabled = False
         For i = 0 To Me.labItem.UBound
@@ -604,11 +610,19 @@ Private Sub tmrCheckFocus_Timer()
             End If
         Next i
     End If
-    If GetForegroundWindow <> Me.hWnd Then
+    
+    CurrTarget = GetForegroundWindow()
+    If CurrTarget <> Me.hwnd Then
+        GetClassNameA CurrTarget, ClassName, ByVal 255
+        If Left(ClassName, 21) = "XTPDockingPaneMiniWnd" And Not NoWhitelist Then   '白名单，用来解决Pane浮动窗口不能弹出菜单的问题
+            NoWhitelist = True
+            Me.SetFocus
+            Exit Sub
+        End If
         If SubMenuWindow Is Nothing Then
             Me.CloseMenu
         Else
-            If GetForegroundWindow <> SubMenuWindow.hWnd And (Not SubMenuWindow.IsPopupSub) Then
+            If CurrTarget <> SubMenuWindow.hwnd And (Not SubMenuWindow.IsPopupSub) Then
                 Me.CloseMenu
             End If
         End If
@@ -618,7 +632,7 @@ End Sub
 Private Sub tmrPopupTimeout_Timer()
     If Not SubMenuWindow Is Nothing Then
         If PrevItem <> SubMenuWindow.MatchItem Then
-            SetLayeredWindowAttributes Me.hWnd, 0, 255, LWA_ALPHA
+            SetLayeredWindowAttributes Me.hwnd, 0, 255, LWA_ALPHA
             SubMenuWindow.CloseMenu
             Set SubMenuWindow = Nothing
             Me.tmrPopupTimeout.Enabled = False

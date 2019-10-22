@@ -169,6 +169,17 @@ Public Function SelectItem(ByVal Item As Long) As Boolean
     SelectItem = (SendMessageA(wndTreeView, TVM_SELECTITEM, TVGN_CARET, ByVal Item) <> 0)
 End Function
 
+'描述:      从指定坐标获取列表项的句柄
+'参数:      X, Y: 指定坐标
+'返回值:    如果有列表项在指定的坐标的位置，返回该列表项的句柄；否则返回0
+Public Function HitTest(X As Long, Y As Long) As Long
+    Dim tvhti   As TVHITTESTINFO
+    
+    tvhti.pt.X = X
+    tvhti.pt.Y = Y
+    HitTest = SendMessageA(wndTreeView, TVM_HITTEST, ByVal 0, ByVal VarPtr(tvhti))
+End Function
+
 'WARNING! DO NOT REMOVE OR MODIFY THE FOLLOWING COMMENTED LINES!
 'MappingInfo=UserControl,UserControl,-1,Enabled
 Public Property Get Enabled() As Boolean

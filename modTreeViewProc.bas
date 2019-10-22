@@ -12,7 +12,7 @@ Option Explicit
 '.          uMsg: 消息值
 '.          wParam, lParam: 消息的参数
 '返回值:    消息处理返回值
-Public Function TreeViewWindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function TreeViewWindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     Select Case uMsg
         Case WM_MOUSEMOVE
             Call frmSolutionExplorer.SolutionTreeView_MouseMove(wParam And Not (MK_CONTROL Or MK_SHIFT), _
@@ -38,6 +38,8 @@ Public Function TreeViewWindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
         
         Case WM_LBUTTONDBLCLK
             Call frmSolutionExplorer.SolutionTreeView_DoubleClick(1, GetShiftValue(wParam), LoWord(lParam), HiWord(lParam))
+            TreeViewWindowProc = 0
+            Exit Function
         
         Case WM_KEYDOWN
             'lParam \ (2 ^ 30) = lParam >> 30
@@ -47,10 +49,10 @@ Public Function TreeViewWindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
             Call frmSolutionExplorer.SolutionTreeView_KeyUp(wParam)
         
         Case WM_DESTROY
-            SetWindowLongA hWnd, GWL_WNDPROC, GetPropA(hWnd, "PrevWndProc")
+            SetWindowLongA hwnd, GWL_WNDPROC, GetPropA(hwnd, "PrevWndProc")
         
     End Select
-    TreeViewWindowProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
+    TreeViewWindowProc = CallWindowProc(GetPropA(hwnd, "PrevWndProc"), hwnd, uMsg, wParam, lParam)
 End Function
 
 '描述:      处理树视图所在的用户控件的消息，并触发对应的事件
@@ -58,7 +60,7 @@ End Function
 '.          uMsg: 消息值
 '.          wParam, lParam: 消息的参数
 '返回值:    消息处理返回值
-Public Function TreeViewUserCtlWindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function TreeViewUserCtlWindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     Select Case uMsg
         Case WM_NOTIFY
             Dim nm      As NMHDR
@@ -124,9 +126,9 @@ Public Function TreeViewUserCtlWindowProc(ByVal hWnd As Long, ByVal uMsg As Long
             End Select
         
         Case WM_DESTROY
-            SetWindowLongA hWnd, GWL_WNDPROC, GetPropA(hWnd, "PrevWndProc")
+            SetWindowLongA hwnd, GWL_WNDPROC, GetPropA(hwnd, "PrevWndProc")
     End Select
-    TreeViewUserCtlWindowProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
+    TreeViewUserCtlWindowProc = CallWindowProc(GetPropA(hwnd, "PrevWndProc"), hwnd, uMsg, wParam, lParam)
 End Function
 
 '描述:      处理树视图里面编辑标签的文本框的选择文本（EM_SETSEL）消息，如果文本里面有“.”就只选择“.”前面的内容
@@ -134,10 +136,10 @@ End Function
 '.          uMsg: 消息值
 '.          wParam, lParam: 消息的参数
 '返回值:    消息处理返回值
-Public Function TreeViewEditBoxWindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function TreeViewEditBoxWindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     If uMsg = EM_SETSEL Then                                        '拦截选择文本消息，修改文本选择的位置
         wParam = 0                                                      '从文本开头选择
-        lParam = GetPropA(hWnd, "DotPos")                               '选择到“.”的位置
+        lParam = GetPropA(hwnd, "DotPos")                               '选择到“.”的位置
     End If
-    TreeViewEditBoxWindowProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
+    TreeViewEditBoxWindowProc = CallWindowProc(GetPropA(hwnd, "PrevWndProc"), hwnd, uMsg, wParam, lParam)
 End Function

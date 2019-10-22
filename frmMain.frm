@@ -35,11 +35,11 @@ Begin VB.Form frmMain
    End
    Begin DragControlsIDE.DarkMenu DarkMenu 
       Align           =   1  'Align Top
-      Height          =   312
+      Height          =   345
       Left            =   0
       TabIndex        =   3
-      Top             =   492
-      Width           =   16848
+      Top             =   495
+      Width           =   16845
       _ExtentX        =   29713
       _ExtentY        =   609
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -276,37 +276,37 @@ Begin VB.Form frmMain
       MenuID_22       =   21
       MenuText_22     =   "向内缩进 (&O)       Shift+Tab"
       MenuVisible_22  =   -1  'True
-      MenuIcon_22     =   "frmMain.frx":1CF31
+      MenuIcon_22     =   "frmMain.frx":1D268
       SubMenuID_22_0  =   0
       MenuID_23       =   22
       MenuText_23     =   "-"
       MenuVisible_23  =   -1  'True
-      MenuIcon_23     =   "frmMain.frx":1CF51
+      MenuIcon_23     =   "frmMain.frx":1D5BF
       SubMenuID_23_0  =   0
       MenuID_24       =   23
       MenuText_24     =   "添加/移除断点 (&B)  F9"
       MenuVisible_24  =   -1  'True
-      MenuIcon_24     =   "frmMain.frx":1CF71
+      MenuIcon_24     =   "frmMain.frx":1D5DF
       SubMenuID_24_0  =   0
       MenuID_25       =   24
       MenuText_25     =   "清除所有断点 (&M)"
       MenuVisible_25  =   -1  'True
-      MenuIcon_25     =   "frmMain.frx":1CF91
+      MenuIcon_25     =   "frmMain.frx":1D5FF
       SubMenuID_25_0  =   0
       MenuID_26       =   25
       MenuText_26     =   "-"
       MenuVisible_26  =   -1  'True
-      MenuIcon_26     =   "frmMain.frx":1CFB1
+      MenuIcon_26     =   "frmMain.frx":1D61F
       SubMenuID_26_0  =   0
       MenuID_27       =   26
       MenuText_27     =   "跳转到行 (&J)       Ctrl+G"
       MenuVisible_27  =   -1  'True
-      MenuIcon_27     =   "frmMain.frx":1CFD1
+      MenuIcon_27     =   "frmMain.frx":1D63F
       SubMenuID_27_0  =   0
       MenuID_28       =   27
       MenuText_28     =   "视图"
       MenuVisible_28  =   -1  'True
-      MenuIcon_28     =   "frmMain.frx":1CFF1
+      MenuIcon_28     =   "frmMain.frx":1D65F
       SUBMENU_ITEM_COUNT_28=   6
       SubMenuID_28_0  =   0
       SubMenuText_28_1=   "工具栏 (&T)"
@@ -325,42 +325,42 @@ Begin VB.Form frmMain
       MenuText_29     =   "工具栏 (&T)"
       MenuCheckBox_29 =   -1  'True
       MenuVisible_29  =   -1  'True
-      MenuIcon_29     =   "frmMain.frx":1D011
+      MenuIcon_29     =   "frmMain.frx":1D67F
       SubMenuID_29_0  =   0
       MenuID_30       =   29
       MenuText_30     =   "控件箱 (&C)"
       MenuCheckBox_30 =   -1  'True
       MenuVisible_30  =   -1  'True
-      MenuIcon_30     =   "frmMain.frx":1D0D6
+      MenuIcon_30     =   "frmMain.frx":1D744
       SubMenuID_30_0  =   0
       MenuID_31       =   30
       MenuText_31     =   "属性 (&P)           F4"
       MenuCheckBox_31 =   -1  'True
       MenuVisible_31  =   -1  'True
-      MenuIcon_31     =   "frmMain.frx":1D189
+      MenuIcon_31     =   "frmMain.frx":1D7F7
       SubMenuID_31_0  =   0
       MenuID_32       =   31
       MenuText_32     =   "工程资源管理器 (&M)"
       MenuCheckBox_32 =   -1  'True
       MenuVisible_32  =   -1  'True
-      MenuIcon_32     =   "frmMain.frx":1D315
+      MenuIcon_32     =   "frmMain.frx":1D983
       SubMenuID_32_0  =   0
       MenuID_33       =   32
       MenuText_33     =   "错误列表 (&E)       Ctrl+E"
       MenuCheckBox_33 =   -1  'True
       MenuVisible_33  =   -1  'True
-      MenuIcon_33     =   "frmMain.frx":1D335
+      MenuIcon_33     =   "frmMain.frx":1D9A3
       SubMenuID_33_0  =   0
       MenuID_34       =   33
       MenuText_34     =   "输出 (&O)           Ctrl+Alt+O"
       MenuCheckBox_34 =   -1  'True
       MenuVisible_34  =   -1  'True
-      MenuIcon_34     =   "frmMain.frx":1D4E3
+      MenuIcon_34     =   "frmMain.frx":1DB51
       SubMenuID_34_0  =   0
       MenuID_35       =   34
       MenuText_35     =   "生成"
       MenuVisible_35  =   -1  'True
-      MenuIcon_35     =   "frmMain.frx":1D64B
+      MenuIcon_35     =   "frmMain.frx":1DCB9
       SUBMENU_ITEM_COUNT_35=   2
       SubMenuID_35_0  =   0
       SubMenuText_35_1=   "生成代码文件 (&C)"
@@ -370,17 +370,17 @@ Begin VB.Form frmMain
       MenuID_36       =   35
       MenuText_36     =   "生成代码文件 (&C)"
       MenuVisible_36  =   -1  'True
-      MenuIcon_36     =   "frmMain.frx":1D66B
+      MenuIcon_36     =   "frmMain.frx":1DCD9
       SubMenuID_36_0  =   0
       MenuID_37       =   36
       MenuText_37     =   "生成可执行文件 (&E) Ctrl+F5"
       MenuVisible_37  =   -1  'True
-      MenuIcon_37     =   "frmMain.frx":1D87B
+      MenuIcon_37     =   "frmMain.frx":1DEE9
       SubMenuID_37_0  =   0
       MenuID_38       =   37
       MenuText_38     =   "调试"
       MenuVisible_38  =   -1  'True
-      MenuIcon_38     =   "frmMain.frx":1D89B
+      MenuIcon_38     =   "frmMain.frx":1DF09
       SUBMENU_ITEM_COUNT_38=   9
       SubMenuID_38_0  =   0
       SubMenuText_38_1=   "窗口"
@@ -404,7 +404,7 @@ Begin VB.Form frmMain
       MenuID_39       =   38
       MenuText_39     =   "窗口"
       MenuVisible_39  =   -1  'True
-      MenuIcon_39     =   "frmMain.frx":1D8BB
+      MenuIcon_39     =   "frmMain.frx":1DF29
       SUBMENU_ITEM_COUNT_39=   13
       SubMenuID_39_0  =   0
       SubMenuText_39_1=   "断点列表 (&B)       Ctrl+Alt+B"
@@ -437,121 +437,121 @@ Begin VB.Form frmMain
       MenuText_40     =   "断点列表 (&B)       Ctrl+Alt+B"
       MenuCheckBox_40 =   -1  'True
       MenuVisible_40  =   -1  'True
-      MenuIcon_40     =   "frmMain.frx":1D8DB
+      MenuIcon_40     =   "frmMain.frx":1DF49
       SubMenuID_40_0  =   0
       MenuID_41       =   40
       MenuText_41     =   "-"
       MenuVisible_41  =   -1  'True
-      MenuIcon_41     =   "frmMain.frx":1D9E2
+      MenuIcon_41     =   "frmMain.frx":1E050
       SubMenuID_41_0  =   0
       MenuID_42       =   41
       MenuText_42     =   "监视窗口 (&W)       Ctrl+Alt+W"
       MenuCheckBox_42 =   -1  'True
       MenuVisible_42  =   -1  'True
-      MenuIcon_42     =   "frmMain.frx":1DA02
+      MenuIcon_42     =   "frmMain.frx":1E070
       SubMenuID_42_0  =   0
       MenuID_43       =   42
       MenuText_43     =   "本地 (&L)           Ctrl+Alt+L"
       MenuCheckBox_43 =   -1  'True
       MenuVisible_43  =   -1  'True
-      MenuIcon_43     =   "frmMain.frx":1DB39
+      MenuIcon_43     =   "frmMain.frx":1E1A7
       SubMenuID_43_0  =   0
       MenuID_44       =   43
       MenuText_44     =   "立即窗口 (&I)       Ctrl+Alt+I"
       MenuCheckBox_44 =   -1  'True
       MenuVisible_44  =   -1  'True
-      MenuIcon_44     =   "frmMain.frx":1DB59
+      MenuIcon_44     =   "frmMain.frx":1E1C7
       SubMenuID_44_0  =   0
       MenuID_45       =   44
       MenuText_45     =   "-"
       MenuVisible_45  =   -1  'True
-      MenuIcon_45     =   "frmMain.frx":1DB79
+      MenuIcon_45     =   "frmMain.frx":1E1E7
       SubMenuID_45_0  =   0
       MenuID_46       =   45
       MenuText_46     =   "调用堆栈 (&C)       Ctrl+Alt+C"
       MenuCheckBox_46 =   -1  'True
       MenuVisible_46  =   -1  'True
-      MenuIcon_46     =   "frmMain.frx":1DB99
+      MenuIcon_46     =   "frmMain.frx":1E207
       SubMenuID_46_0  =   0
       MenuID_47       =   46
       MenuText_47     =   "线程 (&T)           Ctrl+Alt+T"
       MenuCheckBox_47 =   -1  'True
       MenuVisible_47  =   -1  'True
-      MenuIcon_47     =   "frmMain.frx":1DBB9
+      MenuIcon_47     =   "frmMain.frx":1E227
       SubMenuID_47_0  =   0
       MenuID_48       =   47
       MenuText_48     =   "模块 (&M)           Ctrl+Alt+M"
       MenuCheckBox_48 =   -1  'True
       MenuVisible_48  =   -1  'True
-      MenuIcon_48     =   "frmMain.frx":1DE32
+      MenuIcon_48     =   "frmMain.frx":1E4A0
       SubMenuID_48_0  =   0
       MenuID_49       =   48
       MenuText_49     =   "-"
       MenuVisible_49  =   -1  'True
-      MenuIcon_49     =   "frmMain.frx":1DEF6
+      MenuIcon_49     =   "frmMain.frx":1E564
       SubMenuID_49_0  =   0
       MenuID_50       =   49
       MenuText_50     =   "内存 (&E)           Ctrl+Alt+E"
       MenuCheckBox_50 =   -1  'True
       MenuVisible_50  =   -1  'True
-      MenuIcon_50     =   "frmMain.frx":1DF16
+      MenuIcon_50     =   "frmMain.frx":1E584
       SubMenuID_50_0  =   0
       MenuID_51       =   50
       MenuText_51     =   "寄存器 (&R)         Ctrl+Alt+R"
       MenuCheckBox_51 =   -1  'True
       MenuVisible_51  =   -1  'True
-      MenuIcon_51     =   "frmMain.frx":1DFF9
+      MenuIcon_51     =   "frmMain.frx":1E667
       SubMenuID_51_0  =   0
       MenuID_52       =   51
       MenuText_52     =   "反汇编 (&D)         Ctrl+Alt+D"
       MenuCheckBox_52 =   -1  'True
       MenuVisible_52  =   -1  'True
-      MenuIcon_52     =   "frmMain.frx":1E019
+      MenuIcon_52     =   "frmMain.frx":1E687
       SubMenuID_52_0  =   0
       MenuID_53       =   52
       MenuText_53     =   "运行 (&R)           F5"
       MenuVisible_53  =   -1  'True
-      MenuIcon_53     =   "frmMain.frx":1E0CF
+      MenuIcon_53     =   "frmMain.frx":1E73D
       SubMenuID_53_0  =   0
       MenuID_54       =   53
       MenuText_54     =   "中断 (&B)           Ctrl+Alt+Break"
       MenuVisible_54  =   -1  'True
-      MenuIcon_54     =   "frmMain.frx":1E354
+      MenuIcon_54     =   "frmMain.frx":1E9C2
       SubMenuID_54_0  =   0
       MenuID_55       =   54
       MenuText_55     =   "停止 (&E)           Shift+F5"
       MenuVisible_55  =   -1  'True
-      MenuIcon_55     =   "frmMain.frx":1E40B
+      MenuIcon_55     =   "frmMain.frx":1EA79
       SubMenuID_55_0  =   0
       MenuID_56       =   55
       MenuText_56     =   "重新运行 (&S)       Ctrl+Shift+F5"
       MenuVisible_56  =   -1  'True
-      MenuIcon_56     =   "frmMain.frx":1E4E3
+      MenuIcon_56     =   "frmMain.frx":1EB51
       SubMenuID_56_0  =   0
       MenuID_57       =   56
       MenuText_57     =   "-"
       MenuVisible_57  =   -1  'True
-      MenuIcon_57     =   "frmMain.frx":1E503
+      MenuIcon_57     =   "frmMain.frx":1EB71
       SubMenuID_57_0  =   0
       MenuID_58       =   57
       MenuText_58     =   "逐语句执行         F11"
       MenuVisible_58  =   -1  'True
-      MenuIcon_58     =   "frmMain.frx":1E523
+      MenuIcon_58     =   "frmMain.frx":1EB91
       SubMenuID_58_0  =   0
       MenuID_59       =   58
       MenuText_59     =   "逐过程执行         F10"
       MenuVisible_59  =   -1  'True
-      MenuIcon_59     =   "frmMain.frx":1E543
+      MenuIcon_59     =   "frmMain.frx":1EBB1
       SubMenuID_59_0  =   0
       MenuID_60       =   59
       MenuText_60     =   "执行到返回         Shift+F11"
       MenuVisible_60  =   -1  'True
-      MenuIcon_60     =   "frmMain.frx":1E563
+      MenuIcon_60     =   "frmMain.frx":1EBD1
       SubMenuID_60_0  =   0
       MenuID_61       =   60
       MenuText_61     =   "工具"
       MenuVisible_61  =   -1  'True
-      MenuIcon_61     =   "frmMain.frx":1E583
+      MenuIcon_61     =   "frmMain.frx":1EBF1
       SUBMENU_ITEM_COUNT_61=   5
       SubMenuID_61_0  =   0
       SubMenuText_61_1=   "窗口工具 (&W)"
@@ -567,32 +567,32 @@ Begin VB.Form frmMain
       MenuID_62       =   61
       MenuText_62     =   "窗口工具 (&W)"
       MenuVisible_62  =   -1  'True
-      MenuIcon_62     =   "frmMain.frx":1E5A3
+      MenuIcon_62     =   "frmMain.frx":1EC11
       SubMenuID_62_0  =   0
       MenuID_63       =   62
       MenuText_63     =   "消息拦截 (&M)"
       MenuVisible_63  =   -1  'True
-      MenuIcon_63     =   "frmMain.frx":1E687
+      MenuIcon_63     =   "frmMain.frx":1ECF5
       SubMenuID_63_0  =   0
       MenuID_64       =   63
       MenuText_64     =   "进程 (&P)"
       MenuVisible_64  =   -1  'True
-      MenuIcon_64     =   "frmMain.frx":1E75B
+      MenuIcon_64     =   "frmMain.frx":1EDC9
       SubMenuID_64_0  =   0
       MenuID_65       =   64
       MenuText_65     =   "-"
       MenuVisible_65  =   -1  'True
-      MenuIcon_65     =   "frmMain.frx":1E9D4
+      MenuIcon_65     =   "frmMain.frx":1F042
       SubMenuID_65_0  =   0
       MenuID_66       =   65
       MenuText_66     =   "设置 (&O)"
       MenuVisible_66  =   -1  'True
-      MenuIcon_66     =   "frmMain.frx":1E9F4
+      MenuIcon_66     =   "frmMain.frx":1F062
       SubMenuID_66_0  =   0
       MenuID_67       =   66
       MenuText_67     =   "帮助"
       MenuVisible_67  =   -1  'True
-      MenuIcon_67     =   "frmMain.frx":1EBF5
+      MenuIcon_67     =   "frmMain.frx":1F263
       SUBMENU_ITEM_COUNT_67=   3
       SubMenuID_67_0  =   0
       SubMenuText_67_1=   "帮助文档 (&D)       F1"
@@ -604,17 +604,17 @@ Begin VB.Form frmMain
       MenuID_68       =   67
       MenuText_68     =   "帮助文档 (&D)       F1"
       MenuVisible_68  =   -1  'True
-      MenuIcon_68     =   "frmMain.frx":1EC15
+      MenuIcon_68     =   "frmMain.frx":1F283
       SubMenuID_68_0  =   0
       MenuID_69       =   68
       MenuText_69     =   "示例程序 (&E)"
       MenuVisible_69  =   -1  'True
-      MenuIcon_69     =   "frmMain.frx":1ED05
+      MenuIcon_69     =   "frmMain.frx":1F373
       SubMenuID_69_0  =   0
       MenuID_70       =   69
       MenuText_70     =   "关于拖控件大法 (&A) Ctrl+F1"
       MenuVisible_70  =   -1  'True
-      MenuIcon_70     =   "frmMain.frx":1EEE0
+      MenuIcon_70     =   "frmMain.frx":1F54E
       SubMenuID_70_0  =   0
    End
    Begin VB.PictureBox picToolBar 
@@ -717,7 +717,7 @@ Begin VB.Form frmMain
       MaxButtonVisible=   0   'False
       MinButtonVisible=   0   'False
       BindCaption     =   -1  'True
-      Picture         =   "frmMain.frx":1F5FE
+      Picture         =   "frmMain.frx":1FC6C
    End
    Begin XtremeSkinFramework.SkinFramework SkinFramework 
       Left            =   14160
@@ -751,7 +751,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 '获取窗口最大、最小化状态
-Private Declare Function GetWindowPlacement Lib "user32" (ByVal hWnd As Long, lpwndpl As WINDOWPLACEMENT) As Long
+Private Declare Function GetWindowPlacement Lib "user32" (ByVal hwnd As Long, lpwndpl As WINDOWPLACEMENT) As Long
 
 '创建进程
 Private Declare Function CreateProcess Lib "kernel32" Alias "CreateProcessA" (ByVal lpApplicationName As Long, ByVal lpCommandLine As String, _
@@ -832,7 +832,7 @@ End Function
 
 '描述:      “加载项目”菜单
 Private Sub mnuOpen_Click()
-    NoSkinMsgBox ShowOpen(Me.hWnd, "Dilidi - Open", "洗屁屁文件(*.cpp)" & vbNullChar & "*.cpp")
+    NoSkinMsgBox ShowOpen(Me.hwnd, "Dilidi - Open", "洗屁屁文件(*.cpp)" & vbNullChar & "*.cpp")
 End Sub
 
 '描述:      “保存”菜单
@@ -859,7 +859,7 @@ Private Function mnuSave_Click() As Integer
     frmSaveBox.bBlock = True                                                            '阻塞代码执行
     Me.Enabled = False
     frmSaveBox.Show
-    SetWindowPos frmSaveBox.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE    '让保存对话框置顶
+    SetWindowPos frmSaveBox.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE    '让保存对话框置顶
     Do                                                                                  '等待保存对话框关闭
         Sleep 50
         DoEvents
@@ -873,7 +873,7 @@ End Function
 
 '描述:      “另存为”菜单
 Private Sub mnuSaveAs_Click()
-    NoSkinMsgBox ShowSave(Me.hWnd, "Shar.cpp", "Save", "fsaf(*.cpp)" & vbNullChar & "*.cpp")
+    NoSkinMsgBox ShowSave(Me.hwnd, "Shar.cpp", "Save", "fsaf(*.cpp)" & vbNullChar & "*.cpp")
 End Sub
 
 '描述:      “新建项目”菜单
@@ -885,7 +885,7 @@ Private Sub mnuNewProject_Click()
     Set NewCreateWindow = New frmCreateOptions
     Me.Enabled = False
     Me.DarkWindowBorderSizer.Bind = False
-    SetParent NewCreateWindow.hWnd, 0
+    SetParent NewCreateWindow.hwnd, 0
     NewCreateWindow.Move Screen.Width / 2 - frmCreate.Width / 2, Screen.Height / 2 - frmCreate.Height / 2
     NewCreateWindow.DarkTitleBar_NoDrop.Visible = True
     NewCreateWindow.DarkWindowBorder.Bind = True
@@ -1107,7 +1107,7 @@ End Sub
 Public Sub ShowStartupPage()
     frmCreate.DarkTitleBar_NoDrop.Visible = False                                       '不显示标题栏和边框
     frmCreate.DarkWindowBorder.Bind = False
-    SetParent frmCreate.hWnd, Me.picClientArea.hWnd                                     '让“新建项目”作为本窗体的子窗体
+    SetParent frmCreate.hwnd, Me.picClientArea.hwnd                                     '让“新建项目”作为本窗体的子窗体
     frmCreate.Move 0, 0                                                                 '设置其位置
     frmCreate.Show
 End Sub
@@ -1161,7 +1161,7 @@ Private Sub Form_Initialize()
     
     '启动LOGO
     frmStartupLogo.Show
-    SetWindowPos frmStartupLogo.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE
+    SetWindowPos frmStartupLogo.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE
     frmStartupLogo.SetFocus
     frmStartupLogo.Refresh
     
@@ -1199,53 +1199,53 @@ Private Sub Form_Load()
     Dim ClientHeight        As Integer, ClientWidth             As Integer
     Dim i                   As Integer
     
-    Me.DockingPane.AttachToWindow Me.picClientArea.hWnd                                                                 '绑定工作区
+    Me.DockingPane.AttachToWindow Me.picClientArea.hwnd                                                                 '绑定工作区
     ClientHeight = Me.picClientArea.ScaleHeight / Screen.TwipsPerPixelY
     ClientWidth = Me.picClientArea.ScaleWidth / Screen.TwipsPerPixelX
     Me.DockingPane.CreatePane 1, 100, ClientHeight, DockLeftOf                                                          '控件箱
-    Me.DockingPane(1).Handle = frmControlBox.hWnd
+    Me.DockingPane(1).Handle = frmControlBox.hwnd
     Me.DockingPane(1).Title = Lang_ControlBox_Caption
     Me.DockingPane.CreatePane 2, 250, ClientHeight / 2, DockRightOf                                                     '属性
-    Me.DockingPane(2).Handle = frmProperties.hWnd
+    Me.DockingPane(2).Handle = frmProperties.hwnd
     Me.DockingPane(2).Title = Lang_Properties_Caption
     Me.DockingPane.CreatePane 3, 250, ClientHeight / 2, DockRightOf                                                     '工程资源管理器
-    Me.DockingPane(3).Handle = frmSolutionExplorer.hWnd
+    Me.DockingPane(3).Handle = frmSolutionExplorer.hwnd
     Me.DockingPane(3).Title = Lang_SolutionExplorer_Caption
     Me.DockingPane.CreatePane 4, ClientWidth / 2, 120, DockBottomOf Or DockLeftOf                                       '错误列表
-    Me.DockingPane(4).Handle = frmErrorList.hWnd
+    Me.DockingPane(4).Handle = frmErrorList.hwnd
     Me.DockingPane(4).Title = Lang_ErrorList_Caption
     Me.DockingPane.CreatePane 5, ClientWidth / 2, 120, DockBottomOf Or DockRightOf                                      '输出
-    Me.DockingPane(5).Handle = frmOutput.hWnd
+    Me.DockingPane(5).Handle = frmOutput.hwnd
     Me.DockingPane(5).Title = Lang_Output_Caption
     Me.DockingPane.CreatePane 6, ClientWidth / 2, 120, DockBottomOf Or DockRightOf                                      '断点列表
-    Me.DockingPane(6).Handle = frmBreakpoints.hWnd
+    Me.DockingPane(6).Handle = frmBreakpoints.hwnd
     Me.DockingPane(6).Title = Lang_Breakpoints_Caption
     Me.DockingPane.CreatePane 7, ClientWidth / 2, 120, DockBottomOf                                                     '监视窗口
-    Me.DockingPane(7).Handle = frmWatch.hWnd
+    Me.DockingPane(7).Handle = frmWatch.hwnd
     Me.DockingPane(7).Title = Lang_Watch_Caption
     Me.DockingPane.CreatePane 8, ClientWidth / 2, 120, DockBottomOf                                                     '本地
-    Me.DockingPane(8).Handle = frmLocals.hWnd
+    Me.DockingPane(8).Handle = frmLocals.hwnd
     Me.DockingPane(8).Title = Lang_Locals_Caption
     Me.DockingPane.CreatePane 9, ClientWidth / 2, 120, DockBottomOf                                                     '立即窗口
-    Me.DockingPane(9).Handle = frmImmediate.hWnd
+    Me.DockingPane(9).Handle = frmImmediate.hwnd
     Me.DockingPane(9).Title = Lang_Immediate_Caption
     Me.DockingPane.CreatePane 10, ClientWidth / 2, 120, DockBottomOf                                                    '调用堆栈
-    Me.DockingPane(10).Handle = frmCallStack.hWnd
+    Me.DockingPane(10).Handle = frmCallStack.hwnd
     Me.DockingPane(10).Title = Lang_CallStack_Caption
     Me.DockingPane.CreatePane 11, ClientWidth / 2, 120, DockBottomOf                                                    '线程
-    Me.DockingPane(11).Handle = frmThreads.hWnd
+    Me.DockingPane(11).Handle = frmThreads.hwnd
     Me.DockingPane(11).Title = Lang_Threads_Caption
     Me.DockingPane.CreatePane 12, ClientWidth / 2, 120, DockBottomOf                                                    '模块
-    Me.DockingPane(12).Handle = frmModules.hWnd
+    Me.DockingPane(12).Handle = frmModules.hwnd
     Me.DockingPane(12).Title = Lang_Modules_Caption
     Me.DockingPane.CreatePane 13, ClientWidth / 2, 250, DockBottomOf                                                    '内存
-    Me.DockingPane(13).Handle = frmMemory.hWnd
+    Me.DockingPane(13).Handle = frmMemory.hwnd
     Me.DockingPane(13).Title = Lang_Memory_Caption
     Me.DockingPane.CreatePane 14, ClientWidth / 2, 250, DockBottomOf                                                    '寄存器
-    Me.DockingPane(14).Handle = frmRegisters.hWnd
+    Me.DockingPane(14).Handle = frmRegisters.hwnd
     Me.DockingPane(14).Title = Lang_Registers_Caption
     Me.DockingPane.CreatePane 15, ClientWidth / 2, 250, DockBottomOf                                                    '反汇编
-    Me.DockingPane(15).Handle = frmDisassembly.hWnd
+    Me.DockingPane(15).Handle = frmDisassembly.hwnd
     Me.DockingPane(15).Title = Lang_Disassembly_Caption
     For i = 1 To 15                                                                                                     '隐藏所有的Pane
         Me.DockingPane(i).Close
@@ -1263,7 +1263,7 @@ Private Sub Form_Load()
     Me.DockingPane.PaintManager.SplitterSize = 2                                                                        '设置分割区域的大小
     
     'If Not Me.SkinFramework.LoadSkin("Skin.cjstyles", "NormalBlue.ini") Then                                            '加载皮肤 [ToDo]
-    '    MsgBox "加载皮肤失败！", vbCritical, Lang_Msgbox_Error todo: multi language
+        'MsgBox "加载皮肤失败！", vbCritical, Lang_Msgbox_Error todo: multi language
     'End If
     
     'todo 删掉-----------------
@@ -1283,7 +1283,7 @@ Private Sub Form_Load()
     Dim lpObj               As Long                                                                                     '指向窗口自身的物件指针
     Set WindowObj = Me
     lpObj = ObjPtr(WindowObj)                                                                                           '获取指向窗口自身的物件指针
-    SetPropA Me.hWnd, "WindowObj", lpObj                                                                                '记录窗口的物件地址，供子类化卸载窗体用
+    SetPropA Me.hwnd, "WindowObj", lpObj                                                                                '记录窗口的物件地址，供子类化卸载窗体用
     'SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)    '[ToDo]
     
     '显示启动页面
@@ -1332,7 +1332,7 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     End If
     
     '恢复窗口子类化
-    SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(Me.hWnd, "PrevWndProc")
+    SetWindowLongA Me.hwnd, GWL_WNDPROC, GetPropA(Me.hwnd, "PrevWndProc")
     
     '关闭工具提示文本窗口
     Call DestroyToolTip
@@ -1382,11 +1382,11 @@ Private Sub Form_Resize()
     Dim wp      As WINDOWPLACEMENT
     
     For Each Target In Forms
-        If GetPropA(Target.hWnd, "Parent") = Me.picWindowClientArea.hWnd Then
-            GetWindowPlacement Target.hWnd, wp
+        If GetPropA(Target.hwnd, "Parent") = Me.picWindowClientArea.hwnd Then
+            GetWindowPlacement Target.hwnd, wp
             If wp.ShowCmd = SW_MAXIMIZE Then
-                ShowWindow Target.hWnd, SW_HIDE
-                ShowWindow Target.hWnd, SW_MAXIMIZE
+                ShowWindow Target.hwnd, SW_HIDE
+                ShowWindow Target.hwnd, SW_MAXIMIZE
             End If
         End If
     Next Target

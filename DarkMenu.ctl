@@ -5,10 +5,10 @@ Begin VB.UserControl DarkMenu
    ClientHeight    =   480
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   5568
+   ClientWidth     =   5565
    PropertyPages   =   "DarkMenu.ctx":0000
    ScaleHeight     =   480
-   ScaleWidth      =   5568
+   ScaleWidth      =   5565
    ToolboxBitmap   =   "DarkMenu.ctx":0014
    Begin VB.Timer tmrCheckFocus 
       Enabled         =   0   'False
@@ -46,7 +46,7 @@ Begin VB.UserControl DarkMenu
       Caption         =   " Item"
       BeginProperty Font 
          Name            =   "Microsoft YaHei UI"
-         Size            =   9.6
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -223,7 +223,9 @@ Public Sub HideMenu(Optional HideFromSubMenu As Boolean = False)
 End Sub
 
 'Please note that the parameter 'ClickedFromRootItem' is for internal usage ONLY. Please ignore it when calling this function
-Public Sub PopupMenu(ParentMenuID As Integer, X As Single, Y As Single, Optional ClickedFromRootItem As Integer = -1)
+Public Sub PopupMenu(ParentMenuID As Integer, Optional X As Single = -1, Optional Y As Single = -1, Optional ClickedFromRootItem As Integer = -1)
+    On Error Resume Next
+    
     If UBound(Menus(ParentMenuID + 1).SubMenuID) > 0 Then
         If ClickedFromRootItem = -1 Then
             Call HideMenu
@@ -234,14 +236,24 @@ Public Sub PopupMenu(ParentMenuID As Integer, X As Single, Y As Single, Optional
         frmPopupMenu.CloseMenu
         ReleaseCapture
         With frmPopupMenu
-            .Left = X
-            .Top = Y
+            If X = -1 And Y = -1 Then
+                Dim CurPos  As POINT
+                
+                GetCursorPos CurPos
+                .Left = CurPos.X * Screen.TwipsPerPixelX
+                .Top = CurPos.Y * Screen.TwipsPerPixelY
+            Else
+                .Left = X
+                .Top = Y
+            End If
             If ClickedFromRootItem = -1 Then
                 .AddItems Me, Menus(ParentMenuID + 1).SubMenuID, 0
             Else
                 .AddItems Me, Menus(ParentMenuID + 1).SubMenuID, UserControl.labRootItem(ClickedFromRootItem).Width
             End If
+            .NoWhitelist = False
             .Show
+            .SetFocus
         End With
     End If
 End Sub
@@ -306,7 +318,7 @@ Private Sub labRootItem_MouseDown(Index As Integer, Button As Integer, Shift As 
     Dim wRect   As RECT
     
     If UBound(Menus(RootMenuID(Index)).SubMenus) > 0 Then
-        GetWindowRect UserControl.hWnd, wRect
+        GetWindowRect UserControl.hwnd, wRect
         With UserControl.lnBorderLeft
             .X1 = UserControl.labRootItem(Index).Left
             .Y1 = 0
@@ -370,7 +382,7 @@ Private Sub tmrCheckFocus_Timer()
     Dim pt          As POINT
     
     GetCursorPos pt
-    If Not bShow And WindowFromPoint(pt.X, pt.Y) <> UserControl.hWnd Then
+    If Not bShow And WindowFromPoint(pt.X, pt.Y) <> UserControl.hwnd Then
         Call HideMenu
         Call UserControl_MouseMove(0, 0, 0, 0)
         UserControl.tmrCheckFocus.Enabled = False

@@ -44,7 +44,7 @@ Begin VB.Form frmCreate
       MaxButtonVisible=   0   'False
       MinButtonVisible=   0   'False
       BindCaption     =   -1  'True
-      Picture         =   "frmCreate.frx":1BCC2
+      Picture         =   "frmCreate.frx":10CA
    End
    Begin DragControlsIDE.DarkImageButton cmdNewWindowProgram 
       Height          =   765
@@ -54,7 +54,7 @@ Begin VB.Form frmCreate
       Width           =   6855
       _ExtentX        =   12091
       _ExtentY        =   1349
-      Image           =   "frmCreate.frx":1C914
+      Image           =   "frmCreate.frx":1844
       HasBorder       =   0   'False
       Caption         =   "       新建窗口程序"
       Alignment       =   0
@@ -67,7 +67,7 @@ Begin VB.Form frmCreate
       Width           =   6855
       _ExtentX        =   12091
       _ExtentY        =   1349
-      Image           =   "frmCreate.frx":1CA47
+      Image           =   "frmCreate.frx":1977
       HasBorder       =   0   'False
       Caption         =   "       新建控制台程序"
       Alignment       =   0
@@ -80,7 +80,7 @@ Begin VB.Form frmCreate
       Width           =   6855
       _ExtentX        =   12091
       _ExtentY        =   1349
-      Image           =   "frmCreate.frx":1CBC8
+      Image           =   "frmCreate.frx":1AF8
       HasBorder       =   0   'False
       Caption         =   "       新建空白C++程序"
       Alignment       =   0
@@ -93,7 +93,7 @@ Begin VB.Form frmCreate
       Width           =   6855
       _ExtentX        =   12091
       _ExtentY        =   1349
-      Image           =   "frmCreate.frx":1CF0D
+      Image           =   "frmCreate.frx":1E3D
       HasBorder       =   0   'False
       Caption         =   "       打开工程..."
       Alignment       =   0

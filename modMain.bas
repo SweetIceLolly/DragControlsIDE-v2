@@ -8,7 +8,7 @@ Attribute VB_Name = "modMain"
 Option Explicit
 
 '调用系统的消息处理过程
-Public Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal hWnd As Long, _
+Public Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal hwnd As Long, _
     ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 
 '获取系统参数信息
@@ -139,7 +139,7 @@ End Function
 '.          uMsg: 消息值
 '.          wParam, lParam: 消息的参数
 '返回值:    消息处理返回值
-Public Function MainWindowMaximizeCloseFixProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function MainWindowMaximizeCloseFixProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     If uMsg = WM_GETMINMAXINFO Then                                                         '窗口尝试获取最大、最小化信息
         Dim mmi             As MINMAXINFO                                                       '最大、最小化信息
         Dim rectWorkArea    As RECT                                                             '屏幕工作区大小
@@ -156,11 +156,11 @@ Public Function MainWindowMaximizeCloseFixProc(ByVal hWnd As Long, ByVal uMsg As
         If wParam = SC_CLOSE Then
             Dim WindowObj   As Object                                                           '对应的窗体物件
             
-            CopyMemory ByVal VarPtr(WindowObj), GetPropA(hWnd, "WindowObj"), ByVal 4            '获取该窗口对应的Form
+            CopyMemory ByVal VarPtr(WindowObj), GetPropA(hwnd, "WindowObj"), ByVal 4            '获取该窗口对应的Form
             Unload WindowObj                                                                    '卸载Form
         End If
     End If
-    MainWindowMaximizeCloseFixProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
+    MainWindowMaximizeCloseFixProc = CallWindowProc(GetPropA(hwnd, "PrevWndProc"), hwnd, uMsg, wParam, lParam)
 End Function
 
 '描述:      在代码文本框重绘的同时重绘断点
@@ -168,11 +168,11 @@ End Function
 '.          uMsg: 消息值
 '.          wParam, lParam: 消息的参数
 '返回值:    消息处理返回值
-Public Function EditBreakpointsRedrawProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function EditBreakpointsRedrawProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     If uMsg = WM_PAINT Then                                                                 '拦截到WM_PAINT消息的时候顺便重绘断点
-        bpRedrawFileIndex = GetPropA(hWnd, "FileIndex")
+        bpRedrawFileIndex = GetPropA(hwnd, "FileIndex")
     End If
-    EditBreakpointsRedrawProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
+    EditBreakpointsRedrawProc = CallWindowProc(GetPropA(hwnd, "PrevWndProc"), hwnd, uMsg, wParam, lParam)
 End Function
 
 '描述:      在“本地”窗口的ListView的列表头调整大小的时候调整图片框的宽度
@@ -180,19 +180,19 @@ End Function
 '.          uMsg: 消息值
 '.          wParam, lParam: 消息的参数
 '返回值:    消息处理返回值
-Public Function LocalsColumnHeaderLayoutProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function LocalsColumnHeaderLayoutProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     On Error Resume Next
     
     If uMsg = HDM_LAYOUT Then                                                               '拦截到HDM_LAYOUT消息的时候调整图片框宽度
         Dim ItemRect        As RECT                                                             '第一个列表头的宽度
         
-        SendMessageA hWnd, HDM_GETITEMRECT, ByVal 0, ByVal VarPtr(ItemRect)                     '获取第一个列表头的宽度
+        SendMessageA hwnd, HDM_GETITEMRECT, ByVal 0, ByVal VarPtr(ItemRect)                     '获取第一个列表头的宽度
         ItemRect.Left = (ItemRect.Right - ItemRect.Left) * Screen.TwipsPerPixelX                '计算出宽度（缇），并直接存放在ItemRect.Left
         
         '有足够的宽度就把图片框的宽度设置为300，没有足够的宽度就让图片框的宽度随着列表头的宽度变化
         frmLocals.picSelMargin.Width = IIf(ItemRect.Left > frmLocals.picSelMargin.Width, 300, ItemRect.Left)
     End If
-    LocalsColumnHeaderLayoutProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
+    LocalsColumnHeaderLayoutProc = CallWindowProc(GetPropA(hwnd, "PrevWndProc"), hwnd, uMsg, wParam, lParam)
 End Function
 
 '描述:      当“本地”窗口的ListView重绘的时候重绘节点图标
@@ -200,11 +200,11 @@ End Function
 '.          uMsg: 消息值
 '.          wParam, lParam: 消息的参数
 '返回值:    消息处理返回值
-Public Function LocalsListViewNodesRedrawProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function LocalsListViewNodesRedrawProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     If uMsg = WM_PAINT Then
         Call frmLocals.RedrawNodeIcons
     End If
-    LocalsListViewNodesRedrawProc = CallWindowProc(GetPropA(hWnd, "PrevWndProc"), hWnd, uMsg, wParam, lParam)
+    LocalsListViewNodesRedrawProc = CallWindowProc(GetPropA(hwnd, "PrevWndProc"), hwnd, uMsg, wParam, lParam)
 End Function
 
 '描述:      显示“打开”通用对话框
@@ -212,13 +212,13 @@ End Function
 '.          Title: 对话框标题
 '.          Filter: 文件过滤器，使用vbNullChar来隔开每个过滤器
 '返回值:    如果操作取消或者出错，返回""；否则返回选择的文件路径
-Public Function ShowOpen(hWnd As Long, Title As String, Filter As String) As String
+Public Function ShowOpen(hwnd As Long, Title As String, Filter As String) As String
     Dim ofn                 As OPENFILENAME                                                 '对话框信息
     
     Filter = Filter & vbNullChar
     With ofn                                                                                '设置对话框信息
         .lStructSize = Len(ofn)
-        .hWndOwner = hWnd
+        .hWndOwner = hwnd
         .hInstance = App.hInstance
         .lpstrFilter = Filter
         .lpstrFile = String(MAX_PATH, vbNullChar)                                               '设置文件名缓冲区
@@ -245,14 +245,14 @@ End Function
 '.          Title: 对话框标题
 '.          Filter: 文件过滤器，使用vbNullChar来隔开每个过滤器
 '返回值:    如果操作取消或者出错，返回""；否则返回选择的文件路径
-Public Function ShowSave(hWnd As Long, DefaultName As String, Title As String, Filter As String) As String
+Public Function ShowSave(hwnd As Long, DefaultName As String, Title As String, Filter As String) As String
     Dim ofn                 As OPENFILENAME                                                 '对话框信息
     
     DefaultName = DefaultName & String(MAX_PATH - Len(DefaultName), vbNullChar)             '字符串结尾加上足够数量的'\0'，作为缓冲区
     Filter = Filter & vbNullChar                                                            '字符串末尾必须是'\0'
     With ofn                                                                                '设置对话框信息
         .lStructSize = Len(ofn)
-        .hWndOwner = hWnd
+        .hWndOwner = hwnd
         .hInstance = App.hInstance
         .lpstrFilter = Filter
         .lpstrFile = DefaultName

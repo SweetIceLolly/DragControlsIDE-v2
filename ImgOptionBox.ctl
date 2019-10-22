@@ -84,8 +84,8 @@ Public Property Get Focused() As Boolean
     Focused = IsFocus
 End Property
 
-Public Property Let Focused(f As Boolean)
-    If f Then
+Public Property Let Focused(NewFocused As Boolean)
+    If NewFocused Then
         Dim obj As Object
         For Each obj In UserControl.Parent.Controls
             If Not (obj Is Me) Then
@@ -95,7 +95,7 @@ Public Property Let Focused(f As Boolean)
             End If
         Next
     End If
-    IsFocus = f
+    IsFocus = NewFocused
     Call ChangeAppearance(IsFocus)
     
     RaiseEvent Click
@@ -105,8 +105,8 @@ Public Property Get Content() As String
     Content = MyLabel.Caption
 End Property
 
-Public Property Let Content(c As String)
-    MyLabel.Caption = c
+Public Property Let Content(NewContent As String)
+    MyLabel.Caption = NewContent
     MyLabel.Move UserControl.Width / 2 - MyLabel.Width / 2, UserControl.Height * 0.8 - MyLabel.Height / 2
     PropertyChanged "Content"
 End Property
@@ -130,12 +130,14 @@ Public Property Let FileName(NewFileName As String)
     PropertyChanged "Image"
 End Property
 
-Private Sub InputCover_Click()
-    If Not IsFocus Then
-        Focused = True
+Private Sub InputCover_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    If Button = vbLeftButton Then
+        If Not IsFocus Then
+            Focused = True
+        End If
+        
+        RaiseEvent Click
     End If
-    
-    RaiseEvent Click
 End Sub
 
 Private Sub UserControl_Initialize()

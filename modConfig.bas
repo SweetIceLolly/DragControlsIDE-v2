@@ -100,16 +100,22 @@ Public Lang_CreateOptions_WinMain               As String
 Public Lang_CreateOptions_Include               As String
 Public Lang_CreateOptions_OK                    As String
 Public Lang_CreateOptions_Cancel                As String
+Public Lang_CreateOptions_ProjectType           As String
+Public Lang_CreateOptions_TypeOption_1          As String
+Public Lang_CreateOptions_TypeOption_2          As String
+Public Lang_CreateOptions_TypeOption_3          As String
 Public Lang_CreateOptions_BrowseCaption         As String
 Public Lang_CreateOptions_ProjectNameRequired   As String
 Public Lang_CreateOptions_InvalidProjectName    As String
 Public Lang_CreateOptions_InvalidProjectPath    As String
 Public Lang_CreateOptions_CreationFailure_1     As String
 Public Lang_CreateOptions_CreationFailure_2     As String
-Public Lang_CreateOptions_SourceFile            As String
 Public Lang_CreateOptions_WindowProgram         As String
 Public Lang_CreateOptions_ConsoleProgram        As String
 Public Lang_CreateOptions_PlainCPP              As String
+Public Lang_CreateOptions_SameNameReplace_1     As String
+Public Lang_CreateOptions_SameNameReplace_2     As String
+Public Lang_CreateOptions_CreateProjectFailed   As String
 
 Public Lang_Application_Title                   As String
 Public Lang_Main_SaveBeforeCompile              As String
@@ -281,16 +287,22 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_CreateOptions_Include = "#include <stdio.h>"
     Lang_CreateOptions_OK = "确定"
     Lang_CreateOptions_Cancel = "取消"
+    Lang_CreateOptions_ProjectType = "项目类型"
+    Lang_CreateOptions_TypeOption_1 = "窗口程序"
+    Lang_CreateOptions_TypeOption_2 = "控制台程序"
+    Lang_CreateOptions_TypeOption_3 = "空白C++程序"
     Lang_CreateOptions_BrowseCaption = "选择项目文件夹"
     Lang_CreateOptions_ProjectNameRequired = "请输入项目名称！"
     Lang_CreateOptions_InvalidProjectName = "无效的项目名称: "
     Lang_CreateOptions_InvalidProjectPath = "指定的项目文件夹路径无效！"
     Lang_CreateOptions_CreationFailure_1 = "无法创建"
     Lang_CreateOptions_CreationFailure_2 = " ，请确保项目名称是有效的。"
-    Lang_CreateOptions_SourceFile = "源文件"
     Lang_CreateOptions_WindowProgram = "新窗口程序"
     Lang_CreateOptions_ConsoleProgram = "新控制台程序"
     Lang_CreateOptions_PlainCPP = "新空白C++程序"
+    Lang_CreateOptions_SameNameReplace_1 = "选择的目录下有重名的文件: "
+    Lang_CreateOptions_SameNameReplace_2 = "，是否覆盖？"
+    Lang_CreateOptions_CreateProjectFailed = "，创建工程失败"
     
     Lang_Application_Title = "拖控件大法"
     Lang_Main_SaveBeforeCompile = "是否先保存所有文件再进行编译？"

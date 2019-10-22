@@ -227,7 +227,6 @@ End Sub
 
 Private Sub imgIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = vbLeftButton Or Button = vbRightButton Then
-        Dim wRect   As RECT
         Dim wp  As WINDOWPLACEMENT
     
         GetWindowPlacement UserControl.Parent.hWnd, wp
@@ -239,9 +238,7 @@ Private Sub imgIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, 
             UserControl.mnuPopup.MenuEnabled(2) = True
         End If
         
-        GetWindowRect UserControl.hWnd, wRect
-        UserControl.mnuPopup.PopupMenu 0, wRect.Left * Screen.TwipsPerPixelX + X + 120, _
-            wRect.Top * Screen.TwipsPerPixelY + Y + 120
+        UserControl.mnuPopup.PopupMenu 0
     End If
 End Sub
 

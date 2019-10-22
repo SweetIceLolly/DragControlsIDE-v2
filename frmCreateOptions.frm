@@ -10,6 +10,7 @@ Begin VB.Form frmCreateOptions
    Icon            =   "frmCreateOptions.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
+   Picture         =   "frmCreateOptions.frx":1BCC2
    ScaleHeight     =   6870
    ScaleWidth      =   10110
    StartUpPosition =   2  'CenterScreen
@@ -22,10 +23,11 @@ Begin VB.Form frmCreateOptions
       Width           =   1308
       _ExtentX        =   2302
       _ExtentY        =   2434
-      Image           =   "frmCreateOptions.frx":1BCC2
+      Image           =   "frmCreateOptions.frx":1C42C
       Content         =   "窗口程序"
    End
    Begin VB.PictureBox picBtnFrame 
+      Align           =   2  'Align Bottom
       Appearance      =   0  'Flat
       BackColor       =   &H00504D4D&
       BorderStyle     =   0  'None
@@ -33,10 +35,10 @@ Begin VB.Form frmCreateOptions
       Height          =   924
       Left            =   0
       ScaleHeight     =   930
-      ScaleWidth      =   10170
+      ScaleWidth      =   10110
       TabIndex        =   13
-      Top             =   5976
-      Width           =   10164
+      Top             =   5940
+      Width           =   10110
       Begin DragControlsIDE.DarkButton cmdCancel 
          Height          =   492
          Left            =   8568
@@ -79,24 +81,25 @@ Begin VB.Form frmCreateOptions
       End
    End
    Begin VB.PictureBox picProjectFrame 
+      Align           =   4  'Align Right
       Appearance      =   0  'Flat
       BackColor       =   &H00302D2D&
       BorderStyle     =   0  'None
       ForeColor       =   &H80000008&
-      Height          =   5508
-      Left            =   5352
-      ScaleHeight     =   5505
+      Height          =   5445
+      Left            =   5325
+      ScaleHeight     =   5445
       ScaleWidth      =   4785
       TabIndex        =   14
-      Top             =   480
+      Top             =   495
       Width           =   4788
       Begin DragControlsIDE.DarkCheckBox chkMainArgs 
          Height          =   372
          Left            =   240
          TabIndex        =   7
          Top             =   3048
-         Width           =   3636
-         _ExtentX        =   6403
+         Width           =   4215
+         _ExtentX        =   7435
          _ExtentY        =   661
          Enabled         =   -1  'True
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -111,12 +114,12 @@ Begin VB.Form frmCreateOptions
          Caption         =   "帮我写好main （有参数）"
       End
       Begin DragControlsIDE.DarkCheckBox chkMain 
-         Height          =   372
+         Height          =   375
          Left            =   240
          TabIndex        =   6
-         Top             =   2616
-         Width           =   3636
-         _ExtentX        =   6403
+         Top             =   2610
+         Width           =   4215
+         _ExtentX        =   7435
          _ExtentY        =   661
          Enabled         =   -1  'True
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -129,26 +132,6 @@ Begin VB.Form frmCreateOptions
             Strikethrough   =   0   'False
          EndProperty
          Caption         =   "帮我写好main （无参数）"
-      End
-      Begin DragControlsIDE.DarkButton cmdBrowse 
-         Height          =   336
-         Left            =   3552
-         TabIndex        =   5
-         Top             =   1992
-         Width           =   864
-         _ExtentX        =   1535
-         _ExtentY        =   582
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "Microsoft YaHei UI"
-            Size            =   9
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Caption         =   "浏览..."
-         HasBorder       =   0   'False
       End
       Begin DragControlsIDE.DarkEdit edProjectName 
          Height          =   372
@@ -174,8 +157,8 @@ Begin VB.Form frmCreateOptions
          Left            =   240
          TabIndex        =   9
          Top             =   3912
-         Width           =   3636
-         _ExtentX        =   6403
+         Width           =   4215
+         _ExtentX        =   7435
          _ExtentY        =   661
          Enabled         =   -1  'True
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -189,32 +172,13 @@ Begin VB.Form frmCreateOptions
          EndProperty
          Caption         =   "#include <stdio.h>"
       End
-      Begin DragControlsIDE.DarkEdit edPath 
-         Height          =   372
-         Left            =   288
-         TabIndex        =   4
-         Top             =   1968
-         Width           =   4140
-         _ExtentX        =   7303
-         _ExtentY        =   661
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "Microsoft YaHei UI"
-            Size            =   9
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Text            =   "C:\Project"
-      End
       Begin DragControlsIDE.DarkCheckBox chkWinMain 
          Height          =   372
          Left            =   240
          TabIndex        =   8
          Top             =   3480
-         Width           =   3636
-         _ExtentX        =   6403
+         Width           =   4215
+         _ExtentX        =   7435
          _ExtentY        =   661
          Enabled         =   -1  'True
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -227,6 +191,45 @@ Begin VB.Form frmCreateOptions
             Strikethrough   =   0   'False
          EndProperty
          Caption         =   "帮我写好WinMain"
+      End
+      Begin DragControlsIDE.DarkButton cmdBrowse 
+         Height          =   375
+         Left            =   3600
+         TabIndex        =   5
+         Top             =   1920
+         Width           =   870
+         _ExtentX        =   1535
+         _ExtentY        =   661
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Caption         =   "浏览..."
+         HasBorder       =   0   'False
+      End
+      Begin DragControlsIDE.DarkEdit edPath 
+         Height          =   375
+         Left            =   240
+         TabIndex        =   4
+         Top             =   1920
+         Width           =   3300
+         _ExtentX        =   5821
+         _ExtentY        =   661
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Microsoft YaHei UI"
+            Size            =   9
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "C:\Project"
       End
       Begin VB.Label labTip 
          AutoSize        =   -1  'True
@@ -283,11 +286,11 @@ Begin VB.Form frmCreateOptions
    End
    Begin DragControlsIDE.DarkTitleBar DarkTitleBar_NoDrop 
       Align           =   1  'Align Top
-      Height          =   492
+      Height          =   495
       Left            =   0
       TabIndex        =   12
       Top             =   0
-      Width           =   10116
+      Width           =   10110
       _ExtentX        =   17833
       _ExtentY        =   873
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -305,7 +308,7 @@ Begin VB.Form frmCreateOptions
       MaxButtonVisible=   0   'False
       MinButtonVisible=   0   'False
       BindCaption     =   -1  'True
-      Picture         =   "frmCreateOptions.frx":1BE3E
+      Picture         =   "frmCreateOptions.frx":1C5A8
    End
    Begin DragControlsIDE.ImgOptionBox TypeOption 
       Height          =   1380
@@ -316,7 +319,7 @@ Begin VB.Form frmCreateOptions
       Width           =   1308
       _ExtentX        =   2302
       _ExtentY        =   2434
-      Image           =   "frmCreateOptions.frx":1CA90
+      Image           =   "frmCreateOptions.frx":1CD22
       Content         =   "控制台程序"
    End
    Begin DragControlsIDE.ImgOptionBox TypeOption 
@@ -328,13 +331,13 @@ Begin VB.Form frmCreateOptions
       Width           =   1308
       _ExtentX        =   2302
       _ExtentY        =   2434
-      Image           =   "frmCreateOptions.frx":1CC40
+      Image           =   "frmCreateOptions.frx":1CED2
       Content         =   "空白C++程序"
    End
    Begin VB.Label labTip 
       AutoSize        =   -1  'True
       BackStyle       =   0  'Transparent
-      Caption         =   "类型"
+      Caption         =   "项目类型"
       BeginProperty Font 
          Name            =   "微软雅黑"
          Size            =   12
@@ -345,12 +348,12 @@ Begin VB.Form frmCreateOptions
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   324
+      Height          =   315
       Index           =   3
-      Left            =   384
+      Left            =   390
       TabIndex        =   18
-      Top             =   744
-      Width           =   480
+      Top             =   750
+      Width           =   960
    End
 End
 Attribute VB_Name = "frmCreateOptions"
@@ -370,7 +373,7 @@ Option Explicit
 Private Declare Function SHBrowseForFolder Lib "shell32.dll" Alias "SHBrowseForFolderA" (lpBrowseInfo As BROWSEINFO) As Long
 
 '获取特殊目录路径
-Private Declare Function SHGetFolderPathA Lib "shell32.dll" (ByVal hWnd As Long, ByVal csidl As Long, ByVal hToken As Long, _
+Private Declare Function SHGetFolderPathA Lib "shell32.dll" (ByVal hwnd As Long, ByVal csidl As Long, ByVal hToken As Long, _
     ByVal dwFlags As Long, pszPath As Any) As Long
     
 Public NewProjectType   As Integer                                          '将要新建的项目类型（请见frmMain的ProjectType变量说明）
@@ -418,7 +421,7 @@ Private Sub cmdBrowse_Click()
     Dim NewPath As String * MAX_PATH
     
     With bi
-        .hWndOwner = Me.hWnd
+        .hWndOwner = Me.hwnd
         .pidlRoot = 0
         .lpszTitle = Lang_CreateOptions_BrowseCaption
         .ulFlags = BIF_RETURNONLYFSDIRS Or BIF_USENEWUI
@@ -496,6 +499,41 @@ Private Sub cmdOK_Click()
         End If
     End If
     
+    '检测是否有重名文件
+    If Dir(ProjPath & ProjName & ".cpp", vbDirectory Or vbNormal Or vbReadOnly Or vbHidden Or vbSystem) <> "" Then      '检测到重名的cpp文件
+        If NoSkinMsgBox(Lang_CreateOptions_SameNameReplace_1 & ProjPath & ProjName & ".cpp" & _
+           Lang_CreateOptions_SameNameReplace_2, vbQuestion Or vbYesNo, Lang_Msgbox_Confirm) <> vbYes Then
+            Exit Sub
+        End If
+    End If
+    If Dir(ProjPath & ProjName & ".myproj", vbDirectory Or vbNormal Or vbReadOnly Or vbHidden Or vbSystem) <> "" Then   '检测到重名的工程文件
+        If NoSkinMsgBox(Lang_CreateOptions_SameNameReplace_1 & ProjPath & ProjName & ".myproj" & _
+           Lang_CreateOptions_SameNameReplace_2, vbQuestion Or vbYesNo, Lang_Msgbox_Confirm) <> vbYes Then
+            Exit Sub
+        End If
+    End If
+    
+    '创建项目相关的文件
+    Kill ProjPath & ProjName & ".cpp"
+    Kill ProjPath & ProjName & ".myproj"
+    Err.Clear
+    Open ProjPath & ProjName & ".myproj" For Binary As #1                                               '创建工程文件
+        If Err.Number <> 0 Then
+            MsgBox Lang_CreateOptions_CreationFailure_1 & ProjPath & ProjName & ".myproj" & _
+                   Lang_CreateOptions_CreateProjectFailed, vbExclamation, Lang_Msgbox_Error
+            Close #1
+            Exit Sub
+        End If
+    Close #1
+    Open ProjPath & ProjName & ".cpp" For Binary As #1                                                  '创建cpp文件
+        If Err.Number <> 0 Then
+            MsgBox Lang_CreateOptions_CreationFailure_1 & ProjPath & ProjName & ".cpp" & _
+                   Lang_CreateOptions_CreateProjectFailed, vbExclamation, Lang_Msgbox_Error
+            Close #1
+            Exit Sub
+        End If
+    Close #1
+    
     '更新窗体状态
     frmMain.ProjectType = NewProjectType                                                                '设置工程类型
     Call frmMain.HideStartupPage                                                                        '隐藏启动界面
@@ -519,10 +557,8 @@ Private Sub cmdOK_Click()
     frmSolutionExplorer.SolutionTreeView.RemoveItem 0                                                   '清空树视图
     ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem(CurrentProject.ProjectName)               '添加项目
     ProjectNameTvItem = ParentItem                                                                      '记录工程名称对应的树视图列表项
-    ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem(Lang_CreateOptions_SourceFile, ParentItem)
-    frmSolutionExplorer.SolutionTreeView.ExpandItems frmSolutionExplorer.SolutionTreeView.GetParentItem(ParentItem), 2
     ParentItem = frmSolutionExplorer.SolutionTreeView.AddItem(ProjName & ".cpp", ParentItem)
-    frmSolutionExplorer.SolutionTreeView.ExpandItems frmSolutionExplorer.SolutionTreeView.GetParentItem(ParentItem), 2
+    frmSolutionExplorer.SolutionTreeView.ExpandItems ProjectNameTvItem, 2
     frmSolutionExplorer.SolutionTreeView.SelectItem ParentItem
     ReDim TvItemBinding(0)                                                                              '添加一个树视图列表项和文件序号的绑定
     TvItemBinding(0).FileIndex = 0                                                                      '设置绑定
@@ -629,9 +665,13 @@ Private Sub Form_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub Form_Load()
-    Me.Caption = Lang_CreateOptions_Caption                                                 '设置窗口标题
+    Me.Caption = Lang_CreateOptions_Caption                                 '设置窗口标题
     Me.labTip(0).Caption = Lang_CreateOptions_ProjectNameLabel
     Me.labTip(1).Caption = Lang_CreateOptions_ProjectFolderLabel
+    Me.labTip(3).Caption = Lang_CreateOptions_ProjectType
+    Me.TypeOption(1).Content = Lang_CreateOptions_TypeOption_1
+    Me.TypeOption(2).Content = Lang_CreateOptions_TypeOption_2
+    Me.TypeOption(3).Content = Lang_CreateOptions_TypeOption_3
     Me.chkIncludeStdio.Caption = Lang_CreateOptions_Include
     Me.chkMain.Caption = Lang_CreateOptions_Main_NoArgs
     Me.chkMainArgs.Caption = Lang_CreateOptions_Main_Args
@@ -643,7 +683,7 @@ Private Sub Form_Load()
     
     frmMain.Enabled = False
     frmMain.DarkWindowBorderSizer.Bind = False
-    SetWindowPos Me.hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE
+    SetWindowPos Me.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE
     
     '获取“我的文档”路径作为默认路径
     Dim MyDocPath(MAX_PATH) As Byte
