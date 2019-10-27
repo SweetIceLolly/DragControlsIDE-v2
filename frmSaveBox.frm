@@ -183,7 +183,7 @@ Private Sub cmdYes_Click()
     Dim i           As Long
     Dim lstIndex    As Long
     
-    SetWindowPos Me.hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE  '取消窗口置顶，防止遮挡对话框
+    SetWindowPos Me.hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE  '取消窗口置顶，防止遮挡对话框
     bSaveFlag = 1                                                               '先标记为保存失败
     For lstIndex = 0 To Me.lstFiles.ListCount - 1                               '保存所有勾选了的文件
         If Me.lstFiles.Selected(lstIndex) Then
@@ -197,11 +197,12 @@ Private Sub cmdYes_Click()
                     For i = 0 To UBound(.Files)                                                 '复制所有代码文件信息
                         With .Files(i)
                             .FileName = GetFileName(CurrentProject.Files(i).FilePath)
-                            .IsHeaderFile = CurrentProject.Files(i).IsHeaderFile
                             .PrevLine = CurrentProject.Files(i).PrevLine
                             .Breakpoints = CurrentProject.Files(i).Breakpoints
+                            .FolderIndex = CurrentProject.Files(i).FolderIndex
                         End With
                     Next i
+                    .Folders = CurrentProject.Folders                                           '复制所有文件夹信息
                 End With
                 Open ProjectFilePath For Binary As #1                                       '保存工程文件
                 If Err.Number <> 0 Then                                                     '保存文件不能继续

@@ -462,26 +462,11 @@ Private Sub cmdOK_Click()
         Me.edProjectName.SetFocus
         Exit Sub
     End If
-    If ProjName = "." Or ProjName = ".." Then                                                           '检查名称是否为“.”或者“..”
+    If Not CheckInvalidFileName(ProjName) Then                                                          '检查工程名称是否非法
         NoSkinMsgBox Lang_CreateOptions_InvalidProjectName & ProjName, vbExclamation, Lang_Msgbox_Error
         Me.edProjectName.SetFocus
         Exit Sub
     End If
-    
-    '检查非法字符
-    Dim InvalidChars    As String                                                                       '非法字符
-    Dim i               As Integer, j               As Integer
-    
-    InvalidChars = """/\:?<>*|"
-    For i = 1 To Len(ProjName)                                                                          '检查非法字符
-        For j = 1 To Len(InvalidChars)
-            If Mid(ProjName, i, 1) = Mid(InvalidChars, i, 1) Then
-                NoSkinMsgBox Lang_CreateOptions_InvalidProjectName & ProjName, vbExclamation, Lang_Msgbox_Error
-                Me.edProjectName.SetFocus
-                Exit Sub
-            End If
-        Next j
-    Next i
     
     '检测路径
     If Dir(Me.edPath.Text, vbDirectory Or vbNormal Or vbReadOnly Or vbHidden Or vbSystem) = "" Then     '检测到路径不存在
@@ -563,6 +548,7 @@ Private Sub cmdOK_Click()
     ReDim TvItemBinding(0)                                                                              '添加一个树视图列表项和文件序号的绑定
     TvItemBinding(0).FileIndex = 0                                                                      '设置绑定
     TvItemBinding(0).TVITEM = ParentItem
+    TvItemBinding(0).IsFolder = False
     
     CodeStartLn = 1
     If Me.chkIncludeStdio.Value = True Then                                                             '#include <stdio.h>
@@ -592,11 +578,12 @@ Private Sub cmdOK_Click()
          CodeStartLn = CodeStartLn + 3
     End If
     With CurrentProject                                                                                 '设置工程信息
+        ReDim .Folders(0)
         ReDim .Files(0)
         With .Files(0)
             .FilePath = ProjPath & ProjName & ".cpp"
+            .FolderIndex = 0
             .Changed = True
-            .IsHeaderFile = False
             .PrevLine = CodeStartLn
             ReDim .Breakpoints(0)
         End With

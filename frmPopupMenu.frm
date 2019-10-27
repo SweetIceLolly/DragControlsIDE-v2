@@ -204,6 +204,7 @@ Private Sub PopupNewMenu(LabelIndex As Integer)
         .Left = Me.Left + Me.labItem(LabelIndex).Width - 15
         .Top = Me.Top + Me.labItem(LabelIndex).Top - ITEM_DISTANCE
         .AddItems BoundCtl, Menus(CurrSubMenuID(LabelIndex + 1)).SubMenuID
+        .NoWhitelist = True
         .Show
         If IsUsingKeyboard Then
             Call .Form_KeyDown(vbKeyDown, 0)

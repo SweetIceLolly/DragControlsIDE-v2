@@ -952,7 +952,7 @@ Private Sub mnuRun_Click()
         "cd """ & Left(GccPath, InStrRev(GccPath, "\")) & """ && " & _
         """" & GccPath & """ -static -g -o """ & ExePath & """"
     For i = 0 To UBound(CurrentProject.Files)
-        If Not CurrentProject.Files(i).IsHeaderFile Then
+        If Not Right(CurrentProject.Files(i).FilePath, 2) = ".h" And Not Right(CurrentProject.Files(i).FilePath, 4) = ".hpp" Then
             GccCmdLine = GccCmdLine & " """ & CurrentProject.Files(i).FilePath & """"
         End If
     Next i
@@ -1422,6 +1422,15 @@ Private Sub tmrCheckProcess_Timer()
     Dim ExitCode                    As Long                                         '进程退出码
     Dim i                           As Long
     
+    If Not ProcessExists(GdbPipe.hProcess) Then
+        frmOutput.OutputLog "gdb进程" & GdbPipe.dwProcessId & "(" & Hex(GdbPipe.dwProcessId) & ") " & "意外退出！调试被迫结束。"
+        frmOutput.OutputLog "将试图强制结束调试进程" & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ")"
+        If TerminateProcess(DebugProgramInfo.hProcess, 0) = 0 Then
+            frmOutput.OutputLog "结束进程" & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ") " & "失败！请自行结束该进程。"
+        End If
+        Call ProcessExitedHandler(0)
+        Exit Sub
+    End If
     If GdbPipe.DosOutput(PipeOutput, "(gdb) ") = 1 Then                             '获取gdb是否有新消息
         PipeOutputLine = Split(PipeOutput, vbCrLf)                                      '分割出gdb输出的每一行
         For i = 0 To UBound(PipeOutputLine)                                             '遍历输出的每一行

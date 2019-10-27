@@ -48,6 +48,11 @@ Public Function TreeViewWindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal
         Case WM_KEYUP
             Call frmSolutionExplorer.SolutionTreeView_KeyUp(wParam)
         
+        Case WM_CTLCOLOREDIT                                                    '设置文本框颜色为白底黑字
+            SetTextColor wParam, ByVal 0                                            '黑色文本
+            TreeViewWindowProc = GetStockObject(WHITE_BRUSH)                        '要返回用来绘制背景的刷子
+            Exit Function
+        
         Case WM_DESTROY
             SetWindowLongA hwnd, GWL_WNDPROC, GetPropA(hwnd, "PrevWndProc")
         
@@ -137,9 +142,31 @@ End Function
 '.          wParam, lParam: 消息的参数
 '返回值:    消息处理返回值
 Public Function TreeViewEditBoxWindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+    Static SelAllByCtrlA   As Boolean                               '是否按下Ctrl+A来全选文本
+    
     If uMsg = EM_SETSEL Then                                        '拦截选择文本消息，修改文本选择的位置
-        wParam = 0                                                      '从文本开头选择
-        lParam = GetPropA(hwnd, "DotPos")                               '选择到“.”的位置
+        If Not SelAllByCtrlA Then                                       '一般的，用户开始修改文件名的时候就选择到“.”的位置
+            wParam = 0                                                      '从文本开头选择
+            lParam = GetPropA(hwnd, "DotPos")                               '选择到“.”的位置
+        Else                                                            '特殊的，用户按下Ctrl+A的时候就全选文本
+            SelAllByCtrlA = False
+        End If
+    ElseIf uMsg = WM_KEYDOWN Then                                   '拦截按键按下消息，防止按下方向键的时候文本框失去焦点
+        Select Case wParam
+            Case VK_A                                                   '按下Ctrl+A的时候全选文本
+                If GetAsyncKeyState(VK_CONTROL) <> 0 Then
+                    SelAllByCtrlA = True
+                    SendMessageA hwnd, EM_SETSEL, ByVal 0, ByVal -1
+                End If
+            
+            Case VK_LEFT, VK_RIGHT, VK_DOWN, VK_UP                      '按下方向键的时候防止控件失焦
+                TreeViewEditBoxWindowProc = CallWindowProc(GetPropA(hwnd, "PrevWndProc"), hwnd, uMsg, wParam, lParam)
+            
+            Case Else
+                TreeViewEditBoxWindowProc = 0
+            
+        End Select
+        Exit Function
     End If
     TreeViewEditBoxWindowProc = CallWindowProc(GetPropA(hwnd, "PrevWndProc"), hwnd, uMsg, wParam, lParam)
 End Function

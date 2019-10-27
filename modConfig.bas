@@ -20,21 +20,27 @@ Public Type GdbBreakpointMapInfo
     BreakpointIndex                             As Long                                     '对应的断点序号
 End Type
 
+'定义文件夹信息结构
+Public Type ProjectFolderStruct
+    FolderPath                                  As String                                   '项目路径（ProjectFolderPath）下文件夹的相对路径（不以“\”结尾）
+    ParentFolder                                As Long                                     '母文件夹在CurrentProject.Folders的索引（0代表没有）
+End Type
+
 '定义代码文件信息结构
 Public Type SourceFileStruct
-    IsHeaderFile                                As Boolean                                  '是否为头文件
     PrevLine                                    As Long                                     '保存时处在的行号
     Changed                                     As Boolean                                  '文件是否被更改
     FilePath                                    As String                                   '文件路径
+    FolderIndex                                 As Long                                     '所在目录在CurrentProject.Folders的索引
     TargetWindow                                As frmCodeWindow                            '对应的代码窗体，每次运行的时候都会不一样
     Breakpoints()                               As BreakpointInfo                           '所有断点信息
 End Type
 
 '定义保存专用的代码文件信息结构
 Public Type SourceFileStruct_Save
-    IsHeaderFile                                As Boolean                                  '是否为头文件
     PrevLine                                    As Long                                     '保存时处在的行号
     FileName                                    As String                                   '文件名称（即相对路径）
+    FolderIndex                                 As Long                                     '所在目录在CurrentProject.Folders的索引
     Breakpoints()                               As BreakpointInfo                           '所有断点信息
 End Type
 
@@ -44,6 +50,7 @@ Public Type ProjectFileStruct
     ProjectType                                 As Integer                                  '工程类型。请见frmMain的ProjectType变量的说明
     Changed                                     As Boolean                                  '文件是否被更改
     Files()                                     As SourceFileStruct                         '工程包括的所有文件
+    Folders()                                   As ProjectFolderStruct                      '工程包括的所有文件夹
 End Type
 
 '定义保存专用的工程文件结构
@@ -51,12 +58,14 @@ Public Type ProjectFileStruct_Save
     ProjectName                                 As String                                   '工程名称
     ProjectType                                 As Integer                                  '工程类型。请见frmMain的ProjectType变量的说明
     Files()                                     As SourceFileStruct_Save                    '工程包括的所有文件
+    Folders()                                   As ProjectFolderStruct                      '工程包括的所有文件夹（跳过索引0）
 End Type
 
-'定义树视图列表项与文件序号绑定的结构
+'定义树视图列表项与文件序号（即ProjectFileStruct.Files的索引）绑定的结构
 Public Type TvItemToFileIndex
     TVITEM                                      As Long                                     '文件序号对应的树视图列表项
-    FileIndex                                   As Long                                     '树视图列表项对应的文件序号
+    FileIndex                                   As Long                                     '树视图列表项对应的文件序号或者文件夹索引
+    IsFolder                                    As Boolean                                  '对应的项目是否为文件夹
 End Type
 
 '===================================================================
@@ -208,6 +217,31 @@ Public Function GetFileName(strPath As String) As String
     Dim tmp()               As String
     tmp = Split(strPath, "\")
     GetFileName = tmp(UBound(tmp))
+End Function
+
+'描述:      检查非法文件名
+'参数:      strName: 需要被检查的文件名
+'返回值:    True: 合法的文件名; False: 非法的文件名
+Public Function CheckInvalidFileName(strName As String) As Boolean
+    Dim InvalidChars        As String                                                       '非法字符
+    Dim i                   As Integer, j               As Integer
+    
+    If strName = "." Or strName = ".." Then                                                 '检查名称是否为“.”或者“..”
+        CheckInvalidFileName = False
+        Exit Function
+    End If
+    
+    InvalidChars = """/\:?<>*|"
+    For i = 1 To Len(strName)                                                               '检查非法字符
+        For j = 1 To Len(InvalidChars)
+            If Mid(strName, i, 1) = Mid(InvalidChars, j, 1) Then
+                CheckInvalidFileName = False
+                Exit Function
+            End If
+        Next j
+    Next i
+    
+    CheckInvalidFileName = True
 End Function
 
 '描述:      创建一个新的代码窗口，并把它添加到CodeWindows中

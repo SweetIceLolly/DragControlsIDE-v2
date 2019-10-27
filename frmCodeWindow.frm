@@ -249,13 +249,13 @@ Private Sub Form_Load()
     Dim lpObj               As Long                                                                                     '指向窗口自身的物件指针
     Set WindowObj = Me
     lpObj = ObjPtr(WindowObj)                                                                                           '获取指向窗口自身的物件指针
-    SetPropA Me.hWnd, "WindowObj", lpObj                                                                                '记录窗口的物件地址，供子类化卸载窗体用
+    SetPropA Me.hwnd, "WindowObj", lpObj                                                                                '记录窗口的物件地址，供子类化卸载窗体用
     'SetPropA Me.hWnd, "PrevWndProc", SetWindowLongA(Me.hWnd, GWL_WNDPROC, AddressOf MainWindowMaximizeCloseFixProc)    '[ToDo]
 
     '设置代码框的子类化，使其重绘的时候能够重绘断点
     Dim RealSyntaxEdit      As Long                                                                                     '代码框真实的hWnd
     
-    RealSyntaxEdit = FindWindowExA(Me.SyntaxEdit.hWnd, 0, "CodejockSyntaxEditor", vbNullString)                         '代码框其实只是一个壳，里面的那个窗口才是真正的代码框窗口
+    RealSyntaxEdit = FindWindowExA(Me.SyntaxEdit.hwnd, 0, "CodejockSyntaxEditor", vbNullString)                         '代码框其实只是一个壳，里面的那个窗口才是真正的代码框窗口
     SetPropA RealSyntaxEdit, "FileIndex", FileIndex
     'SetPropA RealSyntaxEdit, "PrevWndProc", SetWindowLongA(RealSyntaxEdit, GWL_WNDPROC, AddressOf EditBreakpointsRedrawProc)    '[ToDo]
 End Sub
@@ -263,8 +263,8 @@ End Sub
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     If IsExiting Then
         '恢复窗口子类化
-        SetWindowLongA Me.hWnd, GWL_WNDPROC, GetPropA(Me.hWnd, "PrevWndProc")
-        SetWindowLongA Me.SyntaxEdit.hWnd, GWL_WNDPROC, GetPropA(Me.SyntaxEdit.hWnd, "PrevWndProc")
+        SetWindowLongA Me.hwnd, GWL_WNDPROC, GetPropA(Me.hwnd, "PrevWndProc")
+        SetWindowLongA Me.SyntaxEdit.hwnd, GWL_WNDPROC, GetPropA(Me.SyntaxEdit.hwnd, "PrevWndProc")
     Else
         Cancel = 1
         Me.Hide
