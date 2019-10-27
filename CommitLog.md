@@ -1,5 +1,25 @@
 【日志】
 
+# 2019.10.27
+
+把检查文件名是否合法的过程单独写成一个函数`CheckInvalidFileName`，因为不同的位置（比如重命名、创建文件）会用到这个过程。
+
+结构更改：新增文件夹信息结构`ProjectFolderStruct`；为代码文件信息结构`SourceFileStruct`添加`FolderIndex`属性，移除`IsHeaderFile`属性；为工程文件结构`ProjectFileStruct`添加`Folders()`数组，用来记录工程里面的所有文件夹；为树视图列表项绑定结构`TvItemToFileIndex`添加`IsFolder`属性，用来标记树视图列表项对应的项目是否为文件夹。
+
+frmMain的mnuRun_Click过程中判断文件是否为头文件的思路由检查文件的`IsHeaderFile`属性改为检查文件的扩展名是否为h或者hpp。
+
+frmMain的tmrCheckProcess_Timer过程中添加了检测并处理gdb进程意外退出的代码。
+
+修改frmPopupMenu的PopupNewMenu过程，把新窗体的NoWhiteList属性设置为True，修复了Pane浮动窗口中弹出菜单的二级菜单在失焦后不会自动隐藏的Bug。
+
+修改modTreeViewProc中树视图控件的子类化，处理其WM_CTLCOLOREDIT消息，让树视图编辑标签时的文本框的颜色更加友好。
+
+修改modTreeViewProc中树视图的文本框的子类化，处理其WM_KEYDOWN消息，分别处理了方向键和Ctrl+A快捷键。
+
+为工程资源管理器的树视图添加上下文菜单，并实现了添加文件夹、添加文件、重命名文件夹、重命名文件、用文件浏览器打开路径等过程。
+
+为工程资源管理器的树视图添加菜单键（VK_APPS）的响应。（虽然可能根本没人会发现...）
+
 # 2019.10.21
 
 抱歉这么久没有commit，因为这段时间真的好忙。
