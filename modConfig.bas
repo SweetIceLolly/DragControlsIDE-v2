@@ -162,6 +162,8 @@ Public Lang_Main_Debug_Returned                 As String
 Public Lang_SolutionExplorer_Caption            As String
 Public Lang_SolutionExplorer_RenameFailure_1    As String
 Public Lang_SolutionExplorer_RenameFailure_2    As String
+Public Lang_SolutionExplorer_NewFolderName      As String
+Public Lang_SolutionExplorer_InvalidName        As String
 
 Public Lang_SaveBox_Caption                     As String
 Public Lang_SaveBox_Yes                         As String
@@ -271,6 +273,7 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     If LoadMenuTextOnly Then
         Dim id          As Long
         
+        '主窗口菜单
         For id = 0 To 69
             frmMain.DarkMenu.MenuText(id) = LoadResString(ResID + id)
             If Err.Number <> 0 Then
@@ -278,6 +281,24 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
                 Exit Function
             End If
         Next id
+        
+        '工程资源管理器弹出菜单1
+        For id = 1 To 4
+            frmSolutionExplorer.mnuItemPopup.MenuText(id) = LoadResString(ResID + 99 + id)
+            If Err.Number <> 0 Then
+                LoadLanguage = False
+                Exit Function
+            End If
+        Next id
+        
+        For id = 1 To 13
+            frmSolutionExplorer.mnuProjectItemPopup.MenuText(id) = LoadResString(ResID + 199 + id)
+            If Err.Number <> 0 Then
+                LoadLanguage = False
+                Exit Function
+            End If
+        Next id
+        
         Exit Function
     End If
     
@@ -372,6 +393,8 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_SolutionExplorer_Caption = "工程资源管理器"
     Lang_SolutionExplorer_RenameFailure_1 = "为文件"
     Lang_SolutionExplorer_RenameFailure_2 = " 重命名失败: "
+    Lang_SolutionExplorer_NewFolderName = "新文件夹"
+    Lang_SolutionExplorer_InvalidName = "无效的名称！"
     
     Lang_SaveBox_Caption = "保存"
     Lang_SaveBox_Yes = "是"
@@ -402,6 +425,6 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_CallStack_Retrieving_Caption = "调用堆栈 - 正在获取..."
     Lang_CallStack_Args = "参数"
     Lang_CallStack_Tooltip_Title = "调用堆栈信息:"
-    Lang_CallStack_NoArg = "<无参数>"
+    Lang_CallStack_NoArg = "<无>"
 End Function
 

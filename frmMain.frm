@@ -702,22 +702,14 @@ Begin VB.Form frmMain
       TabIndex        =   1
       Top             =   0
       Width           =   16845
-      _ExtentX        =   29713
-      _ExtentY        =   873
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Microsoft YaHei UI"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Caption         =   "拖控件大法"
-      MaxButtonVisible=   0   'False
-      MinButtonVisible=   0   'False
-      BindCaption     =   -1  'True
-      Picture         =   "frmMain.frx":1FC6C
+      _extentx        =   29713
+      _extenty        =   873
+      font            =   "frmMain.frx":1FC6C
+      caption         =   "拖控件大法"
+      maxbuttonvisible=   0   'False
+      minbuttonvisible=   0   'False
+      bindcaption     =   -1  'True
+      picture         =   "frmMain.frx":1FCA0
    End
    Begin XtremeSkinFramework.SkinFramework SkinFramework 
       Left            =   14160
@@ -883,6 +875,7 @@ Private Sub mnuNewProject_Click()
         Set NewCreateWindow = Nothing
     End If
     Set NewCreateWindow = New frmCreateOptions
+    Unload frmCreate
     Me.Enabled = False
     Me.DarkWindowBorderSizer.Bind = False
     SetParent NewCreateWindow.hwnd, 0

@@ -280,7 +280,7 @@ Private Sub mnuCreateFolder_Click()
     
     IsCreatingFolder = True                                                         '标记为正在创建文件夹
     IsCreatingFile = False
-    CreatingDefaultName = "新文件夹"                             'todo 设置默认名称
+    CreatingDefaultName = Lang_SolutionExplorer_NewFolderName
     hTreeItem = Me.SolutionTreeView.GetSelectedItem()
     CreatedTreeItem = Me.SolutionTreeView.AddItem(CreatingDefaultName, hTreeItem)   '创建文件夹节点
     Me.SolutionTreeView.ExpandItems hTreeItem, 2
@@ -306,7 +306,7 @@ End Sub
 Private Sub Form_Load()
     Me.Caption = Lang_SolutionExplorer_Caption
     
-    'ToDo: Set context menu text
+    
 End Sub
 
 Private Sub Form_Resize()
@@ -468,7 +468,7 @@ Public Sub SolutionTreeView_EndLabelEdit(ByVal hTreeItem As Long, NewText As Str
             IsCreatingFile = False
             Me.SolutionTreeView.RemoveItem CreatedTreeItem
         End If
-        NoSkinMsgBox "无效的名称！", vbExclamation, Lang_Msgbox_Error       'todo
+        NoSkinMsgBox Lang_SolutionExplorer_InvalidName, vbExclamation, Lang_Msgbox_Error
         bCancel = True
         Exit Sub
     End If

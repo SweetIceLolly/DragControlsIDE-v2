@@ -179,6 +179,7 @@ Dim PrevX           As Single, _
     PrevY           As Single
 
 Public NoWhitelist  As Boolean          '如果从Pane上弹出菜单，第一次失焦会允许菜单不消失，第二次就关闭菜单
+Dim KeyBindingList(vbKeyA To vbKeyZ)    As Integer      '如果菜单项里面有“&”，就把“&”前面的字母和菜单控件Index绑定起来，以实现键盘快捷键（实际对应的Index是该数组的值-1）
 
 Public Sub CloseMenu()
     On Error Resume Next
@@ -248,6 +249,7 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
     Next i
     
     HasCheckBox = False
+    ZeroMemory KeyBindingList(vbKeyA), ByVal 52                             '清空按键绑定列表（52 = 26 * sizeof(Integer)）
     For i = 1 To UBound(CurrSubMenuID)
         If Menus(CurrSubMenuID(i)).Visible Then
             If i > 1 Then
@@ -263,6 +265,19 @@ Public Sub AddItems(FromControl As DarkMenu, FromArray() As Integer, Optional Co
                 Me.labItem(i - 1).Top = Me.labItem(i - 2).Top + Me.labItem(i - 2).Height + ITEM_DISTANCE '+ ITEM_DISTANCE / 2 - Me.labItem(i - 2).Height / 2
                 Me.labItem(i - 2).Height = Me.labItem(i - 1).Top - Me.labItem(i - 2).Top
             End If
+            
+            '检查菜单字串里面是否有“&”
+            Dim CharPos     As Integer
+            Dim CharValue   As Integer
+            CharPos = InStr(Menus(CurrSubMenuID(i)).MenuText, "&")
+            If CharPos > 1 Then                                             '如果能找到“&”，并且不在第一个字符
+                CharValue = Asc(Mid(Menus(CurrSubMenuID(i)).MenuText, CharPos + 1, 1))
+                CharValue = CharValue And (Not 32)                              '把小写字母的Ascii码转换成大写的Ascii码
+                If CharValue >= vbKeyA And CharValue <= vbKeyZ Then             '如果“&”前面的字符在字母表范围内，就把菜单项和对应的按键绑定起来
+                    KeyBindingList(CharValue) = i
+                End If
+            End If
+            
             If Menus(CurrSubMenuID(i)).CheckBox = True And Menus(CurrSubMenuID(i)).MenuText <> "-" Then
                 HasCheckBox = True
                 If nCheckBoxes > 0 Then
@@ -487,8 +502,14 @@ Public Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
         
         Case vbKeyEscape
             BoundCtl.HideMenu True
-        
     End Select
+    
+    '响应快捷键
+    If KeyCode >= vbKeyA And KeyCode <= vbKeyZ Then
+        If KeyBindingList(KeyCode) <> 0 Then
+            Call labItem_MouseUp(KeyBindingList(KeyCode) - 1, 1, 0, 0, 0)
+        End If
+    End If
 End Sub
 
 Private Sub Form_Load()

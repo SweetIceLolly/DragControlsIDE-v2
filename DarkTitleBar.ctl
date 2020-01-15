@@ -184,7 +184,7 @@ Option Explicit
 'Focused:       241, 241, 213
 'No focus:      117, 153, 136
 
-Private Declare Function GetWindowPlacement Lib "user32" (ByVal hWnd As Long, lpwndpl As WINDOWPLACEMENT) As Long
+Private Declare Function GetWindowPlacement Lib "user32" (ByVal hwnd As Long, lpwndpl As WINDOWPLACEMENT) As Long
 
 Private Const SZ_MARGIN = 30
 
@@ -203,13 +203,13 @@ Private Sub cmdMax_Click()
     On Error Resume Next
     Dim wp          As WINDOWPLACEMENT
     
-    GetWindowPlacement UserControl.Parent.hWnd, wp
+    GetWindowPlacement UserControl.Parent.hwnd, wp
     If wp.ShowCmd = SW_MAXIMIZE Then
-        ShowWindow UserControl.Parent.hWnd, SW_RESTORE
+        ShowWindow UserControl.Parent.hwnd, SW_RESTORE
         UserControl.cmdMax.ToolTipText = Lang_TitleBar_Max
         Set UserControl.cmdMax.Picture = UserControl.imgMax.Picture
     Else
-        ShowWindow UserControl.Parent.hWnd, SW_MAXIMIZE
+        ShowWindow UserControl.Parent.hwnd, SW_MAXIMIZE
         UserControl.cmdMax.ToolTipText = Lang_TitleBar_Restore
         Set UserControl.cmdMax.Picture = UserControl.imgRestore.Picture
     End If
@@ -217,7 +217,7 @@ End Sub
 
 Private Sub cmdMin_Click()
     On Error Resume Next
-    ShowWindow UserControl.Parent.hWnd, SW_MINIMIZE
+    ShowWindow UserControl.Parent.hwnd, SW_MINIMIZE
 End Sub
 
 Private Sub imgIcon_DblClick()
@@ -227,9 +227,9 @@ End Sub
 
 Private Sub imgIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = vbLeftButton Or Button = vbRightButton Then
-        Dim wp  As WINDOWPLACEMENT
+        Dim wp      As WINDOWPLACEMENT
     
-        GetWindowPlacement UserControl.Parent.hWnd, wp
+        GetWindowPlacement UserControl.Parent.hwnd, wp
         If wp.ShowCmd = SW_MAXIMIZE Then
             UserControl.mnuPopup.MenuEnabled(1) = True
             UserControl.mnuPopup.MenuEnabled(2) = False
@@ -238,7 +238,7 @@ Private Sub imgIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, 
             UserControl.mnuPopup.MenuEnabled(2) = True
         End If
         
-        UserControl.mnuPopup.PopupMenu 0
+        UserControl.mnuPopup.PopupMenu 0, UserControl.Parent.Left + X, UserControl.Parent.Top + UserControl.Height
     End If
 End Sub
 
@@ -277,7 +277,7 @@ Private Sub tmrCheckFocus_Timer()
         UserControl.tmrCheckFocus.Enabled = False
     End If
     UserControl.Width = UserControl.Parent.ScaleWidth
-    If GetForegroundWindow() = UserControl.Parent.hWnd Then
+    If GetForegroundWindow() = UserControl.Parent.hwnd Then
         UserControl.labTip.ForeColor = RGB(218, 218, 232)
     Else
         UserControl.labTip.ForeColor = RGB(188, 188, 188)
@@ -298,7 +298,7 @@ Private Sub UserControl_MouseDown(Button As Integer, Shift As Integer, X As Sing
     
     If Button = vbLeftButton Then
         ReleaseCapture
-        SendMessageA UserControl.Parent.hWnd, WM_NCLBUTTONDOWN, HTCAPTION, 0
+        SendMessageA UserControl.Parent.hwnd, WM_NCLBUTTONDOWN, HTCAPTION, 0
     ElseIf Button = vbRightButton Then
         Call imgIcon_MouseDown(1, 0, X, Y)
     End If
@@ -336,7 +336,7 @@ Private Sub UserControl_Resize()
     '-------------------------------------------------
     Dim wp  As WINDOWPLACEMENT
     
-    GetWindowPlacement UserControl.Parent.hWnd, wp
+    GetWindowPlacement UserControl.Parent.hwnd, wp
     If wp.ShowCmd = SW_MAXIMIZE Then
         UserControl.cmdMax.ToolTipText = Lang_TitleBar_Restore
         Set UserControl.cmdMax.Picture = UserControl.imgRestore.Picture
