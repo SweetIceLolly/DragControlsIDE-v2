@@ -135,6 +135,8 @@ Public Lang_Main_StartingGcc                    As String
 Public Lang_Main_GccStartFailed                 As String
 Public Lang_Main_CompileSucceed                 As String
 Public Lang_Main_CompileFailed                  As String
+Public Lang_Main_Run_Menu_Start                 As String
+Public Lang_Main_Run_Menu_Continue              As String
 Public Lang_Main_RunFailed                      As String
 Public Lang_Main_RunSucceed                     As String
 Public Lang_Main_GdbFailed                      As String
@@ -195,6 +197,15 @@ Public Lang_CallStack_Retrieving_Caption        As String
 Public Lang_CallStack_Args                      As String
 Public Lang_CallStack_Tooltip_Title             As String
 Public Lang_CallStack_NoArg                     As String
+
+Public Lang_ErrorList_Errors                    As String
+Public Lang_ErrorList_Warnings                  As String
+Public Lang_ErrorList_Info                      As String
+Public Lang_ErrorList_Description               As String
+Public Lang_ErrorList_File                      As String
+Public Lang_ErrorList_Line                      As String
+Public Lang_ErrorList_Column                    As String
+Public Lang_ErrorList_Tooltip_Title             As String
 '===================================================================
 
 Public CurrentProject                           As ProjectFileStruct                        '当前工程的信息
@@ -368,6 +379,8 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_Main_GccStartFailed = "无法启动g++: "
     Lang_Main_CompileSucceed = "编译完成: EXE路径: "
     Lang_Main_CompileFailed = "编译失败！"
+    Lang_Main_Run_Menu_Start = LoadResString(ResID + 52)
+    Lang_Main_Run_Menu_Continue = "继续运行 (&R)"
     Lang_Main_RunFailed = "无法运行 "
     Lang_Main_RunSucceed = "创建待调试进程: 进程ID: "
     Lang_Main_GdbFailed = "创建gdb调试管道失败！无法进行调试。"
@@ -387,7 +400,7 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_Main_RunningInfo_1 = "进程"
     Lang_Main_RunningInfo_2 = "正在运行"
     Lang_Main_Debug_OpenSourceFailure = "无法打开代码文件: "
-    Lang_Main_Debug_BreakpointHit = "断电命中于"
+    Lang_Main_Debug_BreakpointHit = "断点命中于"
     Lang_Main_Debug_Returned = "程序退出并返回: "
     
     Lang_SolutionExplorer_Caption = "工程资源管理器"
@@ -426,5 +439,14 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_CallStack_Args = "参数"
     Lang_CallStack_Tooltip_Title = "调用堆栈信息:"
     Lang_CallStack_NoArg = "<无>"
+    
+    Lang_ErrorList_Errors = " 错误"
+    Lang_ErrorList_Warnings = " 警告"
+    Lang_ErrorList_Info = " 消息"
+    Lang_ErrorList_Description = "描述"
+    Lang_ErrorList_File = "文件"
+    Lang_ErrorList_Line = "行"
+    Lang_ErrorList_Column = "列"
+    Lang_ErrorList_Tooltip_Title = "错误信息"
 End Function
 

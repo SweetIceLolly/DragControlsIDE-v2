@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "Image.ocx"
+Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "image.ocx"
 Begin VB.Form frmPopupMenu 
    BackColor       =   &H001C1B1B&
    BorderStyle     =   0  'None
@@ -507,7 +507,9 @@ Public Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
     'ÏìÓ¦¿ì½Ý¼ü
     If KeyCode >= vbKeyA And KeyCode <= vbKeyZ Then
         If KeyBindingList(KeyCode) <> 0 Then
-            Call labItem_MouseUp(KeyBindingList(KeyCode) - 1, 1, 0, 0, 0)
+            If Menus(KeyBindingList(KeyCode) + 1).Enabled Then
+                Call labItem_MouseUp(KeyBindingList(KeyCode) - 1, 1, 0, 0, 0)
+            End If
         End If
     End If
 End Sub

@@ -438,7 +438,7 @@ Private Sub BracketsParser(ParentItem As Long, OutputString As String)
         tmpStr = SplitTmp(0) & "." & tmpStr                                                     '（[ParentVar.]*, *, *）
         VarOutputLength = StringParser(NewVarNodesIndex, tmpStr)
         If Len(tmpStr) > VarOutputLength + 2 Then
-            tmpStr = Right(tmpStr, Len(tmpStr) - VarOutputLength - 2)                               '2 = Len(", ")
+            tmpStr = Right(tmpStr, Len(tmpStr) - VarOutputLength - 1)                               '2 = Len(", ")
         Else
             Exit Do
         End If
@@ -526,7 +526,7 @@ Private Sub Form_Load()
     SetPropA Me.lvLocals.ListViewHwnd, "PrevWndProc", SetWindowLongA(Me.lvLocals.ListViewHwnd, GWL_WNDPROC, AddressOf LocalsListViewNodesRedrawProc)
     
     '把图片框放到ListView里
-    SetParent Me.picSelMargin.hWnd, Me.lvLocals.ListViewHwnd
+    SetParent Me.picSelMargin.hwnd, Me.lvLocals.ListViewHwnd
     Me.picSelMargin.Top = ColumnHeaderHeight
     
     '计算图片框的宽度相当于多少个空格

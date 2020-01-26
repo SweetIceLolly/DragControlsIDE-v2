@@ -236,42 +236,18 @@ End Sub
 
 Private Sub lvCallStack_DoubleClick(iItem As Long, iSubItem As Long, X As Long, Y As Long)
     On Error Resume Next
-    Dim i                   As Long
     
     If CallStackInfo(iItem).File <> "" Then                                                 '如果有对应的文件
-        For i = 0 To UBound(CurrentProject.Files)                                               '尝试在工程的文件中查找对应的文件
-            If CurrentProject.Files(i).FilePath = CallStackInfo(iItem).File Then                    '查找到对应的文件
-                If CurrentProject.Files(i).TargetWindow Is Nothing Then                              '如果有对应的代码窗口就切换过去
-                    Dim NewCodeWindow   As frmCodeWindow
-                    Dim FileData        As String
-                    Dim tmpData         As String
-                    
-                    Set NewCodeWindow = CreateNewCodeWindow(i)                                              '创建新的代码窗体并设置绑定的文件序号
-                    NewCodeWindow.Caption = GetFileName(CallStackInfo(iItem).File)
-                    
-                    Err.Clear
-                    Open CallStackInfo(iItem).File For Input As #1                                          '尝试打开对应的代码文件
-                        If Err.Number <> 0 Then
-                            Close #1
-                            NoSkinMsgBox Lang_Main_Debug_OpenSourceFailure & CallStackInfo(iItem).File, vbExclamation, Lang_Msgbox_Error
-                        Else
-                            Do While Not EOF(1)
-                                Line Input #1, tmpData
-                                FileData = FileData & tmpData & vbCrLf
-                            Loop
-                        End If
-                    Close #1
-                    
-                    frmMain.TabBar.AddForm NewCodeWindow
-                Else                                                                                    '没有的话就创建一个新的代码窗口
-                    frmMain.TabBar.SwitchToByForm CurrentProject.Files(i).TargetWindow
-                End If
-                
-                CurrentProject.Files(i).TargetWindow.SyntaxEdit.CurrPos.Row = CallStackInfo(iItem).Line
-                CurrentProject.Files(i).TargetWindow.SyntaxEdit.SetFocus
-                Exit Sub
-            End If
-        Next i
+        Dim NewCodeWindow   As frmCodeWindow
+        
+        '切换到对应的窗口
+        Set NewCodeWindow = frmMain.ShowCodeWindow(, CallStackInfo(iItem).File)
+        If NewCodeWindow Is Nothing Then
+            NoSkinMsgBox Lang_Main_Debug_OpenSourceFailure & CallStackInfo(iItem).File, vbExclamation, Lang_Msgbox_Error
+        Else
+            NewCodeWindow.SyntaxEdit.CurrPos.Row = CallStackInfo(iItem).Line
+            NewCodeWindow.SyntaxEdit.SetFocus
+        End If
     End If
 End Sub
 

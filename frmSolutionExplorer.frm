@@ -305,8 +305,6 @@ End Sub
 
 Private Sub Form_Load()
     Me.Caption = Lang_SolutionExplorer_Caption
-    
-    
 End Sub
 
 Private Sub Form_Resize()
@@ -424,15 +422,14 @@ Public Sub SolutionTreeView_DoubleClick(ByVal Button As Long, ByVal Shift As Lon
                 Me.SolutionTreeView.ExpandItems CurrSelItem, 3                                              '切换节点展开状态
                 Me.SolutionTreeView.EndEditLabel False                                                      '取消编辑标签
             Else                                                                                        '如果选择的项目是代码文件
-                If CurrentProject.Files(TvItemBinding(i).FileIndex).TargetWindow Is Nothing Then
-                    Dim NewCodeWindow   As frmCodeWindow                                                        '新建的代码框窗体
-                    
-                    Set NewCodeWindow = CreateNewCodeWindow(TvItemBinding(i).FileIndex)                         '创建新的代码窗体并设置绑定的文件序号
-                    NewCodeWindow.Caption = GetFileName(CurrentProject.Files(TvItemBinding(i).FileIndex).FilePath)
-                    frmMain.TabBar.AddForm NewCodeWindow
+                Dim NewCodeWindow   As frmCodeWindow                                                        '对应的代码框窗体
+                
+                Set NewCodeWindow = frmMain.ShowCodeWindow(TvItemBinding(i).FileIndex)                      '获取项目节点所对应的代码窗口
+                If NewCodeWindow Is Nothing Then
+                    NoSkinMsgBox Lang_Main_Debug_OpenSourceFailure & CurrentProject.Files(TvItemBinding(i).FileIndex).FilePath, _
+                        vbExclamation, Lang_Msgbox_Error
                 Else
-                    frmMain.TabBar.SwitchToByForm CurrentProject.Files(TvItemBinding(i).FileIndex).TargetWindow '切换到对应的窗口
-                    CurrentProject.Files(TvItemBinding(i).FileIndex).TargetWindow.SyntaxEdit.SetFocus
+                    NewCodeWindow.SyntaxEdit.SetFocus
                 End If
             End If
             Exit For

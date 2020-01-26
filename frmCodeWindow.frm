@@ -150,7 +150,7 @@ Begin VB.Form frmCodeWindow
          Strikethrough   =   0   'False
       EndProperty
    End
-   Begin VB.Image imgDisabledBreakpoint 
+   Begin VB.Image imgBreakpointWithArrow 
       Height          =   240
       Left            =   6120
       Picture         =   "frmCodeWindow.frx":1C914
@@ -158,7 +158,7 @@ Begin VB.Form frmCodeWindow
       Visible         =   0   'False
       Width           =   240
    End
-   Begin VB.Image imgBreakpoint 
+   Begin VB.Image imgDisabledBreakpoint 
       Height          =   240
       Left            =   5760
       Picture         =   "frmCodeWindow.frx":1CC9E
@@ -166,10 +166,18 @@ Begin VB.Form frmCodeWindow
       Visible         =   0   'False
       Width           =   240
    End
-   Begin VB.Image imgCurrentLine 
+   Begin VB.Image imgBreakpoint 
       Height          =   240
       Left            =   5400
       Picture         =   "frmCodeWindow.frx":1D028
+      Top             =   4440
+      Visible         =   0   'False
+      Width           =   240
+   End
+   Begin VB.Image imgCurrentLine 
+      Height          =   240
+      Left            =   5040
+      Picture         =   "frmCodeWindow.frx":1D3B2
       Top             =   4440
       Visible         =   0   'False
       Width           =   240
@@ -191,7 +199,7 @@ Option Explicit
 Public WindowObj    As Object                                                       '窗口自身
 Public FileIndex    As Long                                                         '在CurrentProject.Files对应的文件序号
 Public RowHeight    As Integer                                                      '代码行的高度（用于计算断点绘图位置）
-Public BreakLine    As Long                                                         '在调试期间中断的行（-1代表没有）
+Public BreakLine    As Long                                                         '在调试期间中断点行（-1代表没有）
 
 '描述:      重新通过代码框的字体计算每行代码的高度
 Public Sub ReCalcRowHeight()
@@ -202,10 +210,12 @@ End Sub
 '描述:      重绘所有的断点
 Public Sub RedrawBreakpoints()
     Dim lnStart     As Long, lnEnd      As Long, ln         As Long                 '可视的第一行; 可视的最后一行; 断点对应的行
+    Dim BreakLineHasBreakpoint          As Boolean                                  '当前的断点行下方是否有断点（以此判断画哪张图）
     Dim i           As Long
     
     Me.picSelMargin.Cls                                                             '清空画布
     lnStart = Me.SyntaxEdit.TopRow                                                  '获取当前可视的第一行
+    BreakLineHasBreakpoint = False                                                  '标记为当前的断点行下方没有断点
     lnEnd = lnStart + Me.SyntaxEdit.Height / RowHeight                              '根据文本框的高度和每行的高度算出文本框能装下多少行，从而得到可视的最后一行
     If lnEnd > Me.SyntaxEdit.RowsCount Then                                         '如果可视的最后一行超过了文本框的总行数就取总行数
         lnEnd = Me.SyntaxEdit.RowsCount
@@ -213,12 +223,19 @@ Public Sub RedrawBreakpoints()
     For i = 0 To UBound(CurrentProject.Files(FileIndex).Breakpoints)                '遍历当前文件的断点，如果是在可视的行数范围内的就画出来
         ln = CurrentProject.Files(FileIndex).Breakpoints(i).CodeLn
         If ln >= lnStart And ln <= lnEnd Then
+            If ln = BreakLine Then                                                          '标记为当前的断点行下方有断点
+                BreakLineHasBreakpoint = True
+            End If
             Me.picSelMargin.PaintPicture Me.imgBreakpoint.Picture, 0, RowHeight * (ln - lnStart), 240, 240
         End If
     Next i
     
-    If BreakLine >= lnStart And BreakLine <= lnEnd Then
-        Me.picSelMargin.PaintPicture Me.imgCurrentLine.Picture, 0, RowHeight * (BreakLine - lnStart), 240, 240
+    If BreakLine >= lnStart And BreakLine <= lnEnd Then                             '如果当前中断行在可视范围内，也画出来
+        If BreakLineHasBreakpoint Then                                                  '绘制“断点+箭头”图片
+            Me.picSelMargin.PaintPicture Me.imgBreakpointWithArrow.Picture, 0, RowHeight * (BreakLine - lnStart), 240, 240
+        Else                                                                            '绘制“箭头”图片
+            Me.picSelMargin.PaintPicture Me.imgCurrentLine.Picture, 0, RowHeight * (BreakLine - lnStart), 240, 240
+        End If
     End If
 End Sub
 
@@ -232,6 +249,7 @@ Private Sub Form_Load()
     Me.Caption = Lang_CodeWindow_Caption
     Me.DarkTitleBar.MaxButtonVisible = True
     Me.DarkTitleBar.MinButtonVisible = True
+    Me.SyntaxEdit.TabWithSpace = True               'ToDo: change this to option
     
     '设置代码框属性
     Me.DarkTitleBar.Top = Me.DarkWindowBorderSizer.Thickness * Screen.TwipsPerPixelY

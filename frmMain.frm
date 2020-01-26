@@ -702,14 +702,22 @@ Begin VB.Form frmMain
       TabIndex        =   1
       Top             =   0
       Width           =   16845
-      _extentx        =   29713
-      _extenty        =   873
-      font            =   "frmMain.frx":1FC6C
-      caption         =   "拖控件大法"
-      maxbuttonvisible=   0   'False
-      minbuttonvisible=   0   'False
-      bindcaption     =   -1  'True
-      picture         =   "frmMain.frx":1FCA0
+      _ExtentX        =   29713
+      _ExtentY        =   873
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Microsoft YaHei UI"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Caption         =   "拖控件大法"
+      MaxButtonVisible=   0   'False
+      MinButtonVisible=   0   'False
+      BindCaption     =   -1  'True
+      Picture         =   "frmMain.frx":1FC6C
    End
    Begin XtremeSkinFramework.SkinFramework SkinFramework 
       Left            =   14160
@@ -788,8 +796,127 @@ Private Sub ProcessExitedHandler(ExitCode As Long)
     GdbPipe.DosInput "q" & vbCrLf                                                       '关闭管道
     Call ClearDebugWindows(True)                                                        '清空所有调试窗口的信息
     
-    '禁用菜单项
-    'ToDo
+    '调整菜单项
+    Call AdjustRuntimeMenu
+End Sub
+
+'描述:      用代码窗口显示指定的文件
+'参数:      FileIndex: 可选的。指定文件在CurrentProject.Files里的序号; 如果不指定这个参数，就要指定FileName参数
+'.          FileName: 可选的。文件名; 如果不指定这个参数，就要指定FileIndex参数
+'返回值:    如果文件成功显示，则返回对应的代码窗口; 否则返回Nothing
+'注意:      两个参数只能指定其中一个。如果同时都指定，则按照FileIndex来执行
+Public Function ShowCodeWindow(Optional FileIndex As Long = -1, Optional FileName As String = "") As frmCodeWindow
+    On Error Resume Next
+    Dim NewCodeWindow   As frmCodeWindow
+    Dim FileData        As String
+    Dim tmpData         As String
+    
+    Set ShowCodeWindow = Nothing
+    
+    '检查是否提供了FileIndex参数
+    If FileIndex <> -1 Then
+        With CurrentProject.Files(FileIndex)
+            '如果没有对应的代码窗口就创建一个新的，有的话就切换过去
+            If .TargetWindow Is Nothing Then
+                Set NewCodeWindow = CreateNewCodeWindow(FileIndex)                  '创建新的代码窗体并设置绑定的文件序号
+                NewCodeWindow.Caption = GetFileName(.FilePath)
+                
+                Err.Clear
+                Open .FilePath For Input As #1                                      '尝试打开对应的代码文件
+                    If Err.Number <> 0 Then
+                        Close #1
+                        Exit Function
+                    Else
+                        Do While Not EOF(1)
+                            Line Input #1, tmpData
+                            FileData = FileData & tmpData & vbCrLf
+                        Loop
+                    End If
+                Close #1
+                
+                NewCodeWindow.SyntaxEdit.Text = FileData
+                Me.TabBar.AddForm NewCodeWindow
+            Else
+                Me.TabBar.SwitchToByForm .TargetWindow
+            End If
+            Set ShowCodeWindow = .TargetWindow
+        End With
+        Exit Function
+    End If
+    
+    '检查是否提供了FileName参数
+    If FileName <> "" Then
+        Dim i   As Long
+        
+        '查找该文件对应的代码文件
+        For i = 0 To UBound(CurrentProject.Files)
+            With CurrentProject.Files(i)
+                If .FilePath = FileName Then
+                    If .TargetWindow Is Nothing Then                                    '该代码文件没有已打开的代码窗口
+                        Set NewCodeWindow = CreateNewCodeWindow(i)                          '创建新的代码窗体并设置绑定的文件序号
+                        NewCodeWindow.Caption = GetFileName(.FilePath)
+                        
+                        Err.Clear
+                        Open .FilePath For Input As #1                                      '尝试打开对应的代码文件
+                            If Err.Number <> 0 Then
+                                Close #1
+                                Exit Function
+                            Else
+                                Do While Not EOF(1)
+                                    Line Input #1, tmpData
+                                    FileData = FileData & tmpData & vbCrLf
+                                Loop
+                            End If
+                        Close #1
+                        
+                        NewCodeWindow.SyntaxEdit.Text = FileData
+                        Me.TabBar.AddForm NewCodeWindow
+                    Else
+                        Me.TabBar.SwitchToByForm .TargetWindow
+                    End If
+                    Set ShowCodeWindow = .TargetWindow
+                    Exit Function
+                End If
+            End With
+        Next i
+    End If
+End Function
+
+'描述:      根据不同的运行状态调整菜单状态
+Private Sub AdjustRuntimeMenu()
+    '0: 设计模式; 1: 运行中; 2: 中断
+    Select Case CurrState
+        Case 0                                                          '设计模式
+            Me.DarkMenu.MenuEnabled(52) = True                              '运行
+            Me.DarkMenu.MenuText(52) = Lang_Main_Run_Menu_Start
+            Me.DarkMenu.MenuEnabled(53) = False                             '中断
+            Me.DarkMenu.MenuEnabled(54) = False                             '停止
+            Me.DarkMenu.MenuEnabled(55) = False                             '重新运行
+            Me.DarkMenu.MenuEnabled(57) = False                             '逐语句
+            Me.DarkMenu.MenuEnabled(58) = False                             '逐过程
+            Me.DarkMenu.MenuEnabled(59) = False                             '执行到返回
+        
+        Case 1                                                          '运行中
+            Me.DarkMenu.MenuEnabled(52) = False
+            Me.DarkMenu.MenuText(52) = Lang_Main_Run_Menu_Continue
+            Me.DarkMenu.MenuEnabled(53) = True
+            Me.DarkMenu.MenuEnabled(54) = True
+            Me.DarkMenu.MenuEnabled(55) = True
+            Me.DarkMenu.MenuEnabled(57) = False
+            Me.DarkMenu.MenuEnabled(58) = False
+            Me.DarkMenu.MenuEnabled(59) = False
+        
+        Case 2                                                          '中断
+            Me.DarkMenu.MenuEnabled(52) = True
+            Me.DarkMenu.MenuText(52) = Lang_Main_Run_Menu_Continue
+            Me.DarkMenu.MenuEnabled(53) = False
+            Me.DarkMenu.MenuEnabled(54) = True
+            Me.DarkMenu.MenuEnabled(55) = True
+            Me.DarkMenu.MenuEnabled(57) = True
+            Me.DarkMenu.MenuEnabled(58) = True
+            Me.DarkMenu.MenuEnabled(59) = True
+        
+    End Select
 End Sub
 
 '描述:      清空所有调试窗口里面的信息
@@ -824,6 +951,7 @@ End Function
 
 '描述:      “加载项目”菜单
 Private Sub mnuOpen_Click()
+    'ToDo
     NoSkinMsgBox ShowOpen(Me.hwnd, "Dilidi - Open", "洗屁屁文件(*.cpp)" & vbNullChar & "*.cpp")
 End Sub
 
@@ -899,9 +1027,14 @@ Private Sub mnuRun_Click()
     Dim MsgBoxRtn           As VbMsgBoxResult                                   '保存确认框的返回值
     Dim SaveRtn             As Integer                                          '保存返回值
     
+    Call AdjustRuntimeMenu
+    Me.DarkMenu.MenuEnabled(52) = False                                         '禁用运行菜单
+    
     If CurrState = 2 Then                                                       '处于中断状态
         Call ClearDebugWindows                                                      '清空所有调试窗口的信息
         GdbPipe.DosInput "continue" & vbCrLf                                        '发送继续运行命令
+        CurrState = 1                                                               '更新调试状态
+        Call AdjustRuntimeMenu                                                      '调整菜单
         Exit Sub
     End If
     
@@ -912,14 +1045,17 @@ Private Sub mnuRun_Click()
             If SaveRtn = 2 Then                                                         '保存时出错
                 If NoSkinMsgBox(Lang_Main_SaveFailedBeforeCompile, vbQuestion Or vbYesNo, Lang_Msgbox_Confirm) = vbNo Then
                     frmOutput.OutputLog Lang_Main_DebugAborted
+                    Call AdjustRuntimeMenu
                     Exit Sub
                 End If
             ElseIf SaveRtn = 3 Or SaveRtn = 4 Then                                      '用户取消保存 或者 用户选择不保存 则取消接下来的操作
                 frmOutput.OutputLog Lang_Main_DebugAborted
+                Call AdjustRuntimeMenu
                 Exit Sub
             End If
         ElseIf MsgBoxRtn = vbCancel Then
             frmOutput.OutputLog Lang_Main_DebugAborted                              '用户选择取消调试
+            Call AdjustRuntimeMenu
             Exit Sub
         End If
     End If
@@ -931,10 +1067,12 @@ Private Sub mnuRun_Click()
             Kill ExePath                                                                '删除掉同名文件
         Else
             frmOutput.OutputLog Lang_Main_DebugAborted
+            Call AdjustRuntimeMenu
             Exit Sub
         End If
     End If
-    frmOutput.edOutput.Text = ""                                                '清空输出
+    Call frmOutput.ClearEverything                                              '清空输出
+    Call frmErrorList.ClearEverything                                           '清空错误列表
     '======================================================================
     
     '使用g++进行编译
@@ -951,6 +1089,7 @@ Private Sub mnuRun_Click()
     Next i
     If GccPipe.InitDosIO(GccCmdLine) = 0 Then                                   'g++管道启动失败
         frmOutput.OutputLog Lang_Main_GccStartFailed & GccCmdLine
+        Call AdjustRuntimeMenu
         Exit Sub
     End If
     frmOutput.OutputLog Lang_Main_StartingGcc & GccCmdLine
@@ -962,16 +1101,57 @@ Private Sub mnuRun_Click()
     GccOutputContent = Split(PipeOutput, vbCrLf)
     If UBound(GccOutputContent) >= 0 Then
         For i = 0 To UBound(GccOutputContent)                                   '逐行输出
-            If GccOutputContent(i) <> "" Then                                   '如果不是空行
+            If GccOutputContent(i) <> "" Then                                       '如果不是空行
                 frmOutput.OutputLog GccOutputContent(i)
+                If GccOutputContent(i) Like "*:\*:*:*: *" And InStr(Left(GccOutputContent(i), 5), ":\") <> 0 Then   '（x:\File Name:Line:Column: error reason）
+                    Dim StrPos          As Long                                             '查找字符串的结果
+                    Dim CurrFileName    As String                                           '对应的文件
+                    Dim CurrLineNumber  As Long                                             '对应的行号
+                    Dim CurrColNumber   As Long                                             '对应的列号
+                    Dim InfoType        As Byte                                             '该消息的类型（0: error; 1: warning; 2: info）
+                    
+                    '分析g++输出并记录到frmOutput的输出行对应信息里
+                    StrPos = InStr(GccOutputContent(i), ":\")
+                    StrPos = InStr(StrPos + 2, GccOutputContent(i), ":")
+                    CurrFileName = Left(GccOutputContent(i), StrPos - 1)                    '（[x:\File Name]:Line:Column: error reason）
+                    GccOutputContent(i) = Right(GccOutputContent(i), _
+                        Len(GccOutputContent(i)) - Len(CurrFileName) - 1)                   '（x:\File Name:[Line:Column: error reason]）
+                    StrPos = InStr(GccOutputContent(i), ":")
+                    CurrLineNumber = CLng(Left(GccOutputContent(i), StrPos - 1))            '（[Line]:Column: error reason）
+                    GccOutputContent(i) = Right(GccOutputContent(i), _
+                        Len(GccOutputContent(i)) - Len(CStr(CurrLineNumber)) - 1)           '（Line:[Column: error reason]）
+                    StrPos = InStr(GccOutputContent(i), ":")
+                    CurrColNumber = CLng(Left(GccOutputContent(i), StrPos - 1))             '（[Column]: error reason）
+                    GccOutputContent(i) = Right(GccOutputContent(i), _
+                        Len(GccOutputContent(i)) - Len(CStr(CurrColNumber)) - 2)            '（Column: [error reason]）
+                    frmOutput.AddLineInfo False, CurrFileName, CurrLineNumber, CurrColNumber
+                    
+                    '添加到错误列表里
+                    GccOutputContent(i) = Trim(GccOutputContent(i))                         '去掉错误描述前后的空格
+                    InfoType = 0                                                            '默认视消息为错误
+                    If LCase(Left(GccOutputContent(i), 7)) = "warning" Then                 '检测到消息为warning类型
+                        InfoType = 1
+                    ElseIf LCase(Left(GccOutputContent(i), 4)) = "note" Then                '检测到消息为note类型
+                        InfoType = 2
+                    Else
+                        If LCase(Left(GccOutputContent(i), 5)) <> "error" Then
+                            Stop
+                        End If
+                    End If
+                    frmErrorList.AddErrorInfoListItem InfoType, GccOutputContent(i), CurrFileName, CurrLineNumber, CurrColNumber
+                End If
             End If
+            DoEvents                                                                    '不要阻塞线程
         Next i
+        Call frmErrorList.AddErrorListItem                                          '添加错误消息到列表中
     End If
     If Dir(ExePath, vbNormal Or vbReadOnly Or vbHidden Or vbSystem) = "" Then   '如果exe路径不存在，则说明编译不成功
         frmOutput.OutputLog Lang_Main_CompileFailed
+        Call AdjustRuntimeMenu
         Exit Sub
     Else
         frmOutput.OutputLog Lang_Main_CompileSucceed & ExePath
+        frmOutput.AddLineInfo True, ExePath, 0
     End If
     '======================================================================
     
@@ -988,6 +1168,8 @@ Private Sub mnuRun_Click()
         NORMAL_PRIORITY_CLASS Or CREATE_SUSPENDED, ByVal 0, ByVal 0, si, DebugProgramInfo) <> 1 Then
         
         frmOutput.OutputLog Lang_Main_RunFailed & ExePath & " (" & Err.LastDllError & ")"
+        frmOutput.AddLineInfo True, ExePath, 0
+        Call AdjustRuntimeMenu
         Exit Sub
     End If
     frmOutput.OutputLog Lang_Main_RunSucceed & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ")"
@@ -999,12 +1181,14 @@ Private Sub mnuRun_Click()
         TerminateProcess DebugProgramInfo.hProcess, 0                               '杀掉待调试进程，放弃调试
         Set GdbPipe = Nothing                                                       '关闭gdb管道
         frmOutput.OutputLog Lang_Main_GdbFailed
+        Call AdjustRuntimeMenu
         Exit Sub
     End If
     frmOutput.OutputLog Lang_Main_GdbSucceed & GdbPipe.dwProcessId & "(" & Hex(GdbPipe.dwProcessId) & ")"
     '======================================================================
     
     frmOutput.OutputLog Lang_Main_GdbLoadingSymbols_1 & ExePath & Lang_Main_GdbLoadingSymbols_2
+    frmOutput.AddLineInfo True, ExePath, 0
     GdbPipe.DosInput "file """ & Replace(ExePath, "\", "/") & """" & vbCrLf     '从exe文件读取符号
     GdbPipe.DosOutput PipeOutput, "(gdb) ", 5000                                '获取gdb的输出
     If InStr(PipeOutput, "no debugging symbols found") <> 0 Or _
@@ -1014,6 +1198,7 @@ Private Sub mnuRun_Click()
             TerminateProcess DebugProgramInfo.hProcess, 0                               '杀掉待调试进程，放弃调试
             Set GdbPipe = Nothing                                                       '关闭gdb管道
             frmOutput.OutputLog Lang_Main_DebugAborted
+            Call AdjustRuntimeMenu
             Exit Sub
         End If
     End If
@@ -1025,12 +1210,13 @@ Private Sub mnuRun_Click()
     
     frmOutput.OutputLog Lang_Main_GdbAttaching
     GdbPipe.DosInput "attach " & DebugProgramInfo.dwProcessId & vbCrLf          '附加到待调试进程
-    GdbPipe.DosOutput PipeOutput, "(gdb) "                                      '获取gdb的输出
+    GdbPipe.DosOutput PipeOutput, "(gdb) ", 5000                                '获取gdb的输出
     If InStr(PipeOutput, "Can't attach") <> 0 Then                              'gdb输出“Can't attach to process.”，附加进程失败
         TerminateProcess DebugProgramInfo.hProcess, 0                               '杀掉待调试进程，放弃调试
         Set GdbPipe = Nothing                                                       '关闭gdb管道
         frmOutput.OutputLog Lang_Main_GdbAttachFailed_1 & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ") " & Lang_Main_GdbAttachFailed_2
         frmOutput.OutputLog Lang_Main_DebugAborted
+        Call AdjustRuntimeMenu
         Exit Sub
     End If
     GdbPipe.DosOutput PipeOutput, "(gdb) ", 5000                                '等待gdb输出完成，超时5秒
@@ -1064,8 +1250,12 @@ Private Sub mnuRun_Click()
                     frmBreakpoints.lvBreakpoints.SetItemText CStr(Split(SplitTmp(1), ": file")(0)), CurrentProject.Files(i).Breakpoints(j).ListViewIndex, 2
                     Exit For
                 ElseIf PipeOutput Like "No line * in file *" Then                           '没有指定的行号（“No line * in file "*".”）
+                    Dim tmpFileLine As Long
+                    
+                    tmpFileLine = Replace(Split(PipeOutput, " in file """)(0), "No line ", "")  '（“No line [*] in file "*".”）
                     frmOutput.OutputLog Lang_Main_GdbBreakpointError_1 & CurrentProject.Files(i).FilePath & _
-                        Lang_Main_GdbBreakpointError_2 & Replace(Split(PipeOutput, " in file """)(0), "No line ", "") & Lang_Main_GdbBreakpointError_3
+                        Lang_Main_GdbBreakpointError_2 & tmpFileLine & Lang_Main_GdbBreakpointError_3
+                    frmOutput.AddLineInfo False, CurrentProject.Files(i).FilePath, tmpFileLine
                 End If
             Next k
             If Not BreakpointAdded Then
@@ -1079,6 +1269,7 @@ Private Sub mnuRun_Click()
     ResumeThread DebugProgramInfo.hThread                                       '继续执行目标进程的主线程
     frmOutput.OutputLog Lang_Main_RunningInfo_1 & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ") " & Lang_Main_RunningInfo_2
     CurrState = 1                                                               '更新调试状态
+    Call AdjustRuntimeMenu
     Me.tmrCheckProcess.Enabled = True                                           '开始等待进程结束
 End Sub
 
@@ -1120,6 +1311,12 @@ Private Sub DarkMenu_MenuItemClicked(MenuID As Integer)
         Case 4                                                                          '另存为
             Call mnuSaveAs_Click
         
+        Case 6                                                                          '退出
+            Unload Me
+        
+        Case 32                                                                         '错误列表
+            Me.DockingPane.ShowPane 4
+        
         Case 39                                                                         '断点列表
             Me.DockingPane.ShowPane 6
         
@@ -1152,7 +1349,7 @@ End Sub
 Private Sub Form_Initialize()
     On Error Resume Next
     
-    '启动LOGO
+    '启动Logo
     frmStartupLogo.Show
     SetWindowPos frmStartupLogo.hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE Or SWP_NOMOVE
     frmStartupLogo.SetFocus
@@ -1284,6 +1481,10 @@ Private Sub Form_Load()
     picToolBar.Move 0, Me.DarkMenu.Top + Me.DarkMenu.Height
     Me.picClientArea.Move 0, Me.picToolBar.Top + Me.picToolBar.Height
     
+    '初始化运行菜单
+    CurrState = 0
+    Call AdjustRuntimeMenu
+    
     '卸载LOGO
     Unload frmStartupLogo
     Me.Show
@@ -1323,6 +1524,9 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
             End If
         End If
     End If
+    
+    '把窗口隐藏起来再慢慢收尾
+    Me.Hide
     
     '恢复窗口子类化
     SetWindowLongA Me.hwnd, GWL_WNDPROC, GetPropA(Me.hwnd, "PrevWndProc")
@@ -1434,48 +1638,33 @@ Private Sub tmrCheckProcess_Timer()
                 Dim SourceLn            As Long                                                 '对应的代码行号
                 
                 CurrState = 2                                                                   '更新调试状态
+                Call AdjustRuntimeMenu                                                          '更新菜单状态
                 SplitTmp = Split(PipeOutput, "Breakpoint ")(1)                                  '（Breakpoint [*, * at *:*]）
                 BreakpointIndex = CLng(Split(SplitTmp, ", ")(0))                                '（[*], * at *:*）
                 SplitTmp = Right(SplitTmp, Len(SplitTmp) - InStr(SplitTmp, " at "))             '（Breakpoint *, * at [*:*]）
                 SourceLn = CLng(Right(SplitTmp, Len(SplitTmp) - InStrRev(SplitTmp, ":")))       '（*:[*]）
                 
-                '如果没有对应的代码窗口就创建一个新的，有的话就切换过去。这部分代码和frmSolutionExplorer的SolutionTreeView_DoubleClick相似
+                '切换到对应的代码框
+                Dim NewCodeWindow       As frmCodeWindow
+                
                 '以防万一：有时候获取断点对应的gdb断点的时候会出错，导致GdbBreakpoints的映射有缺漏。这样会导致创建一个无效的代码窗口
                 If BreakpointIndex <= UBound(GdbBreakpoints) Then
-                    With CurrentProject.Files(GdbBreakpoints(BreakpointIndex).FileIndex)
-                        If .TargetWindow Is Nothing Then
-                            Dim NewCodeWindow   As frmCodeWindow
-                            Dim FileData        As String
-                            Dim tmpData         As String
-                            
-                            Set NewCodeWindow = CreateNewCodeWindow(GdbBreakpoints(BreakpointIndex).FileIndex)  '创建新的代码窗体并设置绑定的文件序号
-                            NewCodeWindow.Caption = GetFileName(.FilePath)
-                            
-                            Err.Clear
-                            Open .FilePath For Input As #1                                                      '尝试打开对应的代码文件
-                                If Err.Number <> 0 Then
-                                    Close #1
-                                    NoSkinMsgBox Lang_Main_Debug_OpenSourceFailure & .FilePath, vbExclamation, Lang_Msgbox_Error
-                                Else
-                                    Do While Not EOF(1)
-                                        Line Input #1, tmpData
-                                        FileData = FileData & tmpData & vbCrLf
-                                    Loop
-                                End If
-                            Close #1
-                            
-                            Me.TabBar.AddForm NewCodeWindow
-                        Else
-                            frmMain.TabBar.SwitchToByForm .TargetWindow                                         '切换到对应的代码窗体
-                        End If
-                        .TargetWindow.SyntaxEdit.CurrPos.Row = SourceLn                                     '跳转到对应的代码行
-                        .TargetWindow.BreakLine = SourceLn
-                        .TargetWindow.SyntaxEdit.SetFocus
-                        .TargetWindow.RedrawBreakpoints                                                 '绘制中断行的小箭头
-                    End With
+                    Set NewCodeWindow = ShowCodeWindow(GdbBreakpoints(BreakpointIndex).FileIndex)       '在代码框显示断点对应的位置
+                    If NewCodeWindow Is Nothing Then
+                        NoSkinMsgBox Lang_Main_Debug_OpenSourceFailure & CurrentProject.Files(GdbBreakpoints(BreakpointIndex).FileIndex).FilePath, _
+                            vbExclamation, Lang_Msgbox_Error
+                    Else
+                        NewCodeWindow.SyntaxEdit.CurrPos.Row = SourceLn                                     '跳转到对应的代码行
+                        NewCodeWindow.BreakLine = SourceLn
+                        NewCodeWindow.SyntaxEdit.SetFocus
+                        NewCodeWindow.RedrawBreakpoints                                                     '绘制中断行的小箭头
+                    End If
                 End If
+                
+                '在“输出”里面添加断点命中消息
                 frmOutput.OutputLog Lang_Main_Debug_BreakpointHit & ": " & _
                     CurrentProject.Files(GdbBreakpoints(BreakpointIndex).FileIndex).FilePath & ":" & SourceLn
+                frmOutput.AddLineInfo False, CurrentProject.Files(GdbBreakpoints(BreakpointIndex).FileIndex).FilePath, SourceLn
                 
                 '获取各种调试信息
                 Call frmCallStack.GetCallStack                                                  '获取调用堆栈
@@ -1505,6 +1694,7 @@ Private Sub tmrCheckProcess_Timer()
                 End If
                 Call ProcessExitedHandler(ExitCode)
             End If
+            'ToDo: Handle "Program received signal SIGFPE, Arithmetic exception."
         Next i
     Else
         Me.tmrCheckProcess.Enabled = False

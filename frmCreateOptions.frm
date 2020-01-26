@@ -577,6 +577,10 @@ Private Sub cmdOK_Click()
             "int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {" & vbCrLf & vbTab & vbCrLf & "}" & vbCrLf
          CodeStartLn = CodeStartLn + 3
     End If
+    'ToDo: replace this with option
+    'if use_space_for_tab then                                                                           '检查是否把Tab替换成空格
+    GenCode = Replace(GenCode, vbTab, Space(4))
+    'end if
     With CurrentProject                                                                                 '设置工程信息
         ReDim .Folders(0)
         ReDim .Files(0)
