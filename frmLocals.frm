@@ -181,8 +181,8 @@ Private Function AddVarItem(ParentNode As Long, VarName As String, DisplayName A
     NewItemIndex = UBound(VarNodes)
     With VarNodes(NewItemIndex)                                             '设置变量信息
         .ParentNode = ParentNode
-        .TypeName = TypeName
-        .Value = Value
+        .TypeName = Replace(TypeName, vbCr, "")                                 '去掉变量类型里所有的换行符
+        .Value = Replace(Value, vbCr & vbCr, vbCr)                              '把多余的空行替换成单一的空行
         .VarName = VarName
         ReDim .ChildNodes(0)                                                    '初始化子节点数组
         .ChildNodes(0) = -1                                                     '-1表示没有子节点
@@ -223,7 +223,11 @@ Private Function StringParser(ParentItem As Long, OutputString As String, Option
     '获取变量的值
     frmMain.GdbPipe.ClearPipe                                               '清空管道里的内容
     frmMain.GdbPipe.DosInput "p (" & VarName & ")" & vbCrLf                 '向gdb发送计算表达式命令（p (var)）
-    frmMain.GdbPipe.DosOutput PipeOutput, "(gdb) "                          '获取gdb输出
+    frmMain.GdbPipe.DosOutput PipeOutput, "(gdb) ", 750                     '获取gdb输出
+    If InStr(PipeOutput, "A syntax error in expression") <> 0 Then          '处理格式错误
+        StringParser = Len(OutputString)                                        '直接退出函数，并返回字符串的长度，意味着取消处理这个字符串
+        Exit Function
+    End If
     PipeOutput = Split(PipeOutput, vbCrLf)(0)                               '只需要输出的第一行
     SplitTmp = Split(PipeOutput, " = ")                                     '（[var] = [value]）
     If UBound(SplitTmp) > 0 Then                                            '如果输出是类似于“* = *”
@@ -234,7 +238,7 @@ Private Function StringParser(ParentItem As Long, OutputString As String, Option
         
     '获取变量类型
     frmMain.GdbPipe.ClearPipe                                               '清空管道里的内容
-    frmMain.GdbPipe.DosInput "ptype (" & VarName & ")" & vbCrLf             '向gdb发送获取表达式类型命令（ptype (var)）
+    frmMain.GdbPipe.DosInput "whatis (" & VarName & ")" & vbCrLf            '向gdb发送获取表达式类型命令（whatis (var)）
     frmMain.GdbPipe.DosOutput PipeOutput, "(gdb) "                          '获取gdb输出
     PipeOutput = Left(PipeOutput, InStrRev(PipeOutput, vbCrLf))             '去掉输出的最后一行
     If Left(PipeOutput, 7) = "type = " Then                                 '输出类似于“type = *”
@@ -291,8 +295,11 @@ Private Sub ArrayParser(ParentItem As Long, OutputString As String)
     
     '获取变量类型
     frmMain.GdbPipe.ClearPipe                                                                   '清空管道里的内容
-    frmMain.GdbPipe.DosInput "ptype (" & VarName & "[0])" & vbCrLf                              '向gdb发送获取表达式类型命令（ptype (var[0])）
-    frmMain.GdbPipe.DosOutput PipeOutput, "(gdb) "                                              '获取gdb输出
+    frmMain.GdbPipe.DosInput "whatis (" & VarName & "[0])" & vbCrLf                             '向gdb发送获取表达式类型命令（whatis (var[0])）
+    frmMain.GdbPipe.DosOutput PipeOutput, "(gdb) ", 750                                         '获取gdb输出
+    If InStr(PipeOutput, "A syntax error in expression") <> 0 Then                              '处理格式错误
+        Exit Sub                                                                                    '直接退出过程
+    End If
     PipeOutput = Left(PipeOutput, InStrRev(PipeOutput, vbCrLf))                                 '去掉输出的最后一行
     If Left(PipeOutput, 7) = "type = " Then                                                     '输出类似于“type = *”
         VarTypeName = Right(PipeOutput, Len(PipeOutput) - 7)                                        '（type = [*]）

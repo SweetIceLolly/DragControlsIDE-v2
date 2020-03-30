@@ -66,7 +66,8 @@ Public Sub ClearEverything()
 End Sub
 
 '描述:      为当前文本框中的最后一行添加输出行信息到LineInfo中
-'参数:      FileName: 该行对应的文件名
+'参数:      InfoType: False: 在代码窗口显示; True: 在文件浏览器中显示
+'.          FileName: 该行对应的文件名
 '.          FileLine: 该行对应的文件行号
 '           FileColumn: 该行对应的文件列号
 Public Sub AddLineInfo(InfoType As Boolean, FileName As String, FileLine As Long, Optional FileColumn As Long = -1)

@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{945E8FCC-830E-45CC-AF00-A012D5AE7451}#15.3#0"; "Codejock.DockingPane.v15.3.1.ocx"
-Object = "{BD0C1912-66C3-49CC-8B12-7B347BF6C846}#15.3#0"; "Codejock.SkinFramework.v15.3.1.ocx"
+Object = "{945E8FCC-830E-45CC-AF00-A012D5AE7451}#15.3#0"; "DockingPane.ocx"
+Object = "{BD0C1912-66C3-49CC-8B12-7B347BF6C846}#15.3#0"; "SkinFramework.ocx"
 Begin VB.Form frmMain 
    BackColor       =   &H00302D2D&
    BorderStyle     =   0  'None
@@ -1617,6 +1617,7 @@ Private Sub tmrCheckProcess_Timer()
     Dim PipeOutputLine()            As String                                       '管道输出的每一行
     Dim SplitTmp                    As String                                       '字符串分割缓存
     Dim ExitCode                    As Long                                         '进程退出码
+    Dim NewCodeWindow               As frmCodeWindow                                '新创建的代码框
     Dim i                           As Long
     
     If Not ProcessExists(GdbPipe.hProcess) Then
@@ -1645,8 +1646,6 @@ Private Sub tmrCheckProcess_Timer()
                 SourceLn = CLng(Right(SplitTmp, Len(SplitTmp) - InStrRev(SplitTmp, ":")))       '（*:[*]）
                 
                 '切换到对应的代码框
-                Dim NewCodeWindow       As frmCodeWindow
-                
                 '以防万一：有时候获取断点对应的gdb断点的时候会出错，导致GdbBreakpoints的映射有缺漏。这样会导致创建一个无效的代码窗口
                 If BreakpointIndex <= UBound(GdbBreakpoints) Then
                     Set NewCodeWindow = ShowCodeWindow(GdbBreakpoints(BreakpointIndex).FileIndex)       '在代码框显示断点对应的位置
@@ -1683,7 +1682,7 @@ Private Sub tmrCheckProcess_Timer()
                 Call ProcessExitedHandler(ExitCode)
             
             '======================================================================================================================
-            ElseIf PipeOutput Like "Program exited *" Then                                  '进程退出消息（Program exited *.）（旧版gdb）
+            ElseIf PipeOutput Like "Program exited *" Then                                  '进程退出消息（Program exited *）（旧版gdb）
                 SplitTmp = Right(PipeOutput, Len(PipeOutput) - InStrRev(PipeOutput, " "))       '（Program exited with code [*.]）或（Program exited [normally.]）
                 SplitTmp = Left(SplitTmp, Len(SplitTmp) - 1)                                    '（[*].）或（[normally].）
                 
@@ -1693,8 +1692,42 @@ Private Sub tmrCheckProcess_Timer()
                     ExitCode = CLng("&O" & SplitTmp)
                 End If
                 Call ProcessExitedHandler(ExitCode)
+                
+            '======================================================================================================================
+            ElseIf PipeOutput Like "Program received signal *" Then                         '程序抛出异常 （Program Received signal *）
+                frmOutput.OutputLog PipeOutput
+                CurrState = 2                                                                   '更新调试状态
+                Call AdjustRuntimeMenu                                                          '更新菜单状态
+                
+                Dim rtnInfo     As CallStackInfoStruct
+                
+                frmMain.GdbPipe.ClearPipe                                                       '清空管道里的内容
+                frmMain.GdbPipe.DosInput "frame" & vbCrLf                                       '向gdb发送获当前代码位置命令
+                frmMain.GdbPipe.DosOutput PipeOutput, "(gdb) "                                  '获取gdb输出
+                
+                PipeOutputLine = Split(PipeOutput, vbCrLf)                                      '分割出gdb输出的每一行
+                rtnInfo = ParseCallStackString(PipeOutputLine(0))                               '分析输出，获取当前代码位置
+                
+                '切换到对应的代码框
+                Set NewCodeWindow = ShowCodeWindow(, rtnInfo.File)                              '在代码框显示断点对应的位置
+                If NewCodeWindow Is Nothing Then
+                    NoSkinMsgBox Lang_Main_Debug_OpenSourceFailure & rtnInfo.File, _
+                            vbExclamation, Lang_Msgbox_Error
+                Else
+                    NewCodeWindow.SyntaxEdit.CurrPos.Row = rtnInfo.Line                             '跳转到对应的代码行
+                    NewCodeWindow.BreakLine = rtnInfo.Line
+                    NewCodeWindow.SyntaxEdit.SetFocus
+                    NewCodeWindow.RedrawBreakpoints                                                 '绘制中断行的小箭头
+                End If
+                
+                '在“输出”里面添加程序中断消息
+                frmOutput.OutputLog "程序中断于 " & rtnInfo.File & ":" & rtnInfo.Line & " (" & rtnInfo.Address & ")"        'todo: translate
+                frmOutput.AddLineInfo False, rtnInfo.File, rtnInfo.Line
+                
+                '获取各种调试信息
+                Call frmCallStack.GetCallStack                                                  '获取调用堆栈
+                Call frmLocals.GetLocals                                                        '获取本地变量
             End If
-            'ToDo: Handle "Program received signal SIGFPE, Arithmetic exception."
         Next i
     Else
         Me.tmrCheckProcess.Enabled = False
