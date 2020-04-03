@@ -1,5 +1,33 @@
 【日志】
 
+# 2020.4.3
+
+获取调用堆栈的管道输出过程添加读取超时，防止递归爆栈的时候程序读取调用堆栈卡死。
+
+GetCallStack函数先处理参数，去掉末尾的换行符再进行解析。
+
+CallStackInfoStruct的Line成员新增特殊值-1。当这个成员为-1的时候对应的File将从文件浏览器显示而不是从代码框加载。
+
+调用堆栈窗口点击列表项显示的标签会根据是否有对应文件而变化。
+
+把frmMain显示调试信息的过程单独放到一个过程里，方便调用。
+
+编写“中断”功能的代码。
+
+编写“停止”功能的代码。
+
+把一些字符串常量换成了变量。
+
+为tmrCheckProcess读取管道内容的过程添加超时，防止递归爆栈的时候程序读取管道卡死。
+
+处理tmrCheckProcess检测到程序中断的时候获取中断位置的时候无对应文件的情况。
+
+处理tmrCheckProcess读取管道失败的情况。
+
+GetCallStack函数添加一种类型的解析，现在能够解析如`#2  0x76926359 in KERNEL32!BaseThreadInitThunk () from C:\WINDOWS\SysWOW64\kernel32.dll`的调用堆栈输出。
+
+改善GetCallStack函数，使其能够解析更为复杂的输出。
+
 # 2020.3.30
 
 删除了frmCallStack里的无用代码，并把解析gdb的调用堆栈输出的过程单独放到了modGdbParser模块的函数里。同时把CallStackInfoStruct结构也放到了该模块里。
