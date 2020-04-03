@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{CA73588D-282F-4592-9369-A61CC244FADA}#15.3#0"; "Codejock.SyntaxEdit.v15.3.1.ocx"
+Object = "{CA73588D-282F-4592-9369-A61CC244FADA}#15.3#0"; "SYNTAX~1.OCX"
 Begin VB.Form frmCodeWindow 
    Appearance      =   0  'Flat
    BackColor       =   &H00302D2D&

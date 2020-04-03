@@ -18,8 +18,8 @@ Begin VB.Form frmCallStack
       TabIndex        =   0
       Top             =   240
       Width           =   3615
-      _extentx        =   6376
-      _extenty        =   4683
+      _ExtentX        =   6376
+      _ExtentY        =   4683
    End
 End
 Attribute VB_Name = "frmCallStack"
@@ -45,7 +45,7 @@ End Sub
 
 '描述:      获取调用堆栈列表
 Public Sub GetCallStack()
-    'On Error Resume Next       'todo
+    On Error Resume Next       'todo
     Dim PipeOutput          As String                                       '管道的输出
     Dim OutputLines()       As String                                       '输出的每一行
     Dim NewListItem         As Long                                         '新添加的ListView列表项索引
@@ -57,16 +57,12 @@ Public Sub GetCallStack()
     
     frmMain.GdbPipe.ClearPipe                                               '清空管道里的内容
     frmMain.GdbPipe.DosInput "info stack" & vbCrLf                          '向gdb发送获取调用堆栈命令
-    frmMain.GdbPipe.DosOutput PipeOutput, "(gdb) "                          '获取gdb输出
+    frmMain.GdbPipe.DosOutput PipeOutput, "(gdb) ", 2000                    '获取gdb输出
     
     OutputLines = Split(PipeOutput, vbCrLf)                                 '逐行分割开输出
     ReDim CallStackInfo(UBound(OutputLines) - 1)                            '分配信息列表元素
     For i = 0 To UBound(OutputLines)                                        '逐行进行分析
         If Trim(OutputLines(i)) <> "(gdb)" Then                                 '去掉无用输出“(gdb) ”
-            If Mid(OutputLines(i), Len(OutputLines(i))) = vbCr Then                 '去掉字符串结尾的换行符
-                OutputLines(i) = Left(OutputLines(i), Len(OutputLines(i)) - 1)
-            End If
-            
             rtnInfo = ParseCallStackString(OutputLines(i))
             CallStackInfo(i) = rtnInfo
             
@@ -83,7 +79,7 @@ Public Sub GetCallStack()
                 rtnInfo.File = Lang_CallStack_NoArg
                 Me.lvCallStack.SetItemText Lang_CallStack_NoArg, NewListItem, 2
             End If
-            If rtnInfo.Line <> 0 Then
+            If rtnInfo.Line > 0 Then
                 Me.lvCallStack.SetItemText CStr(rtnInfo.Line), NewListItem, 3
             Else
                 Me.lvCallStack.SetItemText Lang_CallStack_NoArg, NewListItem, 3
@@ -117,25 +113,35 @@ End Sub
 Private Sub lvCallStack_Click(iItem As Long, iSubItem As Long, X As Long, Y As Long)
     'On Error Resume Next       'todo
     
-    CtlAddToolTip Me.lvCallStack.ListViewHwnd, Lang_Breakpoints_ListViewHeader_Address & ": " & CallStackInfo(iItem).Address & vbCrLf & _
-        Lang_CallStack_Args & ": " & CallStackInfo(iItem).Args & vbCrLf & _
-        Lang_Breakpoints_ListViewHeader_File & ": " & CallStackInfo(iItem).File & ":" & CallStackInfo(iItem).Line, _
-        Lang_CallStack_Tooltip_Title, TTI_INFO
+    If CallStackInfo(iItem).File <> "" Then
+        CtlAddToolTip Me.lvCallStack.ListViewHwnd, Lang_Breakpoints_ListViewHeader_Address & ": " & CallStackInfo(iItem).Address & vbCrLf & _
+            Lang_CallStack_Args & ": " & CallStackInfo(iItem).Args & vbCrLf & _
+            Lang_Breakpoints_ListViewHeader_File & ": " & CallStackInfo(iItem).File & ":" & CallStackInfo(iItem).Line, _
+            Lang_CallStack_Tooltip_Title, TTI_INFO
+    Else
+        CtlAddToolTip Me.lvCallStack.ListViewHwnd, Lang_Breakpoints_ListViewHeader_Address & ": " & CallStackInfo(iItem).Address & vbCrLf & _
+            Lang_CallStack_Args & ": " & CallStackInfo(iItem).Args & vbCrLf & _
+            Lang_CallStack_Tooltip_Title, TTI_INFO
+    End If
 End Sub
 
 Private Sub lvCallStack_DoubleClick(iItem As Long, iSubItem As Long, X As Long, Y As Long)
     On Error Resume Next
     
     If CallStackInfo(iItem).File <> "" Then                                                 '如果有对应的文件
-        Dim NewCodeWindow   As frmCodeWindow
-        
-        '切换到对应的窗口
-        Set NewCodeWindow = frmMain.ShowCodeWindow(, CallStackInfo(iItem).File)
-        If NewCodeWindow Is Nothing Then
-            NoSkinMsgBox Lang_Main_Debug_OpenSourceFailure & CallStackInfo(iItem).File, vbExclamation, Lang_Msgbox_Error
-        Else
-            NewCodeWindow.SyntaxEdit.CurrPos.Row = CallStackInfo(iItem).Line
-            NewCodeWindow.SyntaxEdit.SetFocus
+        If CallStackInfo(iItem).Line <> -1 Then                                                 '切换到对应的代码行
+            Dim NewCodeWindow   As frmCodeWindow
+            
+            '切换到对应的窗口
+            Set NewCodeWindow = frmMain.ShowCodeWindow(, CallStackInfo(iItem).File)
+            If NewCodeWindow Is Nothing Then
+                NoSkinMsgBox Lang_Main_Debug_OpenSourceFailure & CallStackInfo(iItem).File, vbExclamation, Lang_Msgbox_Error
+            Else
+                NewCodeWindow.SyntaxEdit.CurrPos.Row = CallStackInfo(iItem).Line
+                NewCodeWindow.SyntaxEdit.SetFocus
+            End If
+        Else                                                                                    '若行号为-1，则说明是要从文件浏览器打开文件位置
+            Shell "explorer.exe /select,""" & CallStackInfo(iItem).File & """", vbNormalFocus
         End If
     End If
 End Sub

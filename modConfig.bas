@@ -160,6 +160,14 @@ Public Lang_Main_RunningInfo_2                  As String
 Public Lang_Main_Debug_OpenSourceFailure        As String
 Public Lang_Main_Debug_BreakpointHit            As String
 Public Lang_Main_Debug_Returned                 As String
+Public Lang_Main_Failed_Kill_Debug              As String
+Public Lang_Main_Failed_Kill_Gdb                As String
+Public Lang_Main_Failed_Kill_Ending             As String
+Public Lang_Main_Gdb_Unexpected_Exit_1          As String
+Public Lang_Main_Gdb_Unexpected_Exit_2          As String
+Public Lang_Main_Gdb_Unexpected_Exit_3          As String
+Public Lang_Main_Debug_Break_At                 As String
+Public Lang_Main_Read_Pipe_Error                As String
 
 Public Lang_SolutionExplorer_Caption            As String
 Public Lang_SolutionExplorer_RenameFailure_1    As String
@@ -402,6 +410,14 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_Main_Debug_OpenSourceFailure = "无法打开代码文件: "
     Lang_Main_Debug_BreakpointHit = "断点命中于"
     Lang_Main_Debug_Returned = "程序退出并返回: "
+    Lang_Main_Failed_Kill_Debug = "结束调试进程"
+    Lang_Main_Failed_Kill_Gdb = "结束gdb进程"
+    Lang_Main_Failed_Kill_Ending = "失败！请自行结束该进程。"
+    Lang_Main_Gdb_Unexpected_Exit_1 = "gdb进程"
+    Lang_Main_Gdb_Unexpected_Exit_2 = "意外退出！调试被迫结束。"
+    Lang_Main_Gdb_Unexpected_Exit_3 = "将试图强制结束调试进程"
+    Lang_Main_Debug_Break_At = "程序中断于 "
+    Lang_Main_Read_Pipe_Error = "无法获取gdb调试管道内容！将取消本次调试。"
     
     Lang_SolutionExplorer_Caption = "工程资源管理器"
     Lang_SolutionExplorer_RenameFailure_1 = "为文件"

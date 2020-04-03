@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{945E8FCC-830E-45CC-AF00-A012D5AE7451}#15.3#0"; "DockingPane.ocx"
+Object = "{945E8FCC-830E-45CC-AF00-A012D5AE7451}#15.3#0"; "DOCKIN~1.OCX"
 Object = "{BD0C1912-66C3-49CC-8B12-7B347BF6C846}#15.3#0"; "SkinFramework.ocx"
 Begin VB.Form frmMain 
    BackColor       =   &H00302D2D&
@@ -702,22 +702,14 @@ Begin VB.Form frmMain
       TabIndex        =   1
       Top             =   0
       Width           =   16845
-      _ExtentX        =   29713
-      _ExtentY        =   873
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Microsoft YaHei UI"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Caption         =   "拖控件大法"
-      MaxButtonVisible=   0   'False
-      MinButtonVisible=   0   'False
-      BindCaption     =   -1  'True
-      Picture         =   "frmMain.frx":1FC6C
+      _extentx        =   29713
+      _extenty        =   873
+      font            =   "frmMain.frx":1FC6C
+      caption         =   "拖控件大法"
+      maxbuttonvisible=   0   'False
+      minbuttonvisible=   0   'False
+      bindcaption     =   -1  'True
+      picture         =   "frmMain.frx":1FCA0
    End
    Begin XtremeSkinFramework.SkinFramework SkinFramework 
       Left            =   14160
@@ -757,6 +749,9 @@ Private Declare Function GetWindowPlacement Lib "user32" (ByVal hwnd As Long, lp
 Private Declare Function CreateProcess Lib "kernel32" Alias "CreateProcessA" (ByVal lpApplicationName As Long, ByVal lpCommandLine As String, _
     lpProcessAttributes As SECURITY_ATTRIBUTES, lpThreadAttributes As SECURITY_ATTRIBUTES, ByVal bInheritHandles As Long, ByVal dwCreationFlags As Long, _
     ByVal lpEnvironment As Long, ByVal lpCurrentDirectory As Long, lpStartupInfo As STARTUPINFO, lpProcessInformation As PROCESS_INFORMATION) As Long
+
+'中断指定的进程
+Private Declare Function DebugBreakProcess Lib "kernel32" (ByVal hProcess As Long) As Long
 
 '工程类型
 '值     描述
@@ -927,6 +922,12 @@ Private Sub ClearDebugWindows(Optional ClearBreakpoints As Boolean = False)
     End If
     Call frmLocals.ClearEverything                                                  '本地
     Call frmCallStack.ClearEverything                                               '调用堆栈
+End Sub
+
+'描述:      在所有窗口显示调试信息
+Private Sub GetDebugInfo()
+    Call frmLocals.GetLocals                                                        '获取本地变量
+    Call frmCallStack.GetCallStack                                                  '获取调用堆栈
 End Sub
 
 '描述:      检查当前是否有未保存的文件
@@ -1273,6 +1274,31 @@ Private Sub mnuRun_Click()
     Me.tmrCheckProcess.Enabled = True                                           '开始等待进程结束
 End Sub
 
+'描述:      “中断”菜单
+Private Sub mnuBreak_Click()
+    '挂起调试进程
+    DebugBreakProcess DebugProgramInfo.hProcess
+End Sub
+
+'描述:      “停止”菜单
+Private Sub mnuStop_Click()
+    '停止检测计时器
+    Me.tmrCheckProcess.Enabled = False
+    
+    '强制结束调试进程
+    If TerminateProcess(DebugProgramInfo.hProcess, -1) = 0 Then
+        frmOutput.OutputLog Lang_Main_Failed_Kill_Debug & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ") " & Lang_Main_Failed_Kill_Ending
+    End If
+    
+    '强制结束gdb进程
+    If TerminateProcess(GdbPipe.hProcess, -1) = 0 Then
+        frmOutput.OutputLog Lang_Main_Failed_Kill_Gdb & GdbPipe.hProcess & "(" & Hex(GdbPipe.hProcess) & ") " & Lang_Main_Failed_Kill_Ending
+    End If
+    
+    '收尾
+    Call ProcessExitedHandler(-1)
+End Sub
+
 '描述:      隐藏启动界面
 Public Sub HideStartupPage()
     On Error Resume Next
@@ -1328,6 +1354,12 @@ Private Sub DarkMenu_MenuItemClicked(MenuID As Integer)
         
         Case 52                                                                         '运行
             Call mnuRun_Click
+            
+        Case 53                                                                         '中断
+            Call mnuBreak_Click
+        
+        Case 54                                                                         '停止
+            Call mnuStop_Click
         
     End Select
 End Sub
@@ -1453,7 +1485,7 @@ Private Sub Form_Load()
     Me.DockingPane.PaintManager.SplitterSize = 2                                                                        '设置分割区域的大小
     
     'If Not Me.SkinFramework.LoadSkin("Skin.cjstyles", "NormalBlue.ini") Then                                            '加载皮肤 [ToDo]
-        'MsgBox "加载皮肤失败！", vbCritical, Lang_Msgbox_Error todo: multi language
+    '    MsgBox "加载皮肤失败！", vbCritical, Lang_Msgbox_Error 'todo: multi language
     'End If
     
     'todo 删掉-----------------
@@ -1621,15 +1653,15 @@ Private Sub tmrCheckProcess_Timer()
     Dim i                           As Long
     
     If Not ProcessExists(GdbPipe.hProcess) Then
-        frmOutput.OutputLog "gdb进程" & GdbPipe.dwProcessId & "(" & Hex(GdbPipe.dwProcessId) & ") " & "意外退出！调试被迫结束。"
-        frmOutput.OutputLog "将试图强制结束调试进程" & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ")"
-        If TerminateProcess(DebugProgramInfo.hProcess, 0) = 0 Then
-            frmOutput.OutputLog "结束进程" & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ") " & "失败！请自行结束该进程。"
+        frmOutput.OutputLog Lang_Main_Gdb_Unexpected_Exit_1 & GdbPipe.dwProcessId & "(" & Hex(GdbPipe.dwProcessId) & ") " & Lang_Main_Gdb_Unexpected_Exit_2
+        frmOutput.OutputLog Lang_Main_Gdb_Unexpected_Exit_3 & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ")"
+        If TerminateProcess(DebugProgramInfo.hProcess, -1) = 0 Then
+            frmOutput.OutputLog Lang_Main_Failed_Kill_Debug & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ") " & Lang_Main_Failed_Kill_Ending
         End If
-        Call ProcessExitedHandler(0)
+        Call ProcessExitedHandler(-1)
         Exit Sub
     End If
-    If GdbPipe.DosOutput(PipeOutput, "(gdb) ") = 1 Then                             '获取gdb是否有新消息
+    If GdbPipe.DosOutput(PipeOutput, "(gdb) ", 2000) = 1 Then                       '获取gdb是否有新消息
         PipeOutputLine = Split(PipeOutput, vbCrLf)                                      '分割出gdb输出的每一行
         For i = 0 To UBound(PipeOutputLine)                                             '遍历输出的每一行
             PipeOutput = PipeOutputLine(i)
@@ -1666,8 +1698,7 @@ Private Sub tmrCheckProcess_Timer()
                 frmOutput.AddLineInfo False, CurrentProject.Files(GdbBreakpoints(BreakpointIndex).FileIndex).FilePath, SourceLn
                 
                 '获取各种调试信息
-                Call frmCallStack.GetCallStack                                                  '获取调用堆栈
-                Call frmLocals.GetLocals                                                        '获取本地变量
+                Call GetDebugInfo
             '======================================================================================================================
             
             ElseIf PipeOutput Like "[[]Inferior * exited *" Then                            '进程退出信息（[Inferior * (process *) exited *]）（新版gdb）
@@ -1709,28 +1740,37 @@ Private Sub tmrCheckProcess_Timer()
                 rtnInfo = ParseCallStackString(PipeOutputLine(0))                               '分析输出，获取当前代码位置
                 
                 '切换到对应的代码框
-                Set NewCodeWindow = ShowCodeWindow(, rtnInfo.File)                              '在代码框显示断点对应的位置
-                If NewCodeWindow Is Nothing Then
-                    NoSkinMsgBox Lang_Main_Debug_OpenSourceFailure & rtnInfo.File, _
-                            vbExclamation, Lang_Msgbox_Error
-                Else
-                    NewCodeWindow.SyntaxEdit.CurrPos.Row = rtnInfo.Line                             '跳转到对应的代码行
-                    NewCodeWindow.BreakLine = rtnInfo.Line
-                    NewCodeWindow.SyntaxEdit.SetFocus
-                    NewCodeWindow.RedrawBreakpoints                                                 '绘制中断行的小箭头
+                If rtnInfo.File <> "" Then
+                    Set NewCodeWindow = ShowCodeWindow(, rtnInfo.File)                              '在代码框显示断点对应的位置
+                    If NewCodeWindow Is Nothing Then
+                        NoSkinMsgBox Lang_Main_Debug_OpenSourceFailure & rtnInfo.File, _
+                                vbExclamation, Lang_Msgbox_Error
+                    Else
+                        NewCodeWindow.SyntaxEdit.CurrPos.Row = rtnInfo.Line                             '跳转到对应的代码行
+                        NewCodeWindow.BreakLine = rtnInfo.Line
+                        NewCodeWindow.SyntaxEdit.SetFocus
+                        NewCodeWindow.RedrawBreakpoints                                                 '绘制中断行的小箭头
+                    End If
                 End If
                 
                 '在“输出”里面添加程序中断消息
-                frmOutput.OutputLog "程序中断于 " & rtnInfo.File & ":" & rtnInfo.Line & " (" & rtnInfo.Address & ")"        'todo: translate
+                If rtnInfo.File <> "" Then
+                    frmOutput.OutputLog Lang_Main_Debug_Break_At & rtnInfo.File & ":" & rtnInfo.Line & " (" & rtnInfo.Address & ")"
+                Else
+                    frmOutput.OutputLog Lang_Main_Debug_Break_At & rtnInfo.Address
+                End If
                 frmOutput.AddLineInfo False, rtnInfo.File, rtnInfo.Line
                 
                 '获取各种调试信息
-                Call frmCallStack.GetCallStack                                                  '获取调用堆栈
-                Call frmLocals.GetLocals                                                        '获取本地变量
+                Call GetDebugInfo
             End If
         Next i
     Else
+        '无法获取管道内容! 那只好干掉gdb咯...
+        frmOutput.OutputLog Lang_Main_Read_Pipe_Error
         Me.tmrCheckProcess.Enabled = False
-        MsgBox "gdb BOOMED!"
+        TerminateProcess GdbPipe.hProcess, -1
+        TerminateProcess DebugProgramInfo.hProcess, -1
+        Call ProcessExitedHandler(-1)
     End If
 End Sub
