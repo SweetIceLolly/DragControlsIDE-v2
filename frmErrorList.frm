@@ -26,7 +26,7 @@ Begin VB.Form frmErrorList
       Left            =   0
       ScaleHeight     =   600
       ScaleWidth      =   7035
-      TabIndex        =   2
+      TabIndex        =   1
       Top             =   0
       Width           =   7035
       Begin VB.Timer tmrRestoreColor 
@@ -44,7 +44,7 @@ Begin VB.Form frmErrorList
          Left            =   2640
          ScaleHeight     =   405
          ScaleWidth      =   1215
-         TabIndex        =   7
+         TabIndex        =   6
          Top             =   60
          Width           =   1215
          Begin ImageX.aicAlphaImage imgInfo 
@@ -65,7 +65,7 @@ Begin VB.Form frmErrorList
             ForeColor       =   &H00F0F0F0&
             Height          =   195
             Left            =   480
-            TabIndex        =   8
+            TabIndex        =   7
             Top             =   120
             Width           =   495
          End
@@ -88,7 +88,7 @@ Begin VB.Form frmErrorList
          Left            =   1320
          ScaleHeight     =   405
          ScaleWidth      =   1215
-         TabIndex        =   5
+         TabIndex        =   4
          Top             =   60
          Width           =   1215
          Begin ImageX.aicAlphaImage imgWarning 
@@ -109,7 +109,7 @@ Begin VB.Form frmErrorList
             ForeColor       =   &H00F0F0F0&
             Height          =   195
             Left            =   480
-            TabIndex        =   6
+            TabIndex        =   5
             Top             =   120
             Width           =   495
          End
@@ -132,7 +132,7 @@ Begin VB.Form frmErrorList
          Left            =   60
          ScaleHeight     =   405
          ScaleWidth      =   1215
-         TabIndex        =   3
+         TabIndex        =   2
          Top             =   60
          Width           =   1215
          Begin ImageX.aicAlphaImage imgError 
@@ -162,58 +162,20 @@ Begin VB.Form frmErrorList
             ForeColor       =   &H00F0F0F0&
             Height          =   195
             Left            =   480
-            TabIndex        =   4
+            TabIndex        =   3
             Top             =   120
             Width           =   495
          End
       End
    End
-   Begin VB.PictureBox picErrorType 
-      Appearance      =   0  'Flat
-      AutoRedraw      =   -1  'True
-      BackColor       =   &H00373333&
-      BorderStyle     =   0  'None
-      ForeColor       =   &H80000008&
-      Height          =   2400
-      Left            =   0
-      ScaleHeight     =   2400
-      ScaleWidth      =   360
-      TabIndex        =   0
-      Top             =   840
-      Width           =   360
-   End
    Begin DragControlsIDE.DarkListView lvErrorList 
       Height          =   2655
       Left            =   600
-      TabIndex        =   1
-      Top             =   840
+      TabIndex        =   0
+      Top             =   720
       Width           =   5775
       _ExtentX        =   10186
       _ExtentY        =   4683
-   End
-   Begin VB.Image imgInfoIcon 
-      Enabled         =   0   'False
-      Height          =   240
-      Left            =   5880
-      Picture         =   "frmErrorList.frx":0882
-      Top             =   3840
-      Width           =   240
-   End
-   Begin VB.Image imgWarningIcon 
-      Enabled         =   0   'False
-      Height          =   240
-      Left            =   5400
-      Picture         =   "frmErrorList.frx":0C0C
-      Top             =   3840
-      Width           =   240
-   End
-   Begin VB.Image imgErrorIcon 
-      Enabled         =   0   'False
-      Height          =   240
-      Left            =   4920
-      Picture         =   "frmErrorList.frx":0F96
-      Top             =   3840
-      Width           =   240
    End
 End
 Attribute VB_Name = "frmErrorList"
@@ -229,10 +191,18 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+Private Declare Function LoadImageA Lib "user32" (ByVal hInst As Long, ByVal name As Long, ByVal restype As Long, _
+    ByVal cx As Long, ByVal cy As Long, ByVal fuLoad As Long) As Long
+
 '定义按钮颜色常数
 Private Const NORMAL_COLOR = &H373333
 Private Const MOUSEON_COLOR = &H5E5C5C
 Private Const MOUSEDOWN_COLOR = &HCC7A00
+
+'定义图标资源ID常数
+Private Const IDI_ERROR = 101
+Private Const IDI_INFO = 102
+Private Const IDI_WARNING = 103
 
 '定义错误信息结构
 Private Type ErrorInfo
@@ -245,10 +215,7 @@ End Type
 
 Dim ErrorInfoList()             As ErrorInfo                                '所有错误信息（最后一个元素是多余的）
 Dim InfoIndexBindingList()      As Long                                     'InfoIndexBindingList(列表项序号) = ErrorInfoList中的对应元素序号
-Dim ColumnHeaderHeight          As Long                                     'ListView的ColumnHeader高度
-Dim ListItemHeight              As Long                                     'ListView每个列表项的高度
-Dim SpaceCount                  As Integer                                  '图片框的宽度相当于多少个空格
-Dim ColumnHeader                As Long                                     '列表头的窗口句柄
+Dim hImageList                  As Long                                     'ImageList句柄
 
 Dim ShowErrors                  As Boolean                                  '用户自定义显示的消息类型
 Dim ShowWarnings                As Boolean
@@ -265,36 +232,10 @@ Public Sub ClearEverything()
     Me.lvErrorList.Clear
     ReDim ErrorInfoList(0)
     ReDim InfoIndexBindingList(0)
-    Me.picErrorType.Cls
     Call AddErrorListItem
 End Sub
 
-'描述:      重绘所有的错误类型图标
-Public Sub RedrawErrorIcons()
-    On Error Resume Next
-    Dim i                       As Long
-    Dim CurrentListCount        As Long
-    Dim TopItem                 As Long, BottomItem                 As Long
-    
-    Me.picErrorType.Cls
-    TopItem = Me.lvErrorList.GetTopIndex()                                  '获取ListView中第一个可视的列表项的序号
-    BottomItem = TopItem + Me.lvErrorList.Height / ListItemHeight           '计算出ListView中最后一个可视的列表项的序号
-    CurrentListCount = Me.lvErrorList.GetItemCount - 1                      '获取列表项数目
-    If BottomItem > CurrentListCount Then                                   '检测最后一个可视列表项的序号是否超出列表项索引
-        BottomItem = CurrentListCount
-    End If
-    For i = TopItem To BottomItem                                           '绘画可视范围内的所有图标
-        If ErrorInfoList(InfoIndexBindingList(i)).ErrorType = 0 Then            'error
-            Me.picErrorType.PaintPicture Me.imgErrorIcon.Picture, 0, (i - TopItem) * ListItemHeight + 60
-        ElseIf ErrorInfoList(InfoIndexBindingList(i)).ErrorType = 1 Then        'warning
-            Me.picErrorType.PaintPicture Me.imgWarningIcon.Picture, 0, (i - TopItem) * ListItemHeight + 60
-        Else                                                                    'info
-            Me.picErrorType.PaintPicture Me.imgInfoIcon.Picture, 0, (i - TopItem) * ListItemHeight + 60
-        End If
-    Next i
-End Sub
-
-'描述:      往ErrorInfoList和ListView里添加项目
+'描述:      往ErrorInfoList里添加项目
 '参数:      ErrorType: 错误类型（0: error; 1: warning; 2: info）
 '.          Description: 错误描述
 '.          FileName: 文件名
@@ -354,11 +295,21 @@ Public Sub AddErrorListItem()
            (ErrorInfoList(i).ErrorType = 1 And ShowWarnings) Or _
            (ErrorInfoList(i).ErrorType = 2 And ShowInfo) Then
         
-            NewItemIndex = Me.lvErrorList.AddItem(Space(SpaceCount) & CStr(i + 1))
+            NewItemIndex = Me.lvErrorList.AddItem(CStr(i + 1))
             Me.lvErrorList.SetItemText ErrorInfoList(i).Description, NewItemIndex, 1
             Me.lvErrorList.SetItemText ErrorInfoList(i).FileName, NewItemIndex, 2
             Me.lvErrorList.SetItemText CStr(ErrorInfoList(i).FileLine), NewItemIndex, 3
             Me.lvErrorList.SetItemText CStr(ErrorInfoList(i).FileColumn), NewItemIndex, 4
+            
+            '设置列表项的图标
+            Dim lvi As LVITEM
+            
+            lvi.mask = LVIF_IMAGE
+            lvi.iItem = NewItemIndex
+            lvi.iSubItem = 0
+            lvi.iImage = CLng(ErrorInfoList(i).ErrorType)
+            SendMessageA Me.lvErrorList.ListViewHwnd, LVM_SETITEM, ByVal 0, ByVal VarPtr(lvi)
+            
             InfoIndexBindingList(NewItemIndex) = i                                      '添加到序号绑定列表
         End If
     Next i
@@ -368,9 +319,8 @@ Private Sub Form_Load()
     Me.Caption = Lang_ErrorList_Caption
     
     '初始化控件排版
-    Me.picErrorType.Move 0, Me.picTypeSelection.Height, 300
-    Me.lvErrorList.Move 0, Me.picTypeSelection.Height
-    
+    Me.lvErrorList.Left = 0
+    Me.lvErrorList.Top = Me.picTypeSelection.Height
     Me.picSwitchErrors.Top = Me.picTypeSelection.Height / 2 - Me.picSwitchErrors.Height / 2
     Me.picSwitchErrors.Left = 120
     Me.imgError.Left = 60
@@ -404,48 +354,27 @@ Private Sub Form_Load()
     ShowErrors = True                                                                               '默认显示所有消息类型
     ShowWarnings = True
     ShowInfo = True
-    Call AddErrorListItem
+    Call AddErrorListItem                                                                           '初始化按钮布局
+        
+    '创建ListView的图标列表
+    hImageList = ImageList_Create(16, 16, ILC_MASK, 0, 0)
+    Dim hIcon   As Long
+    ImageList_AddIcon hImageList, LoadImageA(App.hInstance, IDI_ERROR, IMAGE_ICON, 0, 0, LR_DEFAULTSIZE)
+    ImageList_AddIcon hImageList, LoadImageA(App.hInstance, IDI_WARNING, IMAGE_ICON, 0, 0, LR_DEFAULTSIZE)
+    ImageList_AddIcon hImageList, LoadImageA(App.hInstance, IDI_INFO, IMAGE_ICON, 0, 0, LR_DEFAULTSIZE)
     
-    '获取列表头的高度
-    Dim tmpRect                 As RECT
-    ColumnHeader = SendMessageA(Me.lvErrorList.ListViewHwnd, LVM_GETHEADER, 0, 0)                   '获取列表头的句柄
-    SendMessageA ColumnHeader, HDM_GETITEMRECT, ByVal 0, ByVal VarPtr(tmpRect)                      '获取列表头的大小
-    ColumnHeaderHeight = (tmpRect.bottom - tmpRect.Top) * Screen.TwipsPerPixelY                     '计算出列表头的高度
-    
-    '获取ListView中每个列表项的高度
-    ZeroMemory tmpRect, ByVal Len(tmpRect)
-    tmpRect.Left = LVIR_BOUNDS                                                                      '根据文档，在发消息前tmpRect.Left须设置为LVIR_BOUNDS
-    Me.lvErrorList.AddItem "Stay DETERMINED!"                                                       '添加一个列表项，以计算列表项高度
-    SendMessageA Me.lvErrorList.ListViewHwnd, LVM_GETITEMRECT, ByVal 0, ByVal VarPtr(tmpRect)       '获取列表项的大小
-    Me.lvErrorList.Clear                                                                            '清空列表项
-    ListItemHeight = (tmpRect.bottom - tmpRect.Top) * Screen.TwipsPerPixelY                         '计算出列表项的高度
-    
-    '设置列表头调整大小的窗口消息处理 todo
-    SetPropA ColumnHeader, "PrevWndProc", SetWindowLongA(ColumnHeader, GWL_WNDPROC, AddressOf ErrorListColumnHeaderLayoutProc)
-    
-    '设置ListView重绘节点图标的窗口消息处理 todo
-    SetPropA Me.lvErrorList.ListViewHwnd, "PrevWndProc", SetWindowLongA(Me.lvErrorList.ListViewHwnd, GWL_WNDPROC, AddressOf ErrorListIconRedrawProc)
-    
-    '把图片框放到ListView里
-    SetParent Me.picErrorType.hwnd, Me.lvErrorList.ListViewHwnd
-    Me.picErrorType.Top = ColumnHeaderHeight
-    
-    '计算图片框的宽度相当于多少个空格
-    SpaceCount = Me.picErrorType.Width / Me.picErrorType.TextWidth(" ") + 1
+    '绑定ListView和图标列表
+    SendMessageA Me.lvErrorList.ListViewHwnd, LVM_SETIMAGELIST, ByVal LVSIL_SMALL, ByVal hImageList
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
-    '恢复列表头的窗口消息处理
-    SetWindowLongA ColumnHeader, GWL_WNDPROC, GetPropA(ColumnHeader, "PrevWndProc")
-    
-    '恢复ListView的窗口消息处理
-    SetWindowLongA Me.lvErrorList.ListViewHwnd, GWL_WNDPROC, GetPropA(Me.lvErrorList.ListViewHwnd, "PrevWndProc")
+    '释放ImageList
+    ImageList_Destroy hImageList
 End Sub
 
 Private Sub Form_Resize()
     On Error Resume Next
     
-    Me.picErrorType.Height = Me.ScaleHeight - ColumnHeaderHeight
     Me.lvErrorList.Width = Me.ScaleWidth
     Me.lvErrorList.Height = Me.ScaleHeight - Me.picTypeSelection.Height
 End Sub
@@ -613,19 +542,25 @@ Private Sub tmrRestoreColor_Timer()
     CurrWindow = WindowFromPoint(CurPos.X, CurPos.Y)
     
     If CurrWindow <> Me.picSwitchErrors.hwnd Then
-        Me.picSwitchErrors.BackColor = NORMAL_COLOR
+        If Me.picSwitchErrors.BackColor <> NORMAL_COLOR Then
+            Me.picSwitchErrors.BackColor = NORMAL_COLOR
+        End If
     Else
         NeedToDisable = False
     End If
     
     If CurrWindow <> Me.picSwitchWarnings.hwnd Then
-        Me.picSwitchWarnings.BackColor = NORMAL_COLOR
+        If Me.picSwitchWarnings.BackColor <> NORMAL_COLOR Then
+            Me.picSwitchWarnings.BackColor = NORMAL_COLOR
+        End If
     Else
         NeedToDisable = False
     End If
     
     If CurrWindow <> Me.picSwitchInfo.hwnd Then
-        Me.picSwitchInfo.BackColor = NORMAL_COLOR
+        If Me.picSwitchInfo.BackColor <> NORMAL_COLOR Then
+            Me.picSwitchInfo.BackColor = NORMAL_COLOR
+        End If
     Else
         NeedToDisable = False
     End If

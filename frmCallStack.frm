@@ -111,7 +111,7 @@ Private Sub Form_Resize()
 End Sub
 
 Private Sub lvCallStack_Click(iItem As Long, iSubItem As Long, X As Long, Y As Long)
-    'On Error Resume Next       'todo
+    On Error Resume Next
     
     If CallStackInfo(iItem).File <> "" Then
         CtlAddToolTip Me.lvCallStack.ListViewHwnd, Lang_Breakpoints_ListViewHeader_Address & ": " & CallStackInfo(iItem).Address & vbCrLf & _
