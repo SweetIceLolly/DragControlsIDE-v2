@@ -241,7 +241,11 @@ End Sub
 
 Private Sub DarkTitleBar_GotFocus()
     On Error Resume Next
-    
+    Me.SyntaxEdit.SetFocus
+End Sub
+
+Private Sub Form_GotFocus()
+    On Error Resume Next
     Me.SyntaxEdit.SetFocus
 End Sub
 

@@ -45,7 +45,7 @@ End Sub
 
 '描述:      获取调用堆栈列表
 Public Sub GetCallStack()
-    On Error Resume Next       'todo
+    On Error Resume Next
     Dim PipeOutput          As String                                       '管道的输出
     Dim OutputLines()       As String                                       '输出的每一行
     Dim NewListItem         As Long                                         '新添加的ListView列表项索引
@@ -53,7 +53,7 @@ Public Sub GetCallStack()
     Dim i                   As Long
     
     Me.lvCallStack.Clear
-    frmMain.DockingPane.Panes(10).Title = Lang_CallStack_Retrieving_Caption
+    frmMain.DockingPane.Panes(10).Title = Lang_CallStack_Caption & Lang_DebugWindow_Retrieving_Caption
     
     frmMain.GdbPipe.ClearPipe                                               '清空管道里的内容
     frmMain.GdbPipe.DosInput "info stack" & vbCrLf                          '向gdb发送获取调用堆栈命令

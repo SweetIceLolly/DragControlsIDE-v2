@@ -930,10 +930,14 @@ Private Sub ClearDebugWindows(Optional ClearBreakpoints As Boolean = False)
     End If
     Call frmLocals.ClearEverything                                                  '本地
     Call frmCallStack.ClearEverything                                               '调用堆栈
+    Call frmModules.ClearEverything                                                 '模块
+    Call frmThreads.ClearEverything                                                 '线程
 End Sub
 
 '描述:      在所有窗口显示调试信息
 Private Sub GetDebugInfo()
+    Call frmModules.GetModules                                                      '获取模块
+    Call frmThreads.GetThreads                                                      '获取线程
     Call frmLocals.GetLocals                                                        '获取本地变量
     Call frmCallStack.GetCallStack                                                  '获取调用堆栈
 End Sub
@@ -1294,17 +1298,17 @@ Private Sub mnuStop_Click()
     Me.tmrCheckProcess.Enabled = False
     
     '强制结束调试进程
-    If TerminateProcess(DebugProgramInfo.hProcess, -1) = 0 Then
+    If TerminateProcess(DebugProgramInfo.hProcess, 0) = 0 Then
         frmOutput.OutputLog Lang_Main_Failed_Kill_Debug & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ") " & Lang_Main_Failed_Kill_Ending
     End If
     
     '强制结束gdb进程
-    If TerminateProcess(GdbPipe.hProcess, -1) = 0 Then
+    If TerminateProcess(GdbPipe.hProcess, 0) = 0 Then
         frmOutput.OutputLog Lang_Main_Failed_Kill_Gdb & GdbPipe.hProcess & "(" & Hex(GdbPipe.hProcess) & ") " & Lang_Main_Failed_Kill_Ending
     End If
     
     '收尾
-    Call ProcessExitedHandler(-1)
+    Call ProcessExitedHandler(0)
 End Sub
 
 '描述:      隐藏启动界面
@@ -1359,6 +1363,12 @@ Private Sub DarkMenu_MenuItemClicked(MenuID As Integer)
         
         Case 45                                                                         '调用堆栈
             Me.DockingPane.ShowPane 10
+        
+        Case 46                                                                         '线程
+            Me.DockingPane.ShowPane 11
+        
+        Case 47                                                                         '模块
+            Me.DockingPane.ShowPane 12
         
         Case 52                                                                         '运行
             Call mnuRun_Click
@@ -1664,10 +1674,10 @@ Private Sub tmrCheckProcess_Timer()
     If Not ProcessExists(GdbPipe.hProcess) Then
         frmOutput.OutputLog Lang_Main_Gdb_Unexpected_Exit_1 & GdbPipe.dwProcessId & "(" & Hex(GdbPipe.dwProcessId) & ") " & Lang_Main_Gdb_Unexpected_Exit_2
         frmOutput.OutputLog Lang_Main_Gdb_Unexpected_Exit_3 & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ")"
-        If TerminateProcess(DebugProgramInfo.hProcess, -1) = 0 Then
+        If TerminateProcess(DebugProgramInfo.hProcess, 0) = 0 Then
             frmOutput.OutputLog Lang_Main_Failed_Kill_Debug & DebugProgramInfo.dwProcessId & "(" & Hex(DebugProgramInfo.dwProcessId) & ") " & Lang_Main_Failed_Kill_Ending
         End If
-        Call ProcessExitedHandler(-1)
+        Call ProcessExitedHandler(0)
         Exit Sub
     End If
     If GdbPipe.DosOutput(PipeOutput, "(gdb) ", 2000) = 1 Then                       '获取gdb是否有新消息
@@ -1778,8 +1788,8 @@ Private Sub tmrCheckProcess_Timer()
         '无法获取管道内容! 那只好干掉gdb咯...
         frmOutput.OutputLog Lang_Main_Read_Pipe_Error
         Me.tmrCheckProcess.Enabled = False
-        TerminateProcess GdbPipe.hProcess, -1
-        TerminateProcess DebugProgramInfo.hProcess, -1
-        Call ProcessExitedHandler(-1)
+        TerminateProcess GdbPipe.hProcess, 0
+        TerminateProcess DebugProgramInfo.hProcess, 0
+        Call ProcessExitedHandler(0)
     End If
 End Sub

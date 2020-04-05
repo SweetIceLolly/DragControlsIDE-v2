@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "Image.ocx"
+Object = "{ACD4732E-2B7C-40C1-A56B-078848D41977}#1.0#0"; "image.ocx"
 Begin VB.UserControl TabBar 
    BackColor       =   &H00302D2D&
    ClientHeight    =   4485
@@ -206,7 +206,7 @@ Public Sub RemoveForm(Index As Integer, Optional DeleteSource As Boolean = True)
         Exit Sub
     End If
     
-    SetParent Windows(Index).hWnd, 0                            '在移除窗口前先恢复其母窗体，因为即使DeleteSource = False，窗口也会随着母窗口一起关闭
+    SetParent Windows(Index).hwnd, 0                            '在移除窗口前先恢复其母窗体，因为即使DeleteSource = False，窗口也会随着母窗口一起关闭
     If DeleteSource Then Unload Windows(Index)
     FixPosition Index, UBound(Windows) - 1, 1
     ReDim Preserve Windows(UBound(Windows) - 1)
@@ -268,7 +268,7 @@ Public Sub AddForm(Frm As Form)
         .Top = TabTitle(Index).Top
         .Visible = True
         .ClearImage
-        .LoadImage_FromHandle SendMessageA(Frm.hWnd, WM_GETICON, ICON_BIG, 0)
+        .LoadImage_FromHandle SendMessageA(Frm.hwnd, WM_GETICON, ICON_BIG, 0)
         .Refresh
         .Width = TabTitle(Index).Height
         .Height = TabTitle(Index).Height
@@ -304,9 +304,9 @@ Public Sub AddForm(Frm As Form)
         .Left = 0
         .Top = TopBar.Height
         .Visible = True
-        .Tag = Frm.hWnd
+        .Tag = Frm.hwnd
         .ZOrder
-        SetParent Frm.hWnd, .hWnd
+        SetParent Frm.hwnd, .hwnd
     End With
     
     ReDim Preserve Windows(UBound(Windows) + 1)
@@ -388,21 +388,21 @@ Private Sub ClickCover_MouseMove(Button As Integer, Shift As Integer, X As Singl
             BottomBar.BackColor = RGB(254, 84, 57)
             Dim p As POINTAPI
             GetCursorPos p
-            SetWindowPos Windows(DropIndex).hWnd, 0, p.X - SrcX / Screen.TwipsPerPixelX, p.Y - SrcY / Screen.TwipsPerPixelY, 0, 0, SWP_NOZORDER Or SWP_NOSIZE
+            SetWindowPos Windows(DropIndex).hwnd, 0, p.X - SrcX / Screen.TwipsPerPixelX, p.Y - SrcY / Screen.TwipsPerPixelY, 0, 0, SWP_NOZORDER Or SWP_NOSIZE
             Windows(DropIndex).DarkTitleBar.Visible = True
             Windows(DropIndex).DarkWindowBorder.Bind = True
             Windows(DropIndex).DarkWindowBorderSizer.Bind = True
             Call Windows(DropIndex).Form_Resize
-            SetParent Windows(DropIndex).hWnd, 0
+            SetParent Windows(DropIndex).hwnd, 0
             Dim rtn As Long
-            rtn = GetWindowLongA(Windows(DropIndex).hWnd, GWL_EXSTYLE) Or WS_EX_LAYERED
-            SetWindowLongA Windows(DropIndex).hWnd, GWL_EXSTYLE, rtn
-            SetLayeredWindowAttributes Windows(DropIndex).hWnd, 0, 128, LWA_ALPHA
+            rtn = GetWindowLongA(Windows(DropIndex).hwnd, GWL_EXSTYLE) Or WS_EX_LAYERED
+            SetWindowLongA Windows(DropIndex).hwnd, GWL_EXSTYLE, rtn
+            SetLayeredWindowAttributes Windows(DropIndex).hwnd, 0, 128, LWA_ALPHA
             
             Sleep 100: DoEvents
             Do While DropMode = 2
                 GetCursorPos p
-                SetWindowPos Windows(DropIndex).hWnd, 0, p.X - SrcX / Screen.TwipsPerPixelX, p.Y - SrcY / Screen.TwipsPerPixelY, 0, 0, SWP_NOZORDER Or SWP_NOSIZE
+                SetWindowPos Windows(DropIndex).hwnd, 0, p.X - SrcX / Screen.TwipsPerPixelX, p.Y - SrcY / Screen.TwipsPerPixelY, 0, 0, SWP_NOZORDER Or SWP_NOSIZE
                 Sleep 10: DoEvents
             Loop
         End If
@@ -417,11 +417,11 @@ End Sub
 
 Private Sub ClickCover_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If DropMode = 2 Then
-        SetLayeredWindowAttributes Windows(DropIndex).hWnd, 0, 255, LWA_ALPHA
+        SetLayeredWindowAttributes Windows(DropIndex).hwnd, 0, 255, LWA_ALPHA
         RaiseEvent WindowDropOut(Windows(DropIndex), DropIndex)
         Dim rtn As Long
-        rtn = GetWindowLongA(Windows(DropIndex).hWnd, GWL_EXSTYLE) And (Not WS_EX_LAYERED)
-        SetWindowLongA Windows(DropIndex).hWnd, GWL_EXSTYLE, rtn
+        rtn = GetWindowLongA(Windows(DropIndex).hwnd, GWL_EXSTYLE) And (Not WS_EX_LAYERED)
+        SetWindowLongA Windows(DropIndex).hwnd, GWL_EXSTYLE, rtn
         RemoveForm DropIndex, False
         BottomBar.BackColor = RGB(0, 122, 204)
     End If
@@ -451,19 +451,19 @@ Private Sub ClickCover_MouseUp(Button As Integer, Shift As Integer, X As Single,
                 If NewIndex < DropIndex Then
                     For i = DropIndex To NewIndex + 1 Step -1
                         Set Windows(i) = Windows(i - 1)
-                        SetParent Windows(i).hWnd, WindowFrame(i).hWnd
+                        SetParent Windows(i).hwnd, WindowFrame(i).hwnd
                         TabTitle(i).Caption = Windows(i).Caption
                     Next
                 Else
                     For i = DropIndex To NewIndex - 1
                         Set Windows(i) = Windows(i + 1)
-                        SetParent Windows(i).hWnd, WindowFrame(i).hWnd
+                        SetParent Windows(i).hwnd, WindowFrame(i).hwnd
                         TabTitle(i).Caption = Windows(i).Caption
                     Next
                 End If
                 Set Windows(NewIndex) = tempW
                 TabTitle(NewIndex).Caption = Windows(NewIndex).Caption
-                SetParent Windows(NewIndex).hWnd, WindowFrame(NewIndex).hWnd
+                SetParent Windows(NewIndex).hwnd, WindowFrame(NewIndex).hwnd
             End If
             If NewIndex < DropIndex Then
                 FixPosition2 NewIndex, DropIndex
@@ -501,8 +501,8 @@ Private Sub FixPosition(StartPos As Integer, EndPos As Integer, Step As Integer)
         CloseButton(i).Left = CloseButton(i + Step).Left - cx
         TabTitle(i).Caption = TabTitle(i + Step).Caption
         TabBg(i).Width = TabBg(i + Step).Width
-        TabIcon(i).LoadImage_FromHandle SendMessageA(Windows(i).hWnd, WM_GETICON, ICON_BIG, 0)
-        SetParent Windows(i).hWnd, WindowFrame(i).hWnd
+        TabIcon(i).LoadImage_FromHandle SendMessageA(Windows(i).hwnd, WM_GETICON, ICON_BIG, 0)
+        SetParent Windows(i).hwnd, WindowFrame(i).hwnd
         CloseButton(i).Tag = CloseButton(i).Left - TabBg(i).Left
     Next
 End Sub
@@ -516,7 +516,7 @@ Private Sub FixPosition2(StartPos As Integer, EndPos As Integer)
         TabBg(i).Width = TabTitle(i).Width + TabTitle(i).Height * 2 + 38 * Screen.TwipsPerPixelX
         CloseButton(i).Left = TabBg(i).Left + 30 * Screen.TwipsPerPixelX + TabTitle(i).Width + TabIcon(i).Width
         CloseButton(i).Tag = CloseButton(i).Left - TabBg(i).Left
-        TabIcon(i).LoadImage_FromHandle SendMessageA(Windows(i).hWnd, WM_GETICON, ICON_BIG, 0)
+        TabIcon(i).LoadImage_FromHandle SendMessageA(Windows(i).hwnd, WM_GETICON, ICON_BIG, 0)
     Next
 End Sub
 
@@ -530,8 +530,8 @@ Private Sub cmdMoveOut_Click()
     If MenuTab = 0 Then Exit Sub
     Dim p As POINTAPI
     GetCursorPos p
-    SetWindowPos Windows(MenuTab).hWnd, 0, p.X, p.Y, 0, 0, SWP_NOZORDER Or SWP_NOSIZE
-    SetParent Windows(MenuTab).hWnd, 0
+    SetWindowPos Windows(MenuTab).hwnd, 0, p.X, p.Y, 0, 0, SWP_NOZORDER Or SWP_NOSIZE
+    SetParent Windows(MenuTab).hwnd, 0
     RaiseEvent WindowDropOut(Windows(MenuTab), MenuTab)
     RemoveForm MenuTab, False
     MenuTab = 0
@@ -544,9 +544,9 @@ Private Sub DropInCheck_Timer()
     
     If UserControl.Extender.Visible = False Then Exit Sub
     
-    Dim hWnd As Long, MBtn As Boolean
-    hWnd = GetActiveWindow
-    If hWnd = 0 Then Exit Sub
+    Dim hwnd As Long, MBtn As Boolean
+    hwnd = GetActiveWindow
+    If hwnd = 0 Then Exit Sub
     If DropMode = 2 Then Exit Sub
     
     MBtn = (GetAsyncKeyState(VK_LBUTTON) <> 0)
@@ -554,19 +554,19 @@ Private Sub DropInCheck_Timer()
     If Not MBtn Then Exit Sub
     
     Dim r As RECT, p As POINTAPI
-    GetWindowRect hWnd, r
+    GetWindowRect hwnd, r
     GetCursorPos p
     
     If Not (p.X >= r.Left And p.X <= r.Right And p.Y >= r.Top And p.Y - r.Top <= 33 * (15 / Screen.TwipsPerPixelY)) Then Exit Sub
     
-    GetWindowRect UserControl.hWnd, r
+    GetWindowRect UserControl.hwnd, r
     
     If Not (p.Y >= r.Top And p.Y <= r.Top + TopBar.Height / Screen.TwipsPerPixelY And p.X >= r.Left And p.X <= r.Right) Then Exit Sub
     
     Dim Frm As Form, DropForm As Form
     
     For Each Frm In VB.Forms
-        If Frm.hWnd = hWnd Then Set DropForm = Frm: Exit For
+        If Frm.hwnd = hwnd Then Set DropForm = Frm: Exit For
     Next
     
     If DropForm Is Nothing Then Exit Sub
@@ -583,15 +583,15 @@ SuccessRead:
     BottomBar.BackColor = RGB(254, 84, 57)
     
     Dim rtn As Long
-    rtn = GetWindowLongA(hWnd, GWL_EXSTYLE) Or WS_EX_LAYERED
-    SetWindowLongA hWnd, GWL_EXSTYLE, rtn
-    SetLayeredWindowAttributes hWnd, 0, 100, LWA_ALPHA
+    rtn = GetWindowLongA(hwnd, GWL_EXSTYLE) Or WS_EX_LAYERED
+    SetWindowLongA hwnd, GWL_EXSTYLE, rtn
+    SetLayeredWindowAttributes hwnd, 0, 100, LWA_ALPHA
     
     DropInMark.Visible = True
     DropInMark.ZOrder
     
     Dim Text As String * 255
-    GetWindowTextA hWnd, Text, 255
+    GetWindowTextA hwnd, Text, 255
     DropInMark.Caption = "*" & Text
     DropInMark.ForeColor = RGB(255, 255, 255)
     DropInMark.Width = Len(DropInMark.Caption) * DropInMark.FontSize * Screen.TwipsPerPixelX + 50 * Screen.TwipsPerPixelX
@@ -604,9 +604,9 @@ SuccessRead:
         Sleep 10: DoEvents
     Loop
     
-    SetLayeredWindowAttributes hWnd, 0, 255, LWA_ALPHA
+    SetLayeredWindowAttributes hwnd, 0, 255, LWA_ALPHA
     rtn = rtn And (Not WS_EX_LAYERED)
-    SetWindowLongA hWnd, GWL_EXSTYLE, rtn
+    SetWindowLongA hwnd, GWL_EXSTYLE, rtn
     
     BottomBar.BackColor = RGB(0, 122, 204)
     DropInMark.Visible = False

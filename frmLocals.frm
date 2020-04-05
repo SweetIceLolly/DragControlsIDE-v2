@@ -462,7 +462,7 @@ Public Sub GetLocals()
     
     ReDim VarNodes(0)                                                       '初始化变量列表
     Me.lvLocals.Clear
-    frmMain.DockingPane.Panes(8).Title = Lang_Locals_Retrieving_Caption
+    frmMain.DockingPane.Panes(8).Title = Lang_Locals_Caption & Lang_DebugWindow_Retrieving_Caption
     
     frmMain.GdbPipe.ClearPipe                                               '清空管道里的内容
     frmMain.GdbPipe.DosInput "info locals" & vbCrLf                         '向gdb发送获取本地变量命令

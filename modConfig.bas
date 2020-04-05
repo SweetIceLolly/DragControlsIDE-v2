@@ -84,12 +84,12 @@ Public Lang_Disassembly_Caption                 As String
 Public Lang_ErrorList_Caption                   As String
 Public Lang_Immediate_Caption                   As String
 Public Lang_Memory_Caption                      As String
-Public Lang_Modules_Caption                     As String
 Public Lang_Output_Caption                      As String
 Public Lang_Properties_Caption                  As String
 Public Lang_Registers_Caption                   As String
 Public Lang_Threads_Caption                     As String
 Public Lang_Watch_Caption                       As String
+Public Lang_DebugWindow_Retrieving_Caption      As String
 
 Public Lang_Create_Caption                      As String
 Public Lang_Create_CreateLabel                  As String
@@ -193,7 +193,6 @@ Public Lang_Breakpoints_Info_3                  As String
 Public Lang_Breakpoints_Info_4                  As String
 
 Public Lang_Locals_Caption                      As String
-Public Lang_Locals_Retrieving_Caption           As String
 Public Lang_Locals_ListViewHeader_Name          As String
 Public Lang_Locals_ListViewHeader_Type          As String
 Public Lang_Locals_ListViewHeader_Value         As String
@@ -201,7 +200,6 @@ Public Lang_Locals_Error                        As String
 Public Lang_Locals_Tooltip_Title                As String
 
 Public Lang_CallStack_Caption                   As String
-Public Lang_CallStack_Retrieving_Caption        As String
 Public Lang_CallStack_Args                      As String
 Public Lang_CallStack_Tooltip_Title             As String
 Public Lang_CallStack_NoArg                     As String
@@ -214,6 +212,12 @@ Public Lang_ErrorList_File                      As String
 Public Lang_ErrorList_Line                      As String
 Public Lang_ErrorList_Column                    As String
 Public Lang_ErrorList_Tooltip_Title             As String
+
+Public Lang_Modules_Caption                     As String
+Public Lang_Modules_ListViewHeader_FileName     As String
+Public Lang_Modules_ListViewHeader_FilePath     As String
+Public Lang_Modules_ListViewHeader_From         As String
+Public Lang_Modules_ListViewHeader_To           As String
 '===================================================================
 
 Public CurrentProject                           As ProjectFileStruct                        '当前工程的信息
@@ -290,33 +294,34 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     
     '读取菜单字符串
     If LoadMenuTextOnly Then
-        Dim id          As Long
+        Dim Id          As Long
         
         '主窗口菜单
-        For id = 0 To 69
-            frmMain.DarkMenu.MenuText(id) = LoadResString(ResID + id)
+        For Id = 0 To 69
+            frmMain.DarkMenu.MenuText(Id) = LoadResString(ResID + Id)
             If Err.Number <> 0 Then
                 LoadLanguage = False
                 Exit Function
             End If
-        Next id
+        Next Id
         
         '工程资源管理器弹出菜单1
-        For id = 1 To 4
-            frmSolutionExplorer.mnuItemPopup.MenuText(id) = LoadResString(ResID + 99 + id)
+        For Id = 1 To 4
+            frmSolutionExplorer.mnuItemPopup.MenuText(Id) = LoadResString(ResID + 99 + Id)
             If Err.Number <> 0 Then
                 LoadLanguage = False
                 Exit Function
             End If
-        Next id
+        Next Id
         
-        For id = 1 To 13
-            frmSolutionExplorer.mnuProjectItemPopup.MenuText(id) = LoadResString(ResID + 199 + id)
+        '工程资源管理器弹出菜单2
+        For Id = 1 To 13
+            frmSolutionExplorer.mnuProjectItemPopup.MenuText(Id) = LoadResString(ResID + 199 + Id)
             If Err.Number <> 0 Then
                 LoadLanguage = False
                 Exit Function
             End If
-        Next id
+        Next Id
         
         Exit Function
     End If
@@ -336,12 +341,12 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_ErrorList_Caption = "错误列表"
     Lang_Immediate_Caption = "立即窗口"
     Lang_Memory_Caption = "内存"
-    Lang_Modules_Caption = "模块"
     Lang_Output_Caption = "输出"
     Lang_Properties_Caption = "属性"
     Lang_Registers_Caption = "寄存器"
     Lang_Threads_Caption = "线程"
     Lang_Watch_Caption = "监视窗口"
+    Lang_DebugWindow_Retrieving_Caption = " - 正在获取..."
     
     Lang_Create_Caption = "新建项目"
     Lang_Create_CreateLabel = "创建"
@@ -443,7 +448,6 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_Breakpoints_Info_4 = "已禁用"
     
     Lang_Locals_Caption = "本地"
-    Lang_Locals_Retrieving_Caption = "本地 - 正在获取..."
     Lang_Locals_ListViewHeader_Name = "名称"
     Lang_Locals_ListViewHeader_Type = "类型"
     Lang_Locals_ListViewHeader_Value = "值"
@@ -451,7 +455,6 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_Locals_Tooltip_Title = "本地变量信息: "
     
     Lang_CallStack_Caption = "调用堆栈"
-    Lang_CallStack_Retrieving_Caption = "调用堆栈 - 正在获取..."
     Lang_CallStack_Args = "参数"
     Lang_CallStack_Tooltip_Title = "调用堆栈信息:"
     Lang_CallStack_NoArg = "<无>"
@@ -464,5 +467,11 @@ Public Function LoadLanguage(ResID As Long, Optional LoadMenuTextOnly As Boolean
     Lang_ErrorList_Line = "行"
     Lang_ErrorList_Column = "列"
     Lang_ErrorList_Tooltip_Title = "错误信息"
+    
+    Lang_Modules_Caption = "模块"
+    Lang_Modules_ListViewHeader_FileName = "文件名"
+    Lang_Modules_ListViewHeader_FilePath = "路径"
+    Lang_Modules_ListViewHeader_From = "从"
+    Lang_Modules_ListViewHeader_To = "到"
 End Function
 

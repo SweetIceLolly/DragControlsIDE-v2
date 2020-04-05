@@ -1,12 +1,31 @@
 Attribute VB_Name = "modGdbParser"
+'====================================================
+'描述:      提供解析gdb输出的函数
+'作者:      冰棍
+'文件:      modGdbParser.bas
+'====================================================
+
 Option Explicit
 
 '定义调用堆栈信息结构
 Public Type CallStackInfoStruct
-    Address                                     As String                                   '地址
-    Args                                        As String                                   '参数
-    File                                        As String                                   '文件
-    Line                                        As Long                                     '行号 (-1则代表要从文件浏览器显示该文件)
+    Address                 As String                                       '地址
+    Args                    As String                                       '参数
+    File                    As String                                       '文件
+    Line                    As Long                                         '行号 (-1则代表要从文件浏览器显示该文件)
+End Type
+
+'定义模块信息结构
+Public Type ModuleInfoStruct
+    File                    As String                                       '模块文件
+    From                    As String                                       '从（地址）
+    To                      As String                                       '到（地址）
+End Type
+
+'定义线程信息结构
+Public Type ThreadInfoStruct
+    Id                      As String                                       '线程ID
+    Frame                   As String                                       '地址
 End Type
 
 '描述:      分析gdb的堆栈输出
@@ -14,9 +33,7 @@ End Type
 '返回值:    存储着调用堆栈信息的结构
 Public Function ParseCallStackString(strCallStack As String) As CallStackInfoStruct
     'On Error Resume Next
-    
     Dim StrPos              As Long                                         '查找到的字符串的位置
-    Dim BracketLevel        As Long                                         '括号匹配计数，一开始是0，遇到“(”加1, 遇到“)”减1
     Dim Info                As CallStackInfoStruct
     
     If Mid(strCallStack, Len(strCallStack)) = vbCr Then                                 '去掉字符串结尾的换行符
@@ -111,4 +128,72 @@ Public Function ParseCallStackString(strCallStack As String) As CallStackInfoStr
     ParseCallStackString = Info
 End Function
 
+'描述:      分析gdb的模块输出
+'参数:      strModule: 需要分析的模块输出
+'返回值:    存储着模块信息的结构
+Public Function ParseModuleString(strModule As String) As ModuleInfoStruct
+    'on error resume next
+    
+    '例子：
+    '(gdb) info sharedlibrary
+    'From        To          Syms Read   Shared Object Library
+    '0x76920000  0x769e47b0  Yes (*)     C:\WINDOWS\SysWOW64\kernel32.dll
+    '0x77051000  0x7724bfd0  Yes (*)     C:\WINDOWS\SysWOW64\KernelBase.dll
+    '0x766c1000  0x7677e764  Yes (*)     C:\WINDOWS\SysWOW64\msvcrt.dll
+    '(*): Shared library is missing debugging information.
+    '(gdb)
 
+    Dim StrPos              As Long                                     '查找到的字符串位置
+    Dim Info                As ModuleInfoStruct
+    
+    If Mid(strModule, Len(strModule)) = vbCr Then                       '去掉字符串结尾的换行符
+        strModule = Left(strModule, Len(strModule) - 1)
+    End If
+    
+    '检测字符串是否符合格式
+    If strModule Like "*0x* 0x* * C:[\/]*" Then
+        StrPos = InStr(strModule, "0x")                                     '搜索第一个“0x”，获取“从”地址
+        Info.From = Mid(strModule, StrPos, 10)
+        StrPos = InStr(StrPos + 10, strModule, "0x")                        '搜索第二个“0x”，获取“到”地址
+        Info.To = Mid(strModule, StrPos, 10)
+        StrPos = InStrRev(strModule, ":\")                                  '从结尾向前搜索“:\”或“:/”，
+        If StrPos = 0 Then
+            StrPos = InStrRev(strModule, ":/")
+        End If
+        StrPos = InStrRev(strModule, " ", StrPos)                           '从找到的位置向前查找空格，获取路径
+        Info.File = Mid(strModule, StrPos + 1, Len(strModule) - StrPos)
+    End If
+    
+    Info.File = Replace(Info.File, "/", "\")                            '把地址里的“/”替换成“\”
+    ParseModuleString = Info
+End Function
+
+Public Function ParseThreadString(strThread As String) As ThreadInfoStruct
+    'on error resume next
+    
+    '例子：
+    '(gdb) info threads
+    '  Id   Target Id         Frame
+    '  2    Thread 19152.0x17a0 0x77af3a4c in ?? ()
+    '* 1    Thread 19152.0x4794 main () at C:\Users\12574\Documents\MyProjects\te\te.cpp:2
+    '(gdb)
+    
+    Dim StrPos              As Long                                     '查找到的字符串位置
+    Dim StrPos2             As Long
+    Dim Info                As ThreadInfoStruct
+    
+    If Mid(strThread, Len(strThread)) = vbCr Then                       '去掉字符串结尾的换行符
+        strThread = Left(strThread, Len(strThread) - 1)
+    End If
+    
+    '检测字符串是否符合格式
+    If strThread Like "* * *.0x* *" Then
+        StrPos = InStr(strThread, ".0x")
+        StrPos = InStr(StrPos, strThread, " ")                              '从“.0x”向后搜索“ ”
+        Info.Frame = Right(strThread, Len(strThread) - StrPos)              '截取空格后的内容作为地址
+        StrPos2 = InStrRev(strThread, " ", StrPos - 1) + 1                  '从“.0x”向前搜索“ ”
+        Info.Id = Mid(strThread, StrPos2, StrPos - StrPos2)                 '截取“.0x”前面的空格和后面的空格中间的文本作为ID
+    End If
+    
+    ParseThreadString = Info
+End Function

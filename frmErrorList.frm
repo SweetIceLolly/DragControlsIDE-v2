@@ -319,8 +319,7 @@ Private Sub Form_Load()
     Me.Caption = Lang_ErrorList_Caption
     
     '³õÊ¼»¯¿Ø¼þÅÅ°æ
-    Me.lvErrorList.Left = 0
-    Me.lvErrorList.Top = Me.picTypeSelection.Height
+    Me.lvErrorList.Move 0, Me.picTypeSelection.Height
     Me.picSwitchErrors.Top = Me.picTypeSelection.Height / 2 - Me.picSwitchErrors.Height / 2
     Me.picSwitchErrors.Left = 120
     Me.imgError.Left = 60
